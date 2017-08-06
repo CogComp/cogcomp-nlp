@@ -95,6 +95,7 @@ public class EREReaderTest {
         XmlTextAnnotation outputXmlTa = runTest(EreCorpus.ENR1, corpusDir);
 
 
+
         corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E68_DEFT_Rich_ERE_English_Training_Annotation_R2_V2/data/";
 
         outputXmlTa = runTest(EreCorpus.ENR2, corpusDir);
@@ -164,6 +165,12 @@ public class EREReaderTest {
 
         XmlTextAnnotation xmlTa = runEventReader(corpusDir, newWantedId);
 
+        List<String> output = Collections.singletonList(SerializationHelper.serializeToJson(xmlTa.getTextAnnotation(), true));
+        try {
+            LineIO.write("ereOut.json", output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -311,6 +318,14 @@ public class EREReaderTest {
 
         XmlTextAnnotation outputXmlTa = nerReader.next();
         TextAnnotation output = outputXmlTa.getTextAnnotation();
+
+        // Test TextAnnotationUtilities.mapTransformedTextAnnotationToSource()
+
+        TextAnnotation mappedTa = TextAnnotationUtilities.mapTransformedTextAnnotationToSource(output, outputXmlTa.getXmlSt());
+
+        assertEquals(mappedTa.getView(ViewNames.TOKENS).getNumberOfConstituents(), output.getView(ViewNames.TOKENS).getNumberOfConstituents());
+        assertEquals(mappedTa.getView(ViewNames.SENTENCE).getNumberOfConstituents(), output.getView(ViewNames.SENTENCE).getNumberOfConstituents());
+
         View nerEre = null;
         if (addNominalMentions) {
             assert (output.hasView(ViewNames.MENTION_ERE));

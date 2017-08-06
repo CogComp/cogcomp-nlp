@@ -64,22 +64,10 @@ public class View implements Serializable, IQueryable<Constituent> {
      * The collection of relations in this view.
      */
     protected final QueryableList<Relation> relations;
-
-    /**
-     * The token id of the leftmost token in this view.
-     */
-    protected int startSpan;
-
-    /**
-     * The token id of the token next to the rightmost token in this view.
-     */
-    protected int endSpan;
-
     /**
      * The name of the system that generates this view.
      */
     protected final String viewGenerator;
-
     /**
      * A inverted index from token ids to constituents in this view that cover that token.
      * <p>
@@ -87,6 +75,14 @@ public class View implements Serializable, IQueryable<Constituent> {
      */
     @SuppressWarnings("rawtypes")
     protected final ArrayList[] tokensToConstituents;
+    /**
+     * The token id of the leftmost token in this view.
+     */
+    protected int startSpan;
+    /**
+     * The token id of the token next to the rightmost token in this view.
+     */
+    protected int endSpan;
 
     /**
      * Creates a view for {@code text} called {@code viewName} which is created using a view
@@ -158,12 +154,21 @@ public class View implements Serializable, IQueryable<Constituent> {
     }
 
     /**
-     * Removes a constituent from this view
+     * Removes a constituent from this view. Removes any relations whose source or target was this constituent.
      */
     public void removeConstituent(Constituent constituent) {
+        Set<Relation> relationsToRemove = new HashSet<>();
+        for (Relation inRel : constituent.incomingRelations)
+            relationsToRemove.add(inRel);
+        for (Relation outRel : constituent.outgoingRelations)
+            relationsToRemove.add(outRel);
+
         constituents.remove(constituent);
         removeAllTokenFromConstituentMapping(constituent);
+        for (Relation rel : relationsToRemove)
+            removeRelation(rel);
     }
+
 
     private void addRelatedConstituents(View restriction, Queue<Constituent> constituentsToConsider) {
         while (!constituentsToConsider.isEmpty()) {
@@ -232,6 +237,8 @@ public class View implements Serializable, IQueryable<Constituent> {
      * removes a relation from this view.
      */
     public void removeRelation(Relation relation) {
+        relation.source.outgoingRelations.remove(relation);
+        relation.target.incomingRelations.remove(relation);
         relations.remove(relation);
     }
 
