@@ -74,7 +74,9 @@ Our normalizer is a deterministic rule-based system. Another option is to use He
 
 The whole module is tested on [TempEval3](https://www.cs.york.ac.uk/semeval-2013/task1/index.php%3Fid=data.html) dataset, evaluated using an evaluation tool provided by TempEval3. You can run this [benchmark script](scripts/benchmark.sh) by doing `sh scripts/benchmark.sh` (make sure your CWD is `cogcomp-nlp`) to see the performance. You should see the following results (some unnecessary printed information is neglected, we only show the result using our extractor + normalizer here):
 ###### Using our extractor + our normalizer:
+
 === Timex Performance ===
+
 |Strict Match|	F1|	P|	R|
 |---|---|---|---|
 |	|79.35|	89.91|	71.01|
