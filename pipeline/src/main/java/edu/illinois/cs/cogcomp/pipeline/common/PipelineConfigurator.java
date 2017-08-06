@@ -40,6 +40,7 @@ public class PipelineConfigurator extends AnnotatorServiceConfigurator {
     public static final Property USE_QUANTIFIER = new Property("useQuantifier", FALSE);
     public static final Property USE_VERB_SENSE = new Property("useVerbSense", FALSE);
     public static final Property USE_JSON = new Property("useJson", FALSE);
+    public static final Property USE_MENTION = new Property("useMention", FALSE);
     public static final Property USE_LAZY_INITIALIZATION = new Property(
             AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE);
     public static final Property USE_SRL_INTERNAL_PREPROCESSOR = new Property(

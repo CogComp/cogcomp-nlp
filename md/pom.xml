@@ -3,7 +3,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.25</version>
+        <version>3.1.27</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -25,27 +25,27 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-nlp-pipeline</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>stanford_3.8.0</artifactId>
-            <version>3.1.25</version>
+            <artifactId>illinois-external-annotators</artifactId>
+            <version>3.1.27</version>
         </dependency>
     </dependencies>
 
