@@ -32,6 +32,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.XmlDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.apache.commons.io.filefilter.FileFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,6 +118,8 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String SOURCE = "source";
     public static final String TRIGGER = "trigger";
     public static final String ORIGIN = "origin";
+    public static final String UNKNOWN_KBID = "not_in_kb";
+    public static final String KBID = "kb_id";
 
     /** aim for consistent naming */
     public static final String EntityMentionTypeAttribute = ACEReader.EntityMentionTypeAttribute;
@@ -134,6 +137,7 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String RelationTargetRoleAttribute = "RelationTargetRole";
     public static final String EventIdAttribute = "event_id";
     public static final String EventMentionIdAttribute = "event_mention_id";
+    public static final String EntityKbIdAttribute = "kb_id";
 
 
     public static final String NAME_START = "nameStartOffset";
@@ -148,6 +152,7 @@ public class EREDocumentReader extends XmlDocumentReader {
     public final Map<String, Set<String>> tagsWithAtts = new HashMap<>();
     public final Set<String> deletableSpanTags = new HashSet<>();
     public final Set<String> tagsToIgnore = new HashSet<>();
+
     /**
      * build an EREDocumentReader configured for the specified ERE release, using provided TextAnnotationBuilder
      *   (allows for non-English, non-UIUC tokenizer)
@@ -220,6 +225,9 @@ public class EREDocumentReader extends XmlDocumentReader {
             case ENR3:
             case ESR2:
             case ZHR2:
+                break;
+            case KBP17:
+                sourceExtension = "";
                 break;
             default:
                 String errMsg = "Illegal value for ereCorpus: " + ereCorpusVal;
@@ -314,12 +322,17 @@ public class EREDocumentReader extends XmlDocumentReader {
      */
     @Override
     public List<List<Path>> getFileListing() throws IOException {
-        FilenameFilter sourceFilter = (dir, name) -> name.endsWith(getRequiredSourceFileExtension());
+
+        FilenameFilter sourceFilter = (dir, name) -> true;
+
+        if (!"".equals(getRequiredSourceFileExtension()))
+            sourceFilter = (dir, name) -> name.endsWith(getRequiredAnnotationFileExtension());
+
         /*
          * returns the FULL PATH of each file
          */
         String sourceDir = resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY.key);
-        List<String> sourceFileList= Arrays.asList(IOUtils.lsFilesRecursive(sourceDir, sourceFilter));
+        List<String> sourceFileList = Arrays.asList(IOUtils.lsFilesRecursive(sourceDir, sourceFilter));
         LinkedList<String> annotationFileList = new LinkedList<>();
 
         FilenameFilter annotationFilter = (dir, name) -> name.endsWith(getRequiredAnnotationFileExtension());
@@ -446,9 +459,11 @@ public class EREDocumentReader extends XmlDocumentReader {
 
     /**
      * prefix indicates language; suffix indicates release
+     * ENRX, ESRX, ZHRX are ERE releases in English, Spanish, and Chinese from LDC/DEFT
+     * KBPXX is a Knowledge Base Population corpus from year XX
      */
     public enum EreCorpus {
-        ENR1, ENR2, ENR3, ESR1, ESR2, ZHR1, ZHR2
+        ENR1, ENR2, ENR3, ESR1, ESR2, ZHR1, ZHR2, KBP17
     }
 
 }

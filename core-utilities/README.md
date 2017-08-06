@@ -455,6 +455,36 @@ protoc --java_out=core-utilities/src/main/java core-utilities/src/main/proto/Tex
 mvn license:format
 ```
 
+### StringTransformation
+
+The `StringTransformation` class helps users processing noisy or marked-up text to track changes
+in character offsets, and to map any annotations developed on the cleaned up text back to the original
+source.  `StringTransformation` keeps a copy of an **original** text, a **current** text,
+and a set of pending edits.  It accepts edits specified as a span of the **current** text and a 
+String to replace that span (which may be the empty string in the case of deletion). Pending edits
+can be applied on demand, and are automatially applied when the current text is retrieved.
+Clients can specify offsets in the original String and find their counterparts in the modified
+text, or vice versa.  This allows users to clean up text, process it with NLP compoments, then
+map annotations back to the original text. Such functionality is useful in NLP tasks where evaluation
+scripts require annotations to be specified in terms of the original source text. 
+Corpus reader components such as `XmlDocumentProcessor` use `StringTransformation` to
+track changes made when xml elements are stripped; `StringTransformationCleanup` applies
+common text cleanup (removing non-standard characters, punctuation errors, etc.) but
+allows users to map any annotations acquired from the cleaned-up text to the original text.
+See `StringTransformationText` for some examples. 
+
+
+### TextAnnotationUtilities
+
+The `TextAnnotationUtilities` class provides helper functions for copying constituents and views
+between TextAnnotations.  In particular, it supports excerpting annotations for sentences or other
+subspans of some `TextAnnotation`'s underlying text into a shorter, self-contained TextAnnotation,
+or mapping from a sentence `TextAnnotation` to one for a longer span containing that sentence.
+
+There is also support for `StringTransformation`, mapping a TextAnnotation associated with a 
+transformed text to an equivalent TextAnnotation over the original text.
+
+
 ## Citation
 
 If you use this code in your research, please provide the URL for this github repository in the relevant publications.  

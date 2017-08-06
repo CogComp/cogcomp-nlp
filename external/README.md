@@ -10,6 +10,9 @@ Here is what we currently have:
 | Stanford Relations |  Details [here](https://nlp.stanford.edu/software/relationExtractor.shtml)   |  https://stanfordnlp.github.io/CoreNLP/  |
 | Stanford OpenIE |  Details [here](https://nlp.stanford.edu/software/openie.shtml)   |  https://stanfordnlp.github.io/CoreNLP/  |
 | Stanford Co-reference |  Details [here](https://stanfordnlp.github.io/CoreNLP/coref.html)   |  https://stanfordnlp.github.io/CoreNLP/  |
+| ClausIE | An OpenIE-like sentence simplification system |
+
+Each module can be run as an independent webserver, and can be accessed by the pipeline-client. 
 
 
 ## License 

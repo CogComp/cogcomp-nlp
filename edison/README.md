@@ -63,7 +63,7 @@ file in order to be used by any learning software that supports it using the met
 ## List of pre-defined feature extractors
 To see the set of pre-defined feature extractors along
 with their description and the `FeatureExtractor` that implements
-them please visit our [Edison search interface](http://bilbo.cs.illinois.edu:5900). 
+them please visit our [Edison search interface](http://legolas.cs.illinois.edu:5900). 
 
 ### Bias feature
 The keyword `bias` in a `.fex` specification includes a feature
