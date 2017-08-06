@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+import edu.illinois.cs.cogcomp.core.algorithms.LevensteinDistance;
 import org.joda.time.Interval;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -855,8 +856,8 @@ public class Phrase
             else{
 
                 for(i=1;i<=168;i++){
-                    if(getLevenshteinDistance(hotoken[i].replaceAll(" ",""),phrase1.replaceAll(" ", ""))<comparenum){
-                        comparenum=getLevenshteinDistance(hotoken[i].replaceAll(" ",""),phrase1.replaceAll(" ", ""));
+                    if(LevensteinDistance.getLevensteinDistance(hotoken[i].replaceAll(" ",""),phrase1.replaceAll(" ", ""))<comparenum){
+                        comparenum=LevensteinDistance.getLevensteinDistance(hotoken[i].replaceAll(" ",""),phrase1.replaceAll(" ", ""));
                         tempmain=hotoken[i];
                         flaggy=1;
                         if(comparenum==0){

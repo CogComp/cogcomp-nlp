@@ -1,0 +1,571 @@
+<?xml version="1.0"?>
+<!--
+
+    This software is released under the University of Illinois/Research and Academic Use License. See
+    the LICENSE file in the root folder for details. Copyright (c) 2016
+
+    Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+    http://cogcomp.cs.illinois.edu/
+
+-->
+<!--
+	Hector Llorens (2011)
+	
+	Variation of the original to suport both original TimeML and TimeML(TEXT) formats.
+	Note: with <TLINKs> outside <TEXT>; and without <s> tags.
+
+	Moreover, the leid attribute for LINKs is added to prevent the declaration of superfluos MAKEINSTANCES
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xml:lang="en" version="1.2">
+
+<xs:annotation>
+	<xs:documentation xml:lang="en-us">
+	TimeML schema
+	<a href="http://www.timeml.org/">timeml.org</a>
+	</xs:documentation>
+</xs:annotation>
+
+<xs:simpleType name="TimeMLID">
+	<xs:annotation>
+	 	<xs:documentation xml:lang="en-us">
+		A <b>TimeMLID</b> is a sequence of lowercase letters followed by a number (decimal digits).
+	 	</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="xs:string">
+		<xs:pattern value="[-._:A-Za-z0-9]+" />
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="EventID">
+	<xs:annotation>
+		<xs:documentation xml:lang="en-us">
+		 A <b>EventID</b> is an <b>e</b> followed by a number (decimal digits).
+		 </xs:documentation>
+ 	</xs:annotation>
+	<xs:restriction base="TimeMLID">
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="EventInstanceID">
+	<xs:annotation>
+		<xs:documentation xml:lang="en-us">
+		A <b>EventInstanceID</b> is an <b>ei</b> followed by a number (decimal digits).
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="TimeMLID">
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="TimeID">
+	<xs:annotation>
+		<xs:documentation xml:lang="en-us">
+		 A <b>TimeID</b> is an <b>t</b> followed by a number (decimal digits).
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="TimeMLID">
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="SignalID">
+	<xs:annotation>
+		<xs:documentation xml:lang="en-us">
+		 A <b>SignalID</b> is an <b>s</b> followed by a number (decimal digits).
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="TimeMLID">
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="LinkID">
+	<xs:annotation>
+		<xs:documentation xml:lang="en-us">
+		A <b>LinkID</b> is an <b>l</b> followed by a number (decimal digits).
+		</xs:documentation>
+	</xs:annotation>
+	<xs:restriction base="TimeMLID">
+	</xs:restriction>
+</xs:simpleType>
+
+
+
+<xs:element name="TimeML">
+
+	<xs:unique name="link_id">
+		<xs:selector xpath="TLINK|SLINK|ALINK" />
+		<xs:field xpath="@lid" />
+	</xs:unique>
+
+	<xs:key name="event_id">
+		<!-- Hector Llorens modification | */EVENT (below there are more analogous) -->
+		<xs:selector xpath="EVENT|*/EVENT" />
+		<xs:field xpath="@eid" />
+	</xs:key>
+
+	<xs:key name="time_id">
+		<xs:selector xpath="TIMEX3|*/TIMEX3" />
+		<xs:field xpath="@tid" />
+	</xs:key>
+
+	<xs:key name="signal_id">
+		<xs:selector xpath="SIGNAL|*/SIGNAL" />
+		<xs:field xpath="@sid" />
+	</xs:key>
+
+	<xs:key name="event_instance_id">
+		<xs:selector xpath="MAKEINSTANCE" />
+		<xs:field xpath="@eiid" />
+	</xs:key>
+		
+	<xs:keyref name="event_id_ref_mi" refer="event_id">
+		<xs:selector xpath="MAKEINSTANCE" />
+		<xs:field xpath="@eventID" />
+	</xs:keyref>
+
+	<xs:keyref name="signal_id_ref_mi" refer="signal_id">
+		<xs:selector xpath="MAKEINSTANCE" />
+		<xs:field xpath="@signalID" />
+	</xs:keyref>
+
+	<xs:keyref name="time_id_ref_tx_ati" refer="time_id">
+		<xs:selector xpath="TIMEX3|*/TIMEX3" />
+		<xs:field xpath="@anchorTimeID" />
+	</xs:keyref>
+
+	<xs:keyref name="signal_id_ref_tl" refer="signal_id">
+		<xs:selector xpath="TLINK" />
+		<xs:field xpath="@signalID" />
+	</xs:keyref>
+
+	<xs:keyref name="time_id_ref_tl_ti" refer="time_id">
+		<xs:selector xpath="TLINK" />
+		<xs:field xpath="@timeID" />
+	</xs:keyref>
+
+	<xs:keyref name="time_id_ref_tl_rtt" refer="time_id">
+		<xs:selector xpath="TLINK" />
+		<xs:field xpath="@relatedToTime" />
+	</xs:keyref>
+
+	<xs:keyref name="time_id_ref_tx_bp" refer="time_id">
+		<xs:selector xpath="TIMEX3|*/TIMEX3" />
+		<xs:field xpath="@beginPoint" />
+	</xs:keyref>
+
+	<xs:keyref name="time_id_ref_tx_ep" refer="time_id">
+		<xs:selector xpath="TIMEX3|*/TIMEX3" />
+		<xs:field xpath="@endPoint" />
+	</xs:keyref>
+
+	<xs:keyref name="event_instance_id_ref_tl-eid" refer="event_instance_id">
+		<xs:selector xpath="TLINK" />
+		<xs:field xpath="@eventInstanceID" />
+	</xs:keyref>
+
+	<xs:keyref name="event_instance_id_ref_tl-rte" refer="event_instance_id">
+		<xs:selector xpath="TLINK" />
+		<xs:field xpath="@relatedToEventInstance" />
+	</xs:keyref>
+
+	<xs:keyref name="signal_id_ref_sl" refer="signal_id">
+		<xs:selector xpath="SLINK" />
+		<xs:field xpath="@signalID" />
+	</xs:keyref>
+
+	<xs:keyref name="event_instance_id_ref_sl-eid" refer="event_instance_id">
+		<xs:selector xpath="SLINK" />
+		<xs:field xpath="@eventInstanceID" />
+	</xs:keyref>
+
+	<xs:keyref name="event_instance_id_ref_sl-sei" refer="event_instance_id">
+		<xs:selector xpath="SLINK" />
+		<xs:field xpath="@subordinatedEventInstance" />
+	</xs:keyref>
+
+	<xs:keyref name="signal_id_ref_al" refer="signal_id">
+		<xs:selector xpath="ALINK" />
+		<xs:field xpath="@signalID" />
+	</xs:keyref>
+
+	<xs:keyref name="event_instance_id_ref_al-eid" refer="event_instance_id">
+		<xs:selector xpath="ALINK" />
+		<xs:field xpath="@eventInstanceID" />
+	</xs:keyref>
+
+	<xs:keyref name="event_id_ref_al-rte" refer="event_instance_id">
+		<xs:selector xpath="ALINK" />
+		<xs:field xpath="@relatedToEventInstance" />
+	</xs:keyref>
+
+</xs:element>
+
+
+<xs:element name="EVENT">
+	<xs:complexType>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+
+				<xs:attribute name="eid" type="EventID" use="required" />
+				<xs:attribute name="stem" type="xs:string" />
+				<xs:attribute name="voice" type="xs:string" />
+				<xs:attribute name="ont_type" type="xs:string" />
+				<xs:attribute name="sentID" type="xs:integer" />
+
+				<xs:attribute name="class" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="OCCURRENCE" />
+							<xs:enumeration value="PERCEPTION" />
+							<xs:enumeration value="REPORTING" />
+							<xs:enumeration value="ASPECTUAL" />
+							<xs:enumeration value="STATE" />
+							<xs:enumeration value="I_STATE" />
+							<xs:enumeration value="I_ACTION" />
+							<xs:enumeration value="MODAL" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+
+
+		<xs:attribute name="mood" type="xs:string" /> <!-- Hector Llorens modification for Spanish -->
+		<xs:attribute name="vform" type="xs:string" /> <!-- Hector Llorens modification for Spanish -->
+
+		<xs:attribute name="modality" type="xs:string" />
+
+		<xs:attribute name="polarity" default="POS">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="NEG" />
+					<xs:enumeration value="POS" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="tense">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PAST" />
+					<xs:enumeration value="PRESENT" />
+					<xs:enumeration value="FUTURE" />
+					<xs:enumeration value="INFINITIVE" />
+					<xs:enumeration value="PRESPART" />
+					<xs:enumeration value="PASTPART" />
+					<xs:enumeration value="PASSIVE" /> <!-- Naushad's modification for his own sake -->
+					<xs:enumeration value="NONE" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="aspect">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PROGRESSIVE" />
+					<xs:enumeration value="PERFECTIVE" />
+					<xs:enumeration value="PERFECTIVE_PROGRESSIVE" />
+					<xs:enumeration value="IMPERFECTIVE" /> <!-- Hector Llorens modification for Spanish -->
+					<xs:enumeration value="IMPERFECTIVE_PROGRESSIVE" /> <!-- Hector Llorens modification for Spanish -->
+					<!--English has neither a simple perfective or imperfective aspect; see imperfective and perfective for some basic English equivalents of this distinction. When translating from a language which has these aspects, they will sometimes be given separate verbs in English. For example, in Ancient Greek the imperfective sometimes adds the notion of "try to do something" (the so-called conative imperfect); hence the same verb root, in the imperfective (present or imperfect) and aorist, respectively, is translated as look and see, search and find, listen and hear (ἠκούομεν ēkoúomen "we listened" vs. ἠκούσαμεν ēkoúsamen "we heard"). Spanish is similar, with imperfect and preterite sabía "I knew" vs. supe "I found out", podía "I was able to" vs. pude "I succeeded", quería "I wanted to" vs. quise "I tried to", no quería "I did not want to" vs. no quise "I refused". Such distinctions are often highly language-specific. 
+					-->
+					<xs:enumeration value="NONE" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="pos">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ADJECTIVE" />
+					<xs:enumeration value="NOUN" />
+					<xs:enumeration value="VERB" />
+					<xs:enumeration value="PREPOSITION" />
+					<xs:enumeration value="OTHER" />
+					<xs:enumeration value="UNKNOWN" /> <!-- Hector Llorens modification for AQUAINT -->
+					<xs:enumeration value="PREP" /> <!-- Hector Llorens modification for Spanish -->
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>			
+
+			</xs:extension> 
+		</xs:simpleContent>
+	</xs:complexType>
+
+</xs:element>
+
+
+<xs:element name="TIMEX3">
+	<xs:complexType>
+		<xs:simpleContent>
+		<xs:extension base="xs:string">
+
+			<xs:attribute name="tid" type="TimeID" use="required" />
+			<xs:attribute name="sentID" type="xs:integer" />
+
+			<xs:attribute name="type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="DATE" />
+						<xs:enumeration value="TIME" />
+						<xs:enumeration value="DURATION" />
+						<xs:enumeration value="SET" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+
+			<xs:attribute name="functionInDocument" default="NONE">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="CREATION_TIME" />
+						<xs:enumeration value="EXPIRATION_TIME" />
+						<xs:enumeration value="MODIFICATION_TIME" />
+						<xs:enumeration value="PUBLICATION_TIME" />
+						<xs:enumeration value="RELEASE_TIME" />
+						<xs:enumeration value="RECEPTION_TIME" />
+						<xs:enumeration value="NONE" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+
+			<xs:attribute name="temporalFunction" type="xs:boolean" default="false" />
+
+			<xs:attribute name="value" use="required" type="xs:string" />
+
+			<xs:attribute name="valueFromFunction" type="xs:IDREF" />
+
+			<xs:attribute name="mod">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="BEFORE" />
+						<xs:enumeration value="AFTER" />
+						<xs:enumeration value="ON_OR_BEFORE" />
+						<xs:enumeration value="ON_OR_AFTER" />
+						<xs:enumeration value="LESS_THAN" />
+						<xs:enumeration value="MORE_THAN" />
+						<xs:enumeration value="EQUAL_OR_LESS" />
+						<xs:enumeration value="EQUAL_OR_MORE" />
+						<xs:enumeration value="START" />
+						<xs:enumeration value="MID" />
+						<xs:enumeration value="END" />
+						<xs:enumeration value="APPROX" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+
+			<xs:attribute name="anchorTimeID" type="TimeID" />
+			<xs:attribute name="beginPoint" type="TimeID"/>
+			<xs:attribute name="endPoint" type="TimeID"/>
+			<xs:attribute name="quant" type="xs:string"/>
+			<xs:attribute name="freq" type="xs:string" />
+			
+		</xs:extension> 
+		</xs:simpleContent>
+	</xs:complexType>
+
+</xs:element>
+
+
+<xs:element name="SIGNAL">
+
+	<xs:complexType>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+
+				<xs:attribute name="sid" type="SignalID" use="required" />
+				<xs:attribute name="sentID" type="xs:integer" />
+
+			</xs:extension> 
+		</xs:simpleContent>
+	</xs:complexType>
+
+</xs:element>
+
+
+<xs:element name="MAKEINSTANCE">
+
+	<xs:complexType>
+
+		<xs:attribute name="eiid" type="EventInstanceID" use="required" />
+		<xs:attribute name="eventID" type="EventID" use="required" />
+		<xs:attribute name="signalID" type="SignalID" />
+		<xs:attribute name="cardinality" type="xs:string" />
+		<xs:attribute name="modality" type="xs:string" />
+		<xs:attribute name="ont_type" type="xs:string" /> <!-- Naushad's modification for his own sake --> 
+		<xs:attribute name="voice" type="xs:string" /> <!-- Naushad's modification for his own sake -->
+		<xs:attribute name="polarity" default="POS">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="NEG" />
+					<xs:enumeration value="POS" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="tense">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PAST" />
+					<xs:enumeration value="PRESENT" />
+					<xs:enumeration value="FUTURE" />
+					<xs:enumeration value="INFINITIVE" />
+					<xs:enumeration value="PRESPART" />
+					<xs:enumeration value="PASTPART" />
+					<xs:enumeration value="NONE" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="aspect">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PROGRESSIVE" />
+					<xs:enumeration value="PERFECTIVE" />
+					<xs:enumeration value="PERFECTIVE_PROGRESSIVE" />
+					<xs:enumeration value="IMPERFECTIVE" /> <!-- Hector Llorens modification for Spanish -->
+					<xs:enumeration value="IMPERFECTIVE_PROGRESSIVE" /> <!-- Hector Llorens modification for Spanish -->
+					<!--English has neither a simple perfective or imperfective aspect; see imperfective and perfective for some basic English equivalents of this distinction. When translating from a language which has these aspects, they will sometimes be given separate verbs in English. For example, in Ancient Greek the imperfective sometimes adds the notion of "try to do something" (the so-called conative imperfect); hence the same verb root, in the imperfective (present or imperfect) and aorist, respectively, is translated as look and see, search and find, listen and hear (ἠκούομεν ēkoúomen "we listened" vs. ἠκούσαμεν ēkoúsamen "we heard"). Spanish is similar, with imperfect and preterite sabía "I knew" vs. supe "I found out", podía "I was able to" vs. pude "I succeeded", quería "I wanted to" vs. quise "I tried to", no quería "I did not want to" vs. no quise "I refused". Such distinctions are often highly language-specific. 
+					-->
+					<xs:enumeration value="NONE" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="pos">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ADJECTIVE" />
+					<xs:enumeration value="NOUN" />
+					<xs:enumeration value="VERB" />
+					<xs:enumeration value="PREPOSITION" />
+					<xs:enumeration value="OTHER" />
+					<xs:enumeration value="UNKNOWN" /> <!-- Hector Llorens modification for AQUAINT -->
+					<xs:enumeration value="PREP" /> <!-- Hector Llorens modification for Spanish -->
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>			
+
+	</xs:complexType>
+
+</xs:element>
+
+
+<xs:element name="TLINK">
+
+	<xs:complexType>
+
+		<xs:attribute name="lid" type="LinkID" />
+		<xs:attribute name="origin" type="xs:string"/>
+		<xs:attribute name="eventInstanceID" type="EventInstanceID" />
+		<xs:attribute name="timeID" type="TimeID" />
+		<xs:attribute name="signalID" type="SignalID" />
+		<xs:attribute name="relatedToTime" type="TimeID" />
+		<xs:attribute name="relatedToEventInstance" type="EventInstanceID" />
+		<!-- Hector Llorens modification | */EVENT (below there are more analogous) -->
+		<!--<xs:attribute name="leid" type="EventID" use="required" />--> <!--UNCOMMENT LATER -->
+		
+
+		<xs:attribute name="relType" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="BEFORE" />
+					<xs:enumeration value="AFTER" />
+					<xs:enumeration value="INCLUDES" />
+					<xs:enumeration value="IS_INCLUDED" />
+					<xs:enumeration value="DURING" />
+					<xs:enumeration value="DURING_INV" />
+					<xs:enumeration value="SIMULTANEOUS" />
+					<xs:enumeration value="IAFTER" />
+					<xs:enumeration value="IBEFORE" />
+					<xs:enumeration value="IDENTITY" />
+					<xs:enumeration value="BEGINS" />
+					<xs:enumeration value="ENDS" />
+					<xs:enumeration value="BEGUN_BY" />
+					<xs:enumeration value="ENDED_BY" />
+					<xs:enumeration value="OVERLAP" /> <!-- Hector Llorens modification for Spanish -->
+					<xs:enumeration value="BEFORE-OR-OVERLAP" /> <!-- Hector Llorens modification for Spanish -->
+					<xs:enumeration value="OVERLAP-OR-AFTER" /> <!-- Hector Llorens modification for Spanish -->
+					<xs:enumeration value="VAGUE" /> <!-- Hector Llorens modification for Spanish -->
+					<xs:enumeration value="NONE" /> <!-- Hector Llorens modification -->
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="changed" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="TRUE" />
+					<xs:enumeration value="FALSE" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+		<xs:attribute name="magnitude" type="TimeID" />
+
+	</xs:complexType>
+
+</xs:element>
+
+
+<xs:element name="SLINK">
+
+	<xs:complexType>
+
+		<xs:attribute name="lid" type="LinkID" />
+		<xs:attribute name="origin" type="xs:string"/>
+		<xs:attribute name="eventInstanceID" type="EventInstanceID" /> <!-- use="required" />-->
+		<xs:attribute name="subordinatedEventInstance" type="EventInstanceID" /> <!-- use="required" />-->
+		<xs:attribute name="signalID" type="SignalID" />
+		<!-- Hector Llorens modification | */EVENT (below there are more analogous) -->
+		<!--<xs:attribute name="leid" type="EventID" use="required"  />--><!--UNCOMMENT LATER -->
+		<xs:attribute name="syntax" type="xs:string" />  <!-- Hector Llorens modification for AQUAINT -->
+
+		<xs:attribute name="relType" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="MODAL" />
+					<xs:enumeration value="NEGATIVE" />
+					<xs:enumeration value="EVIDENTIAL" />
+					<xs:enumeration value="NEG_EVIDENTIAL" />
+					<xs:enumeration value="FACTIVE" />
+					<xs:enumeration value="COUNTER_FACTIVE" />
+					<xs:enumeration value="CONDITIONAL" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+	</xs:complexType>
+
+</xs:element>
+
+
+<xs:element name="ALINK">
+
+	<xs:complexType>
+
+		<xs:attribute name="lid" type="LinkID" />
+		<xs:attribute name="origin" type="xs:string"/>
+		<xs:attribute name="eventInstanceID" type="EventInstanceID" /> <!-- use="required" />-->
+		<xs:attribute name="signalID" type="SignalID" />
+		<xs:attribute name="relatedToEventInstance" type="EventInstanceID" /> <!-- use="required" />-->
+		<!-- Hector Llorens modification | */EVENT (below there are more analogous) -->
+		<!--<xs:attribute name="leid" type="EventID" use="required" />--> <!--UNCOMMENT LATER-->
+		<xs:attribute name="syntax" type="xs:string" />  <!-- Hector Llorens modification for AQUAINT -->
+
+
+		<xs:attribute name="relType" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="INITIATES" />
+					<xs:enumeration value="CULMINATES" />
+					<xs:enumeration value="TERMINATES" />
+					<xs:enumeration value="CONTINUES" />
+					<xs:enumeration value="REINITIATES" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+
+	</xs:complexType>
+
+</xs:element>
+
+
+
+
+</xs:schema>

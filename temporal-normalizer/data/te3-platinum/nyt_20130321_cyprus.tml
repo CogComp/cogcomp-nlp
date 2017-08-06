@@ -1,0 +1,196 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>nyt_20130321_cyprus</DOCID>
+
+<DCT><TIMEX3 tid="t0" type="DATE" value="2013-03-21" temporalFunction="false" functionInDocument="CREATION_TIME">2013-03-21</TIMEX3></DCT>
+
+<TITLE>For Euro Zone, a Cyprus Exit Would Have Little Impact</TITLE>
+
+<TEXT>
+
+A Cyprus <EVENT class="OCCURRENCE" eid="e2001">exit</EVENT> from the euro union, if it <EVENT class="OCCURRENCE" eid="e1">comes</EVENT> to that, would have a devastating <EVENT class="OCCURRENCE" eid="e2023">effect</EVENT> on the country's citizens, who are among the most <EVENT class="STATE" eid="e2006">indebted</EVENT> in the euro zone. And for European unity and diplomacy, the Cyprus <EVENT class="OCCURRENCE" eid="e2102">debacle</EVENT> has already been at least a short-term <EVENT class="OCCURRENCE" eid="e2007">disaster</EVENT>.
+
+ut for the broader financial system in Europe, the losses <EVENT class="OCCURRENCE" eid="e2">resulting</EVENT> from a Cypriot banking <EVENT class="OCCURRENCE" eid="e2105">collapse</EVENT> and the country's <EVENT class="OCCURRENCE" eid="e3">return</EVENT> to its former currency would be minimal compared with the <EVENT class="STATE" eid="e4">havoc</EVENT> that Greece would have <EVENT class="ASPECTUAL" eid="e5">created</EVENT> had it not been <EVENT class="OCCURRENCE" eid="e6">bailed</EVENT> out.
+
+And that, economists and investors <EVENT class="I_STATE" eid="e7">contend</EVENT>, is why Germany and its Dutch stalking horse, Jeroen Dijsselbloem, the president of the Eurogroup of finance ministers, were so <EVENT class="STATE" eid="e2008">adamant</EVENT> that depositors - large and small, Cypriot and Russian - <EVENT class="OCCURRENCE" eid="e2009">contribute</EVENT> 5.8 billion euros ($7.5 billion) toward the 10 billion euro <EVENT class="OCCURRENCE" eid="e2103">bailout</EVENT> of Cyprus's largest banks.
+
+Greece may well have been too big to <EVENT class="OCCURRENCE" eid="e8">fail</EVENT> <TIMEX3 type="DATE" value="2012" tid="t1">last year</TIMEX3>, but Cyprus, which <EVENT class="STATE" eid="e9">creates</EVENT> less than one-half percent of the euro zone's gross domestic product, is certainly not.
+
+From a financial standpoint, what is most <EVENT class="STATE" eid="e2012">noteworthy</EVENT> is that the combined debt of the Cypriot people, companies and government is <EVENT class="STATE" eid="e2010">2.6</EVENT> times the size of the country's gross domestic product. Only Ireland, still <EVENT class="STATE" eid="e10">struggling</EVENT> to <EVENT class="OCCURRENCE" eid="e11">recover</EVENT> from the banking <EVENT class="OCCURRENCE" eid="e2013">collapse</EVENT> that required an international <EVENT class="OCCURRENCE" eid="e12">bailout</EVENT> in <TIMEX3 type="DATE" value="2010" tid="t2">2010</TIMEX3>, has a higher debt-to-G.D.P. <EVENT class="STATE" eid="e2106">ratio</EVENT> among euro zone countries.
+
+As debts in Europe <EVENT class="OCCURRENCE" eid="e13">mount</EVENT> in inverse proportion to the ability of its citizens, companies and governments to <EVENT class="OCCURRENCE" eid="e14">make</EVENT> good on them, the view is <EVENT class="OCCURRENCE" eid="e15">forming</EVENT> in Berlin and Brussels that a signal must be <EVENT class="OCCURRENCE" eid="e16">sent</EVENT> that citizens and investors must <EVENT class="ASPECTUAL" eid="e17">start</EVENT> accepting <EVENT class="I_ACTION" eid="e2014">losses</EVENT> for the euro zone to <EVENT class="OCCURRENCE" eid="e19">survive</EVENT> in the long run.
+
+"There have been too many bailouts in Europe; it's time to <EVENT class="OCCURRENCE" eid="e20">remove</EVENT> the air bags," <EVENT class="REPORTING" eid="e21">said</EVENT> Stephen Jen, a former economist at the International Monetary Fund who runs a hedge fund in London. "This is not a Lehman," he <EVENT class="REPORTING" eid="e22">said</EVENT>, <EVENT class="OCCURRENCE" eid="e23">referring</EVENT> to the disastrous chain <EVENT class="OCCURRENCE" eid="e2100">reaction</EVENT> <EVENT class="ASPECTUAL" eid="e24">touched</EVENT> off by the <EVENT class="OCCURRENCE" eid="e2016">collapse</EVENT> of Lehman Brothers in <TIMEX3 type="DATE" value="2008" tid="t3">2008</TIMEX3>.
+
+Eric Dor is a French economist who has <EVENT class="OCCURRENCE" eid="e25">studied</EVENT> the mechanics of how a country might <EVENT class="OCCURRENCE" eid="e26">remove</EVENT> itself from the monetary union. By his calculations, the euro zone - through its central banking system and its national banks - has just 27 billion euros in outstanding credit <EVENT class="STATE" eid="e27">exposure</EVENT> to Cyprus. That is a mere rounding error compared with the euro zone G.D.P. of 9.4 trillion euros.
+
+Estimates of the potential cost if Greece had been <EVENT class="OCCURRENCE" eid="e30">forced</EVENT> into a disorderly euro <EVENT class="OCCURRENCE" eid="e2011">exit</EVENT> have ranged from 200 billion euros to 800 billion euros, given the larger <EVENT class="STATE" eid="e32">exposure</EVENT> that the European Central Bank and European banks had to the country.
+
+"This <EVENT class="REPORTING" eid="e33">explains</EVENT> why Germany and others are putting so much <EVENT class="STATE" eid="e34">pressure</EVENT> on Cyprus," <EVENT class="REPORTING" eid="e35">said</EVENT> Mr. Dor, head of research at the Ieseg School of Management in Lille, France. "They are <EVENT class="REPORTING" eid="e36">saying</EVENT> we can take the risk of <EVENT class="OCCURRENCE" eid="e38">pushing</EVENT> Cyprus out of the euro zone, and that Europe can take the <EVENT class="OCCURRENCE" eid="e39">losses</EVENT> without going <EVENT class="STATE" eid="e40">broke</EVENT>."
+
+Mr. Dor <EVENT class="REPORTING" eid="e41">notes</EVENT> that the current euro zonewide system of insuring bank deposits up to 100,000 euros was <EVENT class="OCCURRENCE" eid="e42">put</EVENT> in place after the financial <EVENT class="OCCURRENCE" eid="e2017">panic</EVENT> that followed the Lehman <EVENT class="OCCURRENCE" eid="e43">collapse</EVENT>. Those deposits are <EVENT class="STATE" eid="e44">supposed</EVENT> to be <EVENT class="OCCURRENCE" eid="e45">insured</EVENT> by national governments.
+
+So when the president of Cyprus <EVENT class="REPORTING" eid="e46">admitted</EVENT> <TIMEX3 type="DATE" value="2013-W12" tid="t4">this week</TIMEX3> that his country did not <EVENT class="OCCURRENCE" eid="e2104">have</EVENT> the money to backstop the 30 billion euros of guaranteed bank deposits - a figure greater than the Cypriot economy itself - a crucial bond of trust between a government and its citizens was <EVENT class="OCCURRENCE" eid="e47">snapped</EVENT>.
+
+"It is the first time ever that the leader of a euro zone country has <EVENT class="REPORTING" eid="e48">admitted</EVENT> that he could not <EVENT class="STATE" eid="e49">afford</EVENT> to <EVENT class="OCCURRENCE" eid="e50">pay</EVENT> the guarantee," Mr. Dor <EVENT class="REPORTING" eid="e51">said</EVENT>.
+
+A hasty <EVENT class="OCCURRENCE" eid="e52">expulsion</EVENT> from the euro zone would make the savings of the Cypriot people all the more <EVENT class="STATE" eid="e2101">evanescent</EVENT>, once they are <EVENT class="OCCURRENCE" eid="e55">converted</EVENT> back into Cypriot pounds, the currency Cyprus used before <EVENT class="OCCURRENCE" eid="e57">adopting</EVENT> the euro in <TIMEX3 type="DATE" value="2007" tid="t5">2007</TIMEX3>.
+
+</TEXT>
+
+
+<MAKEINSTANCE eiid="ei1"  eventID="e1" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2001"  eventID="e2001" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2023"  eventID="e2023" pos="NOUN" tense="NONE" aspect="PERFECTIVE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei2006"  eventID="e2006" pos="PREP" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2007"  eventID="e2007" pos="NOUN" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2"  eventID="e2" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei3"  eventID="e3" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei4"  eventID="e4" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei5"  eventID="e5" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei6"  eventID="e6" pos="VERB" tense="PAST" aspect="NONE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei7"  eventID="e7" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2008"  eventID="e2008" pos="ADJECTIVE" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2009"  eventID="e2009" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei8"  eventID="e8" pos="VERB" tense="INFINITIVE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei9"  eventID="e9" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei10"  eventID="e10" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2012"  eventID="e2012" pos="ADJECTIVE" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2010"  eventID="e2010" pos="OTHER" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei11"  eventID="e11" pos="VERB" tense="INFINITIVE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei12"  eventID="e12" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei13"  eventID="e13" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei14"  eventID="e14" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei15"  eventID="e15" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei16"  eventID="e16" pos="VERB" tense="FUTURE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei17"  eventID="e17" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2014"  eventID="e2014" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei19"  eventID="e19" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei20"  eventID="e20" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei21"  eventID="e21" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei22"  eventID="e22" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei23"  eventID="e23" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei24"  eventID="e24" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei25"  eventID="e25" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei26"  eventID="e26" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" modality="might" />
+<MAKEINSTANCE eiid="ei27"  eventID="e27" pos="NOUN" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei30"  eventID="e30" pos="VERB" tense="PAST" aspect="PERFECTIVE" polarity="POS" modality="if" />
+<MAKEINSTANCE eiid="ei2011"  eventID="e2011" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei32"  eventID="e32" pos="NOUN" tense="PAST" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei33"  eventID="e33" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei34"  eventID="e34" pos="NOUN" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei35"  eventID="e35" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei36"  eventID="e36" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei38"  eventID="e38" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei39"  eventID="e39" pos="NOUN" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei40"  eventID="e40" pos="ADJECTIVE" tense="PRESENT" aspect="PROGRESSIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei41"  eventID="e41" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei42"  eventID="e42" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2017"  eventID="e2017" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei43"  eventID="e43" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei44"  eventID="e44" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei45"  eventID="e45" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" modality="supposed" />
+<MAKEINSTANCE eiid="ei46"  eventID="e46" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei47"  eventID="e47" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei48"  eventID="e48" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei49"  eventID="e49" pos="VERB" tense="PRESENT" aspect="NONE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei50"  eventID="e50" pos="VERB" tense="INFINITIVE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei51"  eventID="e51" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei52"  eventID="e52" pos="NOUN" tense="FUTURE" aspect="NONE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei55"  eventID="e55" pos="VERB" tense="FUTURE" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei57"  eventID="e57" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2100"  eventID="e2100" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2101"  eventID="e2101" pos="ADJECTIVE" tense="FUTURE" aspect="NONE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei2102"  eventID="e2102" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2103"  eventID="e2103" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2104"  eventID="e2104" pos="VERB" tense="PAST" aspect="NONE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei2105"  eventID="e2105" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2106"  eventID="e2106" pos="NOUN" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2013"  eventID="e2013" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2016"  eventID="e2016" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+
+<TLINK lid="l1" relType="AFTER" eventInstanceID="ei1" relatedToTime="t0" />
+<TLINK lid="l2001" relType="AFTER" eventInstanceID="ei2001" relatedToTime="t0" />
+<TLINK lid="l2018" relType="AFTER" eventInstanceID="ei2023" relatedToTime="t0" />
+<TLINK lid="l2019" relType="INCLUDES" eventInstanceID="ei2006" relatedToTime="t0" />
+<TLINK lid="l2" relType="AFTER" eventInstanceID="ei2" relatedToTime="t0" />
+<TLINK lid="l2020" relType="BEFORE" eventInstanceID="ei2001" relatedToEventInstance="ei2023" />
+<TLINK lid="l2021" relType="INCLUDES" eventInstanceID="ei2006" relatedToEventInstance="ei2001" />
+<TLINK lid="l3" relType="BEFORE" eventInstanceID="ei1" relatedToEventInstance="ei2" />
+<TLINK lid="l4" relType="BEFORE" eventInstanceID="ei3" relatedToEventInstance="ei2" />
+<TLINK lid="l5" relType="SIMULTANEOUS" eventInstanceID="ei4" relatedToEventInstance="ei2" />
+<TLINK lid="l6" relType="BEFORE" eventInstanceID="ei5" relatedToEventInstance="ei2" />
+<TLINK lid="l2022" relType="BEFORE" eventInstanceID="ei5" relatedToEventInstance="ei6" />
+<TLINK lid="l7" relType="BEFORE" eventInstanceID="ei6" relatedToEventInstance="ei2" />
+<TLINK lid="l8" relType="INCLUDES" eventInstanceID="ei7" relatedToTime="t0" />
+<TLINK lid="l10" relType="IS_INCLUDED" eventInstanceID="ei8" relatedToTime="t1" />
+<TLINK lid="l11" relType="INCLUDES" eventInstanceID="ei9" relatedToTime="t0" />
+<TLINK lid="l13" relType="BEFORE" eventInstanceID="ei8" relatedToEventInstance="ei9" />
+<TLINK lid="l14" relType="IS_INCLUDED" eventInstanceID="ei12" relatedToTime="t2" />
+<TLINK lid="l15" relType="INCLUDES" eventInstanceID="ei10" relatedToTime="t0" />
+<TLINK lid="l155" relType="INCLUDES" eventInstanceID="ei2010" relatedToTime="t0" />
+<TLINK lid="l16" relType="SIMULTANEOUS" eventInstanceID="ei9" relatedToEventInstance="ei10" />
+<TLINK lid="l12008" relType="BEFORE" eventInstanceID="ei2013" relatedToTime="t0"/>
+<TLINK lid="l19" relType="INCLUDES" eventInstanceID="ei15" relatedToTime="t0" />
+<TLINK lid="l21" relType="BEFORE" eventInstanceID="ei13" relatedToEventInstance="ei15" />
+<TLINK lid="l22" relType="BEFORE" eventInstanceID="ei14" relatedToEventInstance="ei15" />
+<TLINK lid="l23" relType="AFTER" eventInstanceID="ei16" relatedToEventInstance="ei15" />
+<TLINK lid="l24" relType="AFTER" eventInstanceID="ei17" relatedToEventInstance="ei15" />
+<TLINK lid="l26" relType="AFTER" eventInstanceID="ei19" relatedToEventInstance="ei15" />
+<TLINK lid="l28" relType="SIMULTANEOUS" eventInstanceID="ei15" relatedToEventInstance="ei21" />
+<TLINK lid="l29" relType="BEFORE" eventInstanceID="ei20" relatedToEventInstance="ei21" />
+<TLINK lid="l30" relType="IS_INCLUDED" eventInstanceID="ei24" relatedToTime="t3" />
+<TLINK lid="l2011" relType="IS_INCLUDED" eventInstanceID="ei2016" relatedToTime="t3" />
+<TLINK lid="l306" relType="BEFORE" eventInstanceID="ei2016" relatedToEventInstance="ei24" />
+<TLINK lid="l32" relType="SIMULTANEOUS" eventInstanceID="ei21" relatedToEventInstance="ei22" />
+<TLINK lid="l34" relType="BEFORE" eventInstanceID="ei24" relatedToEventInstance="ei22" />
+<TLINK lid="l35" relType="BEFORE" eventInstanceID="ei25" relatedToTime="t0" />
+<TLINK lid="l36" relType="AFTER" eventInstanceID="ei22" relatedToEventInstance="ei25" />
+<TLINK lid="l38" relType="INCLUDES" eventInstanceID="ei27" relatedToTime="t0" />
+<TLINK lid="l445" relType="BEFORE" eventInstanceID="ei30" relatedToEventInstance="ei2011" />
+<TLINK lid="l47" relType="INCLUDES" eventInstanceID="ei33" relatedToTime="t0" />
+<TLINK lid="l51" relType="INCLUDES" eventInstanceID="ei34" relatedToEventInstance="ei35" />
+<TLINK lid="l53" relType="SIMULTANEOUS" eventInstanceID="ei34" relatedToEventInstance="ei36" />
+<TLINK lid="l55" relType="AFTER" eventInstanceID="ei38" relatedToEventInstance="ei36" />
+<TLINK lid="l56" relType="AFTER" eventInstanceID="ei39" relatedToEventInstance="ei36" />
+<TLINK lid="l57" relType="SIMULTANEOUS" eventInstanceID="ei40" relatedToEventInstance="ei39" />
+<TLINK lid="l60" relType="BEFORE" eventInstanceID="ei42" relatedToEventInstance="ei41" />
+<TLINK lid="l61" relType="BEFORE" eventInstanceID="ei43" relatedToEventInstance="ei41" />
+<TLINK lid="l615" relType="AFTER" eventInstanceID="ei2017" relatedToEventInstance="ei43" />
+<TLINK lid="l62" relType="INCLUDES" eventInstanceID="ei44" relatedToTime="t0" />
+<TLINK lid="l63" relType="IS_INCLUDED" eventInstanceID="ei41" relatedToEventInstance="ei44" />
+<TLINK lid="l64" relType="SIMULTANEOUS" eventInstanceID="ei45" relatedToEventInstance="ei44" />
+<TLINK lid="l65" relType="IS_INCLUDED" eventInstanceID="ei46" relatedToTime="t4" />
+<TLINK lid="l66" relType="BEFORE" eventInstanceID="ei47" relatedToTime="t0" />
+<TLINK lid="l68" relType="BEFORE" eventInstanceID="ei46" relatedToEventInstance="ei47" />
+
+<TLINK lid="l71" relType="BEFORE" eventInstanceID="ei48" relatedToEventInstance="ei51" />
+<TLINK lid="l72" relType="BEFORE" eventInstanceID="ei49" relatedToEventInstance="ei51" />
+<TLINK lid="l73" relType="BEFORE" eventInstanceID="ei50" relatedToEventInstance="ei51" />
+<TLINK lid="l74" relType="IS_INCLUDED" eventInstanceID="ei57" relatedToTime="t5" />
+<TLINK lid="l75" relType="AFTER" eventInstanceID="ei52" relatedToTime="t0" />
+<TLINK lid="l76" relType="BEFORE" eventInstanceID="ei51" relatedToEventInstance="ei52" />
+<TLINK lid="l79" relType="AFTER" eventInstanceID="ei55" relatedToEventInstance="ei52" />
+<TLINK lid="l81" relType="BEFORE" eventInstanceID="ei57" relatedToEventInstance="ei52" />
+<TLINK lid="l200" relType="IDENTITY" eventInstanceID="ei48" relatedToEventInstance="ei46" />
+<TLINK lid="l201" relType="BEFORE" eventInstanceID="ei2007" relatedToEventInstance="ei1" />
+<TLINK lid="l202" relType="BEFORE" eventInstanceID="ei2007" relatedToTime="t0" />
+<TLINK lid="l203" relType="BEFORE" eventInstanceID="ei2105" relatedToEventInstance="ei2" />
+<TLINK lid="l204" relType="BEFORE" eventInstanceID="ei6" relatedToEventInstance="ei4" />
+<TLINK lid="l205" relType="INCLUDES" eventInstanceID="ei2010" relatedToTime="t0" />
+<TLINK lid="l206" relType="IBEFORE" eventInstanceID="ei2013" relatedToEventInstance="ei11"/>
+<TLINK lid="l207" relType="IS_INCLUDED" eventInstanceID="ei2013" relatedToTime="t2" />
+<TLINK lid="l208" relType="BEFORE" eventInstanceID="ei2014" relatedToEventInstance="ei19"/>
+<TLINK lid="l209" relType="SIMULTANEOUS" eventInstanceID="ei21" relatedToEventInstance="ei35" />
+<TLINK lid="l210" relType="SIMULTANEOUS" eventInstanceID="ei23" relatedToEventInstance="ei21" />
+<TLINK lid="l211" relType="BEFORE" eventInstanceID="ei2100" relatedToTime="t0" />
+<TLINK lid="l212" relType="BEFORE" eventInstanceID="ei30" relatedToTime="t0" />
+<TLINK lid="l213" relType="BEFORE" eventInstanceID="ei46" relatedToTime="t0" />
+<TLINK lid="l214" relType="BEFORE" eventInstanceID="ei42" relatedToTime="t0" />
+<TLINK lid="l215" relType="AFTER" eventInstanceID="ei42" relatedToEventInstance="ei2017" />
+<TLINK lid="l216" relType="SIMULTANEOUS" eventInstanceID="ei21" relatedToEventInstance="ei51" />
+<TLINK lid="l217" relType="AFTER" eventInstanceID="ei2101" relatedToEventInstance="ei55" />
+<TLINK lid="l218" relType="SIMULTANEOUS" eventInstanceID="ei21" relatedToEventInstance="ei41" />
+
+</TimeML>

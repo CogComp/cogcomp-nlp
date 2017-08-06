@@ -541,7 +541,12 @@ public class TemporalChunkerAnnotator extends Annotator{
      * @return
      * @throws Exception
      */
-    public List<TimexChunk> extractTimexFromFile(String text, String content, TextAnnotation ta) throws Exception{
+    public List<TimexChunk> extractTimexFromFile(
+        String text,
+        String content,
+        TextAnnotation ta,
+        boolean verbose
+    ) throws Exception{
         Document document = builder.parse(new InputSource(new StringReader(text)));
         Element rootElement = document.getDocumentElement();
         List<TimexChunk> timex = new ArrayList<>();
@@ -659,8 +664,6 @@ public class TemporalChunkerAnnotator extends Annotator{
                             continue;
                         }
                         else {
-                            if (htTcs.size()>1)
-                                System.out.println(docId + " " + currStr);
                             int htStart = charStart;
                             int htEnd = charStart;
                             for (TimexChunk htTc : htTcs) {
@@ -670,6 +673,7 @@ public class TemporalChunkerAnnotator extends Annotator{
                                 htTc.setCharStart(htStart);
                                 htTc.setCharEnd(htEnd);
                                 timex.add(htTc);
+                                //res.put(new IntPair(htStart, htEnd), htTc);
                             }
                         }
 
@@ -677,6 +681,7 @@ public class TemporalChunkerAnnotator extends Annotator{
                     else
                         tc = timexNormalizer.normalize(new TemporalPhrase(currStr, tense));
                 } catch (Exception e) {
+                    e.printStackTrace();
                     System.err.println("CANNOT NORMALIZE: " + currStr);
                 }
                 if (tc!=null) {
@@ -693,77 +698,75 @@ public class TemporalChunkerAnnotator extends Annotator{
 
         }
 
-        System.out.println("MISS");
-        for (TimexChunk tc:trueTimexs) {
-            IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
-            if (!res.containsKey(key)) {
-                System.out.println(tc.toTIMEXString());
-                TimexChunk htRes = null;
-                if (htRes!=null) {
-                    htRes.setContent(tc.getContent());
-                    System.out.println("HT:    " + htRes.toTIMEXString());
-                }
-            }
-        }
-        System.out.println();
-        System.out.println("WRONG TYPE");
-        for (TimexChunk tc:trueTimexs) {
-            IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
-            if (res.containsKey(key)) {
-                TimexChunk ourTc = res.get(key);
-                if (ourTc.getAttribute(TimexNames.type)==null) {
-                    System.out.println("OUR:   " + ourTc.toTIMEXString());
-                    System.out.println("TRUE:  " + tc.toTIMEXString());
-                    //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+        if (verbose) {
+            System.out.println("MISS");
+            for (TimexChunk tc : trueTimexs) {
+                IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
+                if (!res.containsKey(key)) {
+                    System.out.println(tc.toTIMEXString());
                     TimexChunk htRes = null;
-                    if (htRes!=null) {
-                        htRes.setContent(tc.getContent());
-                        System.out.println("HT:    " + htRes.toTIMEXString());
-                    }
-                }
-                else if (!ourTc.getAttribute(TimexNames.type).equals(tc.getAttribute(TimexNames.type))) {
-                    System.out.println("OUR:   " + ourTc.toTIMEXString());
-                    System.out.println("TRUE:  " + tc.toTIMEXString());
-                    //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
-                    TimexChunk htRes = null;
-                    if (htRes!=null) {
+                    if (htRes != null) {
                         htRes.setContent(tc.getContent());
                         System.out.println("HT:    " + htRes.toTIMEXString());
                     }
                 }
             }
-        }
-        System.out.println();
-        System.out.println("WRONG VALUE");
-        for (TimexChunk tc:trueTimexs) {
-            IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
-            if (res.containsKey(key)) {
-                TimexChunk ourTc = res.get(key);
-                if (ourTc.getAttribute(TimexNames.value)==null) {
-                    System.out.println("OUR:   " + ourTc.toTIMEXString());
-                    System.out.println("TRUE:  " + tc.toTIMEXString());
-                    //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
-                    TimexChunk htRes = null;
-                    if (htRes!=null) {
-                        htRes.setContent(tc.getContent());
-                        System.out.println("HT:    " + htRes.toTIMEXString());
-                    }
-                }
-                else if (!ourTc.getAttribute(TimexNames.value).equals(tc.getAttribute(TimexNames.value))) {
-                    System.out.println("OUR:   " + ourTc.toTIMEXString());
-                    System.out.println("TRUE:  " + tc.toTIMEXString());
-                    //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
-                    TimexChunk htRes = null;
-                    if (htRes!=null) {
-                        htRes.setContent(tc.getContent());
-                        System.out.println("HT:    " + htRes.toTIMEXString());
+            System.out.println();
+            System.out.println("WRONG TYPE");
+            for (TimexChunk tc : trueTimexs) {
+                IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
+                if (res.containsKey(key)) {
+                    TimexChunk ourTc = res.get(key);
+                    if (ourTc.getAttribute(TimexNames.type) == null) {
+                        System.out.println("OUR:   " + ourTc.toTIMEXString());
+                        System.out.println("TRUE:  " + tc.toTIMEXString());
+                        //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                        TimexChunk htRes = null;
+                        if (htRes != null) {
+                            htRes.setContent(tc.getContent());
+                            System.out.println("HT:    " + htRes.toTIMEXString());
+                        }
+                    } else if (!ourTc.getAttribute(TimexNames.type).equals(tc.getAttribute(TimexNames.type))) {
+                        System.out.println("OUR:   " + ourTc.toTIMEXString());
+                        System.out.println("TRUE:  " + tc.toTIMEXString());
+                        //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                        TimexChunk htRes = null;
+                        if (htRes != null) {
+                            htRes.setContent(tc.getContent());
+                            System.out.println("HT:    " + htRes.toTIMEXString());
+                        }
                     }
                 }
             }
+            System.out.println();
+            System.out.println("WRONG VALUE");
+            for (TimexChunk tc : trueTimexs) {
+                IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
+                if (res.containsKey(key)) {
+                    TimexChunk ourTc = res.get(key);
+                    if (ourTc.getAttribute(TimexNames.value) == null) {
+                        System.out.println("OUR:   " + ourTc.toTIMEXString());
+                        System.out.println("TRUE:  " + tc.toTIMEXString());
+                        //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                        TimexChunk htRes = null;
+                        if (htRes != null) {
+                            htRes.setContent(tc.getContent());
+                            System.out.println("HT:    " + htRes.toTIMEXString());
+                        }
+                    } else if (!ourTc.getAttribute(TimexNames.value).equals(tc.getAttribute(TimexNames.value))) {
+                        System.out.println("OUR:   " + ourTc.toTIMEXString());
+                        System.out.println("TRUE:  " + tc.toTIMEXString());
+                        //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                        TimexChunk htRes = null;
+                        if (htRes != null) {
+                            htRes.setContent(tc.getContent());
+                            System.out.println("HT:    " + htRes.toTIMEXString());
+                        }
+                    }
+                }
+            }
+            System.out.println();
         }
-
-        System.out.println();
-
         return timex;
     }
 

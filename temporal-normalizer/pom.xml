@@ -8,16 +8,13 @@
         <version>3.1.25</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>illinois-time</artifactId>
-
     <dependencies>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.1.25</version>
         </dependency>
-
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
@@ -32,16 +29,6 @@
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
             <version>3.1.25</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-pos-models</artifactId>
-            <version>3.0.13</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-chunker-model</artifactId>
-            <version>3.0.77</version>
         </dependency>
         <dependency>
             <groupId>org.apache.uima</groupId>
@@ -90,7 +77,12 @@
             <artifactId>illinois-nlp-pipeline</artifactId>
             <version>3.1.25</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.3</version>
+        </dependency>
     </dependencies>
 
 </project>

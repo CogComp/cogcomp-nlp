@@ -30,6 +30,8 @@ Each library contains detailed readme and instructions on how to use it. In addi
 | [commasrl](commasrl/README.md) | This software extracts relations that commas participate in. |
 | [similarity](similarity/README.md) | This software compare objects --especially Strings-- and return a score indicating how similar they are. |
 | [external-annotators](external/README.md) | A collection useful external annotators.  |
+| [temporal-normalizer](temporal-normalizer/README.md) | A temporal extractor and normalizer.  |
+
 
  - **Questions?** Have a look at our [FAQs](faq.md). 
 

@@ -1,0 +1,92 @@
+<?xml version="1.0" ?><TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>bbc_20130322_721</DOCID>
+
+<DCT><TIMEX3 functionInDocument="CREATION_TIME" temporalFunction="false" tid="t0" type="DATE" value="2013-03-22">2013-03-22</TIMEX3></DCT>
+
+<TITLE>Russian police raid rights group Memorial and other NGOs</TITLE>
+
+<TEXT>
+
+Russian police and tax inspectors have <EVENT class="OCCURRENCE" eid="e1">raided</EVENT> the offices of the human rights group Memorial and other civil society groups which get foreign funding.
+
+Memorial is famous for <EVENT class="OCCURRENCE" eid="e2">documenting</EVENT> human rights <EVENT class="OCCURRENCE" eid="e3">abuses</EVENT> in Russia.
+
+The US embassy in Moscow has <EVENT class="REPORTING" eid="e4">voiced</EVENT> concern and <EVENT class="I_ACTION" eid="e5">asked</EVENT> the Russian government for an <EVENT class="OCCURRENCE" eid="e1000">explanation</EVENT>.
+
+A new Russian law <EVENT class="STATE" eid="e6">says</EVENT> foreign-funded non-governmental groups (NGOs) linked to politics must register as "foreign agents" - a term which suggests spying.
+
+In the worst <EVENT class="OCCURRENCE" eid="e1000016">repressions</EVENT> of the Soviet period the label "foreign agents" was used to <EVENT class="OCCURRENCE" eid="e10">denounce</EVENT> dissidents - or simply political rivals of Joseph Stalin - and could <EVENT class="I_ACTION" eid="e11">lead</EVENT> to <EVENT class="OCCURRENCE" eid="e1000017">execution</EVENT>.
+
+Memorial <EVENT class="REPORTING" eid="e12">says</EVENT> inspectors <EVENT class="OCCURRENCE" eid="e13">returned</EVENT> to its Moscow offices on <TIMEX3 tid="t1" type="DATE" value="2013-03-22">Friday</TIMEX3>, having already <EVENT class="OCCURRENCE" eid="e14">seized</EVENT> 600 documents including accounts on <TIMEX3 tid="t2" type="DATE" value="2013-03-21">Thursday</TIMEX3>.
+
+A statement on the Memorial website <EVENT class="REPORTING" eid="e15">said</EVENT> the <EVENT class="OCCURRENCE" eid="e1000018">inspections</EVENT> were directly <EVENT class="OCCURRENCE" eid="e16">linked</EVENT> to the new law on NGOs and the targeted groups' <EVENT class="STATE" eid="e1000019">compliance</EVENT> with it.
+
+Memorial director Arseny Roginsky, <EVENT class="OCCURRENCE" eid="e17">quoted</EVENT> by the Russian news website Vesti, <EVENT class="REPORTING" eid="e18">said</EVENT> it <EVENT class="STATE" eid="e19">was</EVENT> "a complete check on everything concerned with our sources of funding".
+
+He <EVENT class="I_ACTION" eid="e21">insisted</EVENT> that the NGO law "will not <EVENT class="OCCURRENCE" eid="e22">change</EVENT> our position at all". "We won't <EVENT class="OCCURRENCE" eid="e23">refuse</EVENT> foreign donations, nor will we <EVENT class="OCCURRENCE" eid="e24">register</EVENT> as a 'foreign agent'," he <EVENT class="REPORTING" eid="e25">said</EVENT>.
+
+</TEXT>
+
+
+<MAKEINSTANCE aspect="PERFECTIVE" eiid="ei1" eventID="e1" polarity="POS" pos="VERB" tense="PRESENT"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei2" eventID="e2" polarity="POS" pos="VERB" tense="PRESPART"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei3" eventID="e3" polarity="POS" pos="NOUN" tense="NONE"/>
+<MAKEINSTANCE aspect="PERFECTIVE" eiid="ei4" eventID="e4" polarity="POS" pos="VERB" tense="PRESENT"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei5" eventID="e5" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei6" eventID="e6" polarity="POS" pos="VERB" tense="PRESENT"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei10" eventID="e10" polarity="POS" pos="VERB" tense="INFINITIVE"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei11" eventID="e11" modality="could" polarity="POS" pos="VERB" tense="NONE"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei12" eventID="e12" polarity="POS" pos="VERB" tense="PRESENT"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei13" eventID="e13" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei14" eventID="e14" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei15" eventID="e15" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei16" eventID="e16" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei17" eventID="e17" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei18" eventID="e18" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei19" eventID="e19" polarity="POS" pos="OTHER" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei21" eventID="e21" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei22" eventID="e22" polarity="NEG" pos="VERB" tense="FUTURE"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei23" eventID="e23" polarity="NEG" pos="VERB" tense="FUTURE"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei24" eventID="e24" polarity="NEG" pos="VERB" tense="FUTURE"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei25" eventID="e25" polarity="POS" pos="VERB" tense="PAST"/>
+<MAKEINSTANCE aspect="PERFECTIVE" eiid="ei1000014" eventID="e14" polarity="POS" pos="VERB" tense="PRESENT"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei1000016" eventID="e1000016" modality="" polarity="POS" pos="NOUN" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei1000017" eventID="e1000017" modality="" polarity="POS" pos="NOUN" tense="NONE"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei1000018" eventID="e1000018" modality="could" polarity="POS" pos="NOUN" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei1000019" eventID="e1000019" modality="" polarity="POS" pos="NOUN" tense="PAST"/>
+<MAKEINSTANCE aspect="NONE" eiid="ei1000" eventID="e1000" modality="" polarity="POS" pos="NOUN" tense="FUTURE"/>
+
+<TLINK eventInstanceID="ei1" lid="l1" relType="BEFORE" relatedToTime="t0"/>
+<TLINK eventInstanceID="ei1" lid="l3" relType="AFTER" relatedToEventInstance="ei2"/>
+<TLINK eventInstanceID="ei3" lid="l4" relType="BEFORE" relatedToEventInstance="ei2"/>
+<TLINK eventInstanceID="ei4" lid="l9" relType="IS_INCLUDED" relatedToEventInstance="ei6"/>
+<TLINK eventInstanceID="ei14" lid="l16" relType="BEFORE" relatedToTime="t1"/>
+<TLINK eventInstanceID="ei1000014" lid="l17" relType="IS_INCLUDED" relatedToTime="t2"/>
+<TLINK eventInstanceID="ei13" lid="l20" relType="BEFORE" relatedToEventInstance="ei12"/>
+<TLINK eventInstanceID="ei14" lid="l21" relType="BEFORE" relatedToEventInstance="ei12"/>
+<TLINK eventInstanceID="ei1000014" lid="l22" relType="BEFORE" relatedToEventInstance="ei12"/>
+<TLINK eventInstanceID="ei16" lid="l25" relType="BEFORE" relatedToEventInstance="ei15"/>
+<TLINK eventInstanceID="ei17" lid="l28" relType="AFTER" relatedToEventInstance="ei18"/>
+<TLINK eventInstanceID="ei19" lid="l29" relType="BEFORE" relatedToEventInstance="ei18"/>
+<TLINK eventInstanceID="ei18" lid="l32" relType="SIMULTANEOUS" relatedToEventInstance="ei21"/>
+<TLINK eventInstanceID="ei22" lid="l33" relType="AFTER" relatedToEventInstance="ei21"/>
+<TLINK eventInstanceID="ei21" lid="l35" relType="SIMULTANEOUS" relatedToEventInstance="ei25"/>
+<TLINK eventInstanceID="ei23" lid="l36" relType="AFTER" relatedToEventInstance="ei25"/>
+<TLINK eventInstanceID="ei24" lid="l37" relType="AFTER" relatedToEventInstance="ei25"/>
+
+<TLINK eventInstanceID="ei14" lid="l100" relType="IDENTITY" relatedToEventInstance="ei1"/>
+<TLINK eventInstanceID="ei6"  lid="l101" relType="INCLUDES" relatedToTime="t0"/>
+<TLINK eventInstanceID="ei12" lid="l102" relType="IS_INCLUDED" relatedToTime="t0"/>
+<TLINK eventInstanceID="ei2"  lid="l103" relType="INCLUDES" relatedToEventInstance="ei4"/>
+<TLINK eventInstanceID="ei4"  lid="l104" relType="SIMULTANEOUS" relatedToEventInstance="ei5"/>
+<TLINK eventInstanceID="ei5"  lid="l105" relType="BEFORE" relatedToEventInstance="ei1000"/>
+<TLINK eventInstanceID="ei11" lid="l106" relType="BEFORE" relatedToEventInstance="ei1000017"/>
+<TLINK eventInstanceID="ei13" lid="l107" relType="IS_INCLUDED" relatedToTime="t1"/>
+<TLINK eventInstanceID="ei21" lid="l108" relType="BEFORE" relatedToEventInstance="ei24"/>
+<TLINK eventInstanceID="ei10" lid="l109" relType="BEFORE" relatedToTime="t0"/>
+<TLINK eventInstanceID="ei1"  lid="l110" relType="IS_INCLUDED" relatedToEventInstance="ei1000018"/>
+<TLINK eventInstanceID="ei13" lid="l111" relType="IS_INCLUDED" relatedToEventInstance="ei1000018"/>
+<TLINK eventInstanceID="ei14" lid="l112" relType="IS_INCLUDED" relatedToEventInstance="ei1000018"/>
+
+</TimeML>

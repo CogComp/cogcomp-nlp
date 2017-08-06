@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>AFP_ENG_19970401.0006</DOCID>
+
+<DCT>KUALA LUMPUR, <TIMEX3 tid="t0" type="TIME" value="1997-04-01" temporalFunction="false" functionInDocument="CREATION_TIME">April 1 , 1997</TIMEX3> (AFP)</DCT>
+
+<TITLE>Malaysian share market falls 1.1 percent at midday</TITLE>
+
+
+<TEXT>
+
+Malaysian share prices <EVENT class="OCCURRENCE" eid="e1">dipped</EVENT> 1.1 percent by midday <TIMEX3 type="DATE" value="1997-04-01" tid="t1">Tuesday</TIMEX3>, with the market barometer <EVENT class="OCCURRENCE" eid="e2">falling</EVENT> below the 1,200 support level for the first time in <TIMEX3 type="DURATION" value="P3M" tid="t2">three months</TIMEX3> following credit curbs and the Dow's fall.
+
+"The overnight fall on Wall Street was a double <EVENT class="OCCURRENCE" eid="e3">whammy</EVENT> for the market, which was already <EVENT class="OCCURRENCE" eid="e4">reeling</EVENT> from the central bank's curbs on bank lendings," <EVENT class="REPORTING" eid="e6">said</EVENT> Victor Wan, analyst at South Johore Securities.
+
+Wan <EVENT class="REPORTING" eid="e7">said</EVENT> investors were <EVENT class="OCCURRENCE" eid="e8">selling</EVENT> banking and property stocks in anticipation of lower earnings.
+
+The Kuala Lumpur Stock Exchange's 100-share weighted composite index <EVENT class="OCCURRENCE" eid="e9">tumbled</EVENT> 13.68 points to 1,189.42 at the <EVENT class="OCCURRENCE" eid="e10">close</EVENT> of the morning session, after <EVENT class="OCCURRENCE" eid="e12">touching</EVENT> a low of 1,183.17.
+
+The central Bank Negara Tuesday <EVENT class="OCCURRENCE" eid="e13">imposed</EVENT> new lending limits on shares and luxury properties to <EVENT class="OCCURRENCE" eid="e14">thwart</EVENT> excessive market speculation and <EVENT class="OCCURRENCE" eid="e16">quell</EVENT> soaring property prices.
+
+Bank lending to the property sector was <EVENT class="OCCURRENCE" eid="e19">limited</EVENT> to 20 percent of all loans, excluding residential units costing 60,000 US dollars and below, infrastructure facilities and industrial buildings.
+
+Rules for <EVENT class="OCCURRENCE" eid="e21">lending</EVENT> against stocks and unit trusts were also <EVENT class="OCCURRENCE" eid="e22">redefined</EVENT>.
+
+Trading volume in the morning <EVENT class="OCCURRENCE" eid="e23">session</EVENT> was 162.178 million shares worth 1.175 billion ringgit (470 million dollars).
+
+Falling stocks <EVENT class="OCCURRENCE" eid="e24">outnumbered</EVENT> those <EVENT class="OCCURRENCE" eid="e25">rising</EVENT> 401 to 187, with 142 unchanged and 131 untraded.
+
+Top bank, Maybank, <EVENT class="OCCURRENCE" eid="e26">led</EVENT> the fall in banking stocks with a 75 sen <EVENT class="OCCURRENCE" eid="e27">lost</EVENT> to 27.50 ringgit, Public Bank was <EVENT class="STATE" eid="e28">flat</EVENT> at 3.56 ringgit while Arab- Malaysian Merchant Bank <EVENT class="OCCURRENCE" eid="e29">declined</EVENT> 70 sen to 19.90 ringgit.
+
+Both national powerhouse Tenaga Nasional and gaming giant Genting <EVENT class="OCCURRENCE" eid="e30">eased</EVENT> 10 sen each to 12.00 ringgit and 16.70 ringgit respectively.
+
+Telekom Malaysia <EVENT class="OCCURRENCE" eid="e31">shed</EVENT> 20 sen to 19.10 ringgit.
+
+</TEXT>
+
+
+<MAKEINSTANCE eiid="ei1" eventID="e1" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei3" eventID="e3" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2" eventID="e2" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei31" eventID="e31" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei30" eventID="e30" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei21" eventID="e21" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei24" eventID="e24" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei25" eventID="e25" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei22" eventID="e22" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei23" eventID="e23" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei28" eventID="e28" pos="ADJECTIVE" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei4" eventID="e4" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei29" eventID="e29" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei6" eventID="e6" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei26" eventID="e26" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei7" eventID="e7" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei27" eventID="e27" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei8" eventID="e8" pos="VERB" tense="PAST" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei9" eventID="e9" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei10" eventID="e10" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei12" eventID="e12" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei13" eventID="e13" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei14" eventID="e14" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei16" eventID="e16" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei19" eventID="e19" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+
+
+<TLINK lid="l1" eventInstanceID="ei1" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l2" eventInstanceID="ei9" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l3" eventInstanceID="ei6" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l4" eventInstanceID="ei30" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l5" eventInstanceID="ei22" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l6" eventInstanceID="ei24" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l7" eventInstanceID="ei26" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l8" eventInstanceID="ei19" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l9" eventInstanceID="ei7" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l10" eventInstanceID="ei24" relatedToEventInstance="ei26" relType="BEFORE" />
+<TLINK lid="l11" eventInstanceID="ei26" relatedToEventInstance="ei30" relType="BEFORE" />
+<TLINK lid="l12" eventInstanceID="ei13" relatedToTime="t0" relType="INCLUDES" />
+<TLINK lid="l13" eventInstanceID="ei19" relatedToEventInstance="ei22" relType="BEFORE" />
+<TLINK lid="l14" eventInstanceID="ei13" relatedToEventInstance="ei14" relType="AFTER" />
+<TLINK lid="l15" eventInstanceID="ei9" relatedToEventInstance="ei13" relType="BEFORE" />
+<TLINK lid="l16" eventInstanceID="ei13" relatedToEventInstance="ei16" relType="AFTER" />
+<TLINK lid="l17" eventInstanceID="ei9" relatedToEventInstance="ei12" relType="AFTER" />
+<TLINK lid="l18" eventInstanceID="ei9" relatedToEventInstance="ei10" relType="AFTER" />
+<TLINK lid="l19" eventInstanceID="ei1" relatedToTime="t1" relType="IS_INCLUDED" />
+<TLINK lid="l20" eventInstanceID="ei1" relatedToEventInstance="ei2" relType="AFTER" />
+<TLINK lid="l21" eventInstanceID="ei1" relatedToEventInstance="ei6" relType="SIMULTANEOUS" />
+<TLINK lid="l22" eventInstanceID="ei4" relatedToEventInstance="ei6" relType="BEFORE" />
+<TLINK lid="l23" eventInstanceID="ei6" relatedToEventInstance="ei7" relType="SIMULTANEOUS" />
+<TLINK lid="l24" eventInstanceID="ei7" relatedToEventInstance="ei8" relType="AFTER" />
+<TLINK lid="l25" eventInstanceID="ei22" relatedToEventInstance="ei23" relType="SIMULTANEOUS" />
+<TLINK lid="l26" eventInstanceID="ei23" relatedToEventInstance="ei24" relType="SIMULTANEOUS" />
+<TLINK lid="l27" eventInstanceID="ei24" relatedToEventInstance="ei25" relType="AFTER" />
+<TLINK lid="l28" eventInstanceID="ei30" relatedToEventInstance="ei31" relType="BEFORE" />
+<TLINK lid="l29" eventInstanceID="ei31" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l30" eventInstanceID="ei2" relatedToTime="t2" relType="IS_INCLUDED" />
+<TLINK lid="l31" eventInstanceID="ei26" relatedToEventInstance="ei29" relType="SIMULTANEOUS" />
+<TLINK lid="l32" eventInstanceID="ei26" relatedToEventInstance="ei28" relType="SIMULTANEOUS" />
+<TLINK lid="l33" eventInstanceID="ei7" relatedToEventInstance="ei9" relType="AFTER" />
+<TLINK lid="l34" eventInstanceID="ei3" relatedToEventInstance="ei6" relType="BEFORE" />
+<TLINK lid="l35" eventInstanceID="ei26" relatedToEventInstance="ei27" relType="AFTER" />
+<TLINK lid="l36" eventInstanceID="ei21" relatedToEventInstance="ei22" relType="BEFORE" />
+
+
+
+
+</TimeML>

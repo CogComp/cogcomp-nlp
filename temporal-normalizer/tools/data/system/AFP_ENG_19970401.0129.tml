@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>AFP_ENG_19970401.0129</DOCID>
+
+<DCT>TOKYO, <TIMEX3 tid="t0" type="TIME" value="1997-04-01" temporalFunction="false" functionInDocument="CREATION_TIME">April 1 , 1997</TIMEX3> (AFP)</DCT>
+
+<TITLE>Japan's top 15 corporate collapses</TITLE>
+
+<TEXT>
+
+A list of the top 15 collapses in Japanese corporate history after three finance companies <EVENT eid="ONT::V159386" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">applied</EVENT> <TIMEX3 tid="t1" type="DATE" value="1998-08-04">Tuesday</TIMEX3> to be wound up, with combined debt of 1,800 billion yen (14.6 billion dollars).
+
+Crown Leasing KK <EVENT eid="ONT::V163218" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">applied</EVENT> to be <EVENT eid="ONT::V163306" polarity="POS" modality="NONE" pos="VERB" tense="FUTURE" aspect="NONE" class="OCCURRENCE">wound</EVENT> up at the Tokyo District Court with two other Nippon Credit Bank Ltd (NCB). affiliates, Nippon Total Finance KK and Nippon Credit Finance KK.
+
+Date    Company        Liabilities    Business
+
+(billion yen)
+
+1. <TIMEX3 tid="t2" type="DATE" value="1997-04">April 1997</TIMEX3> Crown Leasing      1,060.00    finance
+
+2. <TIMEX3 tid="t3" type="DATE" value="1996-10">Oct 1996</TIMEX3>  Nichiei Finance     1,000.00    credit guarantee
+
+3. <TIMEX3 tid="t4" type="DATE" value="1996-11">Nov 1996</TIMEX3>  Sueno Kosan        600.00    real estate
+
+4. <TIMEX3 tid="t5" type="DATE" value="1993-11">Nov 1993</TIMEX3>  Muramoto Kensetsu     590.00    <EVENT eid="ONT::V177373" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">construction</EVENT>
+
+5. <TIMEX3 tid="t6" type="DATE" value="1985-08">Aug 1985</TIMEX3>  Sanko Kisen        520.00    <EVENT eid="ONT::V181007" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">shipping</EVENT>
+
+6. <TIMEX3 tid="t7" type="DATE" value="1994-10">Oct 1994</TIMEX3>  Nippon Mortgage      518.49    finance
+
+7. <TIMEX3 tid="t8" type="DATE" value="1997-04">April 1997</TIMEX3> Nippon Total Finance    510.00    finance
+
+8. <TIMEX3 tid="t9" type="DATE" value="1995-03">March 1995</TIMEX3> Osaka Sogo Shinyo     437.00    finance
+
+9. <TIMEX3 tid="t10" type="DATE" value="1991-08">Aug 1991</TIMEX3>  Megumikawa         410.00    restaurant
+
+10. <TIMEX3 tid="t11" type="DATE" value="1995-11">Nov 1995</TIMEX3>  Hyogin Factors       369.20    factoring
+
+11. <TIMEX3 tid="t12" type="DATE" value="1996-06">June 1996</TIMEX3> Shin Kyoto Shimpan     348.88    consumer credit
+
+12. <TIMEX3 tid="t13" type="DATE" value="1987-10">Oct 1987</TIMEX3>  Shinwa Kanko Kaihatsu   309.00    real estate
+
+13. <TIMEX3 tid="t14" type="DATE" value="1995-10">Oct 1995</TIMEX3>  Tokyo Mortgage Acceptance 300.00    finance
+
+14. <TIMEX3 tid="t15" type="DATE" value="1997-04">April 1997</TIMEX3> Nippon Credit Finance   300.00    finance
+
+15. <TIMEX3 tid="t16" type="DATE" value="1991-01">Jan 1991</TIMEX3>  Nanatomi          296.60    real estate
+
+Source: Teikoku Databank/Tokyo Shoko Research
+
+</TEXT>
+
+<MAKEINSTANCE eiid="iONT::V163306" eventID="ONT::V163306"/>
+<MAKEINSTANCE eiid="iONT::V159386" eventID="ONT::V159386"/>
+<MAKEINSTANCE eiid="iONT::V181007" eventID="ONT::V181007"/>
+<MAKEINSTANCE eiid="iONT::V163218" eventID="ONT::V163218"/>
+<MAKEINSTANCE eiid="iONT::V177373" eventID="ONT::V177373"/>
+
+
+<TLINK lid="l1" relType="AFTER" timeID="t14" relatedToTime="t10" />
+<TLINK lid="l2" relType="AFTER" timeID="t7" relatedToTime="t10" />
+<TLINK lid="l3" relType="BEFORE" timeID="t6" relatedToTime="t10" />
+<TLINK lid="l4" relType="AFTER" timeID="t15" relatedToTime="t10" />
+<TLINK lid="l5" relType="AFTER" timeID="t4" relatedToTime="t10" />
+<TLINK lid="l6" relType="AFTER" timeID="t8" relatedToTime="t10" />
+<TLINK lid="l7" relType="BEFORE" timeID="t16" relatedToTime="t10" />
+<TLINK lid="l8" relType="AFTER" timeID="t5" relatedToTime="t10" />
+<TLINK lid="l9" relType="BEFORE" timeID="t10" relatedToTime="t3" />
+<TLINK lid="l10" relType="BEFORE" timeID="t10" relatedToTime="t9" />
+<TLINK lid="l11" relType="BEFORE" timeID="t10" relatedToTime="t2" />
+<TLINK lid="l12" relType="BEFORE" timeID="t10" relatedToTime="t11" />
+<TLINK lid="l13" relType="AFTER" timeID="t10" relatedToTime="t13" />
+<TLINK lid="l14" relType="BEFORE" timeID="t10" relatedToTime="t12" />
+<TLINK lid="l15" relType="BEFORE" timeID="t10" relatedToTime="t1" />
+<TLINK lid="l16" relType="AFTER" timeID="t0" relatedToTime="t10" />
+<TLINK lid="l17" relType="BEFORE" timeID="t6" relatedToTime="t16" />
+<TLINK lid="l18" relType="AFTER" timeID="t16" relatedToTime="t13" />
+<TLINK lid="l19" relType="AFTER" timeID="t14" relatedToTime="t9" />
+<TLINK lid="l20" relType="BEFORE" timeID="t7" relatedToTime="t9" />
+<TLINK lid="l21" relType="AFTER" timeID="t15" relatedToTime="t9" />
+<TLINK lid="l22" relType="AFTER" timeID="t4" relatedToTime="t9" />
+<TLINK lid="l23" relType="AFTER" timeID="t8" relatedToTime="t9" />
+<TLINK lid="l24" relType="BEFORE" timeID="t5" relatedToTime="t9" />
+<TLINK lid="l25" relType="AFTER" timeID="t3" relatedToTime="t9" />
+<TLINK lid="l26" relType="BEFORE" timeID="t9" relatedToTime="t2" />
+<TLINK lid="l27" relType="BEFORE" timeID="t9" relatedToTime="t11" />
+<TLINK lid="l28" relType="BEFORE" timeID="t9" relatedToTime="t12" />
+<TLINK lid="l29" relType="BEFORE" timeID="t9" relatedToTime="t1" />
+<TLINK lid="l30" relType="AFTER" timeID="t0" relatedToTime="t9" />
+<TLINK lid="l31" relType="BEFORE" timeID="t14" relatedToTime="t2" />
+<TLINK lid="l32" relType="IDENTITY" timeID="t15" relatedToTime="t2" />
+<TLINK lid="l33" relType="BEFORE" timeID="t4" relatedToTime="t2" />
+<TLINK lid="l34" relType="IDENTITY" timeID="t8" relatedToTime="t2" />
+<TLINK lid="l35" relType="BEFORE" timeID="t3" relatedToTime="t2" />
+<TLINK lid="l36" relType="AFTER" timeID="t2" relatedToTime="t11" />
+<TLINK lid="l37" relType="AFTER" timeID="t2" relatedToTime="t12" />
+<TLINK lid="l38" relType="BEFORE" timeID="t2" relatedToTime="t1" />
+<TLINK lid="l39" relType="AFTER" timeID="t0" relatedToTime="t2" />
+<TLINK lid="l40" relType="BEFORE" timeID="t14" relatedToTime="t4" />
+<TLINK lid="l41" relType="BEFORE" timeID="t14" relatedToTime="t3" />
+<TLINK lid="l42" relType="BEFORE" timeID="t14" relatedToTime="t11" />
+<TLINK lid="l43" relType="BEFORE" timeID="t14" relatedToTime="t12" />
+<TLINK lid="l44" relType="AFTER" timeID="t4" relatedToTime="t11" />
+<TLINK lid="l45" relType="AFTER" timeID="t3" relatedToTime="t11" />
+<TLINK lid="l46" relType="BEFORE" timeID="t11" relatedToTime="t12" />
+<TLINK lid="l47" relType="AFTER" timeID="t7" relatedToTime="t5" />
+<TLINK lid="l48" relType="AFTER" timeID="t4" relatedToTime="t12" />
+<TLINK lid="l49" relType="AFTER" timeID="t3" relatedToTime="t12" />
+<TLINK lid="l50" relType="BEFORE" timeID="t6" relatedToTime="t13" />
+<TLINK lid="l51" relType="AFTER" timeID="t4" relatedToTime="t3" />
+<TLINK lid="l52" relType="AFTER" timeID="t0" relatedToTime="t1" />
+<TLINK lid="l53" relType="BEFORE" eventInstanceID="iONT::V181007" relatedToTime="t0" />
+<TLINK lid="l54" relType="BEFORE" eventInstanceID="iONT::V163218" relatedToTime="t0" />
+<TLINK lid="l55" relType="BEFORE" eventInstanceID="iONT::V177373" relatedToTime="t0" />
+<TLINK lid="l56" relType="BEFORE" eventInstanceID="iONT::V159386" relatedToTime="t0" />
+<TLINK lid="l57" relType="AFTER" eventInstanceID="iONT::V163306" relatedToTime="t0" />
+<TLINK lid="l58" relType="IDENTITY" eventInstanceID="iONT::V177373" relatedToEventInstance="iONT::V181007" />
+<TLINK lid="l59" relType="SIMULTANEOUS" eventInstanceID="iONT::V159386" relatedToEventInstance="iONT::V163218" />
+<TLINK lid="l60" relType="IS_INCLUDED" eventInstanceID="iONT::V159386" relatedToTime="t1" />
+
+</TimeML>
+

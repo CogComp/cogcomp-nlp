@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>WSJ_20130318_731</DOCID>
+
+<DCT><TIMEX3 tid="t0" type="DATE" value="2013-03-18" temporalFunction="false" functionInDocument="CREATION_TIME">March 18, 2013</TIMEX3></DCT>
+
+<TITLE>A New Game for Microsoft's Kinect</TITLE>
+
+
+
+<TEXT>
+
+Microsoft Corp. <EVENT class="OCCURRENCE" eid="e1">broke</EVENT> sales records in <TIMEX3 type="DATE" value="2010" tid="t1">2010</TIMEX3> when it <EVENT class="OCCURRENCE" eid="e2">released</EVENT> its Kinect - a movement-tracking device that <EVENT class="I_STATE" eid="e3">enabled</EVENT> Xbox users to play their favorite games through gestures alone, without need of a controller.
+
+<TIMEX3 type="DATE" value="PRESENT_REF" tid="t1000">Now</TIMEX3>, with the <EVENT class="OCCURRENCE" eid="e6">help</EVENT> of outside developers, the software giant is <EVENT class="I_STATE" eid="e7">hoping</EVENT> to <EVENT class="OCCURRENCE" eid="e8">move</EVENT> the Kinect beyond gaming.
+
+Microsoft is <EVENT class="OCCURRENCE" eid="e9">expanding</EVENT> into China with a company-funded incubator program for outside developers to <EVENT class="OCCURRENCE" eid="e1000">build</EVENT> products based on Kinect technology for a range of industries including health care and retail.
+
+In the U.S., 11 companies were <EVENT class="OCCURRENCE" eid="e10">selected</EVENT> <TIMEX3 type="DATE" value="2012" tid="t2">last year</TIMEX3> for the accelerator's first <TIMEX3 type="DURATION" value="P3M" tid="t100">three-month</TIMEX3> class in Seattle, out of nearly 500 applicants. Microsoft <EVENT class="REPORTING" eid="e11">said</EVENT> it has <EVENT class="OCCURRENCE" eid="e12">identified</EVENT> three companies for the China program to <EVENT class="OCCURRENCE" eid="e13">run</EVENT> through <TIMEX3 type="DATE" value="2013-06" tid="t3">June</TIMEX3>.
+
+The company <EVENT class="OCCURRENCE" eid="e14">gives</EVENT> each participating startup in the Seattle program $20,000 to <EVENT class="OCCURRENCE" eid="e15">create</EVENT> software that can be used with Kinect for Windows, but it is isn't <EVENT class="OCCURRENCE" eid="e17">asking</EVENT> for any ownership stakes or intellectual property rights. Microsoft also doesn't <EVENT class="STATE" eid="e18">have</EVENT> any veto power over the ideas.
+
+What Microsoft <EVENT class="ASPECTUAL" eid="e19">gets</EVENT> are developers around the world <EVENT class="OCCURRENCE" eid="e20">working</EVENT> on ideas that could potentially <EVENT class="ASPECTUAL" eid="e21">open</EVENT> up Kinect for Windows' technology to new markets - and <EVENT class="I_ACTION" eid="e22">convince</EVENT> consumers and businesses to <EVENT class="OCCURRENCE" eid="e23">buy</EVENT> the company's hardware and make <EVENT class="OCCURRENCE" eid="e25">use</EVENT> of the potential apps.
+
+The Windows-ready Kinect sensor, which would be necessary for any business that <EVENT class="I_STATE" eid="e26">wants</EVENT> to <EVENT class="OCCURRENCE" eid="e27">use</EVENT> these potential new technologies, is <TIMEX3 type="DATE" value="PRESENT_REF" tid="t1001">currently</TIMEX3> selling for <EVENT class="STATE" eid="e28">$250</EVENT> through Microsoft, more than twice what Microsoft charges for the gaming-only Xbox version.
+
+</TEXT>
+
+
+<MAKEINSTANCE eiid="ei1"  eventID="e1" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2"  eventID="e2" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei3"  eventID="e3" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei6"  eventID="e6" pos="NOUN" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei7"  eventID="e7" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei8"  eventID="e8" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei9"  eventID="e9" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei1000"  eventID="e1000" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei10"  eventID="e10" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei11"  eventID="e11" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei12"  eventID="e12" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei13"  eventID="e13" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei14"  eventID="e14" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei15"  eventID="e15" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei17"  eventID="e17" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei18"  eventID="e18" pos="OTHER" tense="PRESENT" aspect="NONE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei19"  eventID="e19" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei20"  eventID="e20" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei21"  eventID="e21" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei22"  eventID="e22" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei23"  eventID="e23" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei25"  eventID="e25" pos="NOUN" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei26"  eventID="e26" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei27"  eventID="e27" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei28"  eventID="e28" pos="OTHER" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+
+<TLINK lid="l1" relType="IS_INCLUDED" eventInstanceID="ei2" relatedToTime="t1" />
+<TLINK lid="l2" relType="BEFORE" eventInstanceID="ei1" relatedToTime="t0" />
+<TLINK lid="l3" relType="BEFORE" eventInstanceID="ei2" relatedToEventInstance="ei1" />
+<TLINK lid="l4" relType="AFTER" eventInstanceID="ei3" relatedToEventInstance="ei2" />
+<TLINK lid="l7" relType="INCLUDES" eventInstanceID="ei7" relatedToTime="t0" />
+<TLINK lid="l1000" relType="SIMULTANEOUS" eventInstanceID="ei7" relatedToTime="t1000" />
+<TLINK lid="l8" relType="BEFORE" eventInstanceID="ei1" relatedToEventInstance="ei7" />
+<TLINK lid="l9" relType="SIMULTANEOUS" eventInstanceID="ei6" relatedToEventInstance="ei7" />
+<TLINK lid="l10" relType="AFTER" eventInstanceID="ei8" relatedToEventInstance="ei7" />
+<TLINK lid="l11" relType="INCLUDES" eventInstanceID="ei9" relatedToTime="t0" />
+<TLINK lid="l1001" relType="AFTER" eventInstanceID="ei1000" relatedToEventInstance="ei9" />
+<TLINK lid="l12" relType="SIMULTANEOUS" eventInstanceID="ei7" relatedToEventInstance="ei9" />
+<TLINK lid="l13" relType="IS_INCLUDED" eventInstanceID="ei10" relatedToTime="t2" />
+<TLINK lid="l14" relType="BEFORE" eventInstanceID="ei10" relatedToTime="t0" />
+<TLINK lid="l15" relType="AFTER" eventInstanceID="ei9" relatedToEventInstance="ei10" />
+<TLINK lid="l16" relType="ENDED_BY" eventInstanceID="ei13" relatedToTime="t3" />
+<TLINK lid="l18" relType="SIMULTANEOUS" eventInstanceID="ei10" relatedToEventInstance="ei12" />
+<TLINK lid="l19" relType="BEFORE" eventInstanceID="ei12" relatedToEventInstance="ei11" />
+<TLINK lid="l20" relType="AFTER" eventInstanceID="ei13" relatedToEventInstance="ei11" />
+<TLINK lid="l22" relType="BEFORE" eventInstanceID="ei11" relatedToEventInstance="ei14" />
+<TLINK lid="l23" relType="AFTER" eventInstanceID="ei15" relatedToEventInstance="ei14" />
+<TLINK lid="l25" relType="BEFORE" eventInstanceID="ei17" relatedToEventInstance="ei14" />
+<TLINK lid="l26" relType="INCLUDES" eventInstanceID="ei18" relatedToTime="t0" />
+<TLINK lid="l27" relType="SIMULTANEOUS" eventInstanceID="ei14" relatedToEventInstance="ei18" />
+<TLINK lid="l28" relType="INCLUDES" eventInstanceID="ei19" relatedToTime="t0" />
+<TLINK lid="l29" relType="SIMULTANEOUS" eventInstanceID="ei18" relatedToEventInstance="ei19" />
+<TLINK lid="l30" relType="IAFTER" eventInstanceID="ei20" relatedToEventInstance="ei19" />
+<TLINK lid="l31" relType="AFTER" eventInstanceID="ei21" relatedToEventInstance="ei19" />
+<TLINK lid="l32" relType="AFTER" eventInstanceID="ei22" relatedToEventInstance="ei21" />
+<TLINK lid="l33" relType="AFTER" eventInstanceID="ei23" relatedToEventInstance="ei22" />
+<TLINK lid="l35" relType="AFTER" eventInstanceID="ei25" relatedToEventInstance="ei23" />
+<TLINK lid="l36" relType="INCLUDES" eventInstanceID="ei28" relatedToTime="t0" />
+<TLINK lid="l37" relType="SIMULTANEOUS" eventInstanceID="ei19" relatedToEventInstance="ei28" />
+<TLINK lid="l38" relType="AFTER" eventInstanceID="ei26" relatedToEventInstance="ei28" />
+
+<TLINK lid="l100" relType="BEFORE" timeID="t1" relatedToTime="t0" />
+<TLINK lid="l101" relType="INCLUDES" eventInstanceID="ei28" relatedToTime="t1001" />
+
+</TimeML>
