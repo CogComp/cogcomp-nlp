@@ -16,8 +16,6 @@ import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexChunk;
-import org.junit.Before;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -42,33 +40,18 @@ import static org.junit.Assert.fail;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.Option.Builder;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.ParseException;
 /**
  * Created by zhilifeng on 8/2/17.
  */
 public class TemporalNormalizerBenchmark {
-    //    private String testFileName = "test.txt";
-//    private static String testFile;
     private TemporalChunkerAnnotator tca;
     private static Logger logger = LoggerFactory.getLogger(TemporalNormalizerBenchmark.class);
-    //private String testText;
     private List<String> DCTs;
     private List<String> testText;
-    //private String folderName = "test_TB";
-    //private String folderName = "last_30_TB";
-    //private String folderName = "uw_TimeBank";
-    //private String folderName = "uw_AQUAINT";
-    //private String folderName = "TimeBank";
-    //private String folderName = "AQUAINT";
     private String folderName = "te3-platinum";
-    //private String folderName = "ht2.1_res";
-    //private String folderName = "AQUAINT_ht";
-    //private String folderName = "TimeBank_ht";
 
-    private static String fullFolderName;
     private List<String> docIDs;
     private List<String> te3inputText;
 
@@ -82,8 +65,6 @@ public class TemporalNormalizerBenchmark {
         rmProps.setProperty("useHeidelTime", useHeidelTime ? "True" : "False");
         tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
 
-        URL testFolderURL = TemporalNormalizerBenchmark.class.getClassLoader().getResource(folderName);
-        //fullFolderName = testFolderURL.getFile();
         File folder = new File(fullFolderName);
         File[] listOfFiles = folder.listFiles();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

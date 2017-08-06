@@ -13,7 +13,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <dependency>
             <groupId>org.apache.uima</groupId>
@@ -43,12 +43,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-nlp-pipeline</artifactId>
-            <version>3.1.25</version>
+            <version>3.1.27</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
         <dependency>

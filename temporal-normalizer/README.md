@@ -1,6 +1,6 @@
-# Illinois-time
+# CogComp-time
 
-Illinois-time is a temporal extraction and normalization framework, designed to detect the temporal phrase of given text, and normalize them according to [TIMEX3 standard](http://www.timeml.org/tempeval2/tempeval2-trial/guidelines/timex3guidelines-072009.pdf)
+CogComp-time is a temporal extraction and normalization framework, designed to detect the temporal phrase of given text, and normalize them according to [TIMEX3 standard](http://www.timeml.org/tempeval2/tempeval2-trial/guidelines/timex3guidelines-072009.pdf)
 
 ## Usage
 
@@ -31,11 +31,39 @@ Here is how you can add maven dependencies into your program:
 In general, the best way to use the illinois-time is through the [`TemporalChunkerAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TemporalChunkerAnnotator.java). Like any other annotator, it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 
 ```java
-	Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
-	// Whether you want to use HeidelTime or our normalizer for normalization
-	rmProps.setProperty("useHeidelTime", useHeidelTime ? "True" : "False");
-	TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
-	tca.addView(ta);
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+
+import java.io.IOException;
+import java.util.Properties;
+
+public class demo {
+    public static void main (String []args) throws IOException, AnnotatorException {
+        Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
+        // Set to "True" if you want to use HeidelTime for normalization
+        rmProps.setProperty("useHeidelTime", "False");
+        TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
+
+        Properties props = new Properties();
+        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
+        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE );
+        AnnotatorService pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
+        String text = "Saturday morning";
+        // If you don't specify DCT, we use today's date as default DCT
+        tca.addDocumentCreationTime("2017-08-06");
+        TextAnnotation ta = pipeline.createAnnotatedTextAnnotation("corpus", "id", text);
+        tca.addView(ta);
+        View temporalViews = ta.getView(ViewNames.TIMEX3);
+        System.out.println(temporalViews);
+    }
+}
 ```
 
 For developers, after you make any changes to this module, run ` mvn install -pl temporal-normalizer -am -DskipTests` to recompile (make sure the current directory is under the main project -- `cogcomp-nlp`).
@@ -48,8 +76,8 @@ The whole module is tested on [TempEval3](https://www.cs.york.ac.uk/semeval-2013
 ###### Using our extractor + our normalizer:
 === Timex Performance ===
 |Strict Match|	F1|	P|	R|
-| --- | --- | --- | --- |
-|	|	79.35|	89.91|	71.01|
+|---|---|---|---|
+|	|79.35|	89.91|	71.01|
 
 |Relaxed Match|	F1|	P|	R|
 |---|---|---|---|
