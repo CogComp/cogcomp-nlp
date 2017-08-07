@@ -10,8 +10,6 @@
  */
 package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
-import org.joda.time.Interval;
-
 import java.util.Calendar;
 import java.util.Date;
 

@@ -13,7 +13,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;

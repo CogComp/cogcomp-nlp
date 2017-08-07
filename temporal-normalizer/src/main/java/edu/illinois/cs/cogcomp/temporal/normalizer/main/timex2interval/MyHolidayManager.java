@@ -13,7 +13,6 @@ package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 import java.util.Set;
 
 import org.joda.time.DateTime;
-import org.joda.time.Interval;
 
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;

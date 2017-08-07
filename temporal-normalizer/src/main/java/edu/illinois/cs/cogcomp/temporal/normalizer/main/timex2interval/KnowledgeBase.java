@@ -7,9 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
-import edu.illinois.cs.cogcomp.nlp.utilities.StringCleanup;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.uima.pear.util.StringUtil;
 
 import java.util.*;
 

@@ -11,12 +11,10 @@ import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
 import de.jollyday.Holiday;
 
-import java.sql.Time;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
-import org.joda.time.Interval;
 import org.joda.time.DateTime;
 
 /**

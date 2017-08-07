@@ -9,9 +9,7 @@ package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
 import org.joda.time.Interval;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

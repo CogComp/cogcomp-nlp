@@ -31,8 +31,6 @@ import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TemporalP
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexChunk;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNames;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNormalizer;
-import javafx.geometry.Pos;
-import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -43,12 +41,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.net.URL;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -7,13 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
-import org.joda.time.DateTime;
-
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Set;
 
 import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
 
