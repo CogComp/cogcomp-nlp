@@ -32,6 +32,18 @@ ACE: 89.45
 
 ### Using Annotator
 
+The recommended way to use this package is through the `MentionAnnotator`. `MentionAnnotator` can be initialized with or without an mode parameter.
+
+The mode parameter has four options:
+
+- `MentionAnnotator("ACE_NONTYPE)` loads the model trained on ACE without type.
+- `MentionAnnotator("ACE_TYPE)` loads the model trained on ACE with type.
+- `MentionAnnotator("ERE_NONTYPE)` loads the model trained on ERE without type.
+- `MentionAnnotator("ERE_TYPE)` loads the model trained on ERE with type.
+
+The initialization of `MentionAnnotator()` without parameter set mode to `"ACE_NONTYPE"`
+
+
 ```java
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -65,14 +77,6 @@ public class app
 
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
         
-        /*
-         * You can initialize MentionAnnotator with a model parameter or not.
-         * With model parameter like new MentionAnnotator("ERE_TYPE"), you can 
-         * indicate which model the annotator uses. In this case, it is trained on ERE with types.
-         * If you choose to initialize without the parameter like shown below, it is by default
-         * the model trained on ACE without type.
-         * Please refer to the comments in MentionAnnotator.java for more information
-         */
         MentionAnnotator mentionAnnotator = new MentionAnnotator();
         mentionAnnotator.addView(ta);
 

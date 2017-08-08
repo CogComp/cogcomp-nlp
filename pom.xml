@@ -14,9 +14,9 @@
         <module>lemmatizer</module>
         <module>edison</module>
         <module>curator</module>
-        <module>md</module>
         <module>pos</module>
         <module>chunker</module>
+        <module>md</module>
         <module>ner</module>
         <module>corpusreaders</module>
         <module>lbjava-nlp-tools</module>
@@ -29,7 +29,6 @@
         <module>prepsrl</module>
         <module>verbsense</module>
         <module>pipeline</module>
-
         <!--external tools -->
         <module>external/external-commons</module>
         <module>external/clausie</module>

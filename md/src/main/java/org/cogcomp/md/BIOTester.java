@@ -21,7 +21,6 @@ import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
-import org.apache.commons.collections.map.HashedMap;
 
 import java.lang.reflect.Method;
 import java.util.*;
