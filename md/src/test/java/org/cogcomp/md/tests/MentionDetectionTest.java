@@ -46,13 +46,9 @@ public class MentionDetectionTest {
     }
 
     @Test
-    public static void testHeadTrain(){
+    public void testHeadTrain(){
         String path = "md/target/test-classes/ERE";
         BIOReader bioReader = new BIOReader(path, "ERE-TRAIN", "NAM", false);
         assertNotNull(BIOTester.train_nam_classifier(bioReader));
-    }
-
-    public static void main (String[] args){
-        testHeadTrain();
     }
 }

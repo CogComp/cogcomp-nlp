@@ -36,10 +36,10 @@ The recommended way to use this package is through the `MentionAnnotator`. `Ment
 
 The mode parameter has four options:
 
-- `MentionAnnotator("ACE_NONTYPE)` loads the model trained on ACE without type.
-- `MentionAnnotator("ACE_TYPE)` loads the model trained on ACE with type.
-- `MentionAnnotator("ERE_NONTYPE)` loads the model trained on ERE without type.
-- `MentionAnnotator("ERE_TYPE)` loads the model trained on ERE with type.
+- `MentionAnnotator("ACE_NONTYPE")` loads the model trained on ACE without type.
+- `MentionAnnotator("ACE_TYPE")` loads the model trained on ACE with type.
+- `MentionAnnotator("ERE_NONTYPE")` loads the model trained on ERE without type.
+- `MentionAnnotator("ERE_TYPE")` loads the model trained on ERE with type.
 
 The initialization of `MentionAnnotator()` without parameter set mode to `"ACE_NONTYPE"`
 
