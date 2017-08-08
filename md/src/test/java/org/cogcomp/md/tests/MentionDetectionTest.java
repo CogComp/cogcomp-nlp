@@ -27,7 +27,7 @@ public class MentionDetectionTest {
     public void testHeadInference(){
         EREMentionRelationReader ereMentionRelationReader = null;
         try {
-            String path = "md/target/test-classes/ERE";
+            String path = "src/test/resources/ERE";
             ereMentionRelationReader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR3, path, false);
             POSAnnotator posAnnotator = new POSAnnotator();
             MentionAnnotator mentionAnnotator = new MentionAnnotator();
@@ -47,8 +47,8 @@ public class MentionDetectionTest {
 
     @Test
     public void testHeadTrain(){
-        String path = "md/target/test-classes/ERE";
+        String path = "src/test/resources/ERE";
         BIOReader bioReader = new BIOReader(path, "ERE-TRAIN", "NAM", false);
-        assertNotNull(BIOTester.train_nam_classifier(bioReader));
+        assertNotNull(BIOTester.train_nam_classifier(bioReader, "src/test/resources/tmp"));
     }
 }
