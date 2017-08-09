@@ -119,6 +119,10 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_VERB_SENSE.key,
                                 Configurator.TRUE);
                         break;
+                    case ViewNames.MENTION:
+                        nonDefaultValues.put(PipelineConfigurator.USE_MENTION.key,
+                                Configurator.TRUE);
+                        break;
                     default:
                         logger.warn("View name "
                                 + vu
