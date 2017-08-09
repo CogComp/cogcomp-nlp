@@ -117,6 +117,10 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_VERB_SENSE.key,
                                 Configurator.TRUE);
                         break;
+                    case ViewNames.TIMEX3:
+                        nonDefaultValues.put(PipelineConfigurator.USE_TIMEX3.key,
+                                Configurator.TRUE);
+                        break;
                     default:
                         logger.warn("View name "
                                 + vu
