@@ -29,7 +29,10 @@ import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerAnnotator;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerConfigurator;
 import edu.illinois.cs.cogcomp.verbsense.VerbSenseAnnotator;
+
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 import org.slf4j.Logger;
@@ -250,6 +253,12 @@ public class PipelineFactory {
         if (rm.getBoolean(PipelineConfigurator.USE_POS)) {
             POSAnnotator pos = new POSAnnotator();
             viewGenerators.put(pos.getViewName(), pos);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)) {
+            Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
+            rmProps.setProperty("useHeidelTime", "False");
+            TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
+            viewGenerators.put(tca.getViewName(), tca);
         }
         if (rm.getBoolean(PipelineConfigurator.USE_LEMMA)) {
             IllinoisLemmatizer lem = new IllinoisLemmatizer(rm);

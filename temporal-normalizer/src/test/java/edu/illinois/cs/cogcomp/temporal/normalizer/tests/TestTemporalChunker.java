@@ -7,15 +7,16 @@
  */
 package edu.illinois.cs.cogcomp.temporal.normalizer.tests;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerAnnotator;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerConfigurator;
 import org.junit.Before;
@@ -26,6 +27,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Properties;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Created by zhilifeng on 11/1/16.
@@ -46,10 +48,6 @@ public class TestTemporalChunker {
 
     @Test
     public void testTemporalChunkerWithPlainText() throws Exception{
-        Properties props = new Properties();
-        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
-        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE );
-        AnnotatorService pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
         String text = "The flu season is winding down, and it has killed 105 children so far - about the average toll.\n" +
                 "\n" +
                 "The season started about a month earlier than usual, sparking concerns it might turn into the worst in " +
@@ -82,7 +80,14 @@ public class TestTemporalChunker {
                 "of year. Since then, flu reports have been dropping off throughout the country.\n" +
                 "\n" +
                 "\"We appear to be getting close to the end of flu season,\" Jhung said.";
-        TextAnnotation ta = pipeline.createAnnotatedTextAnnotation("corpus", "id", text);
+        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+        TextAnnotation ta = tab.createTextAnnotation("corpus", "id", text);
+        POSAnnotator annotator = new POSAnnotator();
+        try {
+            annotator.getView(ta);
+        } catch (AnnotatorException e) {
+            fail("AnnotatorException thrown!\n" + e.getMessage());
+        }
         tca.addView(ta);
         View temporalViews = ta.getView(ViewNames.TIMEX3);
         List<Constituent> constituents = temporalViews.getConstituents();

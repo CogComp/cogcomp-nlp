@@ -19,10 +19,10 @@ import java.util.Date;
 public class TimexNormalizer {
 	//1999-02-10
 	protected static String defaultcountry = "UNITED_STATES";
-	protected static String defaultyear = "2013";
-	protected static String deyear = "2013";
-	protected static String demonth = "03";
-	protected static String deday = "22";
+	protected static String defaultyear = "2017";
+	protected static String deyear = "2017";
+	protected static String demonth = "08";
+	protected static String deday = "08";
 	protected static String dehour = "12";
 	protected static String deminute = "30";
 	protected static String desecond = "00";
@@ -112,7 +112,7 @@ public class TimexNormalizer {
 	}
 
 	public static void main(String [] args) {
-		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("this month", "past"));
+		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("saturday morning", "past"));
 		System.out.println(temp.toTIMEXString());
 
 	}

@@ -8,13 +8,13 @@
 package edu.illinois.cs.cogcomp.temporal.normalizer.main;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexChunk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,11 +100,7 @@ public class TemporalNormalizerBenchmark {
     }
 
     public void testNormalizationWithTrueExtraction(String outputFolder, boolean verbose) throws Exception {
-        Properties props = new Properties();
-        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
-        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.FALSE );
-        AnnotatorService pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
-
+        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
         System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
         ResourceManager nerRm = new TemporalChunkerConfigurator().getDefaultConfig();
@@ -114,10 +110,17 @@ public class TemporalNormalizerBenchmark {
 
         long preprocessTime = System.currentTimeMillis();
         List <TextAnnotation> taList = new ArrayList<>();
+        POSAnnotator annotator = new POSAnnotator();
         for (int j = 0; j < te3inputText.size(); j ++) {
             String text = testText.get(j);
             text = text.replaceAll("\\n", " ");
-            TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( "corpus", "id",  text);
+            TextAnnotation ta = tab.createTextAnnotation("corpus", "id", text);
+            try {
+                annotator.getView(ta);
+            } catch (AnnotatorException e) {
+                fail("AnnotatorException thrown!\n" + e.getMessage());
+            }
+
             taList.add(ta);
         }
 
@@ -161,10 +164,7 @@ public class TemporalNormalizerBenchmark {
     }
 
     public void testTemporalChunker(String outputFolder, boolean verbose) throws Exception {
-        Properties props = new Properties();
-        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
-        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.FALSE );
-        AnnotatorService pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
+        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
 
         ResourceManager nerRm = new TemporalChunkerConfigurator().getDefaultConfig();
         IOUtilities.existsInClasspath(TemporalChunkerAnnotator.class, nerRm.getString("modelDirPath"));
@@ -172,9 +172,15 @@ public class TemporalNormalizerBenchmark {
 
         List <TextAnnotation>taList = new ArrayList<>();
         long preprocessTime = System.currentTimeMillis();
+        POSAnnotator annotator = new POSAnnotator();
 
         for (int j = 0; j < testText.size(); j ++) {
-            TextAnnotation ta = pipeline.createAnnotatedTextAnnotation("corpus", "id", testText.get(j));
+            TextAnnotation ta = tab.createTextAnnotation("corpus", "id", testText.get(j));
+            try {
+                annotator.getView(ta);
+            } catch (AnnotatorException e) {
+                fail("AnnotatorException thrown!\n" + e.getMessage());
+            }
             taList.add(ta);
         }
 
