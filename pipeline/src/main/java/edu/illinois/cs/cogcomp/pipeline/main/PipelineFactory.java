@@ -32,6 +32,8 @@ import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.verbsense.VerbSenseAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
+
+import org.cogcomp.md.MentionAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,6 +117,10 @@ public class PipelineFactory {
                         break;
                     case ViewNames.VERB_SENSE:
                         nonDefaultValues.put(PipelineConfigurator.USE_VERB_SENSE.key,
+                                Configurator.TRUE);
+                        break;
+                    case ViewNames.MENTION:
+                        nonDefaultValues.put(PipelineConfigurator.USE_MENTION.key,
                                 Configurator.TRUE);
                         break;
                     default:
@@ -347,6 +353,10 @@ public class PipelineFactory {
         if(rm.getBoolean(PipelineConfigurator.USE_VERB_SENSE)) {
             VerbSenseAnnotator verbSense = new VerbSenseAnnotator();
             viewGenerators.put(ViewNames.VERB_SENSE, verbSense);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_MENTION)){
+            MentionAnnotator mentionAnnotator = new MentionAnnotator();
+            viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
         }
         return viewGenerators;
     }

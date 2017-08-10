@@ -1,0 +1,289 @@
+package org.cogcomp.md.LbjGen;
+import java.util.*;
+import org.cogcomp.md.*;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
+
+discrete bio_label (Constituent c) <- {
+    return c.getAttribute("BIO");
+}
+
+discrete% gazetteers_features (Constituent c) <- {
+    List features = BIOFeatureExtractor.getGazetteerFeatures(c);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% isSentenceStart (Constituent c) <- {
+    sense "start" : BIOFeatureExtractor.isSentenceStart(c);
+}
+
+discrete% wordForm_features (Constituent c) <- {
+    List features = BIOFeatureExtractor.getWordFormFeatures(c);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete{false, true}% Capitalization (Constituent c) <- {
+    View bioView = c.getTextAnnotation().getView("BIO");
+    for (int i = -1; i < 3; i++){
+        int curId = c.getStartSpan() + i;
+        if (curId < 0 || curId >= bioView.getEndSpan()){
+            continue;
+        }
+        Constituent cCur = bioView.getConstituentsCoveringToken(c.getStartSpan() + i).get(0);
+        if (cCur != null){
+            String cCurForm = cCur.toString();
+            boolean cap = (!cCurForm.equals(cCurForm.toLowerCase()));
+            sense i : cap;
+        }
+    }
+}
+
+discrete% Affixes (Constituent c) <- {
+    String form = c.toString();
+    for (int i = 3; i <= 4; i++){
+        if (form.length() > i){
+            sense "p|" : form.substring(0, i);
+        }
+    }
+    for (int i = 1; i <= 4; i++){
+        if (form.length() > i){
+            sense "s|" : form.substring(form.length() - i);
+        }
+    }
+}
+
+discrete% POS_Features (Constituent c) <- {
+    List features = BIOFeatureExtractor.getPOSFeatures(c);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% AffixesZH (Constituent c) <- {
+    String form = c.toString();
+    for (int i = 1; i <= 2; i++){
+        if (form.length() > i){
+            sense "ZH-p|" : form.substring(0, i);
+        }
+    }
+    for (int i = 1; i <= 2; i++){
+        if (form.length() > i){
+            sense "ZH-s|" : form.substring(form.length() - i);
+        }
+    }
+}
+
+discrete{false, true}% WordTypeInformation (Constituent c) <- {
+    List features = BIOFeatureExtractor.getWordTypeInformation(c);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        String idx = (String)p.getFirst();
+        boolean val = (Boolean)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% BrownClusterPaths (Constituent c) <- {
+        List features = BIOFeatureExtractor.getBrownClusterPaths(c);
+        for (int i = 0; i < features.size(); i++){
+            Pair p = (Pair)features.get(i);
+            int idx = (Integer)p.getFirst();
+            String val = (String)p.getSecond();
+            sense idx : val;
+        }
+}
+
+discrete% preBIOLevel1 (Constituent c) <- {
+    if (c.getStartSpan() - 1 > 0){
+        Constituent cPrev = c.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(c.getStartSpan() - 1).get(0);
+        if (cPrev != null){
+            if (c.getAttribute("isTraining").equals("true")){
+                sense "-1" : cPrev.getAttribute("BIO");
+            }
+            else if (!c.getAttribute("preBIOLevel1").equals("")){
+                sense "-1" : c.getAttribute("preBIOLevel1");
+            }
+        }
+    }
+}
+
+discrete% preBIOLevel2 (Constituent c) <- {
+    if (c.getStartSpan() - 2 > 0){
+        Constituent cPrev = c.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(c.getStartSpan() - 2).get(0);
+        if (cPrev != null){
+            if (c.getAttribute("isTraining").equals("true")){
+                sense "-2" : cPrev.getAttribute("BIO");
+            }
+            else if (!c.getAttribute("preBIOLevel2").equals("")){
+                sense "-2" : c.getAttribute("preBIOLevel2");
+            }
+        }
+    }
+}
+
+discrete{false, true}% isInProList (Constituent c) <- {
+    sense BIOFeatureExtractor.isInPronounList(c);
+}
+
+discrete% wordNetTag (Constituent c) <- {
+    String combined = c.getAttribute("WORDNETTAG");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            sense (s.split("\\."))[0] : (s.split("\\."))[1];
+        }
+    }
+}
+
+discrete% wordNetHym (Constituent c) <- {
+    String combined = c.getAttribute("WORDNETHYM");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            sense i : s;
+        }
+    }
+}
+
+discrete% sameSentenceTypes (Constituent c) <- {
+    String combined = c.getAttribute("SMNAMPRE");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            String[] gp = s.split("-");
+            sense "SMNAM_" + gp[0] : gp[1];
+        }
+    }
+    combined = c.getAttribute("SMNOMPRE");
+    group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            String[] gp = s.split("-");
+            sense "SMNOM_" + gp[0] : gp[1];
+        }
+    }
+    combined = c.getAttribute("SMNAMAFT");
+    group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            String[] gp = s.split("-");
+            sense "SMNAMAFT_" + gp[0] : gp[1];
+        }
+    }
+    combined = c.getAttribute("SMNOMAFT");
+    group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            String[] gp = s.split("-");
+            sense "SMNOMAFT_" + gp[0] : gp[1];
+        }
+    }
+}
+
+discrete bio_classifier_nam (Constituent c) <-
+learn bio_label
+    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
+    5 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL", true)
+
+    progressOutput 10000
+end
+
+discrete bio_classifier_nom (Constituent c) <-
+learn bio_label
+    using wordForm_features, BrownClusterPaths, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH, wordNetTag, wordNetHym, POS_Features
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
+    5 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL", true)
+
+    progressOutput 10000
+end
+
+discrete bio_classifier_pro (Constituent c) <-
+learn bio_label
+    using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
+    5 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL", true)
+
+    progressOutput 10000
+end
+
+real% bioScore (Constituent c) <- {
+    String scoreSet = c.getAttribute("BIOScores");
+    String[] scores = scoreSet.split(",");
+    for (int i = 0 ; i < scores.length; i++){
+        double curScore = Double.parseDouble(scores[i]);
+        sense i : Double.parseDouble(scores[i]);
+    }
+}
+
+discrete % judges (Constituent c) <- {
+    String[] discreteVals = new String[3];
+    discreteVals[0] = c.getAttribute("A_prediction");
+    discreteVals[1] = c.getAttribute("B_prediction");
+    discreteVals[2] = c.getAttribute("C_prediction");
+    sense "nam" : discreteVals[0];
+    sense "nom" : discreteVals[1];
+    sense "pro" : discreteVals[2];
+    int b_count = 0;
+    int i_count = 0;
+    int o_count = 0;
+    for (int i = 0; i < 3; i++){
+        if (discreteVals[i].equals("B")){
+            b_count++;
+        }
+        else if (discreteVals[i].equals("I")){
+            i_count++;
+        }
+        else{
+            o_count++;
+        }
+    }
+    sense "b_count" : b_count;
+    sense "i_count" : i_count;
+    sense "o_count" : o_count;
+}
+
+discrete bio_joint_classifier (Constituent c) <-
+learn bio_label
+    using bioScore, judges
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
+    5 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL", true)
+
+    progressOutput 10000
+end

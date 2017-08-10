@@ -1,0 +1,251 @@
+package org.cogcomp.md.LbjGen;
+import java.util.*;
+import org.cogcomp.md.*;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
+import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
+
+discrete extentLabel (Relation r) <- {
+    return r.getRelationName();
+}
+
+discrete headLastWord (Relation r) <- {
+    return r.getTarget().getTextAnnotation().getToken(r.getTarget().getEndSpan() - 1).toLowerCase();
+}
+
+discrete beforeHead (Relation r) <- {
+    if (r.getSource().getStartSpan() < r.getTarget().getStartSpan()){
+        return true;
+    }
+    return false;
+}
+
+discrete afterHead (Relation r) <- {
+    if (r.getSource().getStartSpan() >= r.getTarget().getEndSpan()){
+        return true;
+    }
+    return false;
+}
+
+discrete headText (Relation r) <- {
+    return r.getTarget().toString().toLowerCase();
+}
+
+discrete% headForm (Relation r) <- {
+    Constituent headC = r.getTarget();
+    for (int i = headC.getStartSpan(); i < headC.getEndSpan(); i++){
+        sense (i - headC.getStartSpan()) : headC.getTextAnnotation().getToken(i);
+        sense "IC_" + (i - headC.getStartSpan()) : headC.getTextAnnotation().getToken(i).toLowerCase();
+    }
+}
+
+discrete afterHeadPOS (Relation r ) <- {
+    TextAnnotation ta = r.getTarget().getTextAnnotation();
+    if (r.getTarget().getEndSpan() < ta.getView(ViewNames.TOKENS).getEndSpan() - 1){
+        return ta.getView(ViewNames.POS).getConstituentsCoveringToken(r.getTarget().getEndSpan() + 1).get(0).getLabel();
+    }
+    return "OUT_OF_BOUND";
+}
+
+discrete% gazetteersFeaturesHead (Relation r) <- {
+    List features = BIOFeatureExtractor.getGazetteerFeaturesHead(r);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        String idx = (String)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete headType (Relation r) <- {
+    return r.getTarget().getAttribute("EntityType");
+}
+
+discrete headLevel (Relation r) <- {
+    return r.getTarget().getAttribute("EntityMentionType");
+}
+
+discrete% headDistance (Relation r) <- {
+    sense "ToStart" : r.getTarget().getStartSpan() - r.getSource().getStartSpan();
+    sense "ToEnd" : r.getTarget().getEndSpan() - r.getSource().getStartSpan();
+}
+
+discrete% headCap (Relation r) <- {
+    Constituent headC = r.getTarget();
+    for (int i = headC.getStartSpan(); i < headC.getEndSpan(); i++){
+        String curForm = headC.getTextAnnotation().getToken(i);
+        sense (i - headC.getStartSpan()) : (curForm.equals(curForm.toLowerCase()));
+    }
+}
+
+discrete% headFeatures (Relation r) <-
+    headLastWord, beforeHead, afterHead, headText, headForm, afterHeadPOS, gazetteersFeaturesHead, headDistance, headCap
+
+discrete% wordFormExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getWordFormFeatures(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% gazetteersFeaturesExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getGazetteerFeaturesSingle(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        sense "0" : features.get(i);
+    }
+}
+
+discrete{false, true}% WordTypeInformationExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getWordTypeInformation(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        String idx = (String)p.getFirst();
+        boolean val = (Boolean)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% POSExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getPOSFeatures(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% BrownClusterPathsExtent (Relation r) <- {
+    String[] cur = r.getSource().getAttribute("BC").split(",");
+    for (int i = 0; i < cur.length; i++){
+        if (cur[i] != ""){
+            sense 0 : cur[i];
+        }
+    }
+    cur = r.getSource().getAttribute("BCm1").split(",");
+    for (int i = 0; i < cur.length; i++){
+        if (cur[i] != ""){
+            sense -1 : cur[i];
+        }
+    }
+    cur = r.getSource().getAttribute("BCp1").split(",");
+    for (int i = 0; i < cur.length; i++){
+        if (cur[i] != ""){
+            sense 1 : cur[i];
+        }
+    }
+}
+
+discrete% WordNetTagExtent (Relation r) <- {
+    String combined = r.getSource().getAttribute("WORDNETTAG");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            sense (s.split("\\."))[0] : (s.split("\\."))[1];
+        }
+    }
+}
+
+discrete% WordNetHymExtent (Relation r) <- {
+    String combined = r.getSource().getAttribute("WORDNETHYM");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            sense i : s;
+        }
+    }
+}
+
+discrete CapitalizationExtent (Relation r) <- {
+    if (r.getSource().toString().equals(r.getSource().toString().toLowerCase())){
+        return "false";
+    }
+    return "true";
+}
+
+discrete% extentFeatures (Relation r) <-
+    wordFormExtent, gazetteersFeaturesExtent, WordTypeInformationExtent, POSExtent, WordNetTagExtent, WordNetHymExtent, CapitalizationExtent
+
+discrete% POSBetween (Relation r) <- {
+    int startIdx = 1;
+    int endIdx = 0;
+    if (r.getSource().getStartSpan() < r.getTarget().getStartSpan()){
+        startIdx = r.getSource().getEndSpan();
+        endIdx = r.getTarget().getStartSpan();
+    }
+    else{
+        startIdx = r.getTarget().getEndSpan();
+        endIdx = r.getSource().getStartSpan();
+    }
+    int anchor = startIdx;
+    for (int i = startIdx; i < endIdx; i++){
+        sense (i - anchor) : r.getSource().getTextAnnotation().getView(ViewNames.POS).getConstituentsCoveringToken(i).get(0).getLabel();
+    }
+}
+
+discrete% wordFormBetween (Relation r) <- {
+    int startIdx = 1;
+    int endIdx = 0;
+    if (r.getSource().getStartSpan() < r.getTarget().getStartSpan()){
+        startIdx = r.getSource().getEndSpan();
+        endIdx = r.getTarget().getStartSpan();
+    }
+    else{
+        startIdx = r.getTarget().getEndSpan();
+        endIdx = r.getSource().getStartSpan();
+    }
+    int anchor = startIdx;
+    for (int i = startIdx; i < endIdx; i++){
+        sense (i - anchor) : r.getSource().getTextAnnotation().getToken(i);
+    }
+}
+
+discrete% wordTypeBetween (Relation r) <- {
+    int startIdx = 1;
+    int endIdx = 0;
+    if (r.getSource().getStartSpan() < r.getTarget().getStartSpan()){
+        startIdx = r.getSource().getEndSpan();
+        endIdx = r.getTarget().getStartSpan();
+    }
+    else{
+        startIdx = r.getTarget().getEndSpan();
+        endIdx = r.getSource().getStartSpan();
+    }
+    int anchor = startIdx;
+    for (int i = startIdx; i < endIdx; i++){
+        List features = BIOFeatureExtractor.getWordTypeInformation(r.getSource().getTextAnnotation().getView(ViewNames.TOKENS).getConstituentsCoveringToken(i).get(0));
+        for (int j = 0; j < features.size(); j++){
+            Pair p = (Pair)features.get(j);
+            String idx = (String)p.getFirst();
+            boolean val = (Boolean)p.getSecond();
+            sense idx + "_" + (i - anchor) : val;
+        }
+    }
+}
+
+discrete% betweenFeatures (Relation r) <-
+    POSBetween, wordFormBetween
+
+discrete% combinedFeatures (Relation r) <-
+    headFeatures && extentFeatures, wordFormExtent && afterHeadPOS, POSExtent && afterHeadPOS,
+    wordFormExtent && headLastWord, POSExtent && headLastWord,
+    headFeatures && headFeatures, extentFeatures && extentFeatures
+
+discrete extent_classifier (Relation r) <-
+learn extentLabel
+    using headFeatures, extentFeatures, betweenFeatures, combinedFeatures
+    from new ExtentReader("data/all")
+    1 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new ExtentReader("data/all")
+    progressOutput 10000
+end

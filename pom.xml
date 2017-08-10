@@ -16,6 +16,7 @@
         <module>curator</module>
         <module>pos</module>
         <module>chunker</module>
+        <module>md</module>
         <module>ner</module>
         <module>corpusreaders</module>
         <module>lbjava-nlp-tools</module>
@@ -28,7 +29,6 @@
         <module>prepsrl</module>
         <module>verbsense</module>
         <module>pipeline</module>
-
         <!--external tools -->
         <module>external/external-commons</module>
         <module>external/clausie</module>
@@ -90,10 +90,10 @@
                 <artifactId>formatter-maven-plugin</artifactId>
                 <version>0.5.2</version>
                 <configuration>
-            <configFile>${googleEclipseFormatterStyle}</configFile>
-            <excludes>
-                <exclude>**/Morpha.java</exclude>
-            </excludes>
+                    <configFile>${googleEclipseFormatterStyle}</configFile>
+                    <excludes>
+                        <exclude>**/Morpha.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -166,7 +166,7 @@
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
 
-			<!-- don't add license headers to LBJava generated files. -->
+                        <!-- don't add license headers to LBJava generated files. -->
                         <exclude>**/Affixes.java</exclude>
                         <exclude>**/BrownClusterPaths.java</exclude>
                         <exclude>**/Capitalization.java</exclude>
@@ -227,5 +227,4 @@
             </extension>
         </extensions>
     </build>
-
 </project>
