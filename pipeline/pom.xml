@@ -2,7 +2,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.27</version>
+        <version>3.1.28</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -15,52 +15,52 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-lemmatizer</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-quantifier</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-prep-srl</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-comma</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-verbsense</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>stanford_3.3.1</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>org.cogcomp</groupId>
@@ -77,12 +77,17 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>md</artifactId>
+            <version>3.1.28</version>
         </dependency>
 
         <dependency>
@@ -111,7 +116,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-depparse</artifactId>
-            <version>3.1.27</version>
+            <version>3.1.28</version>
         </dependency>
 
         <!--for pipeline web-server-->
