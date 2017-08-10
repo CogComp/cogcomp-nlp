@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.utilities;
 
 import java.util.*;
@@ -8,14 +15,14 @@ import java.util.*;
 public class FrameData {
     private String lemma;
 
-    private static class SenseFrameData {
+    public static class SenseFrameData {
         Map<String, ArgumentData> argDescription = new HashMap<>();
         String verbClass = "UNKNOWN";
         String senseName;
         List<Example> examples = new ArrayList<>();
     }
 
-    private static class ArgumentData {
+    public static class ArgumentData {
         String description;
         Set<String> vnTheta = new HashSet<>();
     }
@@ -69,6 +76,12 @@ public class FrameData {
         assert this.senseFrameData.containsKey(sense) : sense
                 + " missing for predicate lemma " + this.lemma;
         return this.senseFrameData.get(sense).argDescription.keySet();
+    }
+
+    public SenseFrameData getArgInfoForSense(String sense) {
+        assert this.senseFrameData.containsKey(sense) : sense
+                + " missing for predicate lemma " + this.lemma;
+        return this.senseFrameData.get(sense);
     }
 
     public void addArgumentDescription(String sense, String arg,

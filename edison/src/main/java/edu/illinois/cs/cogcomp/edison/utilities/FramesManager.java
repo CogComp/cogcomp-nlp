@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.utilities;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
@@ -11,9 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -156,8 +161,9 @@ public class FramesManager {
                 Element role = (Element) roles.item(j);
 
                 String label = role.getAttribute("n");
-                if (role.hasAttribute("f"))
-                    label += "-" + role.getAttribute("f");
+                // danielkh: commented out the attribute, since it messes up description retriaval when using it inside our srl annotators
+//                if (role.hasAttribute("f"))
+//                    label += "-" + role.getAttribute("f");
                 String argLabel = "A" + label;
                 fData.addArgument(sense, argLabel);
 
@@ -238,10 +244,19 @@ public class FramesManager {
         return frameData.get(lemma);
     }
 
-
-    public Set<String> getFrameWithSense(String lemma, String sense) {
+    public FrameData.SenseFrameData getFrameWithSense(String lemma, String sense) {
         FrameData f = getFrame(lemma);
-        return f.getArgsForSense(sense);
+        return f.getArgInfoForSense(sense);
+    }
+
+    /** Example input/output values:
+     * argLabel: A1-PPT --> expected output: commodity
+     * argLabel: A2-LOC --> expected output: location
+     * argLabel: A0-PAG --> expected output: storer
+     */
+    public static String getArgDcrp(String argLabel, FrameData.SenseFrameData arguments) {
+        System.out.println(arguments.argDescription.keySet());
+        return (arguments.argDescription.containsKey(argLabel)) ? arguments.argDescription.get(argLabel).description : "";
     }
 
     /**
@@ -250,7 +265,6 @@ public class FramesManager {
      */
     public static void main(String[] args) throws IOException, InvalidPortException, DatastoreException, InvalidEndpointException {
         FramesManager manager = new FramesManager(true);
-        /*
         for (String predicate : manager.getPredicates()) {
             System.out.println("--> predicate: " + predicate);
             FrameData frame = manager.getFrame(predicate);
@@ -267,9 +281,21 @@ public class FramesManager {
                     senseStr += arg + ",";
                 senseStr = senseStr.substring(0, senseStr.length()-1) + " ";
             }
-            outLines.add(predicate + "\t" + senseStr.trim());
-        }*/
-        Set<String> arguments = manager.getFrameWithSense("store", "01");
+        }
+
+        FrameData.SenseFrameData arguments = manager.getFrameWithSense("buy", "01");
         System.out.println(arguments);
+        System.out.println(arguments.senseName);
+        System.out.println(arguments.verbClass);
+        System.out.println(arguments.argDescription);
+        for(String k : arguments.argDescription.keySet()) {
+            System.out.println("\t\t\tkey: " + k);
+            System.out.println("\t\t\tdescription: " + arguments.argDescription.get(k).description);
+            System.out.println("\t\t\tvnTheta: " + arguments.argDescription.get(k).vnTheta);
+        }
+
+        FrameData.SenseFrameData frameData = manager.getFrameWithSense("buy", "01");
+        System.out.println("frameData: " + frameData);
+        System.out.println(FramesManager.getArgDcrp("A1", frameData));
     }
 }
