@@ -22,6 +22,7 @@ Each library contains detailed readme and instructions on how to use it. In addi
 | [tokenizer](tokenizer/README.md) | An application that identifies sentence and word boundaries in plain text. | 
 | [pos](pos/README.md)  | An application that identifies the part of speech (e.g. verb + tense, noun + number) of each word in plain text.  |  
 | [ner](ner/README.md) | An application that identifies named entities in plain text according to two different sets of categories.  |
+| [md](md/README.md) | An application that identifies entity mentions in plain text.  |
 | [quantifier](quantifier/README.md) | This tool detects mentions of quantities in the text, as well as normalizes it to a standard form. |
 | [inference](inference/README.md) |  A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. |
 | [depparse](depparse/README.md) | An application that identifies the dependency parse tree of a sentence. |
