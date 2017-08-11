@@ -86,7 +86,7 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>md</artifactId>
+            <artifactId>illinois-md</artifactId>
             <version>3.1.27</version>
         </dependency>
 

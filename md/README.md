@@ -30,6 +30,18 @@ ACE: 89.45
 
 ## Usage
 
+### Install with Maven
+
+If you want to use the illinois-md package independently, you can add a maven dependency in your pom.xml. Please replace the `VERSION` with the latest version of the parent package.
+
+```xml
+<dependency>
+    <groupId>edu.illinois.cs.cogcomp</groupId>
+    <artifactId>illinois-md</artifactId>
+    <version>VERSION</version>
+</dependency>
+```
+
 ### Using Annotator
 
 The recommended way to use this package is through the `MentionAnnotator`. `MentionAnnotator` can be initialized with or without an mode parameter.
