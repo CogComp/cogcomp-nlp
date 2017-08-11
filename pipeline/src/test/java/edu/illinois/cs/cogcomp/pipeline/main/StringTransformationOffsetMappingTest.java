@@ -56,6 +56,7 @@ public class StringTransformationOffsetMappingTest {
         props.setProperty(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
         props.setProperty(PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE);
         props.setProperty(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
+        props.setProperty(PipelineConfigurator.USE_MENTION.key, Configurator.TRUE);
 
 
         props.setProperty(PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE);

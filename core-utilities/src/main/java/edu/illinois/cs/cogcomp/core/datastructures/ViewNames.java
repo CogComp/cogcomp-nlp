@@ -30,6 +30,8 @@ public class ViewNames {
     public static final String LEMMA = "LEMMA";
     public static final String POS = "POS";
 
+    public static final String MENTION = "MENTION";
+
     /** the tree gazetteer produced by the SimpleGazetteerAnnotator. */
     public static final String TREE_GAZETTEER = "TREE_GAZETTEER";
 
@@ -136,6 +138,7 @@ public class ViewNames {
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
+            case MENTION:
             case MENTION_ACE:
             case MENTION_ERE:
             case NER_CONLL:

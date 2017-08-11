@@ -32,9 +32,10 @@ import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerAnnotator;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerConfigurator;
 import edu.illinois.cs.cogcomp.verbsense.VerbSenseAnnotator;
-
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
+
+import org.cogcomp.md.MentionAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,6 +123,10 @@ public class PipelineFactory {
                         break;
                     case ViewNames.TIMEX3:
                         nonDefaultValues.put(PipelineConfigurator.USE_TIMEX3.key,
+                                Configurator.TRUE);
+                        break;
+                    case ViewNames.MENTION:
+                        nonDefaultValues.put(PipelineConfigurator.USE_MENTION.key,
                                 Configurator.TRUE);
                         break;
                     default:
@@ -254,12 +259,6 @@ public class PipelineFactory {
             POSAnnotator pos = new POSAnnotator();
             viewGenerators.put(pos.getViewName(), pos);
         }
-        if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)) {
-            Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
-            rmProps.setProperty("useHeidelTime", "False");
-            TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
-            viewGenerators.put(tca.getViewName(), tca);
-        }
         if (rm.getBoolean(PipelineConfigurator.USE_LEMMA)) {
             IllinoisLemmatizer lem = new IllinoisLemmatizer(rm);
             viewGenerators.put(lem.getViewName(), lem);
@@ -360,6 +359,10 @@ public class PipelineFactory {
         if(rm.getBoolean(PipelineConfigurator.USE_VERB_SENSE)) {
             VerbSenseAnnotator verbSense = new VerbSenseAnnotator();
             viewGenerators.put(ViewNames.VERB_SENSE, verbSense);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_MENTION)){
+            MentionAnnotator mentionAnnotator = new MentionAnnotator();
+            viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
         }
         return viewGenerators;
     }
