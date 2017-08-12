@@ -43,8 +43,7 @@ public class BIOCombinedReader extends BIOReader {
     /**
      * @param fold The fold index (0-4) you want to access
      * @param mode Indicates the corpus and train/eval e.g. "ERE-TRAIN"
-     *              mode "ALL-TRAIN/EVAL" indicates all folds together,
-     *              In this mode, "fold" is ignored
+     *              mode "ALL-TRAIN/EVAL" indicates hybrid corpus.
      * @param type Indicates the type (NAM/NOM/PRO/ALL) kept
      */
     public BIOCombinedReader(int fold, String mode, String type){

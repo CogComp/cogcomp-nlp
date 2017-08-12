@@ -25,7 +25,7 @@ public class AnnotatorTester {
      * By default, this function uses the ERE model trained with Type on ERE corpus, should have a fairly high performance.
      */
     public static void test_basic_annotator(){
-        EREMentionRelationReader ereMentionRelationReader = null;
+        ACEReader aceReader = null;
         POSAnnotator posAnnotator = new POSAnnotator();
         int total_labeled = 0;
         int total_predicted = 0;
@@ -33,16 +33,15 @@ public class AnnotatorTester {
         int total_type_correct = 0;
         int total_extent_correct = 0;
         try {
-            ereMentionRelationReader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR3, "data/ere/data", false);
-            MentionAnnotator mentionAnnotator = new MentionAnnotator("ERE_TYPE");
-            for (XmlTextAnnotation xta : ereMentionRelationReader) {
-                TextAnnotation ta = xta.getTextAnnotation();
+            aceReader = new ACEReader("data/partition_with_dev/dev", false);
+            MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_NONTYPE");
+            for (TextAnnotation ta : aceReader) {
                 ta.addView(posAnnotator);
                 mentionAnnotator.addView(ta);
-                total_labeled += ta.getView(ViewNames.MENTION_ERE).getNumberOfConstituents();
+                total_labeled += ta.getView(ViewNames.MENTION_ACE).getNumberOfConstituents();
                 total_predicted += ta.getView(ViewNames.MENTION).getNumberOfConstituents();
                 for (Constituent pc : ta.getView(ViewNames.MENTION).getConstituents()){
-                    for (Constituent gc : ta.getView(ViewNames.MENTION_ERE).getConstituents()){
+                    for (Constituent gc : ta.getView(ViewNames.MENTION_ACE).getConstituents()){
                         gc.addAttribute("EntityType", gc.getLabel());
                         Constituent gch = ACEReader.getEntityHeadForConstituent(gc, ta, "B");
                         if (gch == null){

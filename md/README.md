@@ -28,6 +28,10 @@ Extent boundary accuracy given Head
 
 ACE: 89.45
 
+ERE: 88.74
+
+Combined: 86.65
+
 ## Usage
 
 ### Install with Maven

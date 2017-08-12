@@ -102,6 +102,15 @@ public class ExtentReader implements Parser
                 e.printStackTrace();
             }
         }
+        if (_corpus.startsWith("COMBINED")){
+            String realCorpus = _corpus.split("-")[1];
+            String mode = _corpus.split("-")[2];
+            int fold = Integer.parseInt(_corpus.split("-")[3]);
+            BIOCombinedReader bioCombinedReader = new BIOCombinedReader(fold, realCorpus + "-" + mode, "ALL", true);
+            for (Object ta = bioCombinedReader.next(); ta != null; ta = bioCombinedReader.next()){
+                ret.add((TextAnnotation)ta);
+            }
+        }
         return ret;
     }
     public List<Relation> getPairs(){
@@ -133,11 +142,11 @@ public class ExtentReader implements Parser
         }
         Gazetteers gazetteers = GazetteersFactory.get();
         BrownClusters brownClusters = BrownClusters.get();
-        String mentionViewName = ViewNames.MENTION_ACE;
-        if (_corpus.equals("ERE")){
-            mentionViewName = ViewNames.MENTION_ERE;
-        }
         for (TextAnnotation ta : taList){
+            String mentionViewName = ViewNames.MENTION_ERE;
+            if (ta.getId().startsWith("bn") || ta.getId().startsWith("nw")){
+                mentionViewName = ViewNames.MENTION_ACE;
+            }
             View mentionView = ta.getView(mentionViewName);
             View tokenView = ta.getView(ViewNames.TOKENS);
             for (Constituent mention : mentionView){

@@ -517,7 +517,7 @@ public class BIOTester {
                 if (goldMention.getAttribute("EntityType").equals(predictMention.getAttribute("EntityType"))) {
                     typeCorrect = true;
                 }
-                if (boundaryCorrect && typeCorrect){
+                if (boundaryCorrect){
                     total_correct_mention ++;
                     if (learnerIdx == 0){
                         total_correct_nam ++;
