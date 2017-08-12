@@ -34,10 +34,8 @@ public class Timex3PipelineTest {
 
     @BeforeClass
     public static void init() throws IOException, AnnotatorException {
-        Properties props = new Properties();
-        props.setProperty(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
-        props.setProperty(PipelineConfigurator.USE_TIMEX3.key, Configurator.TRUE);
-        timex3Processor = PipelineFactory.buildPipeline(new ResourceManager(props));
+        ResourceManager rm = new PipelineConfigurator().getConfig(new ResourceManager( "config/pipeline-timex3.properties" ));
+        timex3Processor = PipelineFactory.buildPipeline(rm);
     }
 
 

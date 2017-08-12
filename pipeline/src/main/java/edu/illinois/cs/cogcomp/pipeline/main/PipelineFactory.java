@@ -364,6 +364,11 @@ public class PipelineFactory {
             MentionAnnotator mentionAnnotator = new MentionAnnotator();
             viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
         }
+        if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)){
+            Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
+            TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
+            viewGenerators.put(ViewNames.TIMEX3, tca);
+        }
         return viewGenerators;
     }
 
