@@ -26,11 +26,11 @@ Head Boundary
 
 Extent boundary accuracy given Head
 
-ACE: 89.45
-
-ERE: 88.74
-
-Combined: 86.65
+|         | Accuracy |
+|---------|----------|
+| ACE     | 89.45    |
+| ERE     | 88.74    |
+| ACE+ERE | 86.65    |
 
 ## Usage
 

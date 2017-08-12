@@ -355,7 +355,7 @@ public class PipelineFactory {
             viewGenerators.put(ViewNames.VERB_SENSE, verbSense);
         }
         if (rm.getBoolean(PipelineConfigurator.USE_MENTION)){
-            MentionAnnotator mentionAnnotator = new MentionAnnotator();
+            MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
         }
         return viewGenerators;
