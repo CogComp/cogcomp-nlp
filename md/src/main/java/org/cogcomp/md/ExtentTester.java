@@ -235,26 +235,34 @@ public class ExtentTester {
         Gazetteers gazetteers = GazetteersFactory.get();
         BrownClusters brownClusters = BrownClusters.get();
         for (int i = 0; i < 1; i++) {
-            ExtentReader train_parser = new ExtentReader("data/partition_with_dev/train/"  + i, "ACE");
+            ExtentReader train_parser = new ExtentReader("data/partition_with_dev/train/"  + i, "COMBINED-ALL-TRAIN-" + i);
             extent_classifier classifier = train_extent_classifier(train_parser);
-            ACEReader aceReader = null;
+            BIOCombinedReader bioCombinedReader = null;
             try{
-                aceReader = new ACEReader("data/partition_with_dev/eval/" + i, false);
+                bioCombinedReader = new BIOCombinedReader(i, "ALL-EVAL", "ALL", true);
             }
             catch (Exception e){
                 e.printStackTrace();
             }
-            for (TextAnnotation ta : aceReader){
+            for (Object ota = bioCombinedReader.next(); ota != null; ota = bioCombinedReader.next()){
+                TextAnnotation ta = (TextAnnotation)ota;
                 try {
                     ta.addView(posAnnotator);
                 }
                 catch (Exception e){
                     e.printStackTrace();
                 }
-                View mentionView = ta.getView(ViewNames.MENTION_ACE);
+                String mentionViewName = ViewNames.MENTION_ERE;
+                if (ta.getId().startsWith("bn") || ta.getId().startsWith("nw")){
+                    mentionViewName = ViewNames.MENTION_ACE;
+                }
+                View mentionView = ta.getView(mentionViewName);
                 for (Constituent mention : mentionView.getConstituents()){
-                    labeled ++;
                     Constituent head = ACEReader.getEntityHeadForConstituent(mention, ta, "HEADS");
+                    if (head == null){
+                        continue;
+                    }
+                    labeled ++;
                     Constituent predictedFullMention = getFullMention(classifier, head, gazetteers, brownClusters, wordNet);
                     if (predictedFullMention.getStartSpan() == mention.getStartSpan() &&
                             predictedFullMention.getEndSpan() == mention.getEndSpan()){
@@ -311,9 +319,9 @@ public class ExtentTester {
         int total_mention_head_correct = 0;
         int total_mention_extent_correct = 0;
         for (int i = 0; i < 5; i++) {
-            BIOReader h_train_parser_nam = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "NAM", true);
-            BIOReader h_train_parser_nom = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "NOM", true);
-            BIOReader h_train_parser_pro = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "PRO", true);
+            BIOReader h_train_parser_nam = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "NAM", false);
+            BIOReader h_train_parser_nom = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "NOM", false);
+            BIOReader h_train_parser_pro = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "PRO", false);
 
             bio_classifier_nam h_classifier_nam = BIOTester.train_nam_classifier(h_train_parser_nam);
             bio_classifier_nom h_classifier_nom = BIOTester.train_nom_classifier(h_train_parser_nom);
@@ -326,7 +334,7 @@ public class ExtentTester {
             ExtentReader e_train_parser = new ExtentReader("data/partition_with_dev/train/"  + i);
             extent_classifier e_classifier = train_extent_classifier(e_train_parser);
 
-            BIOReader test_parser = new BIOReader("data/partition_with_dev/eval/" + i, "ACE05-EVAL", "ALL", true);
+            BIOReader test_parser = new BIOReader("data/partition_with_dev/eval/" + i, "ACE05-EVAL", "ALL", false);
             test_parser.reset();
             String preBIOLevel1 = "";
             String preBIOLevel2 = "";

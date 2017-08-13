@@ -36,21 +36,37 @@ public class BIOCombinedReader extends BIOReader {
     List<Constituent> constituents;
     List<TextAnnotation> currentTas;
     int cons_idx;
+    int ta_idx;
     String _type;
     String _mode;
+    Boolean _taOnly;
     /**
      * @param fold The fold index (0-4) you want to access
      * @param mode Indicates the corpus and train/eval e.g. "ERE-TRAIN"
-     *              mode "ALL-TRAIN/EVAL" indicates all folds together,
-     *              In this mode, "fold" is ignored
+     *              mode "ALL-TRAIN/EVAL" indicates hybrid corpus.
      * @param type Indicates the type (NAM/NOM/PRO/ALL) kept
      */
     public BIOCombinedReader(int fold, String mode, String type){
         _mode = mode;
         _type = type;
+        _taOnly = false;
         currentTas = readTasByFold(fold, mode);
         constituents = getTokensFromTAs();
         cons_idx = 0;
+        ta_idx = 0;
+        id = "Hybrid_" + fold;
+    }
+
+    public BIOCombinedReader(int fold, String mode, String type, Boolean taOnly){
+        _mode = mode;
+        _type = type;
+        _taOnly = taOnly;
+        currentTas = readTasByFold(fold, mode);
+        if (!taOnly) {
+            constituents = getTokensFromTAs();
+            cons_idx = 0;
+        }
+        ta_idx = 0;
         id = "Hybrid_" + fold;
     }
     public List<TextAnnotation> readTasByFold(int fold, String mode){
@@ -312,15 +328,31 @@ public class BIOCombinedReader extends BIOReader {
         return tas;
     }
     public Object next(){
-        if (cons_idx == constituents.size()) {
-            return null;
-        } else {
-            cons_idx ++;
-            return constituents.get(cons_idx - 1);
+        if (_taOnly){
+            if (ta_idx == currentTas.size()){
+                return null;
+            }
+            else {
+                ta_idx ++;
+                return currentTas.get(ta_idx - 1);
+            }
+        }
+        else {
+            if (cons_idx == constituents.size()) {
+                return null;
+            } else {
+                cons_idx++;
+                return constituents.get(cons_idx - 1);
+            }
         }
     }
     public void reset(){
-        cons_idx = 0;
+        if (_taOnly){
+            ta_idx = 0;
+        }
+        else {
+            cons_idx = 0;
+        }
     }
     public void close(){
 

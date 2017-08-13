@@ -26,9 +26,25 @@ Head Boundary
 
 Extent boundary accuracy given Head
 
-ACE: 89.45
+|         | Accuracy |
+|---------|----------|
+| ACE     | 89.45    |
+| ERE     | 88.74    |
+| ACE+ERE | 86.65    |
 
 ## Usage
+
+### Install with Maven
+
+If you want to use the illinois-md package independently, you can add a maven dependency in your pom.xml. Please replace the `VERSION` with the latest version of the parent package.
+
+```xml
+<dependency>
+    <groupId>edu.illinois.cs.cogcomp</groupId>
+    <artifactId>illinois-md</artifactId>
+    <version>VERSION</version>
+</dependency>
+```
 
 ### Using Annotator
 

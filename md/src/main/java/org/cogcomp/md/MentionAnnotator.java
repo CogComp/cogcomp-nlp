@@ -48,6 +48,7 @@ public class MentionAnnotator extends Annotator{
     private BrownClusters brownClusters;
     private WordNetManager wordNet;
 
+    private String _mode;
     /**
      * By default, the initializer set mode to "ACE_NONTYPE"
      */
@@ -69,16 +70,20 @@ public class MentionAnnotator extends Annotator{
 
     public MentionAnnotator(boolean lazilyInitialize, String mode){
         super(ViewNames.MENTION, new String[]{ViewNames.POS}, lazilyInitialize);
+        _mode = mode;
+    }
+
+    public void initialize(ResourceManager rm){
         String fileName_NAM = "";
         String fileName_NOM = "";
         String fileName_PRO = "";
         String fileName_EXTENT = "";
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            if (mode.contains("ACE")) {
+            if (_mode.contains("ACE")) {
                 File extentFlie = ds.getDirectory("org.cogcomp.mention", "ACE_EXTENT", 1.0, false);
                 fileName_EXTENT = extentFlie.getPath() + File.separator + "ACE_EXTENT" + File.separator + "EXTENT_ACE";
-                if (mode.contains("NON")){
+                if (_mode.contains("NON")){
                     File headFile = ds.getDirectory("org.cogcomp.mention", "ACE_HEAD_NONTYPE", 1.0, false);
                     fileName_NAM = headFile.getPath() + File.separator + "ACE_HEAD_NONTYPE" + File.separator + "ACE_NAM";
                     fileName_NOM = headFile.getPath() + File.separator + "ACE_HEAD_NONTYPE" + File.separator + "ACE_NOM";
@@ -91,10 +96,10 @@ public class MentionAnnotator extends Annotator{
                     fileName_PRO = headFile.getPath() + File.separator + "ACE_HEAD_TYPE" + File.separator + "ACE_PRO_TYPE";
                 }
             }
-            else if (mode.contains("ERE")){
+            else if (_mode.contains("ERE")){
                 File extentFlie = ds.getDirectory("org.cogcomp.mention", "ERE_EXTENT", 1.0, false);
                 fileName_EXTENT = extentFlie.getPath() + File.separator + "ERE_EXTENT" + File.separator + "EXTENT_ERE";
-                if (mode.contains("NON")){
+                if (_mode.contains("NON")){
                     File headFile = ds.getDirectory("org.cogcomp.mention", "ERE_HEAD_NONTYPE", 1.0, false);
                     fileName_NAM = headFile.getPath() + File.separator + "ERE_HEAD_NONTYPE" + File.separator + "ERE_NAM";
                     fileName_NOM = headFile.getPath() + File.separator + "ERE_HEAD_NONTYPE" + File.separator + "ERE_NOM";
@@ -148,12 +153,11 @@ public class MentionAnnotator extends Annotator{
         candidates[2] = classifier_pro;
     }
 
-    public void initialize(ResourceManager rm){
-
-    }
-
     @Override
     public void addView(TextAnnotation ta) throws AnnotatorException{
+        if (!isInitialized()){
+            doInitialize();
+        }
         View mentionView = new SpanLabelView(ViewNames.MENTION, MentionAnnotator.class.getCanonicalName(), ta, 1.0f, true);
         View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
         View tokenView = ta.getView(ViewNames.TOKENS);
