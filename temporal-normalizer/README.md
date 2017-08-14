@@ -100,3 +100,12 @@ Note : To use your own models, exclude the `illinois-time-models` artifact from 
 
 ## Training
 For the training of our extraction model, please refer to Chunker, with training data substituted by temporal related text.
+
+## Performance Benchmark
+We provide a [`TemporalNormalizerBenchmark`](src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TemporalNormalizerBenchmark.java) for you to evaluate the performance. You can use the following options:
+1. -verbose, this is optional
+2. -useGoldChunk, optional, if not set, temporal chunker will be used
+3. -inputFolder <filepath>, mandatory
+4. -outputFolder <filepath>, mandatory
+
+We use TempEval3 dataset for evaluation, you can download https://www.cs.york.ac.uk/semeval-2013/task1/index.php%3Fid=data.html.
