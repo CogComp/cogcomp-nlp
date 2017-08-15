@@ -143,7 +143,12 @@ public class FramesManager {
             if (sense.equals("oneslashonezeroth.01"))
                 sense = "1-slash-10th.01";
 
-            assert sense.startsWith(IOUtils.stripFileExtension(file)) || sense.startsWith(lemma) : lemma + "\t" + sense;
+            // danielkh: commenting this out since many files don't satisfy
+            /*
+            assert sense.startsWith(IOUtils.stripFileExtension(file)) || sense.startsWith(lemma) :
+                    "lemma: " + lemma + "\t sense:" + sense + "\t file: " + file +
+                            "\tIOUtils.stripFileExtension(file): " + IOUtils.stripFileExtension(file);
+            */
 
             String verbClass;
             if (roleSet.hasAttribute("vncls")) {
@@ -248,7 +253,7 @@ public class FramesManager {
 
     public FrameData.SenseFrameData getFrameWithSense(String lemma, String sense) {
         FrameData f = getFrame(lemma);
-        return f.getArgInfoForSense(sense);
+        return (f != null)? f.getArgInfoForSense(sense) : null;
     }
 
     /** Example input/output values:
@@ -267,24 +272,25 @@ public class FramesManager {
      */
     public static void main(String[] args) throws IOException, InvalidPortException, DatastoreException, InvalidEndpointException {
         FramesManager manager = new FramesManager(true);
-        for (String predicate : manager.getPredicates()) {
-            System.out.println("--> predicate: " + predicate);
-            FrameData frame = manager.getFrame(predicate);
-            System.out.println("--> frame: " + frame);
-            Set<String> senses = frame.getSenses();
-            System.out.println("--> senses: " + senses);
-            String senseStr = "";
-            for (String sense : senses) {
-                Set<String> argsForSense = frame.getArgsForSense(sense);
-                if (argsForSense.isEmpty()) continue;
-                System.out.println("---------> argsForSense: " + argsForSense);
-                senseStr += sense + "#";
-                for (String arg : argsForSense)
-                    senseStr += arg + ",";
-                senseStr = senseStr.substring(0, senseStr.length()-1) + " ";
-            }
-        }
+//        for (String predicate : manager.getPredicates()) {
+//            System.out.println("--> predicate: " + predicate);
+//            FrameData frame = manager.getFrame(predicate);
+//            System.out.println("--> frame: " + frame);
+//            Set<String> senses = frame.getSenses();
+//            System.out.println("--> senses: " + senses);
+//            String senseStr = "";
+//            for (String sense : senses) {
+//                Set<String> argsForSense = frame.getArgsForSense(sense);
+//                if (argsForSense.isEmpty()) continue;
+//                System.out.println("---------> argsForSense: " + argsForSense);
+//                senseStr += sense + "#";
+//                for (String arg : argsForSense)
+//                    senseStr += arg + ",";
+//                senseStr = senseStr.substring(0, senseStr.length()-1) + " ";
+//            }
+//        }
 
+/*
         FrameData.SenseFrameData arguments = manager.getFrameWithSense("buy", "01");
         System.out.println(arguments);
         System.out.println(arguments.senseName);
@@ -295,6 +301,7 @@ public class FramesManager {
             System.out.println("\t\t\tdescription: " + arguments.argDescription.get(k).description);
             System.out.println("\t\t\tvnTheta: " + arguments.argDescription.get(k).vnTheta);
         }
+*/
 
         FrameData.SenseFrameData frameData = manager.getFrameWithSense("buy", "01");
         System.out.println("frameData: " + frameData);

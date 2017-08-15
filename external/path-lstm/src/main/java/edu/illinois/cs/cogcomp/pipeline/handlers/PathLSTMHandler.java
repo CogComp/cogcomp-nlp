@@ -140,7 +140,7 @@ public class PathLSTMHandler extends Annotator {
                             for (Word a : p.getArgMap().keySet()) {
                                 Set<Word> singleton = new TreeSet<Word>();
                                 String argTag = p.getArgumentTag(a);
-                                String argDesc = (frameData!=null)? FramesManager.getArgDcrp(argTag, frameData): "";
+                                String argDesc = (frameData != null) ? FramesManager.getArgDcrp(argTag, frameData): "";
                                 Yield y = a.getYield(p, argTag, singleton);
                                 IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
                                 Constituent c = new Constituent("Argument", viewName, ta,

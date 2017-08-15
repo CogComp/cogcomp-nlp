@@ -70,7 +70,6 @@ public class FrameData {
 
     public void addArgument(String sense, String arg) {
         assert this.senseFrameData.containsKey(sense);
-
         senseFrameData.get(sense).argDescription.put(arg, new ArgumentData());
     }
 
