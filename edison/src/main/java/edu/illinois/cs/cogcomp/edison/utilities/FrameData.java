@@ -10,6 +10,9 @@ package edu.illinois.cs.cogcomp.edison.utilities;
 import java.util.*;
 
 /**
+ * This file contains the datastore required to store the frame information.
+ * The information are populated by FrameManager class.
+ *
  * @author Vivek Srikumar
  */
 public class FrameData {

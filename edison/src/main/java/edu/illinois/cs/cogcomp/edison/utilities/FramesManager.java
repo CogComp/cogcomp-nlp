@@ -28,6 +28,8 @@ import java.net.URL;
 import java.util.*;
 
 /**
+ * A set of utility functions to read frame-related resources, like propBank, nomBank, etc.
+ *
  * @author Vivek Srikumar
  */
 public class FramesManager {
