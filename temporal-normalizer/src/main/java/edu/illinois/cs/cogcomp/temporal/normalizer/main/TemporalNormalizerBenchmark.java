@@ -43,17 +43,31 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 /**
  * Created by zhilifeng on 8/2/17.
+ * We require users to use TempEval3 dataset (following TIMEX3 standard) for evaluation.
+ * You can download the dataset from https://www.cs.york.ac.uk/semeval-2013/task1/index.php%3Fid=data.html
+ * Refer to http://www.timeml.org/tempeval2/tempeval2-trial/guidelines/timex3guidelines-072009.pdf for detail
+ * about TIMEX3 standard.
+ *
+ * This class only generates the evaluated files. Please run a separate evaluation tool provided by TempEval3
+ * to get the actual performance. Refer to README.md Performance Benchmark session for details about how to run.
  */
 public class TemporalNormalizerBenchmark {
     private TemporalChunkerAnnotator tca;
     private static Logger logger = LoggerFactory.getLogger(TemporalNormalizerBenchmark.class);
     private List<String> DCTs;
     private List<String> testText;
-    private String folderName = "te3-platinum";
 
     private List<String> docIDs;
     private List<String> te3inputText;
 
+    /**
+     * Setting up TemporalChunkerAnnotator, prepare dataset
+     * @param fullFolderName folder name of the dataset
+     * @param useHeidelTime boolean whether use HeidelTime for normalization or not
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public void setUp(String fullFolderName, boolean useHeidelTime) throws IOException, ParserConfigurationException, SAXException {
         testText = new ArrayList<>();
         DCTs = new ArrayList<>();
@@ -99,6 +113,12 @@ public class TemporalNormalizerBenchmark {
         }
     }
 
+    /**
+     * Normalize the dataset using real extraction
+     * @param outputFolder
+     * @param verbose
+     * @throws Exception
+     */
     public void testNormalizationWithTrueExtraction(String outputFolder, boolean verbose) throws Exception {
         TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
         System.out.println("Working Directory = " +
@@ -163,6 +183,12 @@ public class TemporalNormalizerBenchmark {
 
     }
 
+    /**
+     * Normalize the dataset using our Chunker for temporal phrases extraction
+     * @param outputFolder
+     * @param verbose
+     * @throws Exception
+     */
     public void testTemporalChunker(String outputFolder, boolean verbose) throws Exception {
         TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
 
@@ -225,7 +251,10 @@ public class TemporalNormalizerBenchmark {
 
     /**
      *
-     * @param args the first argument is the data folder
+     * @param args 1. -verbose, this is optional
+     *             2. -useGoldChunk, optional, if not set, temporal chunker will be used
+     *             3. -inputFolder <filepath>, mandatory
+     *             4. -outputFolder <filepath>, mandatory
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException

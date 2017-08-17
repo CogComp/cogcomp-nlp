@@ -72,7 +72,7 @@ Illinois-time is divided into two parts: extractor and normalizer. Our extractor
 
 Our normalizer is a deterministic rule-based system. Another option is to use HeidelTime to normalize.
 
-The whole module is tested on [TempEval3](https://www.cs.york.ac.uk/semeval-2013/task1/index.php%3Fid=data.html) dataset, evaluated using an evaluation tool provided by TempEval3. You can run this [benchmark script](scripts/benchmark.sh) by doing `sh scripts/benchmark.sh` (make sure your CWD is `cogcomp-nlp`) to see the performance. You should see the following results (some unnecessary printed information is neglected, we only show the result using our extractor + normalizer here):
+The whole module is tested on [TempEval3](https://www.cs.york.ac.uk/semeval-2013/task1/index.php%3Fid=data.html) dataset, evaluated using an evaluation tool provided by TempEval3. You can run this [benchmark script](scripts/benchmark.sh) by doing `sh scripts/benchmark.sh` (make sure your CWD is `cogcomp-nlp`) to see the performance. You should see the following results (some unnecessary printed information is omitted, we only show the result using our extractor + normalizer here):
 ###### Using our extractor + our normalizer:
 
 === Timex Performance ===
@@ -102,7 +102,14 @@ Note : To use your own models, exclude the `illinois-time-models` artifact from 
 For the training of our extraction model, please refer to Chunker, with training data substituted by temporal related text.
 
 ## Performance Benchmark
-We provide a [`TemporalNormalizerBenchmark`](src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TemporalNormalizerBenchmark.java) for you to evaluate the performance. You can use the following options:
+Run:
+```(shell)
+cd temporal-normalizer
+sh scripts/benchmark.sh
+```
+in terminal to get results printed on console.
+
+We provide a [`TemporalNormalizerBenchmark`](src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TemporalNormalizerBenchmark.java) for you to generated evaluated files. You can use the following options:
 1. -verbose, this is optional
 2. -useGoldChunk, optional, if not set, temporal chunker will be used
 3. -inputFolder <filepath>, mandatory
