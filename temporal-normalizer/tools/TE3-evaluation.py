@@ -34,6 +34,11 @@ import commands
 import tempfile
 
 
+if (not os.path.isdir("./TimeML-Normalizer")):
+    print('Download jars from Google Drive')
+    command = 'python google_drive.py 0B67VRBmc0utpQ0dQcjZSdEV4eUk TimeML-Normalizer.tar.gz && tar -xvzf TimeML-Normalizer.tar.gz'
+    os.system(command)
+
 gold_dir = '' 
 system_dir = '' 
 

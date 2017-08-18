@@ -88,6 +88,35 @@
             <artifactId>illinois-tokenizer</artifactId>
             <version>3.1.28</version>
         </dependency>
+        <dependency>
+            <groupId>com.cognitionis</groupId>
+            <artifactId>timeml-normalizer</artifactId>
+            <version>1.1.0</version>
+
+        </dependency>
+        <dependency>
+            <groupId>com.cognitionis</groupId>
+            <artifactId>utils-basickit</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cognitionis</groupId>
+            <artifactId>nlp-files</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
+
+    <repositories>
+        <repository>
+            <id>cognitionis-releases</id>
+            <url>https://github.com/hllorens/cognitionis-mvn-repo/raw/master/releases</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+    </properties>
 </project>
