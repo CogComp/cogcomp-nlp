@@ -129,12 +129,13 @@ public class PathLSTMHandler extends Annotator {
                             predicate.addAttribute(PredicateArgumentView.SenseIdentifer, senseOnly);
                             FrameData.SenseFrameData frameData = null;
                             if(p.getPOS().startsWith("N")) {
-                                frameData = propBankManager.getFrameWithSense(predicateLemma, senseOnly);
-                            }
-                            else {
+                                // if it's noun, load from NomBank
                                 frameData = nomBankManager.getFrameWithSense(predicateLemma, senseOnly);
                             }
-
+                            else {
+                                // otherwise, use propbank
+                                frameData = propBankManager.getFrameWithSense(predicateLemma, senseOnly);
+                            }
                             pav.addConstituent(predicate);
 
                             for (Word a : p.getArgMap().keySet()) {
