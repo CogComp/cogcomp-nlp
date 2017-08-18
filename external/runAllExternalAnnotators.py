@@ -1,6 +1,7 @@
 ####
 # A simple script to run all the servers of the external annotators on different ports.
 # it first selects a bunch of open ports, and then tries running the modules on the free ports
+# designed for Python 2.7
 ####
 
 from __future__ import print_function
@@ -8,7 +9,6 @@ import os
 import sys
 import socket
 from subprocess import check_output
-from subprocess import run
 
 # list of potential port addresses
 ports = [8080, 8443, 1503, 1720, 1731, 3283, 5988, 8009]
@@ -36,7 +36,7 @@ def main():
     for index, elem in enumerate(modules):
         port = filteredPorts[index]
         print("running module `" + elem + "` on port `" + port + "`")
-        run([elem + "/scripts/runWebserver.sh", "-p", port])
+        check_output([elem + "/scripts/runWebserver.sh", "-p", port])
 
 if __name__ == '__main__':
     sys.exit(main())
