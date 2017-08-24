@@ -12,7 +12,6 @@ from subprocess import check_output
 
 # list of potential port addresses
 ports = [8080, 8443, 1503, 1720, 1731, 3283, 5988, 8009]
-modules = ["clausie", "path-lstm", "stanford_3.8.0"]
 
 def checkPortAvailability(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
