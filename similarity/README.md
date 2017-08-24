@@ -6,14 +6,14 @@ similar they are.  It is used in our WordNet-, Named Entity-, embedding-,
 and paraphrase-based similarity code to simplify integration of
 different similarity resources.
 
-## Download Resource File
+## Downloading the Resources
 
-When you first use the specific metrics, the system will automatically download corresponding resource file from CogComp server to `user.home` directory in your local machine.
+When you first use the specific metrics, the system will automatically download corresponding resource files from CogComp server to `user.home` directory in your local machine.
 Notice: Some resource file is very large and it may take a while to download. "paragram" is already included in the `src/main/resources/`.
 
 ## Configure File
 
-The default configure file is `config/configurations.properties.` And see the default config in `SimConfigurator` in `edu.illinois.cs.cogcomp.config` package.
+See the default config in `SimConfigurator` in `edu.illinois.cs.cogcomp.config` package.
 
 
 ## Word similarity
@@ -32,8 +32,8 @@ And the metric can be chosen from "word2vec", "paragram", "esa", "glove", "wordn
 In config file, `customized` gives your option to use your own embedding file. Just put the location of the file at this field and the dimension of the embedding at the filed `customized_embedding_dim`.
 
 
-## Name Entity Comparison
-When you want to compare Name Entity, you can use name entity comparison metric below:
+## Name Entities Comparison
+When you want to compare Name Entities, you can use name entity comparison metric below:
 
 ```java
 NESim nesim=new NESim();
@@ -55,9 +55,9 @@ To use this metric properly, you need to specify some configurations in the Conf
 
 `wordMetric` is the  word comparator metric used in LLM. It can be chosen from "word2vec", "paragram", "esa", "glove", "wordnet" "phrase2vec" or "customized" (your own embedding file).
 
-`usePhraseSim` option will automatically tokenized the sentence into phrase-based units when comparing sentences and notice it should be used with "phrase2vec". To use this option, set it as true and use `phrase2vec` as `wordMetric`. The system can identify the phrases and reformat the sentence. E.g. "please turn the light on" => "please turn-on the light". Notice: the phrase identification process depends on the generalized phrases dictionary we extracted from Wordnet (see `src/main/resources/phrases.txt`).
+`usePhraseSim` option will automatically split the sentence into phrase-based units when comparing sentences. To use this option, set it as true and use `phrase2vec` as `wordMetric`. The system splits the text into phrases, then matches those phrases using a phrase similarity metric that can match different formulations of many phrases, E.g. "please turn the light on" => "please turn-on the light". Notice: When we split sentences into phrases, this phrases identification process depends on the generalized phrases dictionary we extracted from Wordnet (see `src/main/resources/phrases.txt`).
 
-`useNER` option will run NER on sentence and compare name-entity using NE comparison metrics in LLM. To use this option, set it as true. The system will run NER on the sentences first and comparing name entity and words separately. Notice: the NER initialization takes a lot of memory.
+`useNER` option will run NER on sentence and compare name-entity using NE comparison metrics in LLM. To use this option, set it as true. The system will run NER on the sentences first and comparing name entity and words separately. Notice: the NER initialization takes a lot of memory. See [NER detail here](http://cogcomp.cs.illinois.edu/page/software_view/NETagger).
 
 To get the basic LLM similarity score, just set `usePhraseSim` and `useNER` as false in config file (which is also the default setting).
 
