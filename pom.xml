@@ -23,6 +23,7 @@
         <module>big-data-utils</module>
         <module>similarity</module>
         <module>inference</module>
+        <module>temporal-normalizer</module>
         <module>quantifier</module>
         <module>depparse</module>
         <module>commasrl</module>
@@ -165,6 +166,7 @@
                         <exclude>**/*.html</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
+                        <exclude>**/*.dtd</exclude>
 
                         <!-- don't add license headers to LBJava generated files. -->
                         <exclude>**/Affixes.java</exclude>

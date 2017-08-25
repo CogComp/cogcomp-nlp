@@ -1,0 +1,252 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>AFP_ENG_19970401.0099</DOCID>
+
+<DCT>BEIJING, <TIMEX3 tid="t0" type="TIME" value="1997-04-01" temporalFunction="false" functionInDocument="CREATION_TIME">April 1 , 1997</TIMEX3> (AFP)</DCT>
+
+<TITLE>China warns US after Gingrich comments on Taiwan</TITLE>
+
+<TEXT>
+
+Beijing <EVENT eid="ONT::V91371" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="I_ACTION">warned</EVENT> the United States <TIMEX3 tid="t1" type="DATE" value="1998-08-04">Tuesday</TIMEX3> against <EVENT eid="ONT::V91426" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">interfering</EVENT> in Taiwan after US House of Representative speaker Newt Gingrich <EVENT eid="ONT::V91602" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT> Washington would <EVENT eid="ONT::V91649" polarity="POS" modality="would" pos="VERB" tense="NONE" aspect="NONE" class="OCCURRENCE">defend</EVENT> the island against <EVENT eid="ONT::V91716" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">attacks</EVENT> from Beijing.
+
+"The <EVENT eid="ONT::V94790" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">controversy</EVENT> between China and the United States on the Taiwan issue <EVENT eid="ONT::V94924" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">revolves</EVENT> around one point which is US <EVENT eid="ONT::V95032" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">interference</EVENT>," <EVENT eid="ONT::V95060" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="REPORTING">said</EVENT> Chinese foreign ministry spokesman Shen Guofang.
+
+"The US government and the Congress have <EVENT eid="ONT::V97500" polarity="POS" modality="NONE" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" class="REPORTING">expressed</EVENT> their support for the 'one China' policy ... and we <EVENT eid="ONT::V97655" polarity="POS" modality="NONE" pos="NOUN" tense="PRESENT" aspect="NONE" class="I_STATE">hope</EVENT> that the United States will <EVENT eid="ONT::V97754" polarity="POS" modality="will" pos="VERB" tense="FUTURE" aspect="NONE" class="OCCURRENCE">keep</EVENT> its agreements," he <EVENT eid="ONT::V97824" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">added</EVENT>.
+
+Gingrich <EVENT eid="ONT::V100736" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT> <TIMEX3 tid="t2" type="DATE" value="1998-08-02">Sunday</TIMEX3> in Shanghai after <EVENT eid="ONT::V100877" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">meeting</EVENT> Wang Daohan, a top Chinese official on relations between China and Taiwan, that the United States would <EVENT eid="ONT::V101172" polarity="POS" modality="would" pos="VERB" tense="NONE" aspect="NONE" class="OCCURRENCE">defend</EVENT> Taiwan if China <EVENT eid="ONT::V101231" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="ASPECTUAL">launched</EVENT> a military <EVENT eid="ONT::V101345" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">assault</EVENT> to <EVENT eid="ONT::V101395" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">recover</EVENT> the island.
+
+"We <EVENT eid="ONT::V104124" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">understand</EVENT> that in principle you will not <EVENT eid="ONT::V104344" polarity="NEG" modality="will" pos="VERB" tense="FUTURE" aspect="NONE" class="OCCURRENCE">renounce</EVENT> your right to <EVENT eid="ONT::V104416" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">use</EVENT> force. We <EVENT eid="ONT::V107741" polarity="POS" modality="NONE" pos="VERB" tense="PRESENT" aspect="NONE" class="I_STATE">want</EVENT> you to <EVENT eid="ONT::V107848" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="I_STATE">understand</EVENT> that we will <EVENT eid="ONT::V107928" polarity="POS" modality="will" pos="VERB" tense="FUTURE" aspect="NONE" class="OCCURRENCE">defend</EVENT> Taiwan," Gingrich <EVENT eid="ONT::V108003" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT>.
+
+"This is not <EVENT eid="ONT::V110769" polarity="NEG" modality="NONE" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" class="OCCURRENCE">waving</EVENT> a saber. It's just a reminder that it is in the scabbard and available," he <EVENT eid="ONT::V114459" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">added</EVENT>.
+
+Shen <EVENT eid="ONT::V117338" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">reiterated</EVENT> China's hopes for a peaceful reunification with Taiwan, but <EVENT eid="ONT::V117586" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="I_ACTION">warned</EVENT>: "If the question of independence <EVENT eid="ONT::V117677" polarity="POS" modality="NONE" pos="VERB" tense="PRESENT" aspect="NONE" class="OCCURRENCE">arises</EVENT> on the island or a foreign force interferes in Taiwan issues, we will be forced to <EVENT eid="ONT::V118103" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">adopt</EVENT> other necessary measures."
+
+He also <EVENT eid="ONT::V120368" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">attacked</EVENT> Washington for its continued arms sales to Taipei.
+
+"These <EVENT eid="ONT::V123219" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">give</EVENT> clear support and <EVENT eid="ONT::V123354" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="I_ACTION">encouragement</EVENT> to separtist forces on the island and retards the process of peaceful <EVENT eid="ONT::V123543" polarity="POS" modality="NONE" pos="ADJECTIVE" tense="NONE" aspect="NONE" class="OCCURRENCE">reunification</EVENT>," he <EVENT eid="ONT::V123572" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="REPORTING">said</EVENT>.
+
+However, Gingrich then <EVENT eid="ONT::V126178" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">toned</EVENT> down his statements <TIMEX3 tid="t3" type="DATE" value="1998-08-04">Tuesday</TIMEX3> when <EVENT eid="ONT::V126271" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">speaking</EVENT> to journalists in Tokyo and <EVENT eid="ONT::V126451" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">emphasized</EVENT> that Washington would <EVENT eid="ONT::V126494" polarity="POS" modality="would" pos="VERB" tense="NONE" aspect="NONE" class="OCCURRENCE">stick</EVENT> to its 'one China' policy.
+
+Noting Chinese leaders had <EVENT eid="ONT::V129395" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="PERFECTIVE" class="REPORTING">told</EVENT> him they would not resort to military force easily, Gingrich <EVENT eid="ONT::V129550" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT>: "So, we wouldn't have to <EVENT eid="ONT::V129757" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">defend</EVENT>."
+
+Gingrich is to <EVENT eid="ONT::V132575" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">pay</EVENT> a short <EVENT eid="ONT::V132722" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">visit</EVENT> to Taiwan <TIMEX3 tid="t4" type="DATE" value="1998-08-05">Wednesday</TIMEX3> in which he is to <EVENT eid="ONT::V132952" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">meet</EVENT> with President Lee Teng-hui and Premier Lien Chan, a Taiwan presidential spokesman <EVENT eid="ONT::V133168" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT> <TIMEX3 tid="t5" type="DATE" value="1998-08-04">Tuesday</TIMEX3>.
+
+They are to <EVENT eid="ONT::V136031" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="REPORTING">discuss</EVENT> US-Taiwan relations, cross-strait ties and other issues of mutual interest, he <EVENT eid="ONT::V136188" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT>.
+
+Taiwan <EVENT eid="ONT::V138936" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">split</EVENT> from mainland China in <TIMEX3 tid="t6" type="DATE" value="1949">1949</TIMEX3> when the defeated Nationalist government <EVENT eid="ONT::V139135" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">fled</EVENT> there after a bitter civil <EVENT eid="ONT::V139257" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">war</EVENT>.
+
+<TIMEX3 tid="ONT::V142818" type="DATE" value="1997">Last year</TIMEX3>, Beijing <EVENT eid="ONT::V142833" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="ASPECTUAL">launched</EVENT> a series of intimidatory war games against the island, which ground to a halt when Washington <EVENT eid="ONT::V143202" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">dispatched</EVENT> two aircraft carriers to the region.
+
+While China <EVENT eid="ONT::V146344" polarity="POS" modality="NONE" pos="VERB" tense="PRESENT" aspect="NONE" class="REPORTING">says</EVENT> its policy towards Taiwan is eventual <EVENT eid="ONT::V146809" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">reunification</EVENT>, Shen <EVENT eid="ONT::V146421" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">refused</EVENT> to <EVENT eid="ONT::V146473" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">comment</EVENT> on reports over <TIMEX3 tid="ONT::V146582" type="DATE" value="1998-W31-WE">the weekend</TIMEX3> from Tokyo that Jiang would <EVENT eid="ONT::V146645" polarity="POS" modality="would" pos="VERB" tense="NONE" aspect="NONE" class="OCCURRENCE">offer</EVENT> the post of vice-president to Taiwan's top official upon reunification.
+
+"I also <EVENT eid="ONT::V149835" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">read</EVENT> these reports, but they were from the <EVENT eid="ONT::V149970" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">meeting</EVENT> between President Jiang and the Japanese foreign minister and I have nothing more to <EVENT eid="ONT::V150244" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="REPORTING">say</EVENT> about that," he said.
+
+"What is more far more urgent is the organisation of high-level political meetings with Taiwan to <EVENT eid="ONT::V153170" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">resolve</EVENT> issues currently <TIMEX3 tid="t9" type="DATE" value="PRESENT_REF">on</TIMEX3> ice. This would have positive effects on peaceful <EVENT eid="ONT::V156423" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">reunification</EVENT>," he <EVENT eid="ONT::V156442" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">added</EVENT>.
+
+</TEXT>
+
+<MAKEINSTANCE eiid="iONT::V123219" eventID="ONT::V123219"/>
+<MAKEINSTANCE eiid="iONT::V142833" eventID="ONT::V142833"/>
+<MAKEINSTANCE eiid="iONT::V107928" eventID="ONT::V107928"/>
+<MAKEINSTANCE eiid="iONT::V114459" eventID="ONT::V114459"/>
+<MAKEINSTANCE eiid="iONT::V107848" eventID="ONT::V107848"/>
+<MAKEINSTANCE eiid="iONT::V95032" eventID="ONT::V95032"/>
+<MAKEINSTANCE eiid="iONT::V132575" eventID="ONT::V132575"/>
+<MAKEINSTANCE eiid="iONT::V138936" eventID="ONT::V138936"/>
+<MAKEINSTANCE eiid="iONT::V94790" eventID="ONT::V94790"/>
+<MAKEINSTANCE eiid="iONT::V117677" eventID="ONT::V117677"/>
+<MAKEINSTANCE eiid="iONT::V149835" eventID="ONT::V149835"/>
+<MAKEINSTANCE eiid="iONT::V91716" eventID="ONT::V91716"/>
+<MAKEINSTANCE eiid="iONT::V156442" eventID="ONT::V156442"/>
+<MAKEINSTANCE eiid="iONT::V129757" eventID="ONT::V129757"/>
+<MAKEINSTANCE eiid="iONT::V143202" eventID="ONT::V143202"/>
+<MAKEINSTANCE eiid="iONT::V123543" eventID="ONT::V123543"/>
+<MAKEINSTANCE eiid="iONT::V100877" eventID="ONT::V100877"/>
+<MAKEINSTANCE eiid="iONT::V123354" eventID="ONT::V123354"/>
+<MAKEINSTANCE eiid="iONT::V153170" eventID="ONT::V153170"/>
+<MAKEINSTANCE eiid="iONT::V101172" eventID="ONT::V101172"/>
+<MAKEINSTANCE eiid="iONT::V97500" eventID="ONT::V97500"/>
+<MAKEINSTANCE eiid="iONT::V118103" eventID="ONT::V118103"/>
+<MAKEINSTANCE eiid="iONT::V91602" eventID="ONT::V91602"/>
+<MAKEINSTANCE eiid="iONT::V146421" eventID="ONT::V146421"/>
+<MAKEINSTANCE eiid="iONT::V126451" eventID="ONT::V126451"/>
+<MAKEINSTANCE eiid="iONT::V91649" eventID="ONT::V91649"/>
+<MAKEINSTANCE eiid="iONT::V129395" eventID="ONT::V129395"/>
+<MAKEINSTANCE eiid="iONT::V110769" eventID="ONT::V110769"/>
+<MAKEINSTANCE eiid="iONT::V149970" eventID="ONT::V149970"/>
+<MAKEINSTANCE eiid="iONT::V94924" eventID="ONT::V94924"/>
+<MAKEINSTANCE eiid="iONT::V101395" eventID="ONT::V101395"/>
+<MAKEINSTANCE eiid="iONT::V126494" eventID="ONT::V126494"/>
+<MAKEINSTANCE eiid="iONT::V97824" eventID="ONT::V97824"/>
+<MAKEINSTANCE eiid="iONT::V132952" eventID="ONT::V132952"/>
+<MAKEINSTANCE eiid="iONT::V95060" eventID="ONT::V95060"/>
+<MAKEINSTANCE eiid="iONT::V139135" eventID="ONT::V139135"/>
+<MAKEINSTANCE eiid="iONT::V132722" eventID="ONT::V132722"/>
+<MAKEINSTANCE eiid="iONT::V91371" eventID="ONT::V91371"/>
+<MAKEINSTANCE eiid="iONT::V146344" eventID="ONT::V146344"/>
+<MAKEINSTANCE eiid="iONT::V108003" eventID="ONT::V108003"/>
+<MAKEINSTANCE eiid="iONT::V123572" eventID="ONT::V123572"/>
+<MAKEINSTANCE eiid="iONT::V139257" eventID="ONT::V139257"/>
+<MAKEINSTANCE eiid="iONT::V146473" eventID="ONT::V146473"/>
+<MAKEINSTANCE eiid="iONT::V117586" eventID="ONT::V117586"/>
+<MAKEINSTANCE eiid="iONT::V100736" eventID="ONT::V100736"/>
+<MAKEINSTANCE eiid="iONT::V146645" eventID="ONT::V146645"/>
+<MAKEINSTANCE eiid="iONT::V146809" eventID="ONT::V146809"/>
+<MAKEINSTANCE eiid="iONT::V136031" eventID="ONT::V136031"/>
+<MAKEINSTANCE eiid="iONT::V156423" eventID="ONT::V156423"/>
+<MAKEINSTANCE eiid="iONT::V150244" eventID="ONT::V150244"/>
+<MAKEINSTANCE eiid="iONT::V91426" eventID="ONT::V91426"/>
+<MAKEINSTANCE eiid="iONT::V129550" eventID="ONT::V129550"/>
+<MAKEINSTANCE eiid="iONT::V104124" eventID="ONT::V104124"/>
+<MAKEINSTANCE eiid="iONT::V126178" eventID="ONT::V126178"/>
+<MAKEINSTANCE eiid="iONT::V107741" eventID="ONT::V107741"/>
+<MAKEINSTANCE eiid="iONT::V120368" eventID="ONT::V120368"/>
+<MAKEINSTANCE eiid="iONT::V117338" eventID="ONT::V117338"/>
+<MAKEINSTANCE eiid="iONT::V104416" eventID="ONT::V104416"/>
+<MAKEINSTANCE eiid="iONT::V126271" eventID="ONT::V126271"/>
+<MAKEINSTANCE eiid="iONT::V136188" eventID="ONT::V136188"/>
+<MAKEINSTANCE eiid="iONT::V101345" eventID="ONT::V101345"/>
+<MAKEINSTANCE eiid="iONT::V97655" eventID="ONT::V97655"/>
+<MAKEINSTANCE eiid="iONT::V101231" eventID="ONT::V101231"/>
+<MAKEINSTANCE eiid="iONT::V97754" eventID="ONT::V97754"/>
+<MAKEINSTANCE eiid="iONT::V104344" eventID="ONT::V104344"/>
+<MAKEINSTANCE eiid="iONT::V133168" eventID="ONT::V133168"/>
+
+
+<TLINK lid="l1" relType="AFTER" timeID="t0" relatedToTime="t2" />
+<TLINK lid="l2" relType="AFTER" timeID="t1" relatedToTime="t2" />
+<TLINK lid="l3" relType="INCLUDES" timeID="ONT::V146582" relatedToTime="t2" />
+<TLINK lid="l4" relType="BEFORE" timeID="t6" relatedToTime="t2" />
+<TLINK lid="l5" relType="AFTER" timeID="t9" relatedToTime="t2" />
+<TLINK lid="l6" relType="AFTER" timeID="t4" relatedToTime="t2" />
+<TLINK lid="l7" relType="AFTER" timeID="t5" relatedToTime="t2" />
+<TLINK lid="l8" relType="AFTER" timeID="t3" relatedToTime="t2" />
+<TLINK lid="l9" relType="BEFORE" timeID="ONT::V142818" relatedToTime="t2" />
+<TLINK lid="l10" relType="AFTER" timeID="ONT::V146582" relatedToTime="t6" />
+<TLINK lid="l11" relType="BEFORE" timeID="t6" relatedToTime="ONT::V142818" />
+<TLINK lid="l12" relType="IDENTITY" timeID="t0" relatedToTime="t9" />
+<TLINK lid="l13" relType="BEFORE" timeID="t1" relatedToTime="t9" />
+<TLINK lid="l14" relType="BEFORE" timeID="ONT::V146582" relatedToTime="t9" />
+<TLINK lid="l15" relType="AFTER" timeID="t9" relatedToTime="t4" />
+<TLINK lid="l16" relType="AFTER" timeID="t9" relatedToTime="t5" />
+<TLINK lid="l17" relType="AFTER" timeID="t9" relatedToTime="t3" />
+<TLINK lid="l18" relType="AFTER" timeID="ONT::V146582" relatedToTime="ONT::V142818" />
+<TLINK lid="l19" relType="BEFORE" timeID="t1" relatedToTime="t4" />
+<TLINK lid="l20" relType="BEFORE" timeID="ONT::V146582" relatedToTime="t4" />
+<TLINK lid="l21" relType="AFTER" timeID="t4" relatedToTime="t5" />
+<TLINK lid="l22" relType="AFTER" timeID="t4" relatedToTime="t3" />
+<TLINK lid="l23" relType="IDENTITY" timeID="t1" relatedToTime="t3" />
+<TLINK lid="l24" relType="IDENTITY" timeID="t5" relatedToTime="t3" />
+<TLINK lid="l25" relType="AFTER" eventInstanceID="iONT::V123219" relatedToTime="t0" />
+<TLINK lid="l26" relType="BEFORE" eventInstanceID="iONT::V142833" relatedToTime="t0" />
+<TLINK lid="l27" relType="AFTER" eventInstanceID="iONT::V107928" relatedToTime="t0" />
+<TLINK lid="l28" relType="BEFORE" eventInstanceID="iONT::V114459" relatedToTime="t0" />
+<TLINK lid="l29" relType="AFTER" eventInstanceID="iONT::V104416" relatedToTime="t0" />
+<TLINK lid="l30" relType="INCLUDES" eventInstanceID="iONT::V107848" relatedToTime="t0" />
+<TLINK lid="l31" relType="BEFORE" eventInstanceID="iONT::V95032" relatedToTime="t0" />
+<TLINK lid="l32" relType="BEFORE" eventInstanceID="iONT::V132575" relatedToTime="t0" />
+<TLINK lid="l33" relType="BEFORE" eventInstanceID="iONT::V146645" relatedToTime="t0" />
+<TLINK lid="l34" relType="BEFORE" eventInstanceID="iONT::V101231" relatedToTime="t0" />
+<TLINK lid="l35" relType="INCLUDES" eventInstanceID="iONT::V94790" relatedToTime="t0" />
+<TLINK lid="l36" relType="AFTER" eventInstanceID="iONT::V117677" relatedToTime="t0" />
+<TLINK lid="l37" relType="BEFORE" eventInstanceID="iONT::V91649" relatedToTime="t0" />
+<TLINK lid="l38" relType="BEFORE" eventInstanceID="iONT::V91716" relatedToTime="t0" />
+<TLINK lid="l39" relType="AFTER" eventInstanceID="iONT::V123543" relatedToTime="t0" />
+<TLINK lid="l40" relType="BEFORE" eventInstanceID="iONT::V100877" relatedToTime="t0" />
+<TLINK lid="l41" relType="INCLUDES" eventInstanceID="iONT::V123354" relatedToTime="t0" />
+<TLINK lid="l42" relType="AFTER" eventInstanceID="iONT::V153170" relatedToTime="t0" />
+<TLINK lid="l43" relType="BEFORE" eventInstanceID="iONT::V101172" relatedToTime="t0" />
+<TLINK lid="l44" relType="BEFORE" eventInstanceID="iONT::V97500" relatedToTime="t0" />
+<TLINK lid="l45" relType="AFTER" eventInstanceID="iONT::V118103" relatedToTime="t0" />
+<TLINK lid="l46" relType="BEFORE" eventInstanceID="iONT::V91602" relatedToTime="t0" />
+<TLINK lid="l47" relType="BEFORE" eventInstanceID="iONT::V139135" relatedToTime="t0" />
+<TLINK lid="l48" relType="BEFORE" eventInstanceID="iONT::V126451" relatedToTime="t0" />
+<TLINK lid="l49" relType="BEFORE" eventInstanceID="iONT::V149835" relatedToTime="t0" />
+<TLINK lid="l50" relType="BEFORE" eventInstanceID="iONT::V129395" relatedToTime="t0" />
+<TLINK lid="l51" relType="INCLUDES" eventInstanceID="iONT::V110769" relatedToTime="t0" />
+<TLINK lid="l52" relType="BEFORE" eventInstanceID="iONT::V149970" relatedToTime="t0" />
+<TLINK lid="l53" relType="BEFORE" eventInstanceID="iONT::V120368" relatedToTime="t0" />
+<TLINK lid="l54" relType="IS_INCLUDED" eventInstanceID="iONT::V94924" relatedToTime="t0" />
+<TLINK lid="l55" relType="BEFORE" eventInstanceID="iONT::V101395" relatedToTime="t0" />
+<TLINK lid="l56" relType="BEFORE" eventInstanceID="iONT::V126494" relatedToTime="t0" />
+<TLINK lid="l57" relType="AFTER" eventInstanceID="iONT::V97824" relatedToTime="t0" />
+<TLINK lid="l58" relType="AFTER" eventInstanceID="iONT::V104344" relatedToTime="t0" />
+<TLINK lid="l59" relType="BEFORE" eventInstanceID="iONT::V132952" relatedToTime="t0" />
+<TLINK lid="l60" relType="BEFORE" eventInstanceID="iONT::V95060" relatedToTime="t0" />
+<TLINK lid="l61" relType="BEFORE" eventInstanceID="iONT::V146421" relatedToTime="t0" />
+<TLINK lid="l62" relType="BEFORE" eventInstanceID="iONT::V132722" relatedToTime="t0" />
+<TLINK lid="l63" relType="BEFORE" eventInstanceID="iONT::V101345" relatedToTime="t0" />
+<TLINK lid="l64" relType="BEFORE" eventInstanceID="iONT::V91371" relatedToTime="t0" />
+<TLINK lid="l65" relType="BEFORE" eventInstanceID="iONT::V146344" relatedToTime="t0" />
+<TLINK lid="l66" relType="BEFORE" eventInstanceID="iONT::V108003" relatedToTime="t0" />
+<TLINK lid="l67" relType="BEFORE" eventInstanceID="iONT::V156442" relatedToTime="t0" />
+<TLINK lid="l68" relType="BEFORE" eventInstanceID="iONT::V139257" relatedToTime="t0" />
+<TLINK lid="l69" relType="BEFORE" eventInstanceID="iONT::V146473" relatedToTime="t0" />
+<TLINK lid="l70" relType="AFTER" eventInstanceID="iONT::V97754" relatedToTime="t0" />
+<TLINK lid="l71" relType="BEFORE" eventInstanceID="iONT::V117586" relatedToTime="t0" />
+<TLINK lid="l72" relType="BEFORE" eventInstanceID="iONT::V100736" relatedToTime="t0" />
+<TLINK lid="l73" relType="BEFORE" eventInstanceID="iONT::V146809" relatedToTime="t0" />
+<TLINK lid="l74" relType="AFTER" eventInstanceID="iONT::V136031" relatedToTime="t0" />
+<TLINK lid="l75" relType="BEFORE" eventInstanceID="iONT::V156423" relatedToTime="t0" />
+<TLINK lid="l76" relType="INCLUDES" eventInstanceID="iONT::V150244" relatedToTime="t0" />
+<TLINK lid="l77" relType="BEFORE" eventInstanceID="iONT::V91426" relatedToTime="t0" />
+<TLINK lid="l78" relType="BEFORE" eventInstanceID="iONT::V104124" relatedToTime="t0" />
+<TLINK lid="l79" relType="BEFORE" eventInstanceID="iONT::V126178" relatedToTime="t0" />
+<TLINK lid="l80" relType="BEFORE" eventInstanceID="iONT::V138936" relatedToTime="t0" />
+<TLINK lid="l81" relType="BEFORE" eventInstanceID="iONT::V117338" relatedToTime="t0" />
+<TLINK lid="l82" relType="BEFORE" eventInstanceID="iONT::V123572" relatedToTime="t0" />
+<TLINK lid="l83" relType="BEFORE" eventInstanceID="iONT::V126271" relatedToTime="t0" />
+<TLINK lid="l84" relType="BEFORE" eventInstanceID="iONT::V136188" relatedToTime="t0" />
+<TLINK lid="l85" relType="IS_INCLUDED" eventInstanceID="iONT::V107741" relatedToTime="t0" />
+<TLINK lid="l86" relType="IS_INCLUDED" eventInstanceID="iONT::V97655" relatedToTime="t0" />
+<TLINK lid="l87" relType="BEFORE" eventInstanceID="iONT::V143202" relatedToTime="t0" />
+<TLINK lid="l88" relType="AFTER" eventInstanceID="iONT::V129757" relatedToTime="t0" />
+<TLINK lid="l89" relType="BEFORE" eventInstanceID="iONT::V129550" relatedToTime="t0" />
+<TLINK lid="l90" relType="BEFORE" eventInstanceID="iONT::V133168" relatedToTime="t0" />
+<TLINK lid="l91" relType="IDENTITY" eventInstanceID="iONT::V104416" relatedToEventInstance="iONT::V107928" />
+<TLINK lid="l92" relType="AFTER" eventInstanceID="iONT::V126451" relatedToEventInstance="iONT::V129395" />
+<TLINK lid="l93" relType="BEFORE" eventInstanceID="iONT::V129395" relatedToEventInstance="iONT::V132575" />
+<TLINK lid="l94" relType="SIMULTANEOUS" eventInstanceID="iONT::V139135" relatedToEventInstance="iONT::V142833" />
+<TLINK lid="l95" relType="BEFORE" eventInstanceID="iONT::V142833" relatedToEventInstance="iONT::V146645" />
+<TLINK lid="l96" relType="IBEFORE" eventInstanceID="iONT::V146645" relatedToEventInstance="iONT::V149835" />
+<TLINK lid="l97" relType="BEFORE" eventInstanceID="iONT::V97500" relatedToEventInstance="iONT::V101231" />
+<TLINK lid="l98" relType="BEFORE" eventInstanceID="iONT::V95032" relatedToEventInstance="iONT::V97500" />
+<TLINK lid="l99" relType="IBEFORE" eventInstanceID="iONT::V91649" relatedToEventInstance="iONT::V95032" />
+<TLINK lid="l100" relType="IS_INCLUDED" eventInstanceID="iONT::V142833" relatedToTime="ONT::V142818" />
+<TLINK lid="l101" relType="AFTER" eventInstanceID="iONT::V139135" relatedToEventInstance="iONT::V139257" />
+<TLINK lid="l102" relType="AFTER" eventInstanceID="iONT::V100736" relatedToEventInstance="iONT::V100877" />
+<TLINK lid="l103" relType="IS_INCLUDED" eventInstanceID="iONT::V101231" relatedToTime="t2" />
+<TLINK lid="l104" relType="IS_INCLUDED" eventInstanceID="iONT::V100877" relatedToTime="t2" />
+<TLINK lid="l105" relType="IS_INCLUDED" eventInstanceID="iONT::V101172" relatedToTime="t2" />
+<TLINK lid="l106" relType="IS_INCLUDED" eventInstanceID="iONT::V101395" relatedToTime="t2" />
+<TLINK lid="l107" relType="IS_INCLUDED" eventInstanceID="iONT::V101345" relatedToTime="t2" />
+<TLINK lid="l108" relType="IS_INCLUDED" eventInstanceID="iONT::V100736" relatedToTime="t2" />
+<TLINK lid="l109" relType="IS_INCLUDED" eventInstanceID="iONT::V146645" relatedToTime="ONT::V146582" />
+<TLINK lid="l110" relType="IS_INCLUDED" eventInstanceID="iONT::V146421" relatedToTime="ONT::V146582" />
+<TLINK lid="l111" relType="IS_INCLUDED" eventInstanceID="iONT::V146344" relatedToTime="ONT::V146582" />
+<TLINK lid="l112" relType="IS_INCLUDED" eventInstanceID="iONT::V146473" relatedToTime="ONT::V146582" />
+<TLINK lid="l113" relType="IS_INCLUDED" eventInstanceID="iONT::V146809" relatedToTime="ONT::V146582" />
+<TLINK lid="l114" relType="IS_INCLUDED" eventInstanceID="iONT::V91716" relatedToTime="t1" />
+<TLINK lid="l115" relType="IS_INCLUDED" eventInstanceID="iONT::V91602" relatedToTime="t1" />
+<TLINK lid="l116" relType="IS_INCLUDED" eventInstanceID="iONT::V91371" relatedToTime="t1" />
+<TLINK lid="l117" relType="IS_INCLUDED" eventInstanceID="iONT::V91426" relatedToTime="t1" />
+<TLINK lid="l118" relType="IS_INCLUDED" eventInstanceID="iONT::V126451" relatedToTime="t3" />
+<TLINK lid="l119" relType="IS_INCLUDED" eventInstanceID="iONT::V126494" relatedToTime="t3" />
+<TLINK lid="l120" relType="IS_INCLUDED" eventInstanceID="iONT::V126178" relatedToTime="t3" />
+<TLINK lid="l121" relType="IS_INCLUDED" eventInstanceID="iONT::V126271" relatedToTime="t3" />
+<TLINK lid="l122" relType="ENDED_BY" eventInstanceID="iONT::V132575" relatedToTime="t4" />
+<TLINK lid="l123" relType="IS_INCLUDED" eventInstanceID="iONT::V132952" relatedToTime="t4" />
+<TLINK lid="l124" relType="IS_INCLUDED" eventInstanceID="iONT::V132722" relatedToTime="t4" />
+<TLINK lid="l125" relType="IS_INCLUDED" eventInstanceID="iONT::V133168" relatedToTime="t4" />
+<TLINK lid="l126" relType="IS_INCLUDED" eventInstanceID="iONT::V139257" relatedToTime="t6" />
+<TLINK lid="l127" relType="IS_INCLUDED" eventInstanceID="iONT::V138936" relatedToTime="t6" />
+<TLINK lid="l128" relType="IS_INCLUDED" eventInstanceID="iONT::V143202" relatedToTime="ONT::V142818" />
+<TLINK lid="l129" relType="BEGUN_BY" eventInstanceID="iONT::V100877" relatedToEventInstance="iONT::V101231" />
+<TLINK lid="l130" relType="BEFORE" eventInstanceID="iONT::V146809" relatedToEventInstance="iONT::V146473" />
+<TLINK lid="l131" relType="IAFTER" eventInstanceID="iONT::V126271" relatedToEventInstance="iONT::V126178" />
+<TLINK lid="l132" relType="IBEFORE" eventInstanceID="iONT::V91371" relatedToEventInstance="iONT::V91426" />
+
+</TimeML>
+

@@ -29,6 +29,8 @@ import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerAnnotator;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerConfigurator;
 import edu.illinois.cs.cogcomp.verbsense.VerbSenseAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
@@ -117,6 +119,10 @@ public class PipelineFactory {
                         break;
                     case ViewNames.VERB_SENSE:
                         nonDefaultValues.put(PipelineConfigurator.USE_VERB_SENSE.key,
+                                Configurator.TRUE);
+                        break;
+                    case ViewNames.TIMEX3:
+                        nonDefaultValues.put(PipelineConfigurator.USE_TIMEX3.key,
                                 Configurator.TRUE);
                         break;
                     case ViewNames.MENTION:
@@ -357,6 +363,11 @@ public class PipelineFactory {
         if (rm.getBoolean(PipelineConfigurator.USE_MENTION)){
             MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)){
+            Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
+            TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
+            viewGenerators.put(ViewNames.TIMEX3, tca);
         }
         return viewGenerators;
     }

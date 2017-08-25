@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>AFP_ENG_19970401.0006</DOCID>
+
+<DCT>KUALA LUMPUR, <TIMEX3 tid="t0" type="TIME" value="1997-04-01" temporalFunction="false" functionInDocument="CREATION_TIME">April 1 , 1997</TIMEX3> (AFP)</DCT>
+
+<TITLE>Malaysian share market falls 1.1 percent at midday</TITLE>
+
+<TEXT>
+
+Malaysian share prices <EVENT eid="ONT::V32868" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">dipped</EVENT> 1.1 percent by midday <TIMEX3 tid="t1" type="DATE" value="1998-08-04">Tuesday</TIMEX3>, with the market barometer falling below the 1,200 support level for the first time in <TIMEX3 tid="ONT::V33137" type="DURATION" value="P3M">three months</TIMEX3> following credit curbs and the Dow's fall.
+
+"The overnight fall on Wall Street was a double whammy for the market, which was already <EVENT eid="ONT::V36743" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="PROGRESSIVE" class="OCCURRENCE">reeling</EVENT> from the central bank's curbs on bank <EVENT eid="ONT::V36910" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">lendings</EVENT>," <EVENT eid="ONT::V36935" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="REPORTING">said</EVENT> Victor Wan, analyst at South Johore Securities.
+
+Wan <EVENT eid="ONT::V39290" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT> investors were <EVENT eid="ONT::V39337" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">selling</EVENT> banking and property stocks in anticipation of lower earnings.
+
+The Kuala Lumpur Stock Exchange's 100-share weighted composite index <EVENT eid="ONT::V42726" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">tumbled</EVENT> 13.68 points to 1,189.42 at the <EVENT eid="ONT::V42894" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">close</EVENT> of the morning <EVENT eid="ONT::V42949" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">session</EVENT>, after <EVENT eid="ONT::V42977" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">touching</EVENT> a low of 1,183.17.
+
+The central Bank Negara <TIMEX3 tid="t3" type="DATE" value="1998-08-04">Tuesday</TIMEX3> <EVENT eid="ONT::V46546" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">imposed</EVENT> new lending limits on shares and luxury properties to <EVENT eid="ONT::V46703" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">thwart</EVENT> excessive market <EVENT eid="ONT::V46727" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">speculation</EVENT> and <EVENT eid="ONT::V46751" polarity="POS" modality="NONE" pos="VERB" tense="NONE" aspect="NONE" class="OCCURRENCE">quell</EVENT> <EVENT eid="ONT::V46763" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">soaring</EVENT> property prices.
+
+Bank <EVENT eid="ONT::V49516" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">lending</EVENT> to the property sector was <EVENT eid="ONT::V49577" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">limited</EVENT> to 20 percent of all loans, excluding residential units costing 60,000 US dollars and below, infrastructure facilities and industrial buildings.
+
+Rules for <EVENT eid="ONT::V53161" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">lending</EVENT> against stocks and unit trusts were also <EVENT eid="ONT::V53249" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">redefined</EVENT>.
+
+Trading volume in <TIMEX3 tid="t4" type="TIME" value="1998-08-07TMO">the morning</TIMEX3> <EVENT eid="ONT::V56744" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">session</EVENT> was 162.178 million shares worth 1.175 billion ringgit (470 million dollars).
+
+Falling stocks <EVENT eid="ONT::V60432" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">outnumbered</EVENT> those <EVENT eid="ONT::V60446" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">rising</EVENT> 401 to 187, with 142 unchanged and 131 untraded.
+
+Top bank, Maybank, <EVENT eid="ONT::V63176" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">led</EVENT> the fall in banking stocks with a 75 sen lost to 27.50 ringgit, Public Bank was flat at 3.56 ringgit while Arab- Malaysian Merchant Bank <EVENT eid="ONT::V63648" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">declined</EVENT> 70 sen to 19.90 ringgit.
+
+Both national powerhouse Tenaga Nasional and gaming giant Genting <EVENT eid="ONT::V66823" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">eased</EVENT> 10 sen each to 12.00 ringgit and 16.70 ringgit respectively.
+
+Telekom Malaysia shed 20 sen to 19.10 ringgit.
+
+</TEXT>
+
+<MAKEINSTANCE eiid="iONT::V49577" eventID="ONT::V49577"/>
+<MAKEINSTANCE eiid="iONT::V56744" eventID="ONT::V56744"/>
+<MAKEINSTANCE eiid="iONT::V36935" eventID="ONT::V36935"/>
+<MAKEINSTANCE eiid="iONT::V49516" eventID="ONT::V49516"/>
+<MAKEINSTANCE eiid="iONT::V46546" eventID="ONT::V46546"/>
+<MAKEINSTANCE eiid="iONT::V42726" eventID="ONT::V42726"/>
+<MAKEINSTANCE eiid="iONT::V42894" eventID="ONT::V42894"/>
+<MAKEINSTANCE eiid="iONT::V39290" eventID="ONT::V39290"/>
+<MAKEINSTANCE eiid="iONT::V46751" eventID="ONT::V46751"/>
+<MAKEINSTANCE eiid="iONT::V66823" eventID="ONT::V66823"/>
+<MAKEINSTANCE eiid="iONT::V60432" eventID="ONT::V60432"/>
+<MAKEINSTANCE eiid="iONT::V42977" eventID="ONT::V42977"/>
+<MAKEINSTANCE eiid="iONT::V32868" eventID="ONT::V32868"/>
+<MAKEINSTANCE eiid="iONT::V36910" eventID="ONT::V36910"/>
+<MAKEINSTANCE eiid="iONT::V63176" eventID="ONT::V63176"/>
+<MAKEINSTANCE eiid="iONT::V36743" eventID="ONT::V36743"/>
+<MAKEINSTANCE eiid="iONT::V53249" eventID="ONT::V53249"/>
+<MAKEINSTANCE eiid="iONT::V60446" eventID="ONT::V60446"/>
+<MAKEINSTANCE eiid="iONT::V53161" eventID="ONT::V53161"/>
+<MAKEINSTANCE eiid="iONT::V46763" eventID="ONT::V46763"/>
+<MAKEINSTANCE eiid="iONT::V42949" eventID="ONT::V42949"/>
+<MAKEINSTANCE eiid="iONT::V46727" eventID="ONT::V46727"/>
+<MAKEINSTANCE eiid="iONT::V46703" eventID="ONT::V46703"/>
+<MAKEINSTANCE eiid="iONT::V39337" eventID="ONT::V39337"/>
+<MAKEINSTANCE eiid="iONT::V63648" eventID="ONT::V63648"/>
+
+
+<TLINK lid="l1" relType="IDENTITY" timeID="t0" relatedToTime="t4" />
+<TLINK lid="l2" relType="BEFORE" timeID="t3" relatedToTime="t4" />
+<TLINK lid="l3" relType="BEFORE" timeID="t1" relatedToTime="t4" />
+<TLINK lid="l4" relType="IDENTITY" timeID="t3" relatedToTime="t1" />
+<TLINK lid="l5" relType="BEFORE" eventInstanceID="iONT::V49577" relatedToTime="t0" />
+<TLINK lid="l6" relType="BEFORE" eventInstanceID="iONT::V56744" relatedToTime="t0" />
+<TLINK lid="l7" relType="BEFORE" eventInstanceID="iONT::V36935" relatedToTime="t0" />
+<TLINK lid="l8" relType="BEGINS" eventInstanceID="iONT::V36910" relatedToTime="t0" />
+<TLINK lid="l9" relType="BEFORE" eventInstanceID="iONT::V46546" relatedToTime="t0" />
+<TLINK lid="l10" relType="BEFORE" eventInstanceID="iONT::V42726" relatedToTime="t0" />
+<TLINK lid="l11" relType="BEFORE" eventInstanceID="iONT::V42894" relatedToTime="t0" />
+<TLINK lid="l12" relType="BEFORE" eventInstanceID="iONT::V39290" relatedToTime="t0" />
+<TLINK lid="l13" relType="BEFORE" eventInstanceID="iONT::V46751" relatedToTime="t0" />
+<TLINK lid="l14" relType="BEFORE" eventInstanceID="iONT::V60432" relatedToTime="t0" />
+<TLINK lid="l15" relType="BEFORE" eventInstanceID="iONT::V42977" relatedToTime="t0" />
+<TLINK lid="l16" relType="BEFORE" eventInstanceID="iONT::V36743" relatedToTime="t0" />
+<TLINK lid="l17" relType="AFTER" eventInstanceID="iONT::V49516" relatedToTime="t0" />
+<TLINK lid="l18" relType="BEFORE" eventInstanceID="iONT::V63176" relatedToTime="t0" />
+<TLINK lid="l19" relType="BEFORE" eventInstanceID="iONT::V66823" relatedToTime="t0" />
+<TLINK lid="l20" relType="BEFORE" eventInstanceID="iONT::V32868" relatedToTime="t0" />
+<TLINK lid="l21" relType="BEFORE" eventInstanceID="iONT::V53249" relatedToTime="t0" />
+<TLINK lid="l22" relType="INCLUDES" eventInstanceID="iONT::V60446" relatedToTime="t0" />
+<TLINK lid="l23" relType="BEFORE" eventInstanceID="iONT::V53161" relatedToTime="t0" />
+<TLINK lid="l24" relType="BEFORE" eventInstanceID="iONT::V46763" relatedToTime="t0" />
+<TLINK lid="l25" relType="BEFORE" eventInstanceID="iONT::V42949" relatedToTime="t0" />
+<TLINK lid="l26" relType="BEFORE" eventInstanceID="iONT::V46727" relatedToTime="t0" />
+<TLINK lid="l27" relType="BEFORE" eventInstanceID="iONT::V46703" relatedToTime="t0" />
+<TLINK lid="l28" relType="BEFORE" eventInstanceID="iONT::V39337" relatedToTime="t0" />
+<TLINK lid="l29" relType="BEFORE" eventInstanceID="iONT::V63648" relatedToTime="t0" />
+<TLINK lid="l30" relType="IDENTITY" eventInstanceID="iONT::V56744" relatedToEventInstance="iONT::V60432" />
+<TLINK lid="l31" relType="SIMULTANEOUS" eventInstanceID="iONT::V60432" relatedToEventInstance="iONT::V63176" />
+<TLINK lid="l32" relType="IDENTITY" eventInstanceID="iONT::V53249" relatedToEventInstance="iONT::V56744" />
+<TLINK lid="l33" relType="SIMULTANEOUS" eventInstanceID="iONT::V49577" relatedToEventInstance="iONT::V53249" />
+<TLINK lid="l34" relType="SIMULTANEOUS" eventInstanceID="iONT::V46546" relatedToEventInstance="iONT::V49577" />
+<TLINK lid="l35" relType="SIMULTANEOUS" eventInstanceID="iONT::V42726" relatedToEventInstance="iONT::V46546" />
+<TLINK lid="l36" relType="AFTER" eventInstanceID="iONT::V39290" relatedToEventInstance="iONT::V42726" />
+<TLINK lid="l37" relType="IDENTITY" eventInstanceID="iONT::V36935" relatedToEventInstance="iONT::V39290" />
+<TLINK lid="l38" relType="IDENTITY" eventInstanceID="iONT::V32868" relatedToEventInstance="iONT::V36935" />
+<TLINK lid="l39" relType="SIMULTANEOUS" eventInstanceID="iONT::V63176" relatedToEventInstance="iONT::V66823" />
+<TLINK lid="l40" relType="IS_INCLUDED" eventInstanceID="iONT::V46751" relatedToTime="t3" />
+<TLINK lid="l41" relType="IS_INCLUDED" eventInstanceID="iONT::V46763" relatedToTime="t3" />
+<TLINK lid="l42" relType="IS_INCLUDED" eventInstanceID="iONT::V46727" relatedToTime="t3" />
+<TLINK lid="l43" relType="IS_INCLUDED" eventInstanceID="iONT::V46703" relatedToTime="t3" />
+<TLINK lid="l44" relType="IS_INCLUDED" eventInstanceID="iONT::V32868" relatedToTime="ONT::V33137" />
+
+</TimeML>
+
