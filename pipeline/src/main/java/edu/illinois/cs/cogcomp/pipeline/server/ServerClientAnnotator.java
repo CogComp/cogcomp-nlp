@@ -127,21 +127,20 @@ public class ServerClientAnnotator extends Annotator {
             con.setDoOutput(true);
             con.setUseCaches(false);
 
-            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-            wr.write("text=" + URLEncoder.encode(str, "UTF-8") + "&views=" + views);
-            wr.flush();
-
             int responseCode = con.getResponseCode();
             logger.debug("\nSending '" + con.getRequestMethod() + "' request to URL : " + url);
             logger.debug("Response Code : " + responseCode);
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            InputStreamReader reader = new InputStreamReader(con.getInputStream());
+            BufferedReader in = new BufferedReader(reader);
             String inputLine;
             StringBuilder response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
+            reader.close();
+            con.disconnect();
             TextAnnotation ta = SerializationHelper.deserializeFromJson(response.toString());
             if (concurrentMap != null) {
                 concurrentMap.put(key, SerializationHelper.serializeTextAnnotationToBytes(ta));
