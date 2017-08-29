@@ -34,7 +34,7 @@ public class Timex3PipelineTest {
 
     @BeforeClass
     public static void init() throws IOException, AnnotatorException {
-        timex3Processor = PipelineFactory.buildPipeline();
+        timex3Processor = PipelineFactory.buildPipeline(ViewNames.POS, ViewNames.TIMEX3);
     }
 
     @Test
