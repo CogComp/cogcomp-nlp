@@ -34,10 +34,8 @@ public class Timex3PipelineTest {
 
     @BeforeClass
     public static void init() throws IOException, AnnotatorException {
-        ResourceManager rm = new PipelineConfigurator().getConfig(new ResourceManager( "config/pipeline-timex3.properties" ));
-        timex3Processor = PipelineFactory.buildPipeline(rm);
+        timex3Processor = PipelineFactory.buildPipeline(ViewNames.POS, ViewNames.TIMEX3);
     }
-
 
     @Test
     public void testSentencePipeline() {
