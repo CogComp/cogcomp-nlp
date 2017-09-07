@@ -59,6 +59,8 @@ The mode parameter has four options:
 
 The initialization of `MentionAnnotator()` without parameter set mode to `"ACE_NONTYPE"`
 
+There is a static function `getHeadConstituent(Constituent extent, String viewName)` built into the annotator. It can be used to get a constituent that is only the head, with all the attributes that the extent constituent has.
+
 
 ```java
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
@@ -98,6 +100,10 @@ public class app
 
         View mentionView = ta.getView(ViewNames.MENTION);
         List<Constituent> predictedMentions = mentionView.getConstituents();
+        for (Constituent extent : predictedMentions){
+            //Get the head if needed
+            Constituent head = MentionAnnotator.getHeadConstituent(extent, "MENTION_HEAD");
+        }
     }
 }
 ```

@@ -212,4 +212,22 @@ public class MentionAnnotator extends Annotator{
         ta.addView(ViewNames.MENTION, mentionView);
     }
 
+    /**
+     *
+     * @param c The input full extent constituent
+     * @param viewName The expected view name that you want the head constituent to have
+     * @return A constituent that is only the head
+     */
+    public static Constituent getHeadConstituent(Constituent c, String viewName){
+        if (c.getAttribute("EntityHeadStartSpan") == null || c.getAttribute("EntityHeadEndSpan") == null){
+            return null;
+        }
+        int cStart = Integer.parseInt(c.getAttribute("EntityHeadStartSpan"));
+        int cEnd = Integer.parseInt(c.getAttribute("EntityHeadEndSpan"));
+        Constituent ret = new Constituent(c.getLabel(), viewName, c.getTextAnnotation(), cStart, cEnd);
+        for (String attributeKey : c.getAttributeKeys()) {
+            ret.addAttribute(attributeKey, c.getAttribute(attributeKey));
+        }
+        return ret;
+    }
 }
