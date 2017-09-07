@@ -306,6 +306,8 @@ public class BIOTester {
         }
         int startIdx = curToken.getStartSpan();
         int endIdx = startIdx + 1;
+        //Continue to check if the predicted mentions continues to the right
+        //if and only if the start predicted BIOLU tag is "B"
         if (inference(curToken, classifier).startsWith("B") && endIdx < bioView.getEndSpan()) {
             String preBIOLevel2_dup = curToken.getAttribute("preBIOLevel1");
             String preBIOLevel1_dup = inference(curToken, classifier);
@@ -341,6 +343,8 @@ public class BIOTester {
         else{
             wholeMention.addAttribute("EntityType", mostCommon(predictedTypes));
             String className = classifier.getClass().toString();
+            //The className variable is in form "...bio_classifier_[TYPE]"
+            //Take the last three characters which stands for the mention level.
             String emt = className.substring(className.length() - 3).toUpperCase();
             wholeMention.addAttribute("EntityMentionType", emt);
         }

@@ -48,7 +48,6 @@ public class MentionAnnotator extends Annotator{
     private FlatGazetteers gazetteers;
     private BrownClusters brownClusters;
     private WordNetManager wordNet;
-    private POSAnnotator posAnnotator;
 
     private String _mode;
     /**
@@ -73,7 +72,6 @@ public class MentionAnnotator extends Annotator{
     public MentionAnnotator(boolean lazilyInitialize, String mode){
         super(ViewNames.MENTION, new String[]{ViewNames.POS}, lazilyInitialize);
         _mode = mode;
-        posAnnotator = new POSAnnotator();
     }
 
     public void initialize(ResourceManager rm){
@@ -162,7 +160,7 @@ public class MentionAnnotator extends Annotator{
             doInitialize();
         }
         if (!ta.hasView(ViewNames.POS)){
-            ta.addView(posAnnotator);
+            throw new AnnotatorException("Missing required view POS");
         }
         View mentionView = new SpanLabelView(ViewNames.MENTION, MentionAnnotator.class.getCanonicalName(), ta, 1.0f, true);
         View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
