@@ -7,6 +7,7 @@
  */
 package org.cogcomp.md;
 
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import org.cogcomp.md.LbjGen.*;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
@@ -158,6 +159,9 @@ public class MentionAnnotator extends Annotator{
         if (!isInitialized()){
             doInitialize();
         }
+        if (!ta.hasView(ViewNames.POS)){
+            throw new AnnotatorException("Missing required view POS");
+        }
         View mentionView = new SpanLabelView(ViewNames.MENTION, MentionAnnotator.class.getCanonicalName(), ta, 1.0f, true);
         View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
         View tokenView = ta.getView(ViewNames.TOKENS);
@@ -206,4 +210,22 @@ public class MentionAnnotator extends Annotator{
         ta.addView(ViewNames.MENTION, mentionView);
     }
 
+    /**
+     *
+     * @param c The input full extent constituent
+     * @param viewName The expected view name that you want the head constituent to have
+     * @return A constituent that is only the head
+     */
+    public static Constituent getHeadConstituent(Constituent c, String viewName){
+        if (c.getAttribute("EntityHeadStartSpan") == null || c.getAttribute("EntityHeadEndSpan") == null){
+            return null;
+        }
+        int cStart = Integer.parseInt(c.getAttribute("EntityHeadStartSpan"));
+        int cEnd = Integer.parseInt(c.getAttribute("EntityHeadEndSpan"));
+        Constituent ret = new Constituent(c.getLabel(), viewName, c.getTextAnnotation(), cStart, cEnd);
+        for (String attributeKey : c.getAttributeKeys()) {
+            ret.addAttribute(attributeKey, c.getAttribute(attributeKey));
+        }
+        return ret;
+    }
 }
