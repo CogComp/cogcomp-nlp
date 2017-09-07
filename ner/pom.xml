@@ -61,7 +61,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
-            <version>1.2.26</version>
+            <version>1.3.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -114,7 +114,7 @@
             <plugin>
                 <groupId>edu.illinois.cs.cogcomp</groupId>
                 <artifactId>lbjava-maven-plugin</artifactId>
-                <version>1.2.26</version>
+                <version>1.3.0</version>
                 <configuration>
                     <lbjavaInputFileList>
                         <param>${project.basedir}/src/main/lbj/LbjTagger.lbj</param>

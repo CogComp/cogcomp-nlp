@@ -42,7 +42,7 @@ for JAR in `ls $LIB/*.jar`; do
     cpath="$cpath:$JAR"
 done
 
-CMD="java -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerBenchmark $1 $2 $3 $4 $5"
+CMD="java -classpath  ${cpath} -Xmx14g -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8001 -agentpath:/Applications/YourKit-Java-Profiler-2017.02.app/Contents/Resources/bin/mac/libyjpagent.jnilib edu.illinois.cs.cogcomp.ner.NerBenchmark $1 $2 $3 $4 $5"
 
 echo "$0: running command '$CMD'..."
 

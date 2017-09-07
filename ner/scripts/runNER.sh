@@ -34,5 +34,5 @@ for JAR in `ls $LIB/*jar`; do
     cpath="$cpath:$JAR"
 done
 
-CMD="java -classpath  ${cpath} -Xms3g -Xmx10g edu.illinois.cs.cogcomp.ner.Main $1 $2"
+CMD="java -classpath  ${cpath} -Xms3g -Xmx10g -agentpath:/Applications/YourKit-Java-Profiler-2017.02.app/Contents/Resources/bin/mac/libyjpagent.jnilib edu.illinois.cs.cogcomp.ner.Main $1 $2"
 $CMD
