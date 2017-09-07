@@ -306,7 +306,7 @@ public class BIOTester {
         }
         int startIdx = curToken.getStartSpan();
         int endIdx = startIdx + 1;
-        if (endIdx < bioView.getEndSpan()) {
+        if (inference(curToken, classifier).startsWith("B") && endIdx < bioView.getEndSpan()) {
             String preBIOLevel2_dup = curToken.getAttribute("preBIOLevel1");
             String preBIOLevel1_dup = inference(curToken, classifier);
             Constituent pointerToken = null;
@@ -336,9 +336,13 @@ public class BIOTester {
         Constituent wholeMention = new Constituent(curToken.getLabel(), 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
         if (isGold){
             wholeMention.addAttribute("EntityType", goldType);
+            wholeMention.addAttribute("EntityMentionType", curToken.getAttribute("EntityMentionType"));
         }
         else{
             wholeMention.addAttribute("EntityType", mostCommon(predictedTypes));
+            String className = classifier.getClass().toString();
+            String emt = className.substring(className.length() - 3).toUpperCase();
+            wholeMention.addAttribute("EntityMentionType", emt);
         }
         return wholeMention;
     }
