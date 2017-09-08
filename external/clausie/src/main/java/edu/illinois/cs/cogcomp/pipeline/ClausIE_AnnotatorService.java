@@ -26,6 +26,7 @@ public class ClausIE_AnnotatorService {
         Map<String, Annotator> viewGenerators = new HashMap<>();
         ClausIEAnnotator annotator = new ClausIEAnnotator();
         viewGenerators.put(annotator.getViewName(), annotator);
-        service = ExternalAnnotatorServiceFactory.buildPipeline(viewGenerators);
+        service = ExternalAnnotatorServiceFactory.buildPipeline(viewGenerators,
+                ClausIE_AnnotatorService.class.getSimpleName());
     }
 }

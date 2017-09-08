@@ -19,7 +19,6 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
  * @since 9/11/15
  */
 public class AnnotatorServiceConfigurator extends Configurator {
-
     public static final Property CACHE_DIR = new Property("cacheDirectory", "annotation-cache");
     public static final Property THROW_EXCEPTION_IF_NOT_CACHED = new Property(
             "throwExceptionIfNotCached", Configurator.FALSE);

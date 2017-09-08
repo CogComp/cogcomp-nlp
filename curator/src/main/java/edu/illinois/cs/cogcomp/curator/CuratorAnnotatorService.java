@@ -127,6 +127,10 @@ public class CuratorAnnotatorService implements AnnotatorService {
             viewProviders.put(annotator.getViewName(), annotator);
     }
 
+    public void setCacheName(String newName) {
+        this.cacheFile = newName;
+    }
+
     @Override
     public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text)
             throws AnnotatorException {

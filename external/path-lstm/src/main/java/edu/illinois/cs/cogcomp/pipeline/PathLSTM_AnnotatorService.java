@@ -26,6 +26,7 @@ public class PathLSTM_AnnotatorService {
         Map<String, Annotator> viewGenerators = new HashMap<>();
         PathLSTMHandler pathSRL = new PathLSTMHandler(true);
         viewGenerators.put(pathSRL.getViewName(), pathSRL);
-        service = ExternalAnnotatorServiceFactory.buildPipeline(viewGenerators);
+        service = ExternalAnnotatorServiceFactory.buildPipeline(viewGenerators,
+                PathLSTM_AnnotatorService.class.getSimpleName());
     }
 }

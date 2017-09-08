@@ -29,8 +29,10 @@ public class ExternalAnnotatorServiceFactory {
      * @throws IOException
      * @throws AnnotatorException
      */
-    public static BasicAnnotatorService buildPipeline(Map<String, Annotator> annotators) throws IOException, AnnotatorException {
-        ResourceManager emptyConfig = new ResourceManager(new Properties());
+    public static BasicAnnotatorService buildPipeline(Map<String, Annotator> annotators, String cacheDirectory) throws IOException, AnnotatorException {
+        Properties p = new Properties();
+        p.setProperty(AnnotatorServiceConfigurator.CACHE_DIR.key, cacheDirectory);
+        ResourceManager emptyConfig = new ResourceManager(p);
         return buildPipeline(emptyConfig, annotators);
     }
 
