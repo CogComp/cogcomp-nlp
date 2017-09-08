@@ -146,7 +146,8 @@ public class PathLSTMHandler extends Annotator {
                                 Constituent c = new Constituent("Argument", viewName, ta,
                                         finalTokenOffset + span.getFirst(), finalTokenOffset + span.getSecond());
                                 assert span.getFirst() <= span.getSecond() : ta;
-                                List<Constituent> consList = pav.getConstituentsWithSpan(new IntPair(span.getFirst(), span.getSecond()));
+                                List<Constituent> consList = pav.getConstituentsWithSpan(
+                                    new IntPair(finalTokenOffset + span.getFirst(), finalTokenOffset + span.getSecond()));
                                 if (consList.isEmpty()) {
                                     pav.addConstituent(c);
                                 }
