@@ -1,0 +1,7 @@
+politics	religion	computer	autos.sports	science	sales
+politics	talk.politics.guns	talk.politics.mideast	talk.politics.misc
+religion	alt.atheism	soc.religion.christian	talk.religion.misc
+computer	comp.sys.ibm.pc.hardware	comp.sys.mac.hardware	comp.graphics	comp.windows.x	comp.os.ms.windows.misc
+autos.sports	rec.autos	rec.motorcycles	rec.sport.baseball	rec.sport.hockey
+science	sci.electronics	sci.crypt	sci.med	sci.space
+sales	misc.forsale

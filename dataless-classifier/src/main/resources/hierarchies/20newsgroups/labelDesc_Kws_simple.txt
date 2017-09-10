@@ -1,0 +1,26 @@
+politics	politics politics guns politics mideast politics
+religion	religion atheism society religion christianity christian religion
+computer	computer computer systems ibm pc hardware computer systems mac macintosh apple hardware computer graphics computer windows x windowsx computer os operating system microsoft windows
+autos.sports	autos.sports cars motorcycles baseball hockey
+science	science science electronics science cryptography medicine science space
+sales	sales for sale discount
+talk.politics.guns	politics guns
+talk.politics.mideast	politics mideast
+talk.politics.misc	politics
+alt.atheism	atheism
+soc.religion.christian	society religion christianity christian
+talk.religion.misc	religion
+comp.sys.ibm.pc.hardware	computer systems ibm pc hardware
+comp.sys.mac.hardware	computer systems mac macintosh apple hardware
+comp.graphics	computer graphics
+comp.windows.x	computer windows x windowsx
+comp.os.ms.windows.misc	computer os operating system microsoft windows
+rec.autos	cars
+rec.motorcycles	motorcycles
+rec.sport.baseball	baseball
+rec.sport.hockey	hockey
+sci.electronics	science electronics
+sci.crypt	science cryptography
+sci.med	science medicine
+sci.space	science space
+misc.forsale	for sale discount
