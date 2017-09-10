@@ -1,7 +1,7 @@
-# Illinois-DatalessClassification
+# CogComp-DatalessClassifier
 
 Some key points:
-- The Main Class for the Dataless Annotators are :-
+- The Main classes for the Dataless Annotators are :-
   * **ESADatalessAnnotator** for the ESA-based Dataless Annotator
   * **W2VDatalessAnnotator** for the Word2Vec-based Dataless Annotator
 - Dataless Annotators add the **ESA-Dataless** and **W2V-Dataless** views to the input TextAnnotation respectively, and it requires the presence of a **TOKENS** view with the end-user's desired Tokenization.
