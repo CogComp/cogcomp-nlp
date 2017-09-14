@@ -337,7 +337,7 @@ public class NERAnnotatorTest {
         assertEquals(nerView.getConstituents().size(), 2);
 
         String tokTestB =
-                "Grigory Pasko, crusading Russian journalist who documented Russian Navy's mishandling of "
+                "Grigory Pasko, crusading Russian journalist who documented Russian Navy mishandling of "
                         + "nuclear waste, is released on parole after serving two-thirds of his four-year prison sentence.";
 
         ta = tab.createTextAnnotation(tokTestB);
@@ -347,8 +347,10 @@ public class NERAnnotatorTest {
             e.printStackTrace();
             fail(e.getMessage());
         }
+        
         for (Constituent c : nerView.getConstituents())
             System.out.println(c);
+        
         assertEquals(3, nerView.getNumberOfConstituents());
     }
 
