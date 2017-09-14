@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
+import edu.illinois.cs.cogcomp.lbjava.learn.featurepruning.SparseNetworkOptimizer;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TwoLayerPredictionAggregationFeatures;
@@ -110,6 +111,7 @@ public class LearningCurveMultiDataset {
         paramLevel1.baseLTU = new SparseAveragedPerceptron(
             ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1, 0, 
             ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
+        paramLevel1.baseLTU.featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
         logger.info("Level 1 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1+
             ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
         NETaggerLevel1 tagger1 =
@@ -142,24 +144,35 @@ public class LearningCurveMultiDataset {
         BatchTrainer bt1test = prefetchAndGetBatchTrainer(tagger1, testDataSet, testPathL1);
         Parser testParser1 = bt1test.getParser();
 
-        for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel1 < 10)
-                || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
-            bt1train.train(1);
-            testParser1.reset();
-            TestDiscrete simpleTest = new TestDiscrete();
-            simpleTest.addNull("O");
-            TestDiscrete.testDiscrete(simpleTest, tagger1, null, testParser1, true, 0);
-            double f1Level1 = simpleTest.getOverallStats()[2];
-            if (f1Level1 > bestF1Level1) {
-                bestF1Level1 = f1Level1;
-                bestRoundLevel1 = i;
-                tagger1.save();
+        // create the best model possible.
+        {
+            NETaggerLevel1 saveme = null;
+            for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel1 < 10)
+                    || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
+                bt1train.train(1);
+                testParser1.reset();
+                TestDiscrete simpleTest = new TestDiscrete();
+                simpleTest.addNull("O");
+                TestDiscrete.testDiscrete(simpleTest, tagger1, null, testParser1, true, 0);
+                double f1Level1 = simpleTest.getOverallStats()[2];
+                if (f1Level1 > bestF1Level1) {
+                    bestF1Level1 = f1Level1;
+                    bestRoundLevel1 = i;
+                    saveme = (NETaggerLevel1) tagger1.clone();
+                    saveme.beginTraining();
+                }
+                logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
+                            + bestF1Level1);
             }
-            logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
-                        + bestF1Level1);
+            saveme.getBaseLTU().featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
+            saveme.doneTraining();
+            saveme.save();
+            logger.info("Level 1; best round : " + bestRoundLevel1 + "\tbest F1 : " + bestF1Level1);
         }
-        logger.info("Level 1; best round : " + bestRoundLevel1 + "\tbest F1 : " + bestF1Level1);
-
+        
+        // Read the best model back in, optimize by pruning useless features, then write it agains
+        tagger1 = new NETaggerLevel1(paramLevel1, modelPath + ".level1", modelPath + ".level1.lex");
+                
         // trash the l2 prefetch data
         String trainPathL2 = path + ".level2.prefetchedTrainData";
         deleteme = new File(trainPathL2);
@@ -174,6 +187,7 @@ public class LearningCurveMultiDataset {
         paramLevel2.baseLTU = new SparseAveragedPerceptron(
             ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2, 0, 
             ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
+        paramLevel2.baseLTU.featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
         NETaggerLevel2 tagger2 =
                 new NETaggerLevel2(paramLevel2, ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
@@ -194,24 +208,32 @@ public class LearningCurveMultiDataset {
                     prefetchAndGetBatchTrainer(tagger2, testDataSet, testPathL2);
             Parser testParser2 = bt2test.getParser();
 
-            for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel2 < 10)
-                    || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
-                logger.info("Learning level 2 classifier; round " + i);
-                bt2train.train(1);
-                logger.info("Testing level 2 classifier;  on prefetched data, round: " + i);
-                testParser2.reset();
-                TestDiscrete simpleTest = new TestDiscrete();
-                simpleTest.addNull("O");
-                TestDiscrete.testDiscrete(simpleTest, tagger2, null, testParser2, true, 0);
-
-                double f1Level2 = simpleTest.getOverallStats()[2];
-                if (f1Level2 > bestF1Level2) {
-                    bestF1Level2 = f1Level2;
-                    bestRoundLevel2 = i;
-                    tagger2.save();
+            // create the best model possible.
+            {
+                NETaggerLevel2 saveme = null;
+                for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel2 < 10)
+                        || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
+                    logger.info("Learning level 2 classifier; round " + i);
+                    bt2train.train(1);
+                    logger.info("Testing level 2 classifier;  on prefetched data, round: " + i);
+                    testParser2.reset();
+                    TestDiscrete simpleTest = new TestDiscrete();
+                    simpleTest.addNull("O");
+                    TestDiscrete.testDiscrete(simpleTest, tagger2, null, testParser2, true, 0);
+    
+                    double f1Level2 = simpleTest.getOverallStats()[2];
+                    if (f1Level2 > bestF1Level2) {
+                        bestF1Level2 = f1Level2;
+                        bestRoundLevel2 = i;
+                        saveme = (NETaggerLevel2) tagger2.clone();
+                        saveme.beginTraining();
+                    }
+                    logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
+                                + bestF1Level2);
                 }
-                logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
-                            + bestF1Level2);
+                saveme.getBaseLTU().featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
+                saveme.doneTraining();
+                saveme.save();
             }
             
             // trash the l2 prefetch data

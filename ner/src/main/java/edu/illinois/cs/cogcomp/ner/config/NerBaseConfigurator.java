@@ -63,6 +63,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     public final static String AGGREGATE_GAZETTEER = "AggregateGazetteerMatches";
     public final static String PREV_TAGS_FOR_CONTEXT = "PrevTagsForContext";
     public final static String PREDICTIONS_1 = "PredictionsLevel1";
+    public final static String FEATUREPRUNINGTHRESHOLD = "FeaturePruningThreshold";
 
     public final static String BROWN_CLUSTER_PATHS = "BrownClusterPaths";
     public final static String IS_LOWERCASE_BROWN_CLUSTERS = "isLowercaseBrownClusters";
@@ -101,6 +102,8 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     private final static String DEFAULT_AGGREGATE_GAZETTEER = "0";
     private final static String DEFAULT_PREV_TAGS_FOR_CONTEXT = "1";
     private final static String DEFAULT_PREDICTIONS_1 = "1";
+    private final static String DEFAULT_FEATUREPRUNINGTHRESHOLD = "0.000001";
+    
     // private final static String DEFAULT_BEAM_SIZE = "5";
     private final static String DEFAULT_FORCE_LINE_BREAKS = TRUE;
     private final static String DEFAULT_LABELS = "PER ORG LOC MISC";
@@ -155,6 +158,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(PREV_TAGS_FOR_CONTEXT, DEFAULT_PREV_TAGS_FOR_CONTEXT);
         props.setProperty(WORD_TYPE_INFORMATION, DEFAULT_WORD_TYPE_INFORMATION);
         props.setProperty(PREDICTIONS_1, DEFAULT_PREDICTIONS_1);
+        props.setProperty(FEATUREPRUNINGTHRESHOLD, DEFAULT_FEATUREPRUNINGTHRESHOLD);
         props.setProperty(PATHS_TO_BROWN_CLUSTERS, DEFAULT_PATHS_TO_BROWN_CLUSTERS);
         props.setProperty(WORD_EMBEDDINGS, DEFAULT_WORD_EMBEDDINGS);
         props.setProperty(PATH_TO_GAZETTEERS, DEFAULT_PATHS_TO_GAZETTEERS);
