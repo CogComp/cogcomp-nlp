@@ -101,13 +101,20 @@ public class ServerClientAnnotator extends Annotator {
     }
 
     public TextAnnotation annotate(String str) throws Exception {
+        return annotate(str, false);
+    }
+
+    /**
+     * @param overwrite if true, it would overwrite the values on cache
+     */
+    public TextAnnotation annotate(String str, boolean overwrite) throws Exception {
         String viewsConnected = Arrays.toString(viewsToAdd);
         String views = viewsConnected.substring(1, viewsConnected.length() - 1).replace(" ", "");
         ConcurrentMap<String, byte[]> concurrentMap =
                 (db != null) ? db.hashMap(viewName, Serializer.STRING, Serializer.BYTE_ARRAY)
                         .createOrOpen() : null;
         String key = DigestUtils.sha1Hex(str + views);
-        if (concurrentMap != null && concurrentMap.containsKey(key)) {
+        if (!overwrite && concurrentMap != null && concurrentMap.containsKey(key)) {
             byte[] taByte = concurrentMap.get(key);
             return SerializationHelper.deserializeTextAnnotationFromBytes(taByte);
         } else {
@@ -120,21 +127,20 @@ public class ServerClientAnnotator extends Annotator {
             con.setDoOutput(true);
             con.setUseCaches(false);
 
-            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-            wr.write("text=" + URLEncoder.encode(str, "UTF-8") + "&views=" + views);
-            wr.flush();
-
             int responseCode = con.getResponseCode();
             logger.debug("\nSending '" + con.getRequestMethod() + "' request to URL : " + url);
             logger.debug("Response Code : " + responseCode);
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            InputStreamReader reader = new InputStreamReader(con.getInputStream());
+            BufferedReader in = new BufferedReader(reader);
             String inputLine;
             StringBuilder response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
+            reader.close();
+            con.disconnect();
             TextAnnotation ta = SerializationHelper.deserializeFromJson(response.toString());
             if (concurrentMap != null) {
                 concurrentMap.put(key, SerializationHelper.serializeTextAnnotationToBytes(ta));
@@ -146,9 +152,14 @@ public class ServerClientAnnotator extends Annotator {
 
     @Override
     public void addView(TextAnnotation ta) {
+        addView(ta, false);
+    }
+
+
+    public void addView(TextAnnotation ta, boolean overwrite) {
         TextAnnotation newTA = null;
         try {
-            newTA = annotate(ta.getText());
+            newTA = annotate(ta.getText(), overwrite);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -41,7 +41,7 @@ import java.util.Set;
  * @author Christos Christodoulopoulos
  * @author Narender Gupta
  *
- *         Created by mssammon on 4/13/15.
+ * Created by mssammon on 4/13/15.
  */
 public class BasicAnnotatorService implements AnnotatorService {
 
@@ -69,7 +69,6 @@ public class BasicAnnotatorService implements AnnotatorService {
     protected Map<String, Annotator> viewProviders;
     protected boolean forceUpdate;
 
-
     /**
      * constructor with ResourceManager properties for caching behavior
      *
@@ -88,7 +87,6 @@ public class BasicAnnotatorService implements AnnotatorService {
                 .getBoolean(AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key));
     }
 
-
     /**
      * constructor that uses AnnotatorServiceConfigurator default configuration
      * 
@@ -102,8 +100,6 @@ public class BasicAnnotatorService implements AnnotatorService {
                 .getDefaultConfig());
 
     }
-
-
 
     /**
      * Populates the AnnotatorService with {@link View} providers and initializes cache manager, if caching enabled.
@@ -142,11 +138,6 @@ public class BasicAnnotatorService implements AnnotatorService {
 
         this.throwExceptionIfNotCached = throwExceptionIfNotCached;
     }
-
-
-
-
-
 
     /**
      * Creates a basic {@link TextAnnotation} with sentence and token views with the pre-tokenized
@@ -251,8 +242,6 @@ public class BasicAnnotatorService implements AnnotatorService {
         return addViewsAndCache(ta, viewNames, this.forceUpdate );
     }
 
-
-
     /**
      * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
      * known to this {@link AnnotatorService}.
@@ -297,8 +286,6 @@ public class BasicAnnotatorService implements AnnotatorService {
         return addViewsAndCache(ta, viewProviders.keySet(), replaceExistingViews);
     }
 
-
-
     /**
      * DOES NOT CACHE THE ADDED VIEW!!!
      *
@@ -314,17 +301,15 @@ public class BasicAnnotatorService implements AnnotatorService {
         if (ViewNames.SENTENCE.equals(viewName) || ViewNames.TOKENS.equals(viewName))
             return false;
 
-        if ( !textAnnotation.hasView( viewName )  || forceUpdate )
-        {
+        if ( !textAnnotation.hasView( viewName )  || forceUpdate ) {
             isUpdated = true;
 
-            if ( !viewProviders.containsKey( viewName ) )
+            if ( !viewProviders.containsKey(viewName) )
                 throw new AnnotatorException( "View '" + viewName + "' cannot be provided by this AnnotatorService." );
 
             Annotator annotator = viewProviders.get( viewName );
 
-            for ( String prereqView : annotator.getRequiredViews() )
-            {
+            for ( String prereqView : annotator.getRequiredViews() ) {
                 addView( textAnnotation, prereqView );
             }
 
@@ -338,17 +323,28 @@ public class BasicAnnotatorService implements AnnotatorService {
         return isUpdated;
     }
 
-
     protected void throwNotCachedException(String corpusId, String docId, String text) throws AnnotatorException {
         throw new AnnotatorException("text with corpusid '" + corpusId + "', docId '" + docId +
                 "', value '" + text + "' was not in cache, and the field 'throwExceptionIfNotCached' is 'true'.");
     }
 
-
     @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Set<String> viewsToAnnotate) throws AnnotatorException {
 
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
+
+        // if it already contains its, return it.
+        if (!forceUpdate && !disableCache && annotationCache.contains(ta)) {
+            TextAnnotation taFromCache = annotationCache.getTextAnnotation(ta);
+            boolean containsAll = true;
+            for(String vu : viewsToAnnotate) {
+                if(!taFromCache.getAvailableViews().contains(vu)) {
+                    containsAll = false;
+                    break;
+                }
+            }
+            if(containsAll) return taFromCache;
+        }
 
         return addViewsAndCache(ta, viewsToAnnotate, false);
     }
@@ -390,6 +386,4 @@ public class BasicAnnotatorService implements AnnotatorService {
         }
         return ta;
     }
-
-
 }

@@ -1,0 +1,230 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>AFP_ENG_19970401.0099</DOCID>
+
+<DCT>BEIJING, <TIMEX3 tid="t0" type="TIME" value="1997-04-01" temporalFunction="false" functionInDocument="CREATION_TIME">April 1 , 1997</TIMEX3> (AFP)</DCT>
+
+<TITLE>China warns US after Gingrich comments on Taiwan</TITLE>
+
+
+<TEXT>
+
+Beijing <EVENT class="I_ACTION" eid="e1">warned</EVENT> the United States <TIMEX3 type="DATE" value="1997-04-08" tid="t1">Tuesday</TIMEX3> against <EVENT class="OCCURRENCE" eid="e2">interfering</EVENT> in Taiwan after US House of Representative speaker Newt Gingrich <EVENT class="REPORTING" eid="e3">said</EVENT> Washington would <EVENT class="OCCURRENCE" eid="e4">defend</EVENT> the island against <EVENT class="OCCURRENCE" eid="e5">attacks</EVENT> from Beijing.
+
+"The <EVENT class="OCCURRENCE" eid="e6">controversy</EVENT> between China and the United States on the Taiwan issue <EVENT class="OCCURRENCE" eid="e7">revolves</EVENT> around one point which is US interference," <EVENT class="REPORTING" eid="e9">said</EVENT> Chinese foreign ministry spokesman Shen Guofang.
+
+"The US government and the Congress have <EVENT class="OCCURRENCE" eid="e10">expressed</EVENT> their support for the 'one China' policy ... and we <EVENT class="I_STATE" eid="e11">hope</EVENT> that the United States will <EVENT class="OCCURRENCE" eid="e12">keep</EVENT> its agreements," he <EVENT class="OCCURRENCE" eid="e13">added</EVENT>.
+
+Gingrich <EVENT class="REPORTING" eid="e14">said</EVENT> <TIMEX3 type="DATE" value="1997-03-30" tid="t2">Sunday</TIMEX3> in Shanghai after <EVENT class="OCCURRENCE" eid="e15">meeting</EVENT> Wang Daohan, a top Chinese official on relations between China and Taiwan, that the United States would <EVENT class="OCCURRENCE" eid="e16">defend</EVENT> Taiwan if China <EVENT class="OCCURRENCE" eid="e17">launched</EVENT> a military <EVENT class="OCCURRENCE" eid="e18">assault</EVENT> to <EVENT class="OCCURRENCE" eid="e19">recover</EVENT> the island.
+
+"We <EVENT class="I_STATE" eid="e20">understand</EVENT> that in principle you will not <EVENT class="OCCURRENCE" eid="e21">renounce</EVENT> your right to <EVENT class="OCCURRENCE" eid="e22">use</EVENT> force. We <EVENT class="I_STATE" eid="e23">want</EVENT> you to <EVENT class="I_STATE" eid="e24">understand</EVENT> that we will <EVENT class="OCCURRENCE" eid="e25">defend</EVENT> Taiwan," Gingrich <EVENT class="REPORTING" eid="e26">said</EVENT>.
+
+"This is not <EVENT class="OCCURRENCE" eid="e27">waving</EVENT> a saber. It's just a reminder that it is in the scabbard and available," he <EVENT class="OCCURRENCE" eid="e28">added</EVENT>.
+
+Shen <EVENT class="OCCURRENCE" eid="e29">reiterated</EVENT> China's hopes for a peaceful <EVENT class="OCCURRENCE" eid="e30">reunification</EVENT> with Taiwan, but <EVENT class="I_ACTION" eid="e31">warned</EVENT>: "If the question of independence <EVENT class="OCCURRENCE" eid="e32">arises</EVENT> on the island or a foreign force <EVENT class="OCCURRENCE" eid="e33">interferes</EVENT> in Taiwan issues, we will be <EVENT class="OCCURRENCE" eid="e34">forced</EVENT> to <EVENT class="OCCURRENCE" eid="e35">adopt</EVENT> other necessary measures."
+
+He also <EVENT class="OCCURRENCE" eid="e36">attacked</EVENT> Washington for its continued arms <EVENT class="OCCURRENCE" eid="e37">sales</EVENT> to Taipei.
+
+"These <EVENT class="OCCURRENCE" eid="e38">give</EVENT> clear support and encouragement to separtist forces on the island and <EVENT class="OCCURRENCE" eid="e40">retards</EVENT> the process of peaceful reunification," he <EVENT class="REPORTING" eid="e42">said</EVENT>.
+
+However, Gingrich then <EVENT class="OCCURRENCE" eid="e43">toned</EVENT> down his statements <TIMEX3 type="DATE" value="1997-04-01" tid="t3">Tuesday</TIMEX3> when <EVENT class="OCCURRENCE" eid="e44">speaking</EVENT> to journalists in Tokyo and <EVENT class="REPORTING" eid="e45">emphasized</EVENT> that Washington would <EVENT class="OCCURRENCE" eid="e46">stick</EVENT> to its 'one China' policy.
+
+<EVENT class="REPORTING" eid="e47">Noting</EVENT> Chinese leaders had <EVENT class="REPORTING" eid="e48">told</EVENT> him they would not <EVENT class="OCCURRENCE" eid="e49">resort</EVENT> to military force easily, Gingrich <EVENT class="REPORTING" eid="e50">said</EVENT>: "So, we wouldn't have to <EVENT class="OCCURRENCE" eid="e51">defend</EVENT>."
+
+Gingrich is to <EVENT class="OCCURRENCE" eid="e52">pay</EVENT> a short <EVENT class="OCCURRENCE" eid="e53">visit</EVENT> to Taiwan <TIMEX3 type="DATE" value="1997-04-02" tid="t4">Wednesday</TIMEX3> in which he is to <EVENT class="OCCURRENCE" eid="e54">meet</EVENT> with President Lee Teng-hui and Premier Lien Chan, a Taiwan presidential spokesman <EVENT class="REPORTING" eid="e55">said</EVENT> <TIMEX3 type="DATE" value="1997-04-01" tid="t5">Tuesday</TIMEX3>.
+
+They are to <EVENT class="OCCURRENCE" eid="e56">discuss</EVENT> US-Taiwan relations, cross-strait ties and other issues of mutual interest, he <EVENT class="REPORTING" eid="e57">said</EVENT>.
+
+Taiwan <EVENT class="OCCURRENCE" eid="e58">split</EVENT> from mainland China in <TIMEX3 type="DATE" value="1949" tid="t6">1949</TIMEX3> when the defeated Nationalist government <EVENT class="OCCURRENCE" eid="e59">fled</EVENT> there after a bitter civil <EVENT class="OCCURRENCE" eid="e60">war</EVENT>.
+
+<TIMEX3 type="DATE" value="1996" tid="t7">Last year</TIMEX3>, Beijing <EVENT class="OCCURRENCE" eid="e61">launched</EVENT> a series of intimidatory war games against the island, which <EVENT class="OCCURRENCE" eid="e62">ground</EVENT> to a halt when Washington <EVENT class="OCCURRENCE" eid="e63">dispatched</EVENT> two aircraft carriers to the region.
+
+While China <EVENT class="REPORTING" eid="e64">says</EVENT> its policy towards Taiwan is eventual <EVENT class="OCCURRENCE" eid="e65">reunification</EVENT>, Shen <EVENT class="OCCURRENCE" eid="e66">refused</EVENT> to <EVENT class="OCCURRENCE" eid="e67">comment</EVENT> on reports over <TIMEX3 type="DATE" value="1997-W13-WE" tid="t8">the weekend</TIMEX3> from Tokyo that Jiang would <EVENT class="OCCURRENCE" eid="e68">offer</EVENT> the post of vice-president to Taiwan's top official upon reunification.
+
+"I also <EVENT class="OCCURRENCE" eid="e69">read</EVENT> these reports, but they were from the <EVENT class="OCCURRENCE" eid="e70">meeting</EVENT> between President Jiang and the Japanese foreign minister and I have nothing more to <EVENT class="REPORTING" eid="e71">say</EVENT> about that," he <EVENT class="REPORTING" eid="e72">said</EVENT>.
+
+"What is more far more urgent is the organisation of high-level political meetings with Taiwan to <EVENT class="OCCURRENCE" eid="e73">resolve</EVENT> issues currently on ice. This would <EVENT class="STATE" eid="e74">have</EVENT> positive effects on peaceful reunification," he <EVENT class="OCCURRENCE" eid="e76">added</EVENT>.
+
+</TEXT>
+
+
+<MAKEINSTANCE eiid="ei76" eventID="e76" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei73" eventID="e73" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei38" eventID="e38" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei74" eventID="e74" pos="OTHER" tense="FUTURE" aspect="NONE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei37" eventID="e37" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei1" eventID="e1" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei3" eventID="e3" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2" eventID="e2" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei32" eventID="e32" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei31" eventID="e31" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei30" eventID="e30" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei36" eventID="e36" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei35" eventID="e35" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei34" eventID="e34" pos="VERB" tense="FUTURE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei33" eventID="e33" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei4" eventID="e4" pos="VERB" tense="FUTURE" aspect="NONE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei5" eventID="e5" pos="NOUN" tense="FUTURE" aspect="NONE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei6" eventID="e6" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei7" eventID="e7" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei9" eventID="e9" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei49" eventID="e49" pos="VERB" tense="FUTURE" aspect="NONE" polarity="NEG" modality="would" />
+<MAKEINSTANCE eiid="ei48" eventID="e48" pos="VERB" tense="PAST" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei40" eventID="e40" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei43" eventID="e43" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei42" eventID="e42" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei45" eventID="e45" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei44" eventID="e44" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei47" eventID="e47" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei46" eventID="e46" pos="VERB" tense="FUTURE" aspect="NONE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei50" eventID="e50" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei59" eventID="e59" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei58" eventID="e58" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei57" eventID="e57" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei56" eventID="e56" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei55" eventID="e55" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei54" eventID="e54" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei53" eventID="e53" pos="NOUN" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei52" eventID="e52" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei51" eventID="e51" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei60" eventID="e60" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei20" eventID="e20" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei21" eventID="e21" pos="VERB" tense="FUTURE" aspect="NONE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei61" eventID="e61" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei24" eventID="e24" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei25" eventID="e25" pos="VERB" tense="FUTURE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei22" eventID="e22" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei23" eventID="e23" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei28" eventID="e28" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei29" eventID="e29" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei26" eventID="e26" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei27" eventID="e27" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei67" eventID="e67" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei66" eventID="e66" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei69" eventID="e69" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei68" eventID="e68" pos="VERB" tense="FUTURE" aspect="NONE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei63" eventID="e63" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei62" eventID="e62" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei65" eventID="e65" pos="NOUN" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei64" eventID="e64" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei70" eventID="e70" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei71" eventID="e71" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei10" eventID="e10" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei72" eventID="e72" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei11" eventID="e11" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei12" eventID="e12" pos="VERB" tense="FUTURE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei13" eventID="e13" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei14" eventID="e14" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei15" eventID="e15" pos="VERB" tense="PRESENT" aspect="PROGRESSIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei16" eventID="e16" pos="VERB" tense="FUTURE" aspect="NONE" polarity="POS" modality="would" />
+<MAKEINSTANCE eiid="ei17" eventID="e17" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei18" eventID="e18" pos="NOUN" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei19" eventID="e19" pos="VERB" tense="PRESENT" aspect="NONE" polarity="POS" />
+
+
+<TLINK lid="l1" eventInstanceID="ei43" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l2" eventInstanceID="ei42" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l3" eventInstanceID="ei61" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l4" eventInstanceID="ei73" relatedToTime="t0" relType="AFTER" />
+<TLINK lid="l5" eventInstanceID="ei1" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l6" eventInstanceID="ei9" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l7" eventInstanceID="ei26" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l8" eventInstanceID="ei29" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l9" eventInstanceID="ei14" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l10" eventInstanceID="ei36" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l11" eventInstanceID="ei57" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l12" eventInstanceID="ei58" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l13" eventInstanceID="ei55" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l14" eventInstanceID="ei48" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l15" eventInstanceID="ei45" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l16" eventInstanceID="ei27" relatedToTime="t0" relType="INCLUDES" />
+<TLINK lid="l17" eventInstanceID="ei3" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l18" eventInstanceID="ei50" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l19" eventInstanceID="ei14" relatedToTime="t2" relType="IS_INCLUDED" />
+<TLINK lid="l20" eventInstanceID="ei14" relatedToEventInstance="ei15" relType="AFTER" />
+<TLINK lid="l21" eventInstanceID="ei61" relatedToTime="t7" relType="IS_INCLUDED" />
+<TLINK lid="l22" eventInstanceID="ei2" relatedToTime="t1" relType="IS_INCLUDED" />
+<TLINK lid="l23" eventInstanceID="ei76" relatedToTime="t0" relType="IS_INCLUDED" />
+<TLINK lid="l24" eventInstanceID="ei20" relatedToTime="t0" relType="INCLUDES" />
+<TLINK lid="l25" eventInstanceID="ei29" relatedToEventInstance="ei33" relType="AFTER" />
+<TLINK lid="l26" eventInstanceID="ei29" relatedToEventInstance="ei36" relType="BEFORE" />
+<TLINK lid="l27" eventInstanceID="ei29" relatedToEventInstance="ei31" relType="AFTER" />
+<TLINK lid="l28" eventInstanceID="ei28" relatedToEventInstance="ei29" relType="BEFORE" />
+<TLINK lid="l29" eventInstanceID="ei29" relatedToEventInstance="ei32" relType="AFTER" />
+<TLINK lid="l30" eventInstanceID="ei29" relatedToEventInstance="ei35" relType="AFTER" />
+<TLINK lid="l31" eventInstanceID="ei72" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l32" eventInstanceID="ei66" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l33" eventInstanceID="ei14" relatedToEventInstance="ei18" relType="AFTER" />
+<TLINK lid="l34" eventInstanceID="ei14" relatedToEventInstance="ei17" relType="AFTER" />
+<TLINK lid="l35" eventInstanceID="ei14" relatedToEventInstance="ei19" relType="AFTER" />
+<TLINK lid="l36" eventInstanceID="ei20" relatedToEventInstance="ei22" relType="AFTER" />
+<TLINK lid="l37" eventInstanceID="ei20" relatedToEventInstance="ei21" relType="AFTER" />
+<TLINK lid="l38" eventInstanceID="ei58" relatedToEventInstance="ei60" relType="AFTER" />
+<TLINK lid="l39" eventInstanceID="ei58" relatedToEventInstance="ei59" relType="AFTER" />
+<TLINK lid="l40" eventInstanceID="ei58" relatedToEventInstance="ei61" relType="BEFORE" />
+<TLINK lid="l41" eventInstanceID="ei43" relatedToEventInstance="ei46" relType="BEFORE" />
+<TLINK lid="l42" eventInstanceID="ei43" relatedToEventInstance="ei44" relType="AFTER" />
+<TLINK lid="l43" eventInstanceID="ei43" relatedToTime="t3" relType="IS_INCLUDED" />
+<TLINK lid="l44" eventInstanceID="ei53" relatedToTime="t4" relType="IS_INCLUDED" />
+<TLINK lid="l45" eventInstanceID="ei55" relatedToTime="t5" relType="IS_INCLUDED" />
+<TLINK lid="l46" eventInstanceID="ei56" relatedToEventInstance="ei57" relType="BEFORE" />
+<TLINK lid="l47" eventInstanceID="ei38" relatedToEventInstance="ei42" relType="AFTER" />
+<TLINK lid="l48" eventInstanceID="ei1" relatedToEventInstance="ei2" relType="AFTER" />
+<TLINK lid="l49" eventInstanceID="ei68" relatedToTime="t8" relType="IS_INCLUDED" />
+<TLINK lid="l50" eventInstanceID="ei69" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l51" eventInstanceID="ei10" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l52" eventInstanceID="ei44" relatedToTime="t3" relType="IS_INCLUDED" />
+<TLINK lid="l53" eventInstanceID="ei48" relatedToEventInstance="ei52" relType="BEFORE" />
+<TLINK lid="l54" eventInstanceID="ei67" relatedToTime="t8" relType="IS_INCLUDED" />
+<TLINK lid="l55" eventInstanceID="ei58" relatedToTime="t6" relType="IS_INCLUDED" />
+<TLINK lid="l56" eventInstanceID="ei64" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l57" eventInstanceID="ei71" relatedToTime="t0" relType="INCLUDES" />
+<TLINK lid="l58" eventInstanceID="ei1" relatedToEventInstance="ei5" relType="AFTER" />
+<TLINK lid="l59" eventInstanceID="ei1" relatedToEventInstance="ei3" relType="AFTER" />
+<TLINK lid="l60" eventInstanceID="ei13" relatedToTime="t0" relType="IS_INCLUDED" />
+<TLINK lid="l61" eventInstanceID="ei48" relatedToEventInstance="ei50" relType="IS_INCLUDED" />
+<TLINK lid="l62" eventInstanceID="ei52" relatedToEventInstance="ei55" relType="BEFORE" />
+<TLINK lid="l63" eventInstanceID="ei69" relatedToEventInstance="ei72" relType="IS_INCLUDED" />
+<TLINK lid="l64" eventInstanceID="ei23" relatedToEventInstance="ei26" relType="BEFORE" />
+<TLINK lid="l65" eventInstanceID="ei29" relatedToEventInstance="ei34" relType="AFTER" />
+<TLINK lid="l66" eventInstanceID="ei7" relatedToTime="t0" relType="INCLUDES" />
+<TLINK lid="l67" eventInstanceID="ei38" relatedToTime="t0" relType="INCLUDES" />
+<TLINK lid="l68" eventInstanceID="ei66" relatedToEventInstance="ei67" relType="AFTER" />
+<TLINK lid="l69" eventInstanceID="ei64" relatedToEventInstance="ei66" relType="BEFORE" />
+<TLINK lid="l70" eventInstanceID="ei66" relatedToEventInstance="ei72" relType="BEFORE" />
+<TLINK lid="l71" eventInstanceID="ei65" relatedToEventInstance="ei66" relType="BEFORE" />
+<TLINK lid="l72" eventInstanceID="ei66" relatedToEventInstance="ei68" relType="AFTER" />
+<TLINK lid="l73" eventInstanceID="ei61" relatedToEventInstance="ei66" relType="BEFORE" />
+<TLINK lid="l74" eventInstanceID="ei70" relatedToEventInstance="ei72" relType="BEFORE" />
+<TLINK lid="l75" eventInstanceID="ei50" relatedToEventInstance="ei51" relType="AFTER" />
+<TLINK lid="l76" eventInstanceID="ei49" relatedToEventInstance="ei50" relType="AFTER" />
+<TLINK lid="l77" eventInstanceID="ei47" relatedToEventInstance="ei50" relType="IS_INCLUDED" />
+<TLINK lid="l78" eventInstanceID="ei43" relatedToEventInstance="ei50" relType="SIMULTANEOUS" />
+<TLINK lid="l79" eventInstanceID="ei54" relatedToEventInstance="ei55" relType="AFTER" />
+<TLINK lid="l80" eventInstanceID="ei53" relatedToEventInstance="ei55" relType="BEFORE" />
+<TLINK lid="l81" eventInstanceID="ei55" relatedToEventInstance="ei57" relType="SIMULTANEOUS" />
+<TLINK lid="l82" eventInstanceID="ei57" relatedToEventInstance="ei58" relType="SIMULTANEOUS" />
+<TLINK lid="l83" eventInstanceID="ei11" relatedToEventInstance="ei13" relType="BEFORE" />
+<TLINK lid="l84" eventInstanceID="ei12" relatedToEventInstance="ei13" relType="BEFORE" />
+<TLINK lid="l85" eventInstanceID="ei1" relatedToEventInstance="ei9" relType="SIMULTANEOUS" />
+<TLINK lid="l86" eventInstanceID="ei6" relatedToEventInstance="ei9" relType="BEFORE" />
+<TLINK lid="l87" eventInstanceID="ei1" relatedToEventInstance="ei4" relType="AFTER" />
+<TLINK lid="l88" eventInstanceID="ei25" relatedToEventInstance="ei26" relType="AFTER" />
+<TLINK lid="l89" eventInstanceID="ei24" relatedToEventInstance="ei26" relType="BEFORE" />
+<TLINK lid="l90" eventInstanceID="ei40" relatedToEventInstance="ei42" relType="BEFORE" />
+<TLINK lid="l91" eventInstanceID="ei42" relatedToEventInstance="ei43" relType="AFTER" />
+<TLINK lid="l92" eventInstanceID="ei36" relatedToEventInstance="ei42" relType="SIMULTANEOUS" />
+<TLINK lid="l93" eventInstanceID="ei43" relatedToEventInstance="ei45" relType="SIMULTANEOUS" />
+<TLINK lid="l94" eventInstanceID="ei61" relatedToEventInstance="ei62" relType="AFTER" />
+<TLINK lid="l95" eventInstanceID="ei61" relatedToEventInstance="ei63" relType="AFTER" />
+<TLINK lid="l96" eventInstanceID="ei36" relatedToEventInstance="ei37" relType="AFTER" />
+<TLINK lid="l97" eventInstanceID="ei14" relatedToEventInstance="ei16" relType="AFTER" />
+<TLINK lid="l98" eventInstanceID="ei59" relatedToTime="t6" relType="IS_INCLUDED" />
+<TLINK lid="l99" eventInstanceID="ei29" relatedToEventInstance="ei30" relType="AFTER" />
+<TLINK lid="l100" eventInstanceID="ei74" relatedToEventInstance="ei76" relType="SIMULTANEOUS" />
+
+
+
+
+</TimeML>

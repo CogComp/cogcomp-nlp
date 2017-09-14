@@ -27,9 +27,7 @@ public class TextAnnotationMapDBHandlerTest {
 
     @Before
     public void setUp() throws Exception {
-
-        if (IOUtils.exists(dbFile))
-            IOUtils.rm(dbFile);
+        if (IOUtils.exists(dbFile)) IOUtils.rm(dbFile);
 
         mapDBHandler = new TextAnnotationMapDBHandler(dbFile);
         mapDBHandler.addTextAnnotation(testDataset, testTa);
@@ -43,6 +41,7 @@ public class TextAnnotationMapDBHandlerTest {
 
     @Test
     public void addRemoveTextAnnotation() throws Exception {
+        mapDBHandler = new TextAnnotationMapDBHandler("test.db");
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 2);
         // Check that the TextAnnotation is not contained in the DB
         mapDBHandler.removeTextAnnotation(ta);

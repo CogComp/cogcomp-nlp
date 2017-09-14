@@ -1,0 +1,26 @@
+<devset>
+	<pair id="1" entailment="ENTAILMENT" task="QA">
+		<t>The disappearance of York University chef Claudia Lawrence is now being treated as suspected murder, North Yorkshire Police said. However detectives said they had not found any proof that the 35-year-old, who went missing on 18 March, was dead. Her father Peter Lawrence made a direct appeal to his daughter to contact him five weeks after she disappeared. His plea came at a news conference held shortly after a 10,000 reward was offered to help find Miss Lawrence. Crimestoppers said the sum they were offering was &quot;significantly higher&quot; than usual because of public interest in the case.</t>
+		<h>Claudia Lawrence is 35 years old.</h>
+	</pair>
+	<pair id="2" entailment="UNKNOWN" task="QA">
+		<t>Any taxpayer earning over 150,000 will no longer enjoy higher-rate tax relief, which is considered a substantial incentive to save for wealthy workers. From April 2011, anyone who earns 200,000 a year, for example, and pays the typical amount of 6 per cent of their salary into their company pension scheme will lose out on 200 a month or 2,400 a year.  Alistair Darling, when he announced the move in the Budget, insisted that just 1.5 per cent of taxpayers - the equivalent of about 450,000 people - would be hit, but experts argued that it would significantly damage the already beleaguered pensions industry, and cause many savers to think twice about investing in a pension.</t>
+		<h>Alistair Darling is chancellor of UK.</h>
+	</pair>
+	<pair id="3" entailment="UNKNOWN" task="QA">
+		<t>Concerns have been raised that potential leads in the hunt for missing York woman Claudia Lawrence are not being followed up quickly enough. It comes after hotel staff in Malton contacted police after a stranger in the bar expressed satisfaction when asked if the chef was still missing. The incident happened more than three weeks ago and staff said detectives had not yet been in touch. Police said leads were being assessed in a methodical and structured way.</t>
+		<h>Claudia Lawrence resides in Malton.</h>
+	</pair>
+	<pair id="4" entailment="ENTAILMENT" task="QA">
+		<t>Washington - Egyptologists researching a mummy first discovered in 1898 believe it is the mummy of Queen Nefertiti, a legendary beauty and wife of the renegade pharaoh Akhenaten, the Discovery Channel said on Monday. Virtually all traces of Nefertiti and her &quot;heretic&quot; husband, who ruled from 1353-1336 BC, were erased after his unsuccessful attempt to overthrow the pantheon of the gods to worship the sun god Aton - among the earliest known practices of monotheism. Nefertiti also was stepmother of the boy-king Tutankhamen, whose tomb was discovered in 1922.</t>
+		<h>Nefertiti was a queen.</h>
+	</pair>
+	<pair id="5" entailment="ENTAILMENT" task="QA">
+		<t>RED VERSUS YELLOW In broad terms, Thailand's crisis is a battle between the &quot;yellow shirts&quot; -- royalists, the military and urban Thais, who back Prime Minister Abhisit Vejjajiva -- and the &quot;red shirts&quot; -- supporters of former premier Thaksin Shinawatra whose power base was mainly drawn from the country's millions of rural poor. Bureaucratic and military elites have run Thailand for decades, with the poor excluded except during elections when competing parties would try to buy their votes. When Thaksin swept to power in 2000, promising a raft of policies aimed at the poor, things changed.</t>
+		<h>The &quot;yellow shirts&quot; supports Vejjajiva.</h>
+	</pair>
+	<pair id="6" entailment="CONTRADICTION" task="QA">
+		<t>But an O2 insider said there had been problems with a companies trying to sell the pass codes. Some people were &quot;bound to have been turned away&quot; because of fraudulent tickets. Led Zeppelin, formed in 1968, were one of the most influential bands of the 1970s with songs such as Whole Lotta Love and Stairway To Heaven. They split in 1980 after the death of the drummer John Bonham. Kenneth Donnell, 25, who was not born in 1980, spent &#163;83,000 on two tickets in a BBC Children in Need auction.</t>
+		<h>The band Led Zeppelin was formed in 1980.</h>
+	</pair>
+</devset>

@@ -1,4 +1,4 @@
-# Cogcomp Corpusreaders
+# CogComp Corpusreaders
 
 ## Overview
 

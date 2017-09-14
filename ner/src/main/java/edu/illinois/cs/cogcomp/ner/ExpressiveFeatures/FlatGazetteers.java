@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
@@ -200,5 +203,106 @@ public class FlatGazetteers implements Gazetteers {
                 changeEnd = true;
             }
         } // i
+    }
+
+    public String annotateConstituent(Constituent c, boolean isBIO){
+        String expression = c.toString();
+        String ret = "";
+        View bioView = c.getTextAnnotation().getView(ViewNames.TOKENS);
+        for (int startIdx = -4; startIdx <= 0; startIdx ++){
+            for (int len = Math.abs(startIdx); len <= 4; len ++) {
+                String combinedExpression = "";
+                boolean integrity = true;
+                for (int pointer = startIdx; pointer <= startIdx + len; pointer++) {
+                    int curTokenIdx = c.getStartSpan() + pointer;
+                    if (curTokenIdx < 0 || curTokenIdx >= bioView.getEndSpan()) {
+                        integrity = false;
+                        break;
+                    }
+                    String pointerString = bioView.getConstituentsCoveringToken(curTokenIdx).get(0).toString();
+                    combinedExpression += pointerString + " ";
+                }
+                if (combinedExpression.endsWith(" ")) {
+                    combinedExpression = combinedExpression.substring(0, combinedExpression.length() - 1);
+                }
+                if (integrity) {
+                    for (int i = 0; i < dictionaries.size(); i++) {
+                        if (dictionaries.get(i).contains(combinedExpression)) {
+                            String fullName = dictNames.get(i);
+                            String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                            if (isBIO) {
+                                if (startIdx == 0) {
+                                    ret += "B-" + shortName + ",";
+                                } else {
+                                    ret += "L-" + shortName + ",";
+                                }
+                            }
+                            else {
+                                if (startIdx == 0 && len == 0){
+                                    ret += "U-" + shortName + ",";
+                                }
+                                if (startIdx + len == 0){
+                                    ret += "L-" + shortName + ",";
+                                }
+                                if (startIdx == 0 && len > 0){
+                                    ret += "B-" + shortName + ",";
+                                }
+                                if (startIdx < 0 && startIdx + len > 0){
+                                    ret += "I-" + shortName + ",";
+                                }
+                            }
+                        }
+                    }
+                    for (int i = 0; i < dictionariesIgnoreCase.size(); i++) {
+                        if (dictionariesIgnoreCase.get(i).contains(combinedExpression.toLowerCase())) {
+                            String fullName = dictNames.get(i);
+                            String shortName = fullName.split("/")[fullName.split("/").length - 1] + "(IC)";
+                            if (isBIO) {
+                                if (startIdx == 0) {
+                                    ret += "B-" + shortName + ",";
+                                } else {
+                                    ret += "L-" + shortName + ",";
+                                }
+                            }
+                            else {
+                                if (startIdx == 0 && len == 0){
+                                    ret += "U-" + shortName + ",";
+                                }
+                                if (startIdx + len == 0){
+                                    ret += "L-" + shortName + ",";
+                                }
+                                if (startIdx == 0 && len > 0){
+                                    ret += "B-" + shortName + ",";
+                                }
+                                if (startIdx < 0 && startIdx + len > 0){
+                                    ret += "I-" + shortName + ",";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
+    public String annotatePhrase(Constituent phrase){
+        String expression = phrase.toString();
+        String ret = "";
+        for (int i = 0; i < dictionaries.size(); i++) {
+            if (dictionaries.get(i).contains(expression)) {
+                String fullName = dictNames.get(i);
+                String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                ret += shortName + ",";
+            }
+        }
+        for (int i = 0; i < dictionariesIgnoreCase.size(); i++){
+            if (dictionaries.get(i).contains(expression.toLowerCase())){
+                String fullName = dictNames.get(i);
+                String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                ret += shortName + "(IC),";
+            }
+        }
+        return ret;
     }
 }

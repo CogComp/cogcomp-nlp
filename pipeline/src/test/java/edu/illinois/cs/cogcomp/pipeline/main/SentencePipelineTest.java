@@ -59,6 +59,7 @@ public class SentencePipelineTest {
         props.setProperty(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE);
         props.setProperty(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
         props.setProperty(PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE);
+        props.setProperty(PipelineConfigurator.USE_MENTION.key, Configurator.TRUE);
 
 
         props.setProperty(PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE);

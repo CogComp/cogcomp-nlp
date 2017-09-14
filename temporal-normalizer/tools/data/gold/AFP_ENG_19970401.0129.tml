@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>AFP_ENG_19970401.0129</DOCID>
+
+<DCT>TOKYO, <TIMEX3 tid="t0" type="TIME" value="1997-04-01" temporalFunction="false" functionInDocument="CREATION_TIME">April 1 , 1997</TIMEX3> (AFP)</DCT>
+
+<TITLE>Japan's top 15 corporate collapses</TITLE>
+
+
+<TEXT>
+
+A list of the top 15 collapses in Japanese corporate history after three finance companies <EVENT class="OCCURRENCE" eid="e1">applied</EVENT> <TIMEX3 type="DATE" value="1997-04-01" tid="t1">Tuesday</TIMEX3> to be <EVENT class="OCCURRENCE" eid="e2">wound</EVENT> up, with combined debt of 1,800 billion yen (14.6 billion dollars).
+
+Crown Leasing KK <EVENT class="OCCURRENCE" eid="e3">applied</EVENT> to be <EVENT class="OCCURRENCE" eid="e4">wound</EVENT> up at the Tokyo District Court with two other Nippon Credit Bank Ltd (NCB). affiliates, Nippon Total Finance KK and Nippon Credit Finance KK.
+
+Date    Company        Liabilities    Business
+
+(billion yen)
+
+1. <TIMEX3 type="DATE" value="1997-04" tid="t2">April 1997</TIMEX3> Crown Leasing      1,060.00    finance
+
+2. <TIMEX3 type="DATE" value="1996-10" tid="t3">Oct 1996</TIMEX3>  Nichiei Finance     1,000.00    credit guarantee
+
+3. <TIMEX3 type="DATE" value="1996-11" tid="t4">Nov 1996</TIMEX3>  Sueno Kosan        600.00    real estate
+
+4. <TIMEX3 type="DATE" value="1993-11" tid="t5">Nov 1993</TIMEX3>  Muramoto Kensetsu     590.00    construction
+
+5. <TIMEX3 type="DATE" value="1985-08" tid="t6">Aug 1985</TIMEX3>  Sanko Kisen        520.00    shipping
+
+6. <TIMEX3 type="DATE" value="1994-10" tid="t7">Oct 1994</TIMEX3>  Nippon Mortgage      518.49    finance
+
+7. <TIMEX3 type="DATE" value="1997-04" tid="t8">April 1997</TIMEX3> Nippon Total Finance    510.00    finance
+
+8. <TIMEX3 type="DATE" value="1995-03" tid="t9">March 1995</TIMEX3> Osaka Sogo Shinyo     437.00    finance
+
+9. <TIMEX3 type="DATE" value="1991" tid="t10">Aug 1991  Megumikawa         410.00    restaurant</TIMEX3>
+
+<TIMEX3 type="DATE" value="1997-04-01" tid="t11">10.</TIMEX3> <TIMEX3 type="DATE" value="1995-11" tid="t12">Nov 1995</TIMEX3>  Hyogin Factors       369.20    factoring
+
+11. <TIMEX3 type="DATE" value="1996-06" tid="t13">June 1996</TIMEX3> Shin Kyoto Shimpan     348.88    consumer credit
+
+12. <TIMEX3 type="DATE" value="1987-10" tid="t14">Oct 1987</TIMEX3>  Shinwa Kanko Kaihatsu   309.00    real estate
+
+13. <TIMEX3 type="DATE" value="1995-10" tid="t15">Oct 1995</TIMEX3>  Tokyo Mortgage Acceptance 300.00    finance
+
+14. <TIMEX3 type="DATE" value="1997-04" tid="t16">April 1997</TIMEX3> Nippon Credit Finance   300.00    finance
+
+15. <TIMEX3 type="DATE" value="1991" tid="t17">Jan 1991  Nanatomi          296.60</TIMEX3>    real estate
+
+Source: Teikoku Databank/Tokyo Shoko Research
+
+</TEXT>
+
+
+<MAKEINSTANCE eiid="ei1" eventID="e1" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei3" eventID="e3" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2" eventID="e2" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei4" eventID="e4" pos="VERB" tense="PAST" aspect="NONE" polarity="POS" />
+
+
+<TLINK lid="l1" eventInstanceID="ei1" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l2" eventInstanceID="ei1" relatedToTime="t1" relType="IS_INCLUDED" />
+<TLINK lid="l3" eventInstanceID="ei3" relatedToTime="t0" relType="BEFORE" />
+<TLINK lid="l4" eventInstanceID="ei1" relatedToEventInstance="ei3" relType="BEFORE" />
+<TLINK lid="l5" eventInstanceID="ei1" relatedToEventInstance="ei2" relType="AFTER" />
+<TLINK lid="l6" eventInstanceID="ei3" relatedToEventInstance="ei4" relType="AFTER" />
+
+
+
+
+</TimeML>

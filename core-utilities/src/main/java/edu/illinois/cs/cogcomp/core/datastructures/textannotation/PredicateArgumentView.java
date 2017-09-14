@@ -52,12 +52,16 @@ public class PredicateArgumentView extends View {
         this.predicates.add(predicate);
 
         for (int i = 0; i < args.size(); i++) {
-            this.addConstituent(args.get(i));
+            if(!this.containsConstituent(args.get(i))) this.addConstituent(args.get(i));
             this.addRelation(new Relation(relations[i], predicate, args.get(i), scores[i]));
         }
     }
 
-    private void findPredicates() {
+    /**
+     * force update of 'predicates' field.
+     */
+    public void findPredicates() {
+        predicates.clear();
         // The hypothesis is that all nodes with no incoming edges are predicates.
         for (Constituent c : this.getConstituents()) {
             if (c.getIncomingRelations().size() == 0)

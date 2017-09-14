@@ -95,6 +95,7 @@ public class EREReaderTest {
         XmlTextAnnotation outputXmlTa = runTest(EreCorpus.ENR1, corpusDir);
 
 
+
         corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E68_DEFT_Rich_ERE_English_Training_Annotation_R2_V2/data/";
 
         outputXmlTa = runTest(EreCorpus.ENR2, corpusDir);
@@ -152,13 +153,28 @@ public class EREReaderTest {
         assertEquals(QUOTE_VAL, quoteStr);
 
 
-        runRelationReader(corpusDir);
-        runEventReader(corpusDir);
+        String wantedId = "ENG_DF_000170_20150322_F00000082.xml";
+        runRelationReader(corpusDir, wantedId);
 
+        wantedId = "ENG_DF_000170_20150322_F00000082.xml";
+
+        runEventReader(corpusDir, wantedId);
+
+        corpusDir = "/shared/corpora/corporaWeb/deft/event/LDC2016E73_TAC_KBP_2016_Eval_Core_Set_Rich_ERE_Annotation_with_Augmented_Event_Argument_v2/data/eng/nw";
+        String newWantedId = "ENG_NW_001278_20131206_F00011WGK.xml";
+
+        XmlTextAnnotation xmlTa = runEventReader(corpusDir, newWantedId);
+
+        List<String> output = Collections.singletonList(SerializationHelper.serializeToJson(xmlTa.getTextAnnotation(), true));
+        try {
+            LineIO.write("ereOut.json", output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    private static void runRelationReader(String corpusDir) {
+    private static XmlTextAnnotation runRelationReader(String corpusDir, String wantedId) {
         EREMentionRelationReader emr = null;
         try {
             boolean throwExceptionOnXmlTagMismatch = true;
@@ -169,7 +185,6 @@ public class EREReaderTest {
         }
         assert (emr.hasNext());
 
-        String wantedId = "ENG_DF_000170_20150322_F00000082.xml";
         String posterId = "TheOldSchool";
         XmlTextAnnotation outputXmlTa = null;
         do {
@@ -213,8 +228,6 @@ public class EREReaderTest {
 
         System.out.println(TextAnnotationPrintHelper.printCoreferenceView(cView));
 
-
-
         if (doSerialize) {
             String jsonStr = SerializationHelper.serializeToJson(output);
             try {
@@ -237,10 +250,12 @@ public class EREReaderTest {
             assertNotNull(newTa);
         }
         System.out.println("Report: " + emr.generateReport());
+
+        return outputXmlTa;
     }
 
 
-    private static void runEventReader(String corpusDir) {
+    private static XmlTextAnnotation runEventReader(String corpusDir, String wantedId) {
         EREEventReader emr = null;
         try {
             boolean throwExceptionOnXmlTagMismatch = true;
@@ -251,8 +266,6 @@ public class EREReaderTest {
         }
         assert (emr.hasNext());
 
-        String wantedId = "ENG_DF_000170_20150322_F00000082.xml";
-        String posterId = "TheOldSchool";
         XmlTextAnnotation outputXmlTa = null;
 
         do {
@@ -274,11 +287,18 @@ public class EREReaderTest {
 
         assert (eventView.getConstituents().size() > 0);
 
+        List<Constituent> triggers = eventView.getPredicates();
+        assert (triggers.size() > 0);
+        List<Relation> args = eventView.getArguments(triggers.get(0));
+        assert (args.get(0).getAttribute(ORIGIN) != null);
+        assert (args.get(0).getAttribute(REALIS) != null);
+
         System.out.println(eventView.toString());
         String report = emr.generateReport();
 
         System.out.println("Event Reader report:\n\n" + report);
 
+        return outputXmlTa;
     }
 
 
@@ -298,6 +318,14 @@ public class EREReaderTest {
 
         XmlTextAnnotation outputXmlTa = nerReader.next();
         TextAnnotation output = outputXmlTa.getTextAnnotation();
+
+        // Test TextAnnotationUtilities.mapTransformedTextAnnotationToSource()
+
+        TextAnnotation mappedTa = TextAnnotationUtilities.mapTransformedTextAnnotationToSource(output, outputXmlTa.getXmlSt());
+
+        assertEquals(mappedTa.getView(ViewNames.TOKENS).getNumberOfConstituents(), output.getView(ViewNames.TOKENS).getNumberOfConstituents());
+        assertEquals(mappedTa.getView(ViewNames.SENTENCE).getNumberOfConstituents(), output.getView(ViewNames.SENTENCE).getNumberOfConstituents());
+
         View nerEre = null;
         if (addNominalMentions) {
             assert (output.hasView(ViewNames.MENTION_ERE));

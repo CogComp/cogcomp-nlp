@@ -1,4 +1,4 @@
-# Cogcomp NER Tagger
+# CogComp NER Tagger
 
 This is a state of the art NER tagger that tags plain text with named entities. 
 The newest version tags entities with either the "classic" 4-label type set 
@@ -6,13 +6,30 @@ The newest version tags entities with either the "classic" 4-label type set
 18-label type set (based on the OntoNotes corpus). It uses gazetteers extracted from Wikipedia, word class models 
 derived from unlabeled text, and expressive non-local features.
 
+As of model version 3.3, the CoNLL classifiers are trained using a data set augmented with email data. Overall, 
+this slightly improves performance on the CoNLL data and significantly improves performance on email data.
+This is the model that is used by default; you can specify other models as indicated in the table below by 
+setting the configuration parameter "modelName" to the value under "Model classifier" (OntoNotes has its
+own NerOntonotesConfigurator class). 
+
+
+| Corpus | F1 on held-out data | Model classifier | Model version | View Name |
+| :--- | :--- | :--- | :--- | :--- |
+| CoNLL (trained on CoNLL only)| 90.88 | CoNLL | 3.1 | ViewNames.NER_CONLL |
+| CoNLL (trained on CoNLL + enron) | 91.08 | CoNLL_enron | 3.3 | ViewNames.NER_CONLL |
+| OntoNotes | 84.88 | OntoNotes | 3.3 | ViewNames.NER_ONTONOTES |
+| Enron email | 77.68 | ConLL_enron | 3.3 | ViewNames.NER_CONLL |
+| MUC | 88.37 | CoNLL_enron | 3.3 | ViewNames.NER_CONLL |
+
+
+
 ## Quickstart
 
-This assumes you have downloaded the package from the [Cogcomp download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
+This assumes you have downloaded the package from the [CogComp download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
 
 ### Using the Menu Driven Command Line Application
 
-CogcompNER now includes a powerful menu driven command line application. This application provides users a flexible environment
+CogCompNER now includes a powerful menu driven command line application. This application provides users a flexible environment
 supporting applications ranging from simple evaluation to complex bulk tagging. The configuration file must be passed in on the command
 line, although there is the option to modify the confiruation during at runtime.
 
@@ -43,11 +60,13 @@ This script requires the configuration file name.
 ### Java COMMAND LINE
 
 To annotate plain text files, navigate to the root directory (`illinois-ner/`), and run the
-following commands (plain text files are included in `test/SampleInputs/`).
+following commands (a plain text file is included in `test/`).
+NOTE: These commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
 $ mkdir output
-$ java -Xmx3g -classpath "dist/*:lib/*:models/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
+$ java -Xmx6g -classpath "target/*:target/dependency/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
 ```
 
 This will annotate each file in the input directory with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you 
@@ -140,13 +159,15 @@ public class App
 ```
 
 Note that you will need to include all the included jars on the classpath, as before.
+The following commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
-$ javac -cp "dist/*:lib/*:models/*" App.java
-$ java -cp "dist/*:lib/*:models/*:." App
+$ javac -cp "target/*.jar:target/dependency/*" App.java
+$ java -cp "target/*.jar:target/dependency/*:." App
 ```
 
-If you have Maven installed,  you can easily incorporate the Cogcomp Named Entity Recognizer into
+If you have Maven installed,  you can easily incorporate the CogComp Named Entity Recognizer into
 your Maven project by adding the following dependencies to your pom.xml file:
 
 ```xml

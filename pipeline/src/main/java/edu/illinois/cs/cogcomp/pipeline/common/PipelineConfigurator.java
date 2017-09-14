@@ -21,11 +21,7 @@ import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
  * @author Mark Sammons
  * @author Christos Christodoulopoulos
  */
-public class PipelineConfigurator extends AnnotatorConfigurator {
-    public static final Property STFRD_TIME_PER_SENTENCE = new Property(
-            "stanfordMaxTimePerSentence", "100000");
-    public static final Property STFRD_MAX_SENTENCE_LENGTH = new Property(
-            "stanfordParseMaxSentenceLength", "80");
+public class PipelineConfigurator extends AnnotatorServiceConfigurator {
 
     // flags for individual components; default is TRUE for everything
     public static final Property USE_POS = new Property("usePos", FALSE);
@@ -42,13 +38,14 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
     public static final Property USE_SRL_PREP = new Property("usePrepSRL", FALSE);
     public static final Property USE_SRL_COMMA = new Property("useCommaSRL", FALSE);
     public static final Property USE_QUANTIFIER = new Property("useQuantifier", FALSE);
-    public static final Property THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK = new Property(
-            "throwExceptionOnFailedLengthCheck", TRUE);
+    public static final Property USE_VERB_SENSE = new Property("useVerbSense", FALSE);
     public static final Property USE_JSON = new Property("useJson", FALSE);
+    public static final Property USE_MENTION = new Property("useMention", FALSE);
     public static final Property USE_LAZY_INITIALIZATION = new Property(
             AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE);
     public static final Property USE_SRL_INTERNAL_PREPROCESSOR = new Property(
             SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, FALSE);
+    public static final Property USE_TIMEX3 = new Property("useTimex3", FALSE);
 
     /**
      * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable
@@ -70,18 +67,17 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator default
      * SRL_TYPE is Verb.
-     * 
+     *
      * @return a non-null ResourceManager with appropriate values set.
      */
     @Override
     public ResourceManager getDefaultConfig() {
         Property[] properties =
-                {STFRD_TIME_PER_SENTENCE, STFRD_MAX_SENTENCE_LENGTH, USE_POS, USE_LEMMA,
-                        USE_SHALLOW_PARSE, USE_DEP, USE_NER_CONLL, USE_NER_ONTONOTES,
-                        USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM,
-                        USE_SRL_PREP, USE_SRL_COMMA, USE_QUANTIFIER,
-                        THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK, USE_JSON, USE_LAZY_INITIALIZATION,
-                        USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH, USE_SENTENCE_PIPELINE};
+                {USE_POS, USE_LEMMA, USE_SHALLOW_PARSE, USE_DEP, USE_NER_CONLL, USE_NER_ONTONOTES,
+                        USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM, USE_SRL_PREP, USE_SRL_COMMA,
+                        USE_QUANTIFIER, USE_VERB_SENSE, USE_JSON,
+                        USE_LAZY_INITIALIZATION, USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH,
+                        USE_SENTENCE_PIPELINE, USE_TIMEX3, USE_MENTION};
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(
                 generateProperties(properties))));
     }

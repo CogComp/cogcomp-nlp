@@ -1,0 +1,3 @@
+python evaluate_entities.py gold_folder/file system_folder/file debug_level 
+
+## usage: ## to check the performance of a single file: ##          python evaluate_entities.py gold_file_path system_file_path ## to check the performace of all files in a gold folder: ##          python evaluate_entities.py gold_folder_path system_folder_path ## debug = 0, prints the final performance for event and timex extraction  ## debug = 0.5, prints all numbers that explains how the system got the final numbers ## debug = 1, prints all performances for all files ## debug = 1.5, prints the incorrect events/timex and features  ## debug = 2, prints all relevant information to trace which entities systems are missing 

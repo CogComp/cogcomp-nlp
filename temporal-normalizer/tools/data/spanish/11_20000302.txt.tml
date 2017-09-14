@@ -1,0 +1,258 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.cognitionis.com/corpus/es/tml.xsd">
+
+<DOCID>11_20000302.txt</DOCID>
+
+<DCT><TIMEX3 tid="t0" type="DATE" value="2000-03-02" temporalFunction="false" functionInDocument="CREATION_TIME">2000-03-02</TIMEX3></DCT>
+<TEXT>
+<EVENT eid="e1" class="STATE">Era</EVENT> de <EVENT eid="e2" class="I_STATE">esperar</EVENT> que doña Ana Botella <EVENT eid="e3" class="OCCURRENCE">pasaría</EVENT> por Girona durante la <EVENT eid="e4" class="OCCURRENCE">campaña</EVENT> electoral.
+<EVENT eid="e5" class="STATE">Es</EVENT> la única provincia de España en la que el PP nunca ha <EVENT eid="e6" class="OCCURRENCE">conseguido</EVENT> un diputado.
+La esposa del presidente del Gobierno <EVENT eid="e7" class="STATE">es</EVENT> persona de mucha fe y con su <EVENT eid="e8" class="STATE">presencia</EVENT> durante <TIMEX3 tid="t1" type="DURATION" value="PTXM">un ratito</TIMEX3> junto al Onyar seguro que <EVENT eid="e9" class="I_STATE">espera</EVENT> <EVENT eid="e10" class="OCCURRENCE">lograr</EVENT> lo que nunca <EVENT eid="e11" class="OCCURRENCE">consiguió</EVENT> su marido.
+Demarcación esquiva que <EVENT eid="e12" class="OCCURRENCE">vota</EVENT> a CiU, al PSC y hasta a ERC, <EVENT eid="e13" class="I_STATE">pudiéndolo</EVENT> <EVENT eid="e14" class="OCCURRENCE">hacer</EVENT> por el PP.
+<EVENT eid="e15" class="STATE">Es</EVENT> como la <EVENT eid="e16" class="I_STATE">manía</EVENT> de <EVENT eid="e17" class="OCCURRENCE">hablar</EVENT> en catalán, <EVENT eid="e18" class="STATE">existiendo</EVENT> la lengua castellana.
+Todos los catalanes <EVENT eid="e19" class="STATE">son</EVENT> <EVENT eid="e20" class="STATE">raros</EVENT>, pero los gerundenses les <EVENT eid="e21" class="STATE">sobrepasan</EVENT> y entre sus <EVENT eid="e22" class="OCCURRENCE">rarezas</EVENT> <EVENT eid="e23" class="STATE">figura</EVENT> la de <EVENT eid="e24" class="OCCURRENCE">votar</EVENT> sólo un poquito al PP.
+Si ahora se <EVENT eid="e25" class="I_ACTION">consiguen</EVENT> 100 <EVENT eid="e26" class="OCCURRENCE">votos</EVENT> más que en los últimos <EVENT eid="e27" class="OCCURRENCE">comicios</EVENT>, el <EVENT eid="e28" class="STATE">éxito</EVENT> <EVENT eid="e29" class="STATE">será</EVENT> <EVENT eid="e30" class="STATE">innegable</EVENT>.
+Quizá no <EVENT eid="e31" class="I_STATE">alcancen</EVENT> para <EVENT eid="e32" class="OCCURRENCE">sacar</EVENT> un diputado, pero por lo menos lo habrá <EVENT eid="e33" class="OCCURRENCE">intentado</EVENT> doña Ana, que ha <EVENT eid="e34" class="I_STATE">dejado</EVENT> a los componentes de la lista electoral más <EVENT eid="e35" class="STATE">animados</EVENT> de lo que <EVENT eid="e36" class="STATE">estaban</EVENT> antes de la <EVENT eid="e37" class="OCCURRENCE">visita</EVENT>.
+Para <EVENT eid="e38" class="STATE">ser</EVENT> <EVENT eid="e39" class="STATE">candidato</EVENT> del PP por Girona <EVENT eid="e40" class="I_STATE">hace</EVENT> <EVENT eid="e41" class="I_STATE">falta</EVENT> mucha <EVENT eid="e42" class="STATE">moral</EVENT>.
+Quizá el Alcoyano ya no <EVENT eid="e43" class="STATE">sea</EVENT> la máxima <EVENT eid="e44" class="I_STATE">expresión</EVENT> del <EVENT eid="e45" class="I_STATE">convencimiento</EVENT> en las propias <EVENT eid="e46" class="STATE">fuerzas</EVENT> para <EVENT eid="e47" class="OCCURRENCE">vencer</EVENT> cualquier obstáculo.
+De una persona decidida y segura de sí misma, a la que no <EVENT eid="e48" class="STATE">asustan</EVENT> las <EVENT eid="e49" class="OCCURRENCE">dificultades</EVENT> que <EVENT eid="e50" class="I_STATE">puedan</EVENT> <EVENT eid="e51" class="OCCURRENCE">cruzarse</EVENT> en su camino, quizá <EVENT eid="e52" class="I_STATE">haya</EVENT> que <EVENT eid="e53" class="REPORTING">decir</EVENT> que <EVENT eid="e54" class="I_STATE">tiene</EVENT> más <EVENT eid="e55" class="STATE">moral</EVENT> que un candidato a diputado por el PP en Girona.
+<EVENT eid="e56" class="STATE">Estaba</EVENT> <EVENT eid="e57" class="STATE">advertida</EVENT> y para ella no ha <EVENT eid="e58" class="STATE">sido</EVENT> una <EVENT eid="e59" class="OCCURRENCE">sorpresa</EVENT>.
+<EVENT eid="e60" class="I_STATE">Sabía</EVENT> que no <EVENT eid="e61" class="OCCURRENCE">firmaría</EVENT> autógrafos, que las gentes de Girona no se <EVENT eid="e62" class="OCCURRENCE">echarían</EVENT> en sus brazos al <EVENT eid="e63" class="PERCEPTION">verla</EVENT> <EVENT eid="e64" class="OCCURRENCE">pasar</EVENT> y que las madres no <EVENT eid="e65" class="I_ACTION">pondrían</EVENT> a sus hijos a su <EVENT eid="e66" class="STATE">alcance</EVENT> para que <EVENT eid="e67" class="I_ACTION">depositara</EVENT> un <EVENT eid="e68" class="OCCURRENCE">beso</EVENT> cariñoso en sus tiernas mejillas.
+Esto <EVENT eid="e69" class="I_STATE">suele</EVENT> <EVENT eid="e70" class="STATE">ser</EVENT> <EVENT eid="e71" class="STATE">habitual</EVENT> en muchas provincias de las Españas, tal como doña Ana <EVENT eid="e72" class="I_STATE">puede</EVENT> <EVENT eid="e73" class="STATE">comprobar</EVENT> con frecuencia.
+Pero tampoco se <EVENT eid="e74" class="I_STATE">esperaba</EVENT> tanta <EVENT eid="e75" class="STATE">frialdad</EVENT>, tanto <EVENT eid="e76" class="STATE">distanciamiento</EVENT> y tanta <EVENT eid="e77" class="STATE">indiferencia</EVENT>.
+- - <EVENT eid="e78" class="PERCEPTION">Mira</EVENT>, la dona del Asnar.
+- - Ah, buenu ....
+La política <EVENT eid="e79" class="I_ACTION">impone</EVENT> muchos <EVENT eid="e80" class="OCCURRENCE">sacrificios</EVENT> y para doña Ana seguramente lo ha <EVENT eid="e81" class="STATE">sido</EVENT> su breve <EVENT eid="e82" class="OCCURRENCE">estancia</EVENT> entre gente tan rara, que no <EVENT eid="e83" class="OCCURRENCE">vota</EVENT> al PP y que no <EVENT eid="e84" class="I_STATE">quiere</EVENT> que su marido <EVENT eid="e85" class="STATE">sea</EVENT> <EVENT eid="e86" class="STATE">presidente</EVENT> del Gobierno.
+</TEXT>
+
+
+<MAKEINSTANCE eiid="ei1"  eventID="e1" pos="VERB" tense="PAST" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei2"  eventID="e2" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei3"  eventID="e3" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei4"  eventID="e4" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei5"  eventID="e5" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei6"  eventID="e6" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei7"  eventID="e7" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei8"  eventID="e8" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei9"  eventID="e9" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei10"  eventID="e10" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei11"  eventID="e11" pos="VERB" tense="PAST" aspect="PERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei12"  eventID="e12" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei13"  eventID="e13" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei14"  eventID="e14" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei15"  eventID="e15" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei16"  eventID="e16" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei17"  eventID="e17" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei18"  eventID="e18" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei19"  eventID="e19" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei20"  eventID="e20" pos="ADJECTIVE" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei21"  eventID="e21" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei22"  eventID="e22" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei23"  eventID="e23" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei24"  eventID="e24" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei25"  eventID="e25" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei26"  eventID="e26" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei27"  eventID="e27" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei28"  eventID="e28" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei29"  eventID="e29" pos="VERB" tense="FUTURE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei30"  eventID="e30" pos="ADJECTIVE" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei31"  eventID="e31" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei32"  eventID="e32" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei33"  eventID="e33" pos="VERB" tense="FUTURE" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei34"  eventID="e34" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei35"  eventID="e35" pos="ADJECTIVE" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei36"  eventID="e36" pos="VERB" tense="PAST" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei37"  eventID="e37" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei38"  eventID="e38" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei39"  eventID="e39" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei40"  eventID="e40" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei41"  eventID="e41" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei42"  eventID="e42" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei43"  eventID="e43" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei44"  eventID="e44" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei45"  eventID="e45" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei46"  eventID="e46" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei47"  eventID="e47" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei48"  eventID="e48" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei49"  eventID="e49" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei50"  eventID="e50" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei51"  eventID="e51" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei52"  eventID="e52" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei53"  eventID="e53" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei54"  eventID="e54" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei55"  eventID="e55" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei56"  eventID="e56" pos="VERB" tense="PAST" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei57"  eventID="e57" pos="VERB" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei58"  eventID="e58" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei59"  eventID="e59" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei60"  eventID="e60" pos="VERB" tense="PAST" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei61"  eventID="e61" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei62"  eventID="e62" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei63"  eventID="e63" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei64"  eventID="e64" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei65"  eventID="e65" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei66"  eventID="e66" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei67"  eventID="e67" pos="VERB" tense="PAST" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei68"  eventID="e68" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei69"  eventID="e69" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei70"  eventID="e70" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei71"  eventID="e71" pos="ADJECTIVE" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei72"  eventID="e72" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei73"  eventID="e73" pos="VERB" tense="NONE" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei74"  eventID="e74" pos="VERB" tense="PAST" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei75"  eventID="e75" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei76"  eventID="e76" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei77"  eventID="e77" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei78"  eventID="e78" pos="VERB" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei79"  eventID="e79" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei80"  eventID="e80" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei81"  eventID="e81" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei82"  eventID="e82" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei83"  eventID="e83" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei84"  eventID="e84" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="NEG" />
+<MAKEINSTANCE eiid="ei85"  eventID="e85" pos="VERB" tense="PRESENT" aspect="IMPERFECTIVE" polarity="POS" />
+<MAKEINSTANCE eiid="ei86"  eventID="e86" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+<MAKEINSTANCE eiid="ei1000027"  eventID="e27" pos="NOUN" tense="NONE" aspect="NONE" polarity="POS" />
+
+<TLINK lid="l1" relType="SIMULTANEOUS" eventInstanceID="ei8" relatedToTime="t1" />
+<TLINK lid="l2" relType="BEFORE" eventInstanceID="ei1" relatedToTime="t0" />
+<TLINK lid="l3" relType="BEFORE" eventInstanceID="ei2" relatedToTime="t0" />
+<TLINK lid="l4" relType="BEFORE" eventInstanceID="ei3" relatedToTime="t0" />
+<TLINK lid="l5" relType="SIMULTANEOUS" eventInstanceID="ei4" relatedToTime="t0" />
+<TLINK lid="l6" relType="SIMULTANEOUS" eventInstanceID="ei5" relatedToTime="t0" />
+<TLINK lid="l7" relType="BEFORE" eventInstanceID="ei6" relatedToTime="t0" />
+<TLINK lid="l8" relType="SIMULTANEOUS" eventInstanceID="ei7" relatedToTime="t0" />
+<TLINK lid="l9" relType="BEFORE" eventInstanceID="ei8" relatedToTime="t0" />
+<TLINK lid="l10" relType="SIMULTANEOUS" eventInstanceID="ei9" relatedToTime="t0" />
+<TLINK lid="l11" relType="AFTER" eventInstanceID="ei10" relatedToTime="t0" />
+<TLINK lid="l12" relType="BEFORE" eventInstanceID="ei11" relatedToTime="t0" />
+<TLINK lid="l13" relType="SIMULTANEOUS" eventInstanceID="ei12" relatedToTime="t0" />
+<TLINK lid="l14" relType="SIMULTANEOUS" eventInstanceID="ei13" relatedToTime="t0" />
+<TLINK lid="l15" relType="SIMULTANEOUS" eventInstanceID="ei14" relatedToTime="t0" />
+<TLINK lid="l16" relType="SIMULTANEOUS" eventInstanceID="ei15" relatedToTime="t0" />
+<TLINK lid="l17" relType="SIMULTANEOUS" eventInstanceID="ei16" relatedToTime="t0" />
+<TLINK lid="l18" relType="SIMULTANEOUS" eventInstanceID="ei17" relatedToTime="t0" />
+<TLINK lid="l19" relType="SIMULTANEOUS" eventInstanceID="ei18" relatedToTime="t0" />
+<TLINK lid="l20" relType="SIMULTANEOUS" eventInstanceID="ei19" relatedToTime="t0" />
+<TLINK lid="l21" relType="SIMULTANEOUS" eventInstanceID="ei20" relatedToTime="t0" />
+<TLINK lid="l22" relType="SIMULTANEOUS" eventInstanceID="ei21" relatedToTime="t0" />
+<TLINK lid="l23" relType="SIMULTANEOUS" eventInstanceID="ei22" relatedToTime="t0" />
+<TLINK lid="l24" relType="SIMULTANEOUS" eventInstanceID="ei23" relatedToTime="t0" />
+<TLINK lid="l25" relType="SIMULTANEOUS" eventInstanceID="ei24" relatedToTime="t0" />
+<TLINK lid="l26" relType="AFTER" eventInstanceID="ei25" relatedToTime="t0" />
+<TLINK lid="l27" relType="AFTER" eventInstanceID="ei26" relatedToTime="t0" />
+<TLINK lid="l28" relType="BEFORE" eventInstanceID="ei27" relatedToTime="t0" />
+<TLINK lid="l29" relType="AFTER" eventInstanceID="ei27" relatedToTime="t0" />
+<TLINK lid="l30" relType="AFTER" eventInstanceID="ei28" relatedToTime="t0" />
+<TLINK lid="l31" relType="AFTER" eventInstanceID="ei29" relatedToTime="t0" />
+<TLINK lid="l32" relType="AFTER" eventInstanceID="ei30" relatedToTime="t0" />
+<TLINK lid="l33" relType="AFTER" eventInstanceID="ei31" relatedToTime="t0" />
+<TLINK lid="l34" relType="AFTER" eventInstanceID="ei32" relatedToTime="t0" />
+<TLINK lid="l35" relType="AFTER" eventInstanceID="ei33" relatedToTime="t0" />
+<TLINK lid="l36" relType="ENDED_BY" eventInstanceID="ei34" relatedToTime="t0" />
+<TLINK lid="l37" relType="SIMULTANEOUS" eventInstanceID="ei35" relatedToTime="t0" />
+<TLINK lid="l38" relType="BEFORE" eventInstanceID="ei36" relatedToTime="t0" />
+<TLINK lid="l39" relType="ENDED_BY" eventInstanceID="ei37" relatedToTime="t0" />
+<TLINK lid="l40" relType="SIMULTANEOUS" eventInstanceID="ei38" relatedToTime="t0" />
+<TLINK lid="l41" relType="SIMULTANEOUS" eventInstanceID="ei39" relatedToTime="t0" />
+<TLINK lid="l42" relType="SIMULTANEOUS" eventInstanceID="ei40" relatedToTime="t0" />
+<TLINK lid="l43" relType="SIMULTANEOUS" eventInstanceID="ei41" relatedToTime="t0" />
+<TLINK lid="l44" relType="SIMULTANEOUS" eventInstanceID="ei42" relatedToTime="t0" />
+<TLINK lid="l45" relType="SIMULTANEOUS" eventInstanceID="ei43" relatedToTime="t0" />
+<TLINK lid="l46" relType="SIMULTANEOUS" eventInstanceID="ei44" relatedToTime="t0" />
+<TLINK lid="l47" relType="SIMULTANEOUS" eventInstanceID="ei45" relatedToTime="t0" />
+<TLINK lid="l48" relType="SIMULTANEOUS" eventInstanceID="ei46" relatedToTime="t0" />
+<TLINK lid="l49" relType="SIMULTANEOUS" eventInstanceID="ei47" relatedToTime="t0" />
+<TLINK lid="l50" relType="SIMULTANEOUS" eventInstanceID="ei48" relatedToTime="t0" />
+<TLINK lid="l51" relType="BEGUN_BY" eventInstanceID="ei49" relatedToTime="t0" />
+<TLINK lid="l52" relType="BEGUN_BY" eventInstanceID="ei50" relatedToTime="t0" />
+<TLINK lid="l53" relType="BEGUN_BY" eventInstanceID="ei51" relatedToTime="t0" />
+<TLINK lid="l54" relType="SIMULTANEOUS" eventInstanceID="ei52" relatedToTime="t0" />
+<TLINK lid="l55" relType="SIMULTANEOUS" eventInstanceID="ei53" relatedToTime="t0" />
+<TLINK lid="l56" relType="SIMULTANEOUS" eventInstanceID="ei54" relatedToTime="t0" />
+<TLINK lid="l57" relType="SIMULTANEOUS" eventInstanceID="ei55" relatedToTime="t0" />
+<TLINK lid="l58" relType="BEFORE" eventInstanceID="ei56" relatedToTime="t0" />
+<TLINK lid="l59" relType="BEFORE" eventInstanceID="ei57" relatedToTime="t0" />
+<TLINK lid="l60" relType="ENDED_BY" eventInstanceID="ei58" relatedToTime="t0" />
+<TLINK lid="l61" relType="ENDED_BY" eventInstanceID="ei59" relatedToTime="t0" />
+<TLINK lid="l62" relType="BEFORE" eventInstanceID="ei60" relatedToTime="t0" />
+<TLINK lid="l63" relType="BEFORE" eventInstanceID="ei61" relatedToTime="t0" />
+<TLINK lid="l64" relType="BEFORE" eventInstanceID="ei62" relatedToTime="t0" />
+<TLINK lid="l65" relType="BEFORE" eventInstanceID="ei63" relatedToTime="t0" />
+<TLINK lid="l66" relType="BEFORE" eventInstanceID="ei64" relatedToTime="t0" />
+<TLINK lid="l67" relType="BEFORE" eventInstanceID="ei65" relatedToTime="t0" />
+<TLINK lid="l68" relType="BEFORE" eventInstanceID="ei66" relatedToTime="t0" />
+<TLINK lid="l69" relType="BEFORE" eventInstanceID="ei67" relatedToTime="t0" />
+<TLINK lid="l70" relType="BEFORE" eventInstanceID="ei68" relatedToTime="t0" />
+<TLINK lid="l71" relType="SIMULTANEOUS" eventInstanceID="ei69" relatedToTime="t0" />
+<TLINK lid="l72" relType="SIMULTANEOUS" eventInstanceID="ei70" relatedToTime="t0" />
+<TLINK lid="l73" relType="SIMULTANEOUS" eventInstanceID="ei71" relatedToTime="t0" />
+<TLINK lid="l74" relType="SIMULTANEOUS" eventInstanceID="ei72" relatedToTime="t0" />
+<TLINK lid="l75" relType="SIMULTANEOUS" eventInstanceID="ei73" relatedToTime="t0" />
+<TLINK lid="l76" relType="BEFORE" eventInstanceID="ei74" relatedToTime="t0" />
+<TLINK lid="l77" relType="ENDED_BY" eventInstanceID="ei75" relatedToTime="t0" />
+<TLINK lid="l78" relType="ENDED_BY" eventInstanceID="ei76" relatedToTime="t0" />
+<TLINK lid="l79" relType="ENDED_BY" eventInstanceID="ei77" relatedToTime="t0" />
+<TLINK lid="l80" relType="BEFORE" eventInstanceID="ei78" relatedToTime="t0" />
+<TLINK lid="l81" relType="SIMULTANEOUS" eventInstanceID="ei79" relatedToTime="t0" />
+<TLINK lid="l82" relType="SIMULTANEOUS" eventInstanceID="ei80" relatedToTime="t0" />
+<TLINK lid="l83" relType="ENDED_BY" eventInstanceID="ei81" relatedToTime="t0" />
+<TLINK lid="l84" relType="ENDED_BY" eventInstanceID="ei82" relatedToTime="t0" />
+<TLINK lid="l85" relType="SIMULTANEOUS" eventInstanceID="ei83" relatedToTime="t0" />
+<TLINK lid="l86" relType="SIMULTANEOUS" eventInstanceID="ei84" relatedToTime="t0" />
+<TLINK lid="l87" relType="AFTER" eventInstanceID="ei85" relatedToTime="t0" />
+<TLINK lid="l88" relType="AFTER" eventInstanceID="ei86" relatedToTime="t0" />
+<TLINK lid="l89" relType="SIMULTANEOUS" eventInstanceID="ei1" relatedToEventInstance="ei5" />
+<TLINK lid="l90" relType="SIMULTANEOUS" eventInstanceID="ei5" relatedToEventInstance="ei7" />
+<TLINK lid="l91" relType="SIMULTANEOUS" eventInstanceID="ei7" relatedToEventInstance="ei12" />
+<TLINK lid="l92" relType="SIMULTANEOUS" eventInstanceID="ei12" relatedToEventInstance="ei15" />
+<TLINK lid="l93" relType="SIMULTANEOUS" eventInstanceID="ei15" relatedToEventInstance="ei19" />
+<TLINK lid="l94" relType="SIMULTANEOUS" eventInstanceID="ei19" relatedToEventInstance="ei29" />
+<TLINK lid="l95" relType="AFTER" eventInstanceID="ei29" relatedToEventInstance="ei33" />
+<TLINK lid="l96" relType="BEGUN_BY" eventInstanceID="ei33" relatedToEventInstance="ei40" />
+<TLINK lid="l97" relType="SIMULTANEOUS" eventInstanceID="ei40" relatedToEventInstance="ei43" />
+<TLINK lid="l98" relType="SIMULTANEOUS" eventInstanceID="ei43" relatedToEventInstance="ei52" />
+<TLINK lid="l99" relType="BEGUN_BY" eventInstanceID="ei52" relatedToEventInstance="ei56" />
+<TLINK lid="l100" relType="SIMULTANEOUS" eventInstanceID="ei56" relatedToEventInstance="ei60" />
+<TLINK lid="l101" relType="SIMULTANEOUS" eventInstanceID="ei60" relatedToEventInstance="ei69" />
+<TLINK lid="l102" relType="SIMULTANEOUS" eventInstanceID="ei69" relatedToEventInstance="ei74" />
+<TLINK lid="l103" relType="BEFORE" eventInstanceID="ei74" relatedToEventInstance="ei78" />
+<TLINK lid="l104" relType="SIMULTANEOUS" eventInstanceID="ei78" relatedToEventInstance="ei79" />
+<TLINK lid="l105" relType="SIMULTANEOUS" eventInstanceID="ei1" relatedToEventInstance="ei2" />
+<TLINK lid="l106" relType="SIMULTANEOUS" eventInstanceID="ei2" relatedToEventInstance="ei3" />
+<TLINK lid="l107" relType="BEFORE" eventInstanceID="ei9" relatedToEventInstance="ei10" />
+<TLINK lid="l108" relType="SIMULTANEOUS" eventInstanceID="ei10" relatedToEventInstance="ei11" />
+<TLINK lid="l109" relType="SIMULTANEOUS" eventInstanceID="ei13" relatedToEventInstance="ei14" />
+<TLINK lid="l110" relType="SIMULTANEOUS" eventInstanceID="ei15" relatedToEventInstance="ei16" />
+<TLINK lid="l111" relType="SIMULTANEOUS" eventInstanceID="ei16" relatedToEventInstance="ei17" />
+<TLINK lid="l112" relType="SIMULTANEOUS" eventInstanceID="ei19" relatedToEventInstance="ei20" />
+<TLINK lid="l113" relType="SIMULTANEOUS" eventInstanceID="ei23" relatedToEventInstance="ei22" />
+<TLINK lid="l114" relType="SIMULTANEOUS" eventInstanceID="ei29" relatedToEventInstance="ei30" />
+<TLINK lid="l115" relType="ENDED_BY" eventInstanceID="ei31" relatedToEventInstance="ei32" />
+<TLINK lid="l116" relType="BEGUN_BY" eventInstanceID="ei34" relatedToEventInstance="ei35" />
+<TLINK lid="l117" relType="SIMULTANEOUS" eventInstanceID="ei38" relatedToEventInstance="ei39" />
+<TLINK lid="l118" relType="SIMULTANEOUS" eventInstanceID="ei40" relatedToEventInstance="ei41" />
+<TLINK lid="l119" relType="SIMULTANEOUS" eventInstanceID="ei43" relatedToEventInstance="ei44" />
+<TLINK lid="l120" relType="SIMULTANEOUS" eventInstanceID="ei44" relatedToEventInstance="ei45" />
+<TLINK lid="l121" relType="SIMULTANEOUS" eventInstanceID="ei45" relatedToEventInstance="ei46" />
+<TLINK lid="l122" relType="ENDED_BY" eventInstanceID="ei46" relatedToEventInstance="ei47" />
+<TLINK lid="l123" relType="SIMULTANEOUS" eventInstanceID="ei49" relatedToEventInstance="ei50" />
+<TLINK lid="l124" relType="SIMULTANEOUS" eventInstanceID="ei50" relatedToEventInstance="ei51" />
+<TLINK lid="l125" relType="ENDED_BY" eventInstanceID="ei52" relatedToEventInstance="ei53" />
+<TLINK lid="l126" relType="SIMULTANEOUS" eventInstanceID="ei53" relatedToEventInstance="ei54" />
+<TLINK lid="l127" relType="SIMULTANEOUS" eventInstanceID="ei54" relatedToEventInstance="ei55" />
+<TLINK lid="l128" relType="SIMULTANEOUS" eventInstanceID="ei56" relatedToEventInstance="ei57" />
+<TLINK lid="l129" relType="SIMULTANEOUS" eventInstanceID="ei58" relatedToEventInstance="ei59" />
+<TLINK lid="l130" relType="BEFORE" eventInstanceID="ei60" relatedToEventInstance="ei62" />
+<TLINK lid="l131" relType="SIMULTANEOUS" eventInstanceID="ei63" relatedToEventInstance="ei64" />
+<TLINK lid="l132" relType="ENDED_BY" eventInstanceID="ei65" relatedToEventInstance="ei67" />
+<TLINK lid="l133" relType="SIMULTANEOUS" eventInstanceID="ei67" relatedToEventInstance="ei68" />
+<TLINK lid="l134" relType="SIMULTANEOUS" eventInstanceID="ei69" relatedToEventInstance="ei70" />
+<TLINK lid="l135" relType="SIMULTANEOUS" eventInstanceID="ei70" relatedToEventInstance="ei71" />
+<TLINK lid="l136" relType="SIMULTANEOUS" eventInstanceID="ei72" relatedToEventInstance="ei73" />
+<TLINK lid="l137" relType="ENDED_BY" eventInstanceID="ei74" relatedToEventInstance="ei76" />
+<TLINK lid="l138" relType="SIMULTANEOUS" eventInstanceID="ei79" relatedToEventInstance="ei80" />
+<TLINK lid="l139" relType="BEFORE" eventInstanceID="ei84" relatedToEventInstance="ei85" />
+<TLINK lid="l140" relType="SIMULTANEOUS" eventInstanceID="ei85" relatedToEventInstance="ei86" />
+
+</TimeML>

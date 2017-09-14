@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<TimeML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://timeml.org/timeMLdocs/TimeML_1.2.1.xsd">
+
+<DOCID>AFP_ENG_19970401.0092</DOCID>
+
+<DCT>MOSCOW, <TIMEX3 tid="t0" type="TIME" value="1997-04-01" temporalFunction="false" functionInDocument="CREATION_TIME">April 1 , 1997</TIMEX3> (AFP)</DCT>
+
+<TITLE>Former Russian army chief under corruption probe</TITLE>
+
+<TEXT>
+
+Russian prosecutors have <EVENT eid="ONT::V74370" polarity="POS" modality="NONE" pos="VERB" tense="PRESENT" aspect="PERFECTIVE" class="OCCURRENCE">opened</EVENT> a corruption <EVENT eid="ONT::V74482" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">probe</EVENT> against a former commander-in-chief of the army, the Interfax agency <EVENT eid="ONT::V74736" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">reported</EVENT> <TIMEX3 tid="t1" type="DATE" value="1998-08-04">Tuesday</TIMEX3>.
+
+They <EVENT eid="ONT::V77697" polarity="POS" modality="NONE" pos="VERB" tense="PRESENT" aspect="NONE" class="I_STATE">want</EVENT> to <EVENT eid="ONT::V77784" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="I_STATE">know</EVENT> how General Vladimir Semionov <EVENT eid="ONT::V77865" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">built</EVENT> himself a lavish villa on the outskirts of Moscow, the agency <EVENT eid="ONT::V78077" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT>, <EVENT eid="ONT::V78102" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">quoting</EVENT> the prosecutors.
+
+The general was <EVENT eid="ONT::V80906" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">sacked</EVENT> in <TIMEX3 tid="t2" type="DATE" value="1998-12">December</TIMEX3> at the <EVENT eid="ONT::V81051" polarity="POS" modality="NONE" pos="NOUN" tense="NONE" aspect="NONE" class="OCCURRENCE">request</EVENT> of Defence Minister Igor Rodionov for "activities incompatible with his office and <EVENT eid="ONT::V81217" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">bringing</EVENT> the honour and dignity of the military into disrepute".
+
+Semionov is suspected of "abuse of power." Semionov, who had been army chief since <TIMEX3 tid="t3" type="DATE" value="1991">1991</TIMEX3>, <EVENT eid="ONT::V85514" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="OCCURRENCE">refuted</EVENT> the allegations against him.
+
+Rodionov <EVENT eid="ONT::V88244" polarity="POS" modality="NONE" pos="VERB" tense="PAST" aspect="NONE" class="REPORTING">said</EVENT> <TIMEX3 tid="ONT::V88306" type="DATE" value="1998-07">last month</TIMEX3> that a number of other Russian armed forces generals were likely to be <EVENT eid="ONT::V88562" polarity="POS" modality="NONE" pos="VERB" tense="INFINITIVE" aspect="NONE" class="OCCURRENCE">dismissed</EVENT> soon for corruption, without <EVENT eid="ONT::V88639" polarity="POS" modality="NONE" pos="VERB" tense="PRESPART" aspect="NONE" class="OCCURRENCE">naming</EVENT> any of them.
+
+</TEXT>
+
+<MAKEINSTANCE eiid="iONT::V74736" eventID="ONT::V74736"/>
+<MAKEINSTANCE eiid="iONT::V77697" eventID="ONT::V77697"/>
+<MAKEINSTANCE eiid="iONT::V77865" eventID="ONT::V77865"/>
+<MAKEINSTANCE eiid="iONT::V80906" eventID="ONT::V80906"/>
+<MAKEINSTANCE eiid="iONT::V78102" eventID="ONT::V78102"/>
+<MAKEINSTANCE eiid="iONT::V74482" eventID="ONT::V74482"/>
+<MAKEINSTANCE eiid="iONT::V88639" eventID="ONT::V88639"/>
+<MAKEINSTANCE eiid="iONT::V88562" eventID="ONT::V88562"/>
+<MAKEINSTANCE eiid="iONT::V77784" eventID="ONT::V77784"/>
+<MAKEINSTANCE eiid="iONT::V88244" eventID="ONT::V88244"/>
+<MAKEINSTANCE eiid="iONT::V85514" eventID="ONT::V85514"/>
+<MAKEINSTANCE eiid="iONT::V78077" eventID="ONT::V78077"/>
+<MAKEINSTANCE eiid="iONT::V81217" eventID="ONT::V81217"/>
+<MAKEINSTANCE eiid="iONT::V74370" eventID="ONT::V74370"/>
+<MAKEINSTANCE eiid="iONT::V81051" eventID="ONT::V81051"/>
+
+
+<TLINK lid="l1" relType="BEFORE" timeID="t1" relatedToTime="t2" />
+<TLINK lid="l2" relType="AFTER" timeID="t2" relatedToTime="t3" />
+<TLINK lid="l3" relType="AFTER" timeID="t2" relatedToTime="ONT::V88306" />
+<TLINK lid="l4" relType="BEFORE" timeID="t0" relatedToTime="t2" />
+<TLINK lid="l5" relType="AFTER" timeID="t1" relatedToTime="t3" />
+<TLINK lid="l6" relType="AFTER" timeID="t0" relatedToTime="t3" />
+<TLINK lid="l7" relType="BEFORE" timeID="t3" relatedToTime="ONT::V88306" />
+<TLINK lid="l8" relType="AFTER" timeID="t1" relatedToTime="ONT::V88306" />
+<TLINK lid="l9" relType="AFTER" timeID="t0" relatedToTime="ONT::V88306" />
+<TLINK lid="l10" relType="AFTER" timeID="t0" relatedToTime="t1" />
+<TLINK lid="l11" relType="BEFORE" eventInstanceID="iONT::V80906" relatedToTime="t0" />
+<TLINK lid="l12" relType="IS_INCLUDED" eventInstanceID="iONT::V77697" relatedToTime="t0" />
+<TLINK lid="l13" relType="BEFORE" eventInstanceID="iONT::V77865" relatedToTime="t0" />
+<TLINK lid="l14" relType="BEFORE" eventInstanceID="iONT::V74736" relatedToTime="t0" />
+<TLINK lid="l15" relType="IS_INCLUDED" eventInstanceID="iONT::V78102" relatedToTime="t0" />
+<TLINK lid="l16" relType="BEFORE" eventInstanceID="iONT::V74482" relatedToTime="t0" />
+<TLINK lid="l17" relType="BEFORE" eventInstanceID="iONT::V88639" relatedToTime="t0" />
+<TLINK lid="l18" relType="AFTER" eventInstanceID="iONT::V88562" relatedToTime="t0" />
+<TLINK lid="l19" relType="INCLUDES" eventInstanceID="iONT::V77784" relatedToTime="t0" />
+<TLINK lid="l20" relType="BEFORE" eventInstanceID="iONT::V88244" relatedToTime="t0" />
+<TLINK lid="l21" relType="BEFORE" eventInstanceID="iONT::V78077" relatedToTime="t0" />
+<TLINK lid="l22" relType="BEFORE" eventInstanceID="iONT::V81217" relatedToTime="t0" />
+<TLINK lid="l23" relType="BEFORE" eventInstanceID="iONT::V74370" relatedToTime="t0" />
+<TLINK lid="l24" relType="BEFORE" eventInstanceID="iONT::V81051" relatedToTime="t0" />
+<TLINK lid="l25" relType="BEFORE" eventInstanceID="iONT::V85514" relatedToTime="t0" />
+<TLINK lid="l26" relType="IS_INCLUDED" eventInstanceID="iONT::V85514" relatedToEventInstance="iONT::V88639" />
+<TLINK lid="l27" relType="IS_INCLUDED" eventInstanceID="iONT::V88639" relatedToTime="ONT::V88306" />
+<TLINK lid="l28" relType="IS_INCLUDED" eventInstanceID="iONT::V88244" relatedToTime="ONT::V88306" />
+<TLINK lid="l29" relType="IS_INCLUDED" eventInstanceID="iONT::V81217" relatedToTime="t2" />
+<TLINK lid="l30" relType="IS_INCLUDED" eventInstanceID="iONT::V81051" relatedToTime="t2" />
+<TLINK lid="l31" relType="IS_INCLUDED" eventInstanceID="iONT::V74736" relatedToTime="t1" />
+<TLINK lid="l32" relType="IS_INCLUDED" eventInstanceID="iONT::V74482" relatedToTime="t1" />
+<TLINK lid="l33" relType="IS_INCLUDED" eventInstanceID="iONT::V74370" relatedToTime="t1" />
+<TLINK lid="l34" relType="IS_INCLUDED" eventInstanceID="iONT::V85514" relatedToTime="t3" />
+
+</TimeML>
+

@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deft_ere kit_id="569959cf0000000000000039" doc_id="ENG_DF_001237_20150411_F0000008E_0-6461" source_type="multi_post">
+  <entities>
+    <entity id="ent-m.027x630" type="ORG" specificity="specific">
+      <entity_mention id="m-569959cf_39_126" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="119" length="4">
+        <mention_text>ISIS</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_132" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="800" length="4">
+        <mention_text>isis</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_138" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="937" length="4">
+        <mention_text>Isis</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_144" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1579" length="4">
+        <mention_text>ISIS</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_150" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1676" length="4">
+        <mention_text>ISIS</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_156" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="2695" length="4">
+        <mention_text>ISIS</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_162" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="4933" length="4">
+        <mention_text>ISIS</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_168" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5350" length="4">
+        <mention_text>ISIS</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_174" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5729" length="4">
+        <mention_text>ISIS</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_771" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2205" length="65">
+        <mention_text>a notorious organisation which is often associated with terrorism</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2217" length="12">organisation</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1089" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="5490" length="14">
+        <mention_text>those monsters</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="5496" length="8">monsters</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1095" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="5579" length="5">
+        <mention_text>their</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.05htt" type="ORG" specificity="specific">
+      <entity_mention id="m-569959cf_39_180" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3182" length="3">
+        <mention_text>NSA</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.03nr1np" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_186" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="94" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_192" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="540" length="9">
+        <mention_text>anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_198" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="781" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_204" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="915" length="9">
+        <mention_text>anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_210" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1285" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_216" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1427" length="4">
+        <mention_text>Anon</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_222" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1525" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_228" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1683" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_234" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1743" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_240" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1992" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_246" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="2300" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_252" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="2687" length="4">
+        <mention_text>Anon</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_258" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="2851" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_264" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3547" length="9">
+        <mention_text>anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_270" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="4546" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_276" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="4725" length="9">
+        <mention_text>Anonymous</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_282" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5184" length="4">
+        <mention_text>Anon</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_591" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="567" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_597" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="693" length="11">
+        <mention_text>little guys</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="700" length="4">guys</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_717" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1736" length="2">
+        <mention_text>We</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_723" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1754" length="2">
+        <mention_text>We</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_729" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1769" length="2">
+        <mention_text>We</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_735" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1788" length="2">
+        <mention_text>We</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_741" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1813" length="2">
+        <mention_text>us</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_747" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2034" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_753" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2040" length="65">
+        <mention_text>a notorious organisation which is often associated with terrorism</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2052" length="12">organisation</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_759" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2151" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_819" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2582" length="4">
+        <mention_text>them</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_831" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2875" length="4">
+        <mention_text>They</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1511" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2433" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1517" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2443" length="65">
+        <mention_text>a notorious organisation which is often associated with terrorism</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2455" length="12">organisation</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.07jqh" type="ORG" specificity="specific">
+      <entity_mention id="m-569959cf_39_288" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3360" length="7">
+        <mention_text>Taliban</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.09c7w0" type="GPE" specificity="specific">
+      <entity_mention id="m-569959cf_39_300" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="6028" length="2">
+        <mention_text>US</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.02_1m" type="ORG" specificity="specific">
+      <entity_mention id="m-569959cf_39_306" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3834" length="3">
+        <mention_text>FBI</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.0d6qjf" type="ORG" specificity="specific">
+      <entity_mention id="m-569959cf_39_312" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3940" length="3">
+        <mention_text>CIA</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_318" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5196" length="3">
+        <mention_text>CIA</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_987" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3989" length="5">
+        <mention_text>their</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.02l840" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_324" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5842" length="10">
+        <mention_text>Kanye West</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1116" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="5866" length="2">
+        <mention_text>He</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.0289n8t" type="ORG" specificity="specific">
+      <entity_mention id="m-569959cf_39_330" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="177" length="7">
+        <mention_text>Twitter</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_336" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5987" length="7">
+        <mention_text>Twitter</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_342" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="6071" length="7">
+        <mention_text>Twitter</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_348" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1024" length="7">
+        <mention_text>Twitter</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_642" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1140" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1128" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="6048" length="4">
+        <mention_text>them</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-m.06mxs" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_654" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="1261" length="44">
+        <mention_text>people that still think Anonymous is a group</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="1261" length="6">people</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL01474" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_360" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="239" length="13">
+        <mention_text>Supermansadak</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL01475" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_366" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="736" length="11">
+        <mention_text>Jasonh95141</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_372" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="847" length="11">
+        <mention_text>Jasonh95141</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_603" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="892" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02642" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_378" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="357" length="12">
+        <mention_text>ambrosemerly</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_579" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="527" length="1">
+        <mention_text>i</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_585" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="555" length="1">
+        <mention_text>i</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1849" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="531" length="18">
+        <mention_text>a fan of anonymous</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="533" length="3">fan</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02643" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_384" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="634" length="7">
+        <mention_text>odin912</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02644" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_390" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="984" length="6">
+        <mention_text>kkykkx</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_609" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1042" length="2">
+        <mention_text>my</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_615" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1058" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_621" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1076" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_627" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1108" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_648" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1155" length="2">
+        <mention_text>me</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02645" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_396" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1200" length="20">
+        <mention_text>StockholmSyndromePet</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02646" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_402" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1485" length="6">
+        <mention_text>Suriak</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02647" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_408" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1848" length="14">
+        <mention_text>ShareHappyness</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02648" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_414" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="1947" length="11">
+        <mention_text>MarxIzalias</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_813" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2511" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_825" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2670" length="3">
+        <mention_text>you</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02649" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_420" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="2619" length="13">
+        <mention_text>-ParticleMan-</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02650" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_426" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="2810" length="7">
+        <mention_text>piratse</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02651" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_432" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3451" length="12">
+        <mention_text>toomanynoobs</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02652" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_438" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3609" length="11">
+        <mention_text>americanbot</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02653" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_444" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3757" length="12">
+        <mention_text>buddylee_moa</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02654" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_450" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="3878" length="15">
+        <mention_text>Bipolarruledout</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_975" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3927" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02655" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_456" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="4035" length="6">
+        <mention_text>fugher</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_993" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4075" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02656" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_462" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="4483" length="15">
+        <mention_text>GiraffeOnWheels</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02657" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_468" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="4627" length="9">
+        <mention_text>mothzilla</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1026" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4713" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1873" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4841" length="2">
+        <mention_text>me</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02658" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_474" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="4876" length="9">
+        <mention_text>[deleted]</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1044" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4923" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02659" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_480" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="4970" length="10">
+        <mention_text>bagaratoni</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02660" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_486" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5051" length="12">
+        <mention_text>CriticalHalt</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02661" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_492" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5140" length="10">
+        <mention_text>quickie_ss</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02662" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_498" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5232" length="11">
+        <mention_text>Shiroi_Kage</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1071" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="5360" length="1">
+        <mention_text>I</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02663" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_504" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5646" length="9">
+        <mention_text>Brynhilde</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02664" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_510" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5792" length="12">
+        <mention_text>threepronged</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02665" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_516" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="5948" length="5">
+        <mention_text>arrze</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-NIL02666" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_522" noun_type="NAM" source="ENG_DF_001237_20150411_F0000008E" offset="6318" length="20">
+        <mention_text>bartholomewsimpsonjr</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_534" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_528" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="295" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_546" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="422" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_552" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="440" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_564" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="497" length="4">
+        <mention_text>them</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_765" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2184" length="86">
+        <mention_text>members that support a notorious organisation which is often associated with terrorism</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2184" length="7">members</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1011" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4412" length="4">
+        <mention_text>them</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1032" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4747" length="4">
+        <mention_text>them</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1038" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4765" length="5">
+        <mention_text>their</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1050" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="5298" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1077" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="5368" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1083" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="5406" length="5">
+        <mention_text>their</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1101" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="5860" length="4">
+        <mention_text>them</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1167" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="119" length="14">
+        <mention_text>ISIS supporter</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="124" length="9">supporter</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_543" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_537" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="403" length="2">
+        <mention_text>we</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_558" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="470" length="2">
+        <mention_text>we</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_576" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_570" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="514" length="3">
+        <mention_text>all</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_639" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_633" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="1114" length="25">
+        <mention_text>a blood thirsty terrorist</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="1130" length="9">terrorist</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_666" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_660" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="1298" length="7">
+        <mention_text>a group</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="1300" length="5">group</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_675" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_669" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="1319" length="25">
+        <mention_text>literally fucking anybody</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="1337" length="7">anybody</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_696" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1400" length="7">
+        <mention_text>Anybody</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_702" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="1442" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_684" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_678" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="1351" length="11">
+        <mention_text>an activist</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="1354" length="8">activist</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_693" type="ORG" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_687" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="1366" length="32">
+        <mention_text>an organised intellegence agency</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="1392" length="6">agency</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_714" type="ORG" specificity="specific">
+      <entity_mention id="m-569959cf_39_708" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="1636" length="10">
+        <mention_text>government</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="1636" length="10">government</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_837" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2886" length="14">
+        <mention_text>the government</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2890" length="10">government</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_852" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2949" length="4">
+        <mention_text>They</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_858" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="2980" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_891" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3087" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_897" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3140" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_939" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="3320" length="8">
+        <mention_text>the govt</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="3324" length="4">govt</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1122" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="6024" length="10">
+        <mention_text>the US Gov</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="6031" length="3">Gov</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_783" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_777" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2314" length="7">
+        <mention_text>members</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2314" length="7">members</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_792" type="ORG" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_786" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2340" length="21">
+        <mention_text>intelligence agencies</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2353" length="8">agencies</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_801" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_795" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2391" length="7">
+        <mention_text>members</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2391" length="7">members</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_849" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_843" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="2934" length="4">
+        <mention_text>user</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="2934" length="4">user</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_864" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3003" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_870" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3031" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_876" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3056" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_927" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="3245" length="12">
+        <mention_text>your targets</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="3250" length="7">targets</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_933" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3292" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_888" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_882" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="3052" length="23">
+        <mention_text>who they are contacting</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="3052" length="3">who</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_909" type="ORG" specificity="specific">
+      <entity_mention id="m-569959cf_39_903" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="3151" length="12">
+        <mention_text>The military</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="3155" length="8">military</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_918" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_912" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3208" length="3">
+        <mention_text>you</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_921" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3245" length="4">
+        <mention_text>your</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_999" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4170" length="3">
+        <mention_text>you</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1005" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="4326" length="3">
+        <mention_text>you</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_960" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_954" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="3657" length="6">
+        <mention_text>people</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="3657" length="6">people</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_963" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3675" length="5">
+        <mention_text>their</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_969" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3709" length="4">
+        <mention_text>they</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1023" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_1017" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="4431" length="12">
+        <mention_text>other people</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="4437" length="6">people</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1068" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_1062" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="5332" length="22">
+        <mention_text>actual members of ISIS</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="5339" length="7">members</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1113" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_1107" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="5853" length="11">
+        <mention_text>one of them</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="5853" length="3">one</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1140" type="ORG" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_1134" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="6114" length="11">
+        <mention_text>governments</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="6114" length="11">governments</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1149" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_1143" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="6163" length="17">
+        <mention_text>known individuals</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="6169" length="11">individuals</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1152" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="6212" length="27">
+        <mention_text>a known and understood evil</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="6235" length="4">evil</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1164" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_1158" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="6254" length="31">
+        <mention_text>an unknown or misunderstood one</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="6282" length="3">one</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1861" type="PER" specificity="specific">
+      <entity_mention id="m-569959cf_39_945" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="3566" length="8">
+        <mention_text>a stooge</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="3568" length="6">stooge</nom_head>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1855" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3535" length="4">
+        <mention_text>this</mention_text>
+      </entity_mention>
+      <entity_mention id="m-569959cf_39_1864" noun_type="PRO" source="ENG_DF_001237_20150411_F0000008E" offset="3557" length="3">
+        <mention_text>its</mention_text>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1870" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_981" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="3978" length="24">
+        <mention_text>so many on their payroll</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="3981" length="4">many</nom_head>
+      </entity_mention>
+    </entity>
+    <entity id="ent-569959cf_39_1879" type="PER" specificity="nonspecific">
+      <entity_mention id="m-569959cf_39_1056" noun_type="NOM" source="ENG_DF_001237_20150411_F0000008E" offset="5311" length="12">
+        <mention_text>sympathizers</mention_text>
+        <nom_head source="ENG_DF_001237_20150411_F0000008E" offset="5311" length="12">sympathizers</nom_head>
+      </entity_mention>
+    </entity>
+  </entities>
+  <fillers/>
+  <relations>
+    <relation id="r-1503" type="orgaffiliation" subtype="employmentmembership">
+      <relation_mention id="relm-569959cf_39_1179" realis="true">
+        <rel_arg1 entity_id="ent-569959cf_39_1870" entity_mention_id="m-569959cf_39_981" role="employeemember">so many on their payroll</rel_arg1>
+        <rel_arg2 entity_id="ent-m.0d6qjf" entity_mention_id="m-569959cf_39_987" role="org">their</rel_arg2>
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="3995" length="7">payroll</trigger>
+      </relation_mention>
+    </relation>
+    <relation id="r-1504" type="orgaffiliation" subtype="employmentmembership">
+      <relation_mention id="relm-569959cf_39_1189" realis="true">
+        <rel_arg1 entity_id="ent-569959cf_39_1068" entity_mention_id="m-569959cf_39_1062" role="employeemember">actual members of ISIS</rel_arg1>
+        <rel_arg2 entity_id="ent-m.027x630" entity_mention_id="m-569959cf_39_168" role="org">ISIS</rel_arg2>
+      </relation_mention>
+    </relation>
+    <relation id="r-1505" type="partwhole" subtype="subsidiary">
+      <relation_mention id="relm-569959cf_39_1199" realis="true">
+        <rel_arg1 entity_id="ent-569959cf_39_714" entity_mention_id="m-569959cf_39_1122" role="suborg">the US Gov</rel_arg1>
+        <rel_arg2 entity_id="ent-m.09c7w0" entity_mention_id="m-569959cf_39_300" role="parent">US</rel_arg2>
+      </relation_mention>
+    </relation>
+    <relation id="r-1506" type="generalaffiliation" subtype="more">
+      <relation_mention id="relm-569959cf_39_1882" realis="false">
+        <rel_arg1 entity_id="ent-569959cf_39_675" entity_mention_id="m-569959cf_39_696" role="per">Anybody</rel_arg1>
+        <rel_arg2 entity_id="ent-m.03nr1np" entity_mention_id="m-569959cf_39_216" role="entity">Anon</rel_arg2>
+      </relation_mention>
+    </relation>
+  </relations>
+  <hoppers>
+    <hopper id="h-569959cf_39_16">
+      <event_mention id="em-569959cf_39_1209" type="contact" subtype="broadcast" realis="actual" audience="oneway" formality="canttell" medium="notinperson" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="104" length="8">released</trigger>
+        <em_arg entity_id="ent-m.03nr1np" entity_mention_id="m-569959cf_39_186" role="entity" realis="true">Anonymous</em_arg>
+      </event_mention>
+      <event_mention id="em-569959cf_39_1416" type="contact" subtype="broadcast" realis="actual" audience="oneway" formality="canttell" medium="notinperson" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="2161" length="7">Publish</trigger>
+        <em_arg entity_id="ent-m.03nr1np" entity_mention_id="m-569959cf_39_759" role="entity" realis="true">they</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1251">
+      <event_mention id="em-569959cf_39_1230" type="contact" subtype="contact" realis="other" audience="canttell" formality="canttell" medium="canttell" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="435" length="3">say</trigger>
+        <em_arg entity_id="ent-569959cf_39_534" entity_mention_id="m-569959cf_39_546" role="entity" realis="true">they</em_arg>
+        <em_arg entity_id="ent-569959cf_39_543" entity_mention_id="m-569959cf_39_537" role="entity" realis="true">we</em_arg>
+      </event_mention>
+      <event_mention id="em-569959cf_39_1253" type="contact" subtype="contact" realis="other" audience="canttell" formality="canttell" medium="canttell" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="457" length="11">communicate</trigger>
+        <em_arg entity_id="ent-569959cf_39_534" entity_mention_id="m-569959cf_39_552" role="entity" realis="true">they</em_arg>
+      </event_mention>
+      <event_mention id="em-569959cf_39_1719" type="contact" subtype="contact" realis="other" audience="canttell" formality="informal" medium="notinperson" schedule="spontaneous">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="5398" length="7">express</trigger>
+        <em_arg entity_id="ent-569959cf_39_534" entity_mention_id="m-569959cf_39_1077" role="entity" realis="true">they</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1351">
+      <event_mention id="em-569959cf_39_1330" type="conflict" subtype="attack" realis="generic">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="1130" length="9">terrorist</trigger>
+        <em_arg entity_id="ent-569959cf_39_639" entity_mention_id="m-569959cf_39_633" role="attacker" realis="true">a blood thirsty terrorist</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1458">
+      <event_mention id="em-569959cf_39_1437" type="contact" subtype="broadcast" realis="generic" audience="oneway" formality="canttell" medium="canttell" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="2371" length="13">spitting fire</trigger>
+        <em_arg entity_id="ent-m.03nr1np" entity_mention_id="m-569959cf_39_246" role="entity" realis="true">Anonymous</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1544">
+      <event_mention id="em-569959cf_39_1523" type="contact" subtype="broadcast" realis="generic" audience="oneway" formality="informal" medium="notinperson" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="3012" length="6">saying</trigger>
+        <em_arg entity_id="ent-569959cf_39_849" entity_mention_id="m-569959cf_39_864" role="entity" realis="true">they</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1574">
+      <event_mention id="em-569959cf_39_1546" type="contact" subtype="correspondence" realis="generic" audience="twoway" formality="informal" medium="notinperson" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="3065" length="10">contacting</trigger>
+        <em_arg entity_id="ent-569959cf_39_849" entity_mention_id="m-569959cf_39_876" role="entity" realis="true">they</em_arg>
+        <em_arg entity_id="ent-569959cf_39_888" entity_mention_id="m-569959cf_39_882" role="entity" realis="true">who they are contacting</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1597">
+      <event_mention id="em-569959cf_39_1576" type="transaction" subtype="transfermoney" realis="other" ways="voluntary">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="3092" length="3">pay</trigger>
+        <em_arg entity_id="ent-569959cf_39_714" entity_mention_id="m-569959cf_39_891" role="giver" realis="true">they</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1620">
+      <event_mention id="em-569959cf_39_1599" type="contact" subtype="correspondence" realis="generic" audience="twoway" formality="canttell" medium="notinperson" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="3390" length="13">communicating</trigger>
+        <em_arg entity_id="ent-m.07jqh" entity_mention_id="m-569959cf_39_288" role="entity" realis="true">Taliban</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1673">
+      <event_mention id="em-569959cf_39_1645" type="transaction" subtype="transfermoney" realis="generic" ways="voluntary">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="3995" length="7">payroll</trigger>
+        <em_arg entity_id="ent-m.0d6qjf" entity_mention_id="m-569959cf_39_987" role="giver" realis="true">their</em_arg>
+        <em_arg entity_id="ent-569959cf_39_1870" entity_mention_id="m-569959cf_39_981" role="recipient" realis="true">so many on their payroll</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1826">
+      <event_mention id="em-569959cf_39_1805" type="personnel" subtype="startposition" realis="other">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="6157" length="5">place</trigger>
+        <em_arg entity_id="ent-569959cf_39_1149" entity_mention_id="m-569959cf_39_1143" role="person" realis="true">known individuals</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1923">
+      <event_mention id="em-569959cf_39_1946" type="contact" subtype="contact" realis="other" audience="twoway" formality="canttell" medium="canttell" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="1703" length="8">response</trigger>
+        <em_arg entity_id="ent-m.03nr1np" entity_mention_id="m-569959cf_39_228" role="entity" realis="true">Anonymous</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1967">
+      <event_mention id="em-569959cf_39_1374" type="conflict" subtype="attack" realis="generic">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="2096" length="9">terrorism</trigger>
+        <em_arg entity_id="ent-m.03nr1np" entity_mention_id="m-569959cf_39_753" role="attacker" realis="true">a notorious organisation which is often associated with terrorism</em_arg>
+      </event_mention>
+      <event_mention id="em-569959cf_39_1460" type="conflict" subtype="attack" realis="generic">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="2499" length="9">terrorism</trigger>
+        <em_arg entity_id="ent-m.03nr1np" entity_mention_id="m-569959cf_39_1517" role="attacker" realis="true">a notorious organisation which is often associated with terrorism</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1969">
+      <event_mention id="em-569959cf_39_1395" type="conflict" subtype="attack" realis="generic">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="2261" length="9">terrorism</trigger>
+        <em_arg entity_id="ent-m.027x630" entity_mention_id="m-569959cf_39_771" role="attacker" realis="true">a notorious organisation which is often associated with terrorism</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1992">
+      <event_mention id="em-569959cf_39_1971" type="contact" subtype="broadcast" realis="other" audience="oneway" formality="informal" medium="notinperson" schedule="canttell">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="4403" length="8">spamming</trigger>
+        <em_arg entity_id="ent-569959cf_39_534" entity_mention_id="m-569959cf_39_1011" role="audience" realis="true">them</em_arg>
+      </event_mention>
+    </hopper>
+    <hopper id="h-569959cf_39_1994">
+      <event_mention id="em-569959cf_39_1782" type="transaction" subtype="transfermoney" realis="other" ways="voluntary">
+        <trigger source="ENG_DF_001237_20150411_F0000008E" offset="5546" length="6">paying</trigger>
+        <em_arg entity_id="ent-m.027x630" entity_mention_id="m-569959cf_39_1095" role="recipient" realis="true">their</em_arg>
+      </event_mention>
+    </hopper>
+  </hoppers>
+</deft_ere>

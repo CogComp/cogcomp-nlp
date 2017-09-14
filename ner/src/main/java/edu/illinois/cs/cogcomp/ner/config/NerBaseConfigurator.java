@@ -115,7 +115,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     private final static String DEFAULT_SORT_FILES_LEXICALLY = TRUE;
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
-    private final static String DEFAULT_MODEL_NAME = "CoNLL";
+    private final static String DEFAULT_MODEL_NAME = "CoNLL_enron";
     private final static String DEFAULT_LANGUAGE = "en";
 
     private static final String DEFAULT_RANDOM_NOISE_LEVEL = "0.1";

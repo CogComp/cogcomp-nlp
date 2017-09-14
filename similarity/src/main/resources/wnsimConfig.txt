@@ -1,0 +1,2 @@
+wnPath  WordNet_3-0/dict
+paraPath  paraphrase.txt

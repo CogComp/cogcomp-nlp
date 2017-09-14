@@ -37,7 +37,8 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
 
     public TextAnnotationMapDBHandler(String dbFile) {
         try {
-            db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().make();
+            // enabling transactions avoids cache corruption if service fails.
+            this.db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().transactionEnable().make();
         }
         catch (DBException e) {
 //            logger.warn("mapdb couldn't instantiate db using file '{}': check error and either remove lock, " +
@@ -77,6 +78,7 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        db.commit();
     }
 
     @Override
@@ -89,6 +91,7 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
                 throw new RuntimeException(e);
             }
         }
+        db.commit();
     }
 
     @Override
@@ -146,8 +149,7 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
     public TextAnnotation getTextAnnotation(TextAnnotation ta) {
         for (String dataset : getAllDatasets()) {
             final ConcurrentMap<Integer, byte[]> data = getMap(dataset);
-            if(data.containsKey(ta.getTokenizedText().hashCode()))
-            {
+            if(data.containsKey(ta.getTokenizedText().hashCode())) {
                 byte[] taData = data.get(ta.getTokenizedText().hashCode());
                 return SerializationHelper.deserializeTextAnnotationFromBytes(taData);
             }
@@ -162,10 +164,11 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     private Iterable<String> getAllDatasets() {
-        ReentrantReadWriteLock.ReadLock lock = db.getLock$mapdb().readLock();
-        lock.tryLock();
+        // danielkh: apparently the new mapdb doesn't support this locking.
+        //ReentrantReadWriteLock.ReadLock lock = db.getLock$mapdb().readLock();
+        //lock.tryLock();
         Iterable<String> allNames = db.getAllNames();
-        lock.unlock();
+        //lock.unlock();
         return allNames;
     }
 }

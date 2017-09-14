@@ -20,6 +20,7 @@ import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.pipeline.common.Stanford331Configurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordParseHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
@@ -28,8 +29,13 @@ import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerAnnotator;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerConfigurator;
+import edu.illinois.cs.cogcomp.verbsense.VerbSenseAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
+
+import org.cogcomp.md.MentionAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,6 +94,10 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_SRL_VERB.key,
                                 Configurator.TRUE);
                         break;
+                    case ViewNames.SRL_NOM:
+                        nonDefaultValues.put(PipelineConfigurator.USE_SRL_NOM.key,
+                                Configurator.TRUE);
+                        break;
                     case ViewNames.DEPENDENCY_STANFORD:
                         nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_DEP.key,
                                 Configurator.TRUE);
@@ -105,6 +115,18 @@ public class PipelineFactory {
                         break;
                     case ViewNames.SRL_COMMA:
                         nonDefaultValues.put(PipelineConfigurator.USE_SRL_COMMA.key,
+                                Configurator.TRUE);
+                        break;
+                    case ViewNames.VERB_SENSE:
+                        nonDefaultValues.put(PipelineConfigurator.USE_VERB_SENSE.key,
+                                Configurator.TRUE);
+                        break;
+                    case ViewNames.TIMEX3:
+                        nonDefaultValues.put(PipelineConfigurator.USE_TIMEX3.key,
+                                Configurator.TRUE);
+                        break;
+                    case ViewNames.MENTION:
+                        nonDefaultValues.put(PipelineConfigurator.USE_MENTION.key,
                                 Configurator.TRUE);
                         break;
                     default:
@@ -127,7 +149,7 @@ public class PipelineFactory {
         }
 
         // using the default settings and changing the views
-        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(nonDefaultValues);
+        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(new Stanford331Configurator().getConfig(nonDefaultValues));
         boolean splitOnHypen = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH.key);
 
         TextAnnotationBuilder taBldr =
@@ -192,7 +214,7 @@ public class PipelineFactory {
     public static BasicAnnotatorService buildPipeline(ResourceManager rm) throws IOException,
             AnnotatorException {
         // Merges default configuration with the user-specified overrides.
-        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(rm);
+        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(new Stanford331Configurator().getConfig(rm));
         Boolean splitOnDash = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH);
         boolean isSentencePipeline =
                 fullRm.getBoolean(PipelineConfigurator.USE_SENTENCE_PIPELINE.key);
@@ -223,10 +245,10 @@ public class PipelineFactory {
      */
     private static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm)
             throws IOException {
-        ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);
-        String timePerSentence = rm.getString(PipelineConfigurator.STFRD_TIME_PER_SENTENCE);
+        ResourceManager rm = new PipelineConfigurator().getConfig(new Stanford331Configurator().getConfig(nonDefaultRm));
+        String timePerSentence = rm.getString(Stanford331Configurator.STFRD_TIME_PER_SENTENCE);
         String maxParseSentenceLength =
-                rm.getString(PipelineConfigurator.STFRD_MAX_SENTENCE_LENGTH);
+                rm.getString(Stanford331Configurator.STFRD_MAX_SENTENCE_LENGTH);
         boolean useLazyInitialization =
                 rm.getBoolean(PipelineConfigurator.USE_LAZY_INITIALIZATION.key,
                         PipelineConfigurator.TRUE);
@@ -270,7 +292,7 @@ public class PipelineFactory {
             ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
             int maxLength = Integer.parseInt(maxParseSentenceLength);
             boolean throwExceptionOnSentenceLengthCheck =
-                    rm.getBoolean(PipelineConfigurator.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key);
+                    rm.getBoolean(Stanford331Configurator.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key);
 
             if (rm.getBoolean(PipelineConfigurator.USE_STANFORD_DEP)) {
                 StanfordDepHandler depParser =
@@ -334,6 +356,19 @@ public class PipelineFactory {
             viewGenerators.put(ViewNames.SRL_COMMA, commaLabeler);
         }
 
+        if(rm.getBoolean(PipelineConfigurator.USE_VERB_SENSE)) {
+            VerbSenseAnnotator verbSense = new VerbSenseAnnotator();
+            viewGenerators.put(ViewNames.VERB_SENSE, verbSense);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_MENTION)){
+            MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
+            viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)){
+            Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
+            TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
+            viewGenerators.put(ViewNames.TIMEX3, tca);
+        }
         return viewGenerators;
     }
 

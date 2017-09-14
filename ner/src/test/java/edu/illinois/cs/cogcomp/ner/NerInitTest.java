@@ -36,6 +36,8 @@ public class NerInitTest {
         Properties props = new Properties();
         props.setProperty(NerBaseConfigurator.GAZETTEER_FEATURES, "0");
         props.setProperty(NerBaseConfigurator.BROWN_CLUSTER_PATHS, "0");
+        props.setProperty(NerBaseConfigurator.RANDOM_NOISE_LEVEL, "0.0");
+        props.setProperty(NerBaseConfigurator.OMISSION_RATE, "0.0");
 
         ResourceManager rm = (new NerBaseConfigurator()).getConfig(new ResourceManager(props));
 
@@ -54,7 +56,7 @@ public class NerInitTest {
         }
 
         assert (ta.hasView(ViewNames.NER_CONLL));
-        assertEquals(ta.getView(ViewNames.NER_CONLL).getConstituents().size(), 2);
+        assertEquals(1, ta.getView(ViewNames.NER_CONLL).getConstituents().size());
     }
 
 

@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import org.junit.Before;
@@ -293,6 +295,22 @@ public class StringTransformationTest {
         assertEquals(17, modStart);
         assertEquals(18, modEnd);
 
+    }
+
+    @Test
+    public void testContiguousEdits() {
+        String text = "He spoke with Paul <ENAMEX TYPE=\"PERSON\"><ENAMEX TYPE=\"PERSON\" E_OFF=\"1\">Paula</ENAMEX> Zahn</ENAMEX> .";
+        StringTransformation st = new StringTransformation(text);
+        st.transformString(19, 41, "");
+        st.transformString(41, 73, "");
+        st.transformString(78, 87, "");
+        st.transformString(92,101, "");
+
+        String modifiedStr = st.getTransformedText();
+
+        assertEquals(text, st.getOrigText());
+        assertEquals(31, modifiedStr.length());
+        assertEquals("He spoke with Paul Paula Zahn .", modifiedStr);
     }
 
 

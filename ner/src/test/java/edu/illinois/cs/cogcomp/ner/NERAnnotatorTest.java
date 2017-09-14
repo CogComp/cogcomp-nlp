@@ -7,30 +7,35 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.RandomLabelGenerator;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.TextChunkRepresentationManager;
-import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-import org.junit.Test;
-
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.RandomLabelGenerator;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.TextChunkRepresentationManager;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import weka.core.Debug.Random;
-
-import static org.junit.Assert.*;
 
 /**
  * This tests the NERAnnotator. Includes a test to ensure we are extracting the expected entiies,
@@ -82,7 +87,7 @@ public class NERAnnotatorTest {
                     "XSEDE Compatible Basic Cluster",
                     "XCBC",
                     "XSEDE",
-                    "Campus Bridging",
+                    "Campus Bridging team",
                     "Marshall University",
                     "Huntington",
                     "Virginia",

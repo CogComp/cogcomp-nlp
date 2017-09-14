@@ -241,11 +241,20 @@ public class CuratorClient {
                             labeling, allowOverlappingSpans);
         } else if (viewType == ViewTypes.DEPENDENCY_VIEW) {
             Forest depForest = record.getParseViews().get(convertCuratorViewName(viewName));
+
+            if (depForest.trees.size() > TextAnnotationUtilities.getSentenceList(ta).size())
+                throw new AnnotationFailedException("mismatched number of trees and sentences.");
+
             view =
                     CuratorDataStructureInterface.alignForestToDependencyView(viewName, ta,
                             depForest);
         } else if (viewType == ViewTypes.PARSE_VIEW) {
+
             Forest parseForest = record.getParseViews().get(convertCuratorViewName(viewName));
+
+            if (parseForest.trees.size() > TextAnnotationUtilities.getSentenceList(ta).size())
+                throw new AnnotationFailedException("mismatched number of trees and sentences.");
+
             view =
                     CuratorDataStructureInterface.alignForestToParseTreeView(viewName, ta,
                             parseForest);
