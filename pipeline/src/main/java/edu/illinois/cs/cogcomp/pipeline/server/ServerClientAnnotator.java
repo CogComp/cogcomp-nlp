@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * Client to make calls to the remote pipeline server
- * 
+ *
  * @author khashab2
  *
  */
@@ -105,9 +105,10 @@ public class ServerClientAnnotator extends Annotator {
     }
 
     /**
+     * The method is synchronized since the caching seems to have issues upon mult-threaded caching
      * @param overwrite if true, it would overwrite the values on cache
      */
-    public TextAnnotation annotate(String str, boolean overwrite) throws Exception {
+    public synchronized TextAnnotation annotate(String str, boolean overwrite) throws Exception {
         String viewsConnected = Arrays.toString(viewsToAdd);
         String views = viewsConnected.substring(1, viewsConnected.length() - 1).replace(" ", "");
         ConcurrentMap<String, byte[]> concurrentMap =
@@ -127,9 +128,9 @@ public class ServerClientAnnotator extends Annotator {
             con.setDoOutput(true);
             con.setUseCaches(false);
 
-            int responseCode = con.getResponseCode();
-            logger.debug("\nSending '" + con.getRequestMethod() + "' request to URL : " + url);
-            logger.debug("Response Code : " + responseCode);
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            wr.write("text=" + URLEncoder.encode(str, "UTF-8") + "&views=" + views);
+            wr.flush();
 
             InputStreamReader reader = new InputStreamReader(con.getInputStream());
             BufferedReader in = new BufferedReader(reader);
@@ -140,6 +141,7 @@ public class ServerClientAnnotator extends Annotator {
             }
             in.close();
             reader.close();
+            wr.close();
             con.disconnect();
             TextAnnotation ta = SerializationHelper.deserializeFromJson(response.toString());
             if (concurrentMap != null) {
