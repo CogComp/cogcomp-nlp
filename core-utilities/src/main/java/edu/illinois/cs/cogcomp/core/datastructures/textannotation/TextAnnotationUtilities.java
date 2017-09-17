@@ -256,15 +256,13 @@ public class TextAnnotationUtilities {
             newVu.addRelation(newR);
         }
 
-        if (newVu.getNumberOfConstituents() > 0) {
-            newTA.addView(vuName, newVu);
+        newTA.addView(vuName, newVu);
 
-            if (vu instanceof TreeView) {
-                ((TreeView) newVu).makeTrees();
-            }
-            else if (vu instanceof PredicateArgumentView)
-                ((PredicateArgumentView) vu).findPredicates();
+        if (vu instanceof TreeView) {
+            ((TreeView) newVu).makeTrees();
         }
+        else if (vu instanceof PredicateArgumentView)
+            ((PredicateArgumentView) vu).findPredicates();
     }
 
     /**

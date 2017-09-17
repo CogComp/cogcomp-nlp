@@ -144,7 +144,8 @@ public class PathLSTMHandler extends Annotator {
                                 String argDesc = (frameData != null) ? FramesManager.getArgDcrp(argTag, frameData): "";
                                 Yield y = a.getYield(p, argTag, singleton);
                                 IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
-                                Constituent c = new Constituent("Argument", viewName, ta,
+                                String argLabel = (argDesc.length() > 1) ? argTag + "." + argDesc : argTag;
+                                Constituent c = new Constituent(argLabel, viewName, ta,
                                         finalTokenOffset + span.getFirst(), finalTokenOffset + span.getSecond());
                                 assert span.getFirst() <= span.getSecond() : ta;
                                 List<Constituent> consList = pav.getConstituentsWithSpan(
@@ -155,7 +156,6 @@ public class PathLSTMHandler extends Annotator {
                                 else {
                                     c = consList.get(0);
                                 }
-                                String argLabel = (argDesc.length() > 1) ? argTag + "." + argDesc : argTag;
                                 pav.addRelation(new Relation(argLabel, predicate, c, 1.0));
                             }
                         }

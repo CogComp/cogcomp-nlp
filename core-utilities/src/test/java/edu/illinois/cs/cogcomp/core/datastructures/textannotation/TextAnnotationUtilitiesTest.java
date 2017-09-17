@@ -38,7 +38,7 @@ public class TextAnnotationUtilitiesTest {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
         TextAnnotation subTA = TextAnnotationUtilities.getSubTextAnnotation(ta, 2);
         assertTrue(subTA.getText().equals("The paving commenced Monday and will finish in June ."));
-        assertTrue(Objects.equals(subTA.getAvailableViews().toString(), "[SRL_VERB, PSEUDO_PARSE_STANFORD, POS, LEMMA, SHALLOW_PARSE, TOKENS, SENTENCE, PARSE_GOLD]"));
+        assertTrue(Objects.equals(subTA.getAvailableViews().toString(), "[SRL_VERB, PSEUDO_PARSE_STANFORD, POS, NER_CONLL, LEMMA, SHALLOW_PARSE, TOKENS, SENTENCE, PARSE_GOLD]"));
         assertTrue(Objects.equals(subTA.getView(ViewNames.SHALLOW_PARSE).toString(), "[NP The paving ] [VP commenced ] [NP Monday ] [VP will finish ] [PP in ] [NP June ] "));
         String parse = "(S1 (S (NP (DT The)\n" +
                 "    (NN paving))\n" +
