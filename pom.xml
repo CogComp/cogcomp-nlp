@@ -30,6 +30,7 @@
         <module>prepsrl</module>
         <module>verbsense</module>
         <module>pipeline</module>
+	<module>dataless-classifier</module>
         <!--external tools -->
         <module>external/external-commons</module>
         <module>external/clausie</module>

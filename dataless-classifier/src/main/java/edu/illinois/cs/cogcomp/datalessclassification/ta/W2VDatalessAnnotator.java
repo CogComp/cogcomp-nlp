@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.datalessclassification.ta;
 
 import java.io.BufferedReader;
@@ -38,7 +45,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 public class W2VDatalessAnnotator extends ADatalessAnnotator {
 	
 	protected static final String Class_Name = W2VDatalessAnnotator.class.getCanonicalName();
-	public static final String Annotator_Name = "ESA-Dataless";
+	public static final String Annotator_Name = "W2V-DATALESS";
 	
 	/**
 	 * @return The name of the W2V Dataless Annotator
