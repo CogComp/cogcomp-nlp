@@ -29,6 +29,7 @@ import org.json.simple.JSONObject;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.datalessclassification.config.DatalessConfigurator;
 import edu.illinois.cs.cogcomp.datalessclassification.config.W2VDatalessConfigurator;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -45,7 +46,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 public class W2VDatalessAnnotator extends ADatalessAnnotator {
 	
 	protected static final String Class_Name = W2VDatalessAnnotator.class.getCanonicalName();
-	public static final String Annotator_Name = "W2V-DATALESS";
+	public static final String Annotator_Name = ViewNames.W2V_DATALESS;
 	
 	/**
 	 * @return The name of the W2V Dataless Annotator

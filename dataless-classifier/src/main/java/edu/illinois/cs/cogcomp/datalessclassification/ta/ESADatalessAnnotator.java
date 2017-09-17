@@ -29,6 +29,7 @@ import org.json.simple.JSONObject;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.datalessclassification.config.DatalessConfigurator;
 import edu.illinois.cs.cogcomp.datalessclassification.config.ESADatalessConfigurator;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -45,7 +46,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 public class ESADatalessAnnotator extends ADatalessAnnotator {
 	
 	protected static final String Class_Name = ESADatalessAnnotator.class.getCanonicalName();
-	public static final String Annotator_Name = "ESA-DATALESS";
+	public static final String Annotator_Name = ViewNames.ESA_DATALESS;
 	
 	/**
 	 * @return The name of the ESA Dataless Annotator

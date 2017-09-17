@@ -13,6 +13,10 @@ import edu.illinois.cs.cogcomp.comma.CommaLabeler;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.datalessclassification.config.ESADatalessConfigurator;
+import edu.illinois.cs.cogcomp.datalessclassification.config.W2VDatalessConfigurator;
+import edu.illinois.cs.cogcomp.datalessclassification.ta.ESADatalessAnnotator;
+import edu.illinois.cs.cogcomp.datalessclassification.ta.W2VDatalessAnnotator;
 import edu.illinois.cs.cogcomp.depparse.DepAnnotator;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.ner.NerAnnotatorManager;
@@ -369,6 +373,16 @@ public class PipelineFactory {
             TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
             viewGenerators.put(ViewNames.TIMEX3, tca);
         }
+//        if (rm.getBoolean(PipelineConfigurator.USE_ESA_DATALESS)){
+//        	Properties rmProps = new ESADatalessConfigurator().getDefaultConfig().getProperties();
+//        	ESADatalessAnnotator esaDataless = new ESADatalessAnnotator(new ResourceManager(rmProps));        	
+//            viewGenerators.put(ViewNames.ESA_DATALESS, esaDataless);
+//        }
+//        if (rm.getBoolean(PipelineConfigurator.USE_W2V_DATALESS)){
+//        	Properties rmProps = new W2VDatalessConfigurator().getDefaultConfig().getProperties();
+//        	W2VDatalessAnnotator w2vDataless = new W2VDatalessAnnotator(new ResourceManager(rmProps));        	
+//            viewGenerators.put(ViewNames.W2V_DATALESS, w2vDataless);
+//        }
         return viewGenerators;
     }
 
