@@ -37,6 +37,7 @@ public class Stanford_3_8_0_AnnotatorService {
         StanfordTrueCaseHandler trueCaseHandler = new StanfordTrueCaseHandler();
         viewGenerators.put(trueCaseHandler.getViewName(), trueCaseHandler);
 
-        service = ExternalAnnotatorServiceFactory.buildPipeline(viewGenerators);
+        service = ExternalAnnotatorServiceFactory.buildPipeline(viewGenerators,
+                Stanford_3_8_0_AnnotatorService.class.getSimpleName());
     }
 }

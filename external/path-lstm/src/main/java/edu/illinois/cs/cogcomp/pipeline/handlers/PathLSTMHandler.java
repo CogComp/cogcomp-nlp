@@ -129,12 +129,13 @@ public class PathLSTMHandler extends Annotator {
                             predicate.addAttribute(PredicateArgumentView.SenseIdentifer, senseOnly);
                             FrameData.SenseFrameData frameData = null;
                             if(p.getPOS().startsWith("N")) {
-                                frameData = propBankManager.getFrameWithSense(predicateLemma, senseOnly);
-                            }
-                            else {
+                                // if it's noun, load from NomBank
                                 frameData = nomBankManager.getFrameWithSense(predicateLemma, senseOnly);
                             }
-
+                            else {
+                                // otherwise, use propbank
+                                frameData = propBankManager.getFrameWithSense(predicateLemma, senseOnly);
+                            }
                             pav.addConstituent(predicate);
 
                             for (Word a : p.getArgMap().keySet()) {
@@ -143,17 +144,18 @@ public class PathLSTMHandler extends Annotator {
                                 String argDesc = (frameData != null) ? FramesManager.getArgDcrp(argTag, frameData): "";
                                 Yield y = a.getYield(p, argTag, singleton);
                                 IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
-                                Constituent c = new Constituent("Argument", viewName, ta,
+                                String argLabel = (argDesc.length() > 1) ? argTag + "." + argDesc : argTag;
+                                Constituent c = new Constituent(argLabel, viewName, ta,
                                         finalTokenOffset + span.getFirst(), finalTokenOffset + span.getSecond());
                                 assert span.getFirst() <= span.getSecond() : ta;
-                                List<Constituent> consList = pav.getConstituentsWithSpan(new IntPair(span.getFirst(), span.getSecond()));
+                                List<Constituent> consList = pav.getConstituentsWithSpan(
+                                    new IntPair(finalTokenOffset + span.getFirst(), finalTokenOffset + span.getSecond()));
                                 if (consList.isEmpty()) {
                                     pav.addConstituent(c);
                                 }
                                 else {
                                     c = consList.get(0);
                                 }
-                                String argLabel = (argDesc.length() > 1) ? argTag + "." + argDesc : argTag;
                                 pav.addRelation(new Relation(argLabel, predicate, c, 1.0));
                             }
                         }

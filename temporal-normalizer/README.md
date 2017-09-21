@@ -116,3 +116,17 @@ We provide a [`TemporalNormalizerBenchmark`](src/main/java/edu/illinois/cs/cogco
 4. -outputFolder <filepath>, mandatory
 
 We use TempEval3 dataset for evaluation, you can download https://www.cs.york.ac.uk/semeval-2013/task1/index.php%3Fid=data.html.
+
+## Citation
+Please cite the following [paper](http://cogcomp.org/page/publication_view/691) if you used this package.
+
+```
+@inproceedings{ZhaoDoRo12,
+    author = {Ran Zhao, Quang Do and Dan Roth},
+    title = {A Robust Shallow Temporal Reasoning System},
+    booktitle = {NAACL},
+    month = {6},
+    year = {2012},
+    url = "http://cogcomp.org/papers/ZhaoDoRo12.pdf",
+}
+```
