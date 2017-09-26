@@ -65,7 +65,7 @@
         <dependency>
             <groupId>org.cogcomp</groupId>
             <artifactId>cogcomp-datastore</artifactId>
-            <version>1.9.7</version>
+            <version>1.9.10</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -148,7 +148,7 @@
                     <version>2.19.1</version>
                     <configuration>
                         <!--increase the memory requirements if you need more space-->
-                        <argLine>-Xmx12g</argLine>
+                        <argLine>-Xmx17g</argLine>
                     </configuration>
                 </plugin>
             </plugins>

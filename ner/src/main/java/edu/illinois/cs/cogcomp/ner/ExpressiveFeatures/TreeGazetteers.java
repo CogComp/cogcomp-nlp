@@ -61,7 +61,7 @@ public class TreeGazetteers implements Gazetteers {
         try {
             ArrayList<String> filenames = new ArrayList<>();
             Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            File gazDirectory = dsNoCredentials.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.5, false);
+            File gazDirectory = dsNoCredentials.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
             // We are not loading the resources from classpath anymore. Instead we are calling them programmatically
             // InputStream stream = ResourceUtilities.loadResource(pathToDictionaries + "/gazetteers-list.txt");
             InputStream stream = new FileInputStream(gazDirectory.getPath() + File.separator + "gazetteers" + File.separator + "gazetteers-list.txt");
