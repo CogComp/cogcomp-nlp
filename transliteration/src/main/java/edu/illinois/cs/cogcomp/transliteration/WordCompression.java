@@ -9,13 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 
 class WordCompression {
-//    public static void SaveSet(HashSet<String> set, String filename) {
-//        StreamWriter writer = new StreamWriter(filename);
-//        for (String word : set)
-//            writer.WriteLine(word);
-//
-//        writer.Close();
-//    }
 
     public static List<String> GetNgrams(String example) {
         HashMap<String, Boolean> ngramList = new HashMap<>();

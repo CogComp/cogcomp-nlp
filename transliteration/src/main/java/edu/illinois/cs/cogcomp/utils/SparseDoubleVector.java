@@ -25,27 +25,6 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
         super(capacity);
     }
 
-    // Operators won't be implemented in Java.
-    //public static SparseDoubleVector<TKey> operator -(SparseDoubleVector<TKey> vector);
-    //public static SparseDoubleVector<TKey> operator -(double value, SparseDoubleVector<TKey> vector);
-    //public static SparseDoubleVector<TKey> operator -(SparseDoubleVector<TKey> vector, double value);
-    //public static SparseDoubleVector<TKey> operator -(SparseDoubleVector<TKey> vector1, SparseDoubleVector<TKey> vector2);
-    //public static bool operator !=(SparseDoubleVector<TKey> vector1, SparseDoubleVector<TKey> vector2);
-    //public static SparseDoubleVector<TKey> operator %(double value, SparseDoubleVector<TKey> vector);
-    //public static SparseDoubleVector<TKey> operator %(SparseDoubleVector<TKey> vector, double value);
-    //public static SparseDoubleVector<TKey> operator *(double value, SparseDoubleVector<TKey> vector);
-    //public static SparseDoubleVector<TKey> operator *(SparseDoubleVector<TKey> vector, double value);
-    //public static SparseDoubleVector<TKey> operator *(SparseDoubleVector<TKey> vector1, SparseDoubleVector<TKey> vector2);
-    //public static SparseDoubleVector<TKey> operator /(double value, SparseDoubleVector<TKey> vector);
-    //public static SparseDoubleVector<TKey> operator /(SparseDoubleVector<TKey> vector, double value);
-    //public static SparseDoubleVector<TKey> operator /(SparseDoubleVector<TKey> vector1, SparseDoubleVector<TKey> vector2);
-    //public static SparseDoubleVector<TKey> operator +(double value, SparseDoubleVector<TKey> vector);
-    //public static SparseDoubleVector<TKey> operator +(SparseDoubleVector<TKey> vector, double value);
-    //public static SparseDoubleVector<TKey> operator +(SparseDoubleVector<TKey> vector1, SparseDoubleVector<TKey> vector2);
-    //public static bool operator ==(SparseDoubleVector<TKey> vector1, SparseDoubleVector<TKey> vector2);
-    //public static implicit operator SparseDoubleVector<TKey>(Dictionary<TKey, double> vector);
-    //public static implicit operator Dictionary<TKey, double>(SparseDoubleVector<TKey> vector);
-
 
     /**
      * SWM: created to replicate operator method
@@ -128,17 +107,6 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
     public boolean ContainsKey(TKey key){
         throw new NotImplementedException("not yet implemented...");
     }
-
-//    @Override
-//    public boolean equals(Object obj){
-//        throw new NotImplementedException("not yet implemented...");
-//    }
-//
-//
-//    @Override
-//    public int hashCode(){
-//        throw new NotImplementedException("not yet implemented...");
-//    }
 
     /**
      * Takes the exponential of each element in the vector.
@@ -223,14 +191,5 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
     public SparseDoubleVector<TKey> Sign(){
         throw new NotImplementedException("not yet implemented...");
     }
-
-//    @Override
-//    public Iterator<TKey> iterator() {
-//        return this.iterator();
-//    }
-
-
-    // Won't implement this.
-    //public boolean TryGetValue(TKey key, out double value){}
 
 }

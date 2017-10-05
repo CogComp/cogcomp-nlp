@@ -161,36 +161,6 @@ public class SPModel
             return table;
         }
 
-//        public void WriteToStream(OutputStream stream) throws IOException {
-//            DataOutputStream writer = new DataOutputStream(stream);
-//
-//            if (languageModel == null) writer.write(-1);
-//            else
-//            {
-//                writer.write(languageModel.size());
-//                for(String key : languageModel.keySet())
-//                {
-//                    // TODO what are the data types here?
-//                    writer.writeChars(key);
-//                    writer.writeDouble(languageModel.get(key));
-//                }
-//            }
-//
-//            writer.write(ngramSize);
-//
-//            writer.write(trainingExamples.size());
-//            for(Triple<String, String, Double> triple : trainingExamples)
-//            {
-//                writer.writeChars(triple.getFirst());
-//                writer.writeChars(triple.getSecond());
-//                writer.writeDouble(triple.getThird());
-//            }
-//
-//            WriteToWriter(writer, probs);
-//
-//            writer.flush();
-//        }
-
         /**
          * This writes the production probabilities out to file in human-readable format.
          * @param fname the name of the output file

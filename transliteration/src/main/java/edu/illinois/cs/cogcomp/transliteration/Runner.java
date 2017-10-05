@@ -41,20 +41,9 @@ class Runner {
         String trainfile = args[0];
         String testfile = args[1];
 
-//        String trainfile = tl + "wikidata.tt/Hebrew/wikidata.train.Hebrew";
-//        String testfile = tl + "wikidata.tt/Hebrew/wikidata.test.Hebrew";
-
-//        String trainfile = tl + "test/hebToUrom.uromtest";
-//        String testfile = trainfile;
-
         String trainlang = "Hindi";
         String testlang = "Hindi";
-        String probFile = "nonsenseword"; //String.format("probs-%s.txt", trainlang);
-//        String trainfile = wikidataurom + String.format("wikidata.%s", trainlang);
-//        String testfile = wikidataurom + String.format("wikidata.%s", testlang);
-
-        ///String trainfile = irvinedata + String.format("irvine-data.%s", trainlang);
-        //String testfile = irvinedata + String.format("irvine-data.%s", testlang);
+        String probFile = "nonsenseword";
 
         String method = "wikidata";
 
@@ -94,31 +83,6 @@ class Runner {
         String[] arabic_names = {"Arabic", "Egyptian_Arabic", "Mazandarani", "Pashto", "Persian", "Western_Punjabi"};
         String[] devanagari_names = {"Hindi", "Marathi", "Nepali", "Sanskrit"};
         String[] cyrillic_names = {"Bashkir", "Bulgarian", "Chechen", "Kirghiz", "Macedonian", "Russian", "Ukrainian"};
-
-        // List<String> arabicresults = new ArrayList<>();
-        // NUMTRAIN = 485;
-        // NUMTEST = 4062;
-        // for(String name : arabic_names){
-        //     logger.debug("Working on " + name);
-        //     String trainfile = wikidata + String.format("wikidata.%s", name);
-        //     String testfile = wikidata + String.format("wikidata.%s", "Urdu");
-
-        //     arabicresults.add(name + TrainAndTest(trainfile, testfile));
-        // }
-        // LineIO.write("arabicresults.txt", arabicresults);
-
-        // List<String> devresults = new ArrayList<>();
-        // NUMTRAIN = 896;
-        // NUMTEST = 477;
-        // for(String name : devanagari_names){
-        // logger.debug("Working on " + name);
-        //     String trainfile = wikidata + String.format("wikidata.%s", name);
-        //     String testfile = wikidata + String.format("wikidata.%s", "Newar");
-
-        //     devresults.add(name + TrainAndTest(trainfile, testfile));
-        // }
-        // LineIO.write("devresults.txt", devresults);
-
 
         List<String> cyrillicresults = new ArrayList<>();
         NUMTRAIN = 381;
