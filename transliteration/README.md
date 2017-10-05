@@ -1,10 +1,6 @@
 # illinois-transliteration
 
-This is a port of Jeff Pasternack's Code from "Learning Better Transliterations."
+This is a Java port of Jeff Pasternack's C# code from "Learning Better Transliterations."
 
-Note: the methodology is to copy all code directly over, and rename each file
-from .cs -> .java. This is obviously not going to compile, but over time it should
-work.
-
-Another note: this depends on some libraries called Pasternack, which I have no
-idea where they are. 
+To run, look at examples in [TestTransliteration](src/main/test/java/edu/illinois/cs/cogcomp/transliteration/TestTransliteration.java)
+or [Runner](src/main/java/edu/illinois/cs/cogcomp/transliteration/Runner.java).
