@@ -10,7 +10,7 @@ or [Runner](src/main/java/edu/illinois/cs/cogcomp/transliteration/Runner.java).
 
 To train a model, you need pairs of names. A common source is Wikipedia interlanguage links. For example, 
 see [this data](http://www.clsp.jhu.edu/~anni/data/wikipedia_names) 
-from [Learning Transliterations from all languages](http://cis.upenn.edu/~ccb/publications/transliterating-from-all-languages.pdf)
+from [Transliterating From All Languages](http://cis.upenn.edu/~ccb/publications/transliterating-from-all-languages.pdf)
 by Anne Irvine et al.
 
 The standard data format expected is:
