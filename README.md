@@ -19,7 +19,8 @@ Each library contains detailed readme and instructions on how to use it. In addi
 | [curator](curator/README.md) | Supports use of [CogComp NLP Curator](http://cogcomp.cs.illinois.edu/page/software_view/Curator), a tool to run NLP applications as services. |
 | [edison](edison/README.md) | A library for feature extraction from `core-utilities` data structures.  | 
 | [lemmatizer](lemmatizer/README.md)  |  An application that uses [WordNet](https://wordnet.princeton.edu/) and simple rules to find the root forms of words in plain text. |
-| [tokenizer](tokenizer/README.md) | An application that identifies sentence and word boundaries in plain text. | 
+| [tokenizer](tokenizer/README.md) | An application that identifies sentence and word boundaries in plain text. |
+| [transliteration](transliteration/README.md) | An application that transliterates names between different scripts. | 
 | [pos](pos/README.md)  | An application that identifies the part of speech (e.g. verb + tense, noun + number) of each word in plain text.  |  
 | [ner](ner/README.md) | An application that identifies named entities in plain text according to two different sets of categories.  |
 | [md](md/README.md) | An application that identifies entity mentions in plain text.  |
