@@ -115,7 +115,7 @@ public abstract class Annotator {
      * 
      * @param rm configuration parameters
      */
-    public abstract void initialize(ResourceManager rm) throws IOException;
+    public abstract void initialize(ResourceManager rm);
 
 
     /**

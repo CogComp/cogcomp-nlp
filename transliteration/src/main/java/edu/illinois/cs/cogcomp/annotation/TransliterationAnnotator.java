@@ -26,9 +26,13 @@ public class TransliterationAnnotator extends Annotator {
     }
 
     @Override
-    public void initialize(ResourceManager rm) throws IOException {
-        model = new SPModel(rm.getString("transliterationModelPath"));
-        model.setMaxCandidates(1);
+    public void initialize(ResourceManager rm) {
+        try {
+            model = new SPModel(rm.getString("transliterationModelPath"));
+            model.setMaxCandidates(1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
