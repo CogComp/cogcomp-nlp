@@ -121,6 +121,10 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_VERB_SENSE.key,
                                 Configurator.TRUE);
                         break;
+                    case ViewNames.TRANSLITERATION:
+                        nonDefaultValues.put(PipelineConfigurator.USE_TRANSLITERATION.key,
+                                Configurator.TRUE);
+                        break;
                     case ViewNames.TIMEX3:
                         nonDefaultValues.put(PipelineConfigurator.USE_TIMEX3.key,
                                 Configurator.TRUE);
@@ -344,6 +348,11 @@ public class PipelineFactory {
         if (rm.getBoolean(PipelineConfigurator.USE_QUANTIFIER)) {
             Quantifier quantifierAnnotator = new Quantifier();
             viewGenerators.put(ViewNames.QUANTITIES, quantifierAnnotator);
+        }
+
+        if (rm.getBoolean(PipelineConfigurator.USE_TRANSLITERATION)) {
+            TransliterationAnnotator transliterationAnnotator = new TransliterationAnnotator();
+            viewGenerators.put(ViewNames.TRANSLITERATION, transliterationAnnotator);
         }
 
         if (rm.getBoolean(PipelineConfigurator.USE_SRL_PREP)) {
