@@ -35,7 +35,7 @@ public class TransliterationAnnotator extends Annotator {
     @Override
     public void initialize(ResourceManager rm) {
         try {
-            model = new SPModel(rm.getString("transliterationModelPath"));
+            model = new SPModel(rm.getString(TransliterationConfigurator.MODEL_PATH.key));
             model.setMaxCandidates(1);
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,10 +50,12 @@ public class TransliterationAnnotator extends Annotator {
         int index = 0;
         for(String tok : ta.getTokens()){
             try {
-                TopList<Double, String> ll = model.Generate(tok);
-                Pair<Double, String> toppair = ll.getFirst();
-                Constituent c = new Constituent(toppair.getSecond(), toppair.getFirst(), ViewNames.TRANSLITERATION, ta, index,index+1);
-                v.addConstituent(c);
+                TopList<Double, String> ll = model.Generate(tok.toLowerCase());
+                if(ll.size() > 0) {
+                    Pair<Double, String> toppair = ll.getFirst();
+                    Constituent c = new Constituent(toppair.getSecond(), toppair.getFirst(), ViewNames.TRANSLITERATION, ta, index, index + 1);
+                    v.addConstituent(c);
+                }
             } catch (Exception e) {
                 // print that this word has failed...
                 e.printStackTrace();
