@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
 
@@ -114,7 +115,7 @@ public abstract class Annotator {
      * 
      * @param rm configuration parameters
      */
-    public abstract void initialize(ResourceManager rm);
+    public abstract void initialize(ResourceManager rm) throws IOException;
 
 
     /**
