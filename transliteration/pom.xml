@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd
 http://www.w3.org/2001/XMLSchema-instance ">
-
+    <parent>
+        <artifactId>illinois-cogcomp-nlp</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <version>3.1.33</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>edu.illinois.cs.cogcomp</groupId>
-    <artifactId>illinois-transliteration</artifactId>
-    <version>1.0.1</version>
-    <packaging>jar</packaging>
 
-    <url>http://cogcomp.cs.illinois.edu</url>
+    <artifactId>illinois-transliteration</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,11 +68,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <version>56.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>nplm-java</artifactId>
-            <version>1.0.0</version>
-        </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-abstract-server</artifactId>
@@ -135,13 +130,5 @@ http://www.w3.org/2001/XMLSchema-instance ">
             </extension>
         </extensions>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>CogcompSoftware</id>
-            <name>CogcompSoftware</name>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
-        </repository>
-    </distributionManagement>
 
 </project>
