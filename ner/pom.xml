@@ -143,7 +143,7 @@
                     <version>2.19.1</version>
                     <configuration>
                         <!--increase the memory requirements if you need more space-->
-                        <argLine>-Xmx14g</argLine>
+                        <argLine>-Xmx16g</argLine>
                     </configuration>
                 </plugin>
             </plugins>
