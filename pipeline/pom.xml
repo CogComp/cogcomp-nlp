@@ -136,6 +136,11 @@
             <artifactId>illinois-time</artifactId>
             <version>3.1.33</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-transliteration</artifactId>
+            <version>3.1.33</version>
+        </dependency>
 
     </dependencies>
 

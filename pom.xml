@@ -11,6 +11,7 @@
     <modules>
         <module>core-utilities</module>
         <module>tokenizer</module>
+        <module>transliteration</module>
         <module>lemmatizer</module>
         <module>edison</module>
         <module>curator</module>
