@@ -37,27 +37,6 @@
             <version>1.9.10</version>
         </dependency>
 
-        <!--Daniel: the resources commented out because we load them programmatically now. -->
-        <!-- Contains the gazetteers and Brown clusters -->
-	    <!--<dependency>-->
-	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
-	        <!--<artifactId>brown-clusters</artifactId>-->
-	        <!--<version>1.5</version>-->
-	        <!--<scope>runtime</scope>-->
-	    <!--</dependency>-->
-	    <!--<dependency>-->
-	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
-	        <!--<artifactId>gazetteers</artifactId>-->
-	        <!--<version>1.5</version>-->
-	        <!--<scope>runtime</scope>-->
-	    <!--</dependency>-->
-	    <!--<dependency>-->
-	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
-	        <!--<artifactId>wordEmbedding</artifactId>-->
-	        <!--<version>1.5</version>-->
-	        <!--<scope>runtime</scope>-->
-	    <!--</dependency>-->
-        <!--  LBJava stuff.  -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
@@ -104,11 +83,11 @@
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-surefire-plugin</artifactId>
-               <version>2.19.1</version>
+               <version>2.20.1</version>
 			    <configuration>
 			        <forkCount>1</forkCount>
 			        <reuseForks>false</reuseForks>
-			        <argLine>-Xmx8g</argLine>
+			        <argLine>-Xmx9g</argLine>
 			    </configuration>
             </plugin>
 
