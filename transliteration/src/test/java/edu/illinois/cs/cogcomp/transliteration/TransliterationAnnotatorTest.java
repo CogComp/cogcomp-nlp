@@ -25,11 +25,11 @@ public class TransliterationAnnotatorTest {
         this.annotator = new TransliterationAnnotator();
     }
 
-    @Test
+/*    @Test
     public void testCleanText() throws AnnotatorException {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
         annotator.getView(ta);
         assertEquals(true, ta.hasView(ViewNames.TRANSLITERATION));
         System.out.println(ta.getView(ViewNames.TRANSLITERATION));
-    }
+    }*/
 }
