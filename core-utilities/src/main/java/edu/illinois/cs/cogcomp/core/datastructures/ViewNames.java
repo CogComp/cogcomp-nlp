@@ -128,6 +128,7 @@ public class ViewNames {
     public static final String POST_ERE = "POST_ERE";
     public static final String EVENT_ERE = "EVENT_ERE";
 
+    public static final String TRANSLITERATION = "TRANSLITERATION";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
