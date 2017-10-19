@@ -9,15 +9,18 @@ package org.cogcomp.md;
 
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbjava.nlp.ColumnFormat;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.AnnotationReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,5 +154,46 @@ public class ColumnFormatReader extends AnnotationReader<TextAnnotation> {
     }
     public String generateReport(){
         return null;
+    }
+
+    public static void outputToColumnFormatFile(TextAnnotation ta, String viewName, String outputFilePath){
+        List<Integer> sentence_ends = new ArrayList<Integer>();
+        for (int i = 0; i < ta.getNumberOfSentences(); i++){
+            sentence_ends.add(ta.getSentence(i).getEndSpan());
+        }
+        String outputContent = "";
+        View tokenView = ta.getView(ViewNames.TOKENS);
+        View constituentView = ta.getView(viewName);
+        for (Constituent token : tokenView){
+            String consTag = "O";
+            String xh = "x";
+            String zh = "0";
+            String oh = "O";
+            List<Constituent> constituentList = constituentView.getConstituentsCoveringToken(token.getStartSpan());
+            if (constituentList.size() > 0){
+                Constituent hit = constituentList.get(0);
+                if (hit.getStartSpan() == token.getStartSpan()){
+                    consTag = "B-" + hit.getLabel();
+                }
+                else{
+                    consTag = "I-" + hit.getLabel();
+                }
+            }
+            outputContent += consTag + "\t" + zh + "\t" + token.getStartSpan() + "\t"
+                            + oh + "\t" + oh + "\t" + token.toString() + "\t"  + xh + "\t"
+                            + xh + "\t" + zh + "\n";
+            if (sentence_ends.contains(token.getStartSpan())){
+                outputContent += "\n";
+            }
+        }
+        try {
+            FileOutputStream out = null;
+            out = new FileOutputStream(outputFilePath);
+            out.write(outputContent.getBytes());
+            out.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
