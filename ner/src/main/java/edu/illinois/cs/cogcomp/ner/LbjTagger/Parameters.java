@@ -401,7 +401,8 @@ public class Parameters {
 
             param.randomNoiseLevel = randomNoiseLevel;
             param.omissionRate = omissionRate;
-
+            param.featurePruningThreshold = rm.getDouble(NerBaseConfigurator.FEATUREPRUNINGTHRESHOLD);
+            
             // don't forget that these should be initialized only after we know the target labels
             // and the encoding scheme
             param.patternLabelRandomGenerator =

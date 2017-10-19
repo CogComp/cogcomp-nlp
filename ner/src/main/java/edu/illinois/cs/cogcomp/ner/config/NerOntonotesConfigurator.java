@@ -8,7 +8,6 @@
 package edu.illinois.cs.cogcomp.ner.config;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.Properties;
