@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes.utils;
 
 import java.text.ParseException;
@@ -10,7 +17,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 
 /**
- * base class for all SRL node arguments.
+ * base class for all SRL node arguments. Each one represents one line from the propbank
+ * file for a single verb and it's arguments.
  * @author redman
  */
 public class SRLNode {
