@@ -5,6 +5,8 @@
 # With this done, catenate the thickness and learning rate to the end of the
 # config file.
 #
+# THIS SCRIPT IS NO LONGER USED, THE DATA IS COPIED INTO THE ner/ DIRECTORY!
+#
 learnrate=(.2 .01)
 thickness=(20 200)
 
