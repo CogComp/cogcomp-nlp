@@ -66,6 +66,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     public final static String FEATUREPRUNINGTHRESHOLD = "FeaturePruningThreshold";
 
     public final static String BROWN_CLUSTER_PATHS = "BrownClusterPaths";
+    public final static String USE_LOCAL_BROWN_CLUSTER = "UseLocalBrownCluster";
     public final static String IS_LOWERCASE_BROWN_CLUSTERS = "isLowercaseBrownClusters";
     public final static String PATHS_TO_BROWN_CLUSTERS = "pathsToBrownClusters";
     public final static String MIN_WORD_APP_THRESHOLDS_FOR_BROWN_CLUSTERS =
@@ -81,6 +82,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_1 = "0.0";
     public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_2 = "0.0";
     private final static String DEFAULT_BROWN_CLUSTER_PATHS = "1";
+    private final static String DEFAULT_USE_LOCAL_BROWN_CLUSTER = "false";
     private final static String DEFAULT_IS_LOWERCASE_BROWN_CLUSTERS = "false false false";
     private final static String DEFAULT_PATHS_TO_BROWN_CLUSTERS =
             "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt    brown-clusters/brownBllipClusters    brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt";
@@ -135,6 +137,8 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(AGGREGATE_GAZETTEER, DEFAULT_AGGREGATE_GAZETTEER);
         props.setProperty(DEBUG, DEFAULT_DEBUG);
         props.setProperty(BROWN_CLUSTER_PATHS, DEFAULT_BROWN_CLUSTER_PATHS);
+        props.setProperty(USE_LOCAL_BROWN_CLUSTER, DEFAULT_USE_LOCAL_BROWN_CLUSTER);
+
         props.setProperty(CAPITALIZATION, DEFAULT_CAPITALIZATION);
         props.setProperty(FORCE_NEW_SENTENCE_ON_LINE_BREAKS, DEFAULT_FORCE_LINE_BREAKS);
         props.setProperty(FORMS, DEFAULT_FORMS);

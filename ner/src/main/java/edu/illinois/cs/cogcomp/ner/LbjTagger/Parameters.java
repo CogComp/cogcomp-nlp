@@ -383,9 +383,13 @@ public class Parameters {
                                     + "(pathsToBrownClusters, minWordAppThresholdsForBrownClusters, "
                                     + "isLowercaseBrownClusters) need to have the same number of parameters.");
                 }
-
+                boolean useLocalBrownCluster = false;
+                if (rm.containsKey("UseLocalBrownCluster")
+                        && rm.getString("UseLocalBrownCluster").equals("true")){
+                    useLocalBrownCluster = true;
+                }
                 BrownClusters.init(pathsToBrownClusters, minWordAppThresholdsForBrownClusters,
-                        lowercaseBrown);
+                        lowercaseBrown, useLocalBrownCluster);
 
                 // For output later
                 for (int i = 0; i < pathsToBrownClusters.size(); i++) {

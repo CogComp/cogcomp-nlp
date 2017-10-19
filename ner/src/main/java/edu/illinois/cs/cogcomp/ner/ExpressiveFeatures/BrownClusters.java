@@ -72,7 +72,7 @@ public class BrownClusters {
      * @param isLowercaseBrownClusters
      */
     public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
-            Vector<Boolean> isLowercaseBrownClusters) {
+            Vector<Boolean> isLowercaseBrownClusters, boolean useLocalBrownCluster) {
 
         try {
         Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
@@ -88,11 +88,9 @@ public class BrownClusters {
                 THashMap<String, String> h = new THashMap<>();
                 // We used to access the files as resources. Now we are accessing them programmatically.
                 // InFile in = new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
-                // Here we check if the file exists in data-store resources.
-                // If not, we interpret input path as a local resource.
+                // Here we check if local resource is specified.
                 String bcFilePath = bcDirectory.getPath() + File.separator + pathsToClusterFiles.elementAt(i);
-                File checker = new File(bcFilePath);
-                if (!checker.exists()){
+                if (useLocalBrownCluster){
                     bcFilePath = pathsToClusterFiles.elementAt(i);
                 }
                 InputStream is = new FileInputStream(bcFilePath);
