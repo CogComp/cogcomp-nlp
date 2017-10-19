@@ -61,14 +61,10 @@ public class JsonSerializer extends AbstractSerializer {
 
     private static void writeView(View view, JsonObject json) {
         writeString("viewType", view.getClass().getCanonicalName(), json);
-
         writeString("viewName", view.getViewName(), json);
-
         writeString("generator", view.getViewGenerator(), json);
-
         if (view.getScore() != 0)
             writeDouble("score", view.getScore(), json);
-
         List<Constituent> constituents = view.getConstituents();
 
         // Performance of the indexOf method is terrible, so we will collect the 
@@ -105,9 +101,30 @@ public class JsonSerializer extends AbstractSerializer {
             // if we're using relations, constituents shouldn't have any duplicates; otherwise upon deserialization
             // things would not be as expected
             Set<Constituent> consSet = new HashSet<>(constituents);
-            if(consSet.size() < constituents.size())
-                logger.error("There are duplicate constituents in the '" + view + "' view. " +
-                        "You have to fix this otherwise things will be messed up, upon deserialization. ");
+            if(consSet.size() < constituents.size()) {
+                logger.error("There are "+(constituents.size()-consSet.size())+" duplicates constituents in the '" + view.getViewName() + "' view. " +
+                        "You have to fix this otherwise things will be messed up, upon deserialization : "+view.getTextAnnotation().getId());
+                // identify the constituents that hash the same, and print them.
+                int hits = 0;
+                for (int outter = 0 ; outter < constituents.size(); outter++) {
+                    for (int inner = 0 ; inner < constituents.size(); inner++) {
+                        if(outter == inner)
+                            continue;
+                        else {
+                            Constituent c1 = constituents.get(outter);
+                            Constituent c2 = constituents.get(inner);
+                            if (c1.equals(c2)) {
+                                int s1 = c1.getStartSpan();
+                                int s2 = c2.getStartSpan();
+                                c1.equals(c2);
+                                logger.error(hits+") Got them : "+c1+"("+s1+") -- "+c2+"("+s2+")");
+                                hits++;
+                            }
+                        }
+                    }
+
+                }
+            }
 
 
             JsonArray rJson = new JsonArray();

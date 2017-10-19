@@ -148,25 +148,32 @@ public class Constituent implements Serializable, HasAttributes {
         this.outgoingRelations = new ArrayList<>();
         this.incomingRelations = new ArrayList<>();
 
-
-        if (startSpan >= 0) {
-            startCharOffset = text.getTokenCharacterOffset(startSpan).getFirst();
-        } else
-            startCharOffset = -1;
-
-        if (endSpan > 0 && endSpan <= text.size()) {
-            // TODO: verify correct token offset behavior. If a Constituent must always use
-            // one-past-the-end indexing wrt token
-            // indexes, this should be a requirement on instantiation. The check below was throwing
-            // an exception
-            // when start and end span were the same.
-            if (endSpan > startSpan)
-                endCharOffset = text.getTokenCharacterOffset(endSpan - 1).getSecond();
-            else
-                // FIXED -- MS 4/17/2015
-                endCharOffset = text.getTokenCharacterOffset(endSpan).getSecond();
-        } else
-            endCharOffset = 0;
+        // IF this is a zero length constituent, and beyond the end of the text data,
+        // we will set the text char offset to -1 and 0 I guess.
+        if (startSpan == endSpan && startSpan >= text.tokenCharacterOffsets.length) {
+            int ip = text.tokenCharacterOffsets[text.tokenCharacterOffsets.length-1].getSecond();
+            startCharOffset = ip;
+            endCharOffset = ip;
+        } else {
+            if (startSpan >= 0) {
+                startCharOffset = text.getTokenCharacterOffset(startSpan).getFirst();
+            } else
+                startCharOffset = -1;
+    
+            if (endSpan > 0 && endSpan <= text.size()) {
+                // TODO: verify correct token offset behavior. If a Constituent must always use
+                // one-past-the-end indexing wrt token
+                // indexes, this should be a requirement on instantiation. The check below was throwing
+                // an exception
+                // when start and end span were the same.
+                if (endSpan > startSpan)
+                    endCharOffset = text.getTokenCharacterOffset(endSpan - 1).getSecond();
+                else
+                    // FIXED -- MS 4/17/2015
+                    endCharOffset = text.getTokenCharacterOffset(endSpan).getSecond();
+            } else
+                endCharOffset = 0;
+        }
 
         assert endCharOffset >= startCharOffset : "End character offset of constituent less than start!\n"
                 + text.getTokenizedText()
@@ -266,6 +273,9 @@ public class Constituent implements Serializable, HasAttributes {
 
             if (!myRelation.getSource().getSpan().equals(otherRelation.getSource().getSpan()))
                 return false;
+            
+            if (myRelation.getSource().label != otherRelation.getSource().label)
+                return false;
         }
 
         if (this.getOutgoingRelations().size() != that.getOutgoingRelations().size())
@@ -283,6 +293,9 @@ public class Constituent implements Serializable, HasAttributes {
                 return false;
 
             if (!myRelation.getTarget().getSpan().equals(otherRelation.getTarget().getSpan()))
+                return false;
+            
+            if (myRelation.getTarget().label != otherRelation.getTarget().label)
                 return false;
         }
 
