@@ -134,7 +134,7 @@ public class ExtentReader implements Parser
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl);
+            BrownClusters.init(bcs, bcst, bcsl, false);
 
         }
         catch (Exception e){

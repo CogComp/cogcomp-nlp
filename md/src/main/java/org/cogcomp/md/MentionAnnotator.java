@@ -140,7 +140,7 @@ public class MentionAnnotator extends Annotator{
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl);
+            BrownClusters.init(bcs, bcst, bcsl, false);
             brownClusters = BrownClusters.get();
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
