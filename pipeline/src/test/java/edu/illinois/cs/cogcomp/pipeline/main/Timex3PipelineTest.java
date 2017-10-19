@@ -62,7 +62,7 @@ public class Timex3PipelineTest {
         View temporalViews = ta.getView(ViewNames.TIMEX3);
         List<Constituent> constituents = temporalViews.getConstituents();
         assertEquals("<TIMEX3 mod=\"START\" type=\"DATE\" value=\"2016-12\">", constituents.get(0).getLabel());
-        assertEquals("<TIMEX3 type=\"DATE\" value=\"2017-08\">", constituents.get(1).getLabel());
+        assertEquals("<TIMEX3 type=\"DATE\" value=\"2017-09\">", constituents.get(1).getLabel());
     }
 
 }
