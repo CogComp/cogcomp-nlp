@@ -292,12 +292,15 @@ public class DVector implements Cloneable, java.io.Serializable {
 
 
     /**
-     * Writes a binary representation of the vector.
+     * Writes a binary representation of the vector. We will always write the data as single
+     * precision(indicated by the negative size), in this was, as people rebuild their models, 
+     * the disk footprint is reduced, yet, as seen in the read method, they can still read the
+     * old models.
      *
      * @param out The output stream.
      **/
     public void write(ExceptionlessOutputStream out) {
-        out.writeInt(size);
+        out.writeInt(-size);
         for (int i = 0; i < size; ++i)
             out.writeFloat(vector[i]);
     }
@@ -305,7 +308,9 @@ public class DVector implements Cloneable, java.io.Serializable {
 
     /**
      * Reads the binary representation of a vector from the specified stream, overwriting the data
-     * in this object.
+     * in this object. The data is either double on disk, or single precision. If the size read
+     * from the first int is negative, it is single precision data, if it is positive it is double
+     * precision data.
      *
      * @param in The input stream.
      **/
@@ -313,10 +318,15 @@ public class DVector implements Cloneable, java.io.Serializable {
         size = in.readInt();
         if (size == 0)
             vector = new float[defaultCapacity];
-        else {
+        else if (size < 0) {
+            size = -size;
             vector = new float[size];
             for (int i = 0; i < size; ++i)
                 vector[i] = in.readFloat();
+        } else {
+            vector = new float[size];
+            for (int i = 0; i < size; ++i)
+                vector[i] = (float)in.readDouble();
         }
     }
 }
