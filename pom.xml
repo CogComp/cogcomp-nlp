@@ -19,6 +19,7 @@
         <module>chunker</module>
         <module>md</module>
         <module>ner</module>
+        <module>relation-extraction</module>
         <module>corpusreaders</module>
         <module>lbjava-nlp-tools</module>
         <module>big-data-utils</module>
