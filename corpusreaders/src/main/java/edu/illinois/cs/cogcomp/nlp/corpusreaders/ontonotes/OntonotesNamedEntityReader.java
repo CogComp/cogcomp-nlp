@@ -39,10 +39,8 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 /**
- * This class will traverse a directory hierarchy searching for any file with a 
- * certain file extension. The file is expected to be a penn treebank parse file in
- * text format. It will go any number of levels deep. The iteration produces a
- * TextAnnotation for each file.
+ * This reader will traverse a directory, reading a producing a named entity text annotation
+ * for ".name" file found in the directory. It is expected to be an ontonotes 5 directory.
  * @author redman
  */
 public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotation> {
@@ -140,7 +138,8 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
 
     /**
      * parse the pen treebank parse file, producing an annotation covering the entire file.
-     * @param lines the data from the file, each line.
+     * @param data the data from the file, each line.
+     * @param docid the id representing the document name.
      * @return the text annotation.
      * @throws AnnotatorException
      */
@@ -187,7 +186,6 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
         }
         ta.addView(ViewNames.NER_ONTONOTES, nerView);
         return xta;
-
     }
 
     /**
@@ -205,7 +203,6 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
         } else {
             return "No files were read.";
         }
-        
     }
 
     @Override

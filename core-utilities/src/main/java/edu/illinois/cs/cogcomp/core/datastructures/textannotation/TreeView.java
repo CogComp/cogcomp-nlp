@@ -571,8 +571,44 @@ public class TreeView extends View {
                 this.getTextAnnotation(), start, end);
     }
 
+    /**
+     * We need to adjust the tree span offsets, they are relative to the start of the sentence,
+     * we will make them relative to the start of the text.
+     * @param tree the label, span intpair pairs of pairs of pairs.
+     * @param offset the amount to advance the spans.
+     */
+    private void adjustTree(Tree<Pair<String, IntPair>> tree, int offset) {
+        IntPair span = tree.getLabel().getSecond();
+        span.setFirst(span.getFirst()+offset);
+        span.setSecond(span.getSecond()+offset);
+        for (Tree<Pair<String, IntPair>> child : tree.getChildren()) {
+            adjustTree(child, offset);
+        }
+    }
+    
+    /**
+     * Get the constituents comprising the sentence at the provided index organized into a 
+     * tree.
+     * @param sentenceId the id of the sentence.
+     * @return a tree comprised of constituents.
+     */
     public Tree<Constituent> getConstituentTree(int sentenceId) {
-        return getConstituentSubTree(ParseUtils.getSpanLabeledTree(getTree(sentenceId)));
+        if (sentenceId >= this.trees.size())
+            return null;
+        // first get the parse tree containing for each label the token offsets as a pair.
+        Tree<String> sentence = getTree(sentenceId);
+        
+        // now get the span labeled tree
+        Tree<Pair<String, IntPair>> labeledSpans = ParseUtils.getSpanLabeledTree(sentence);
+        
+        // the offset are relative to the beginning of the tree adjust to the start of text.
+        // the root constituent will contain the starting location.
+        Constituent c = this.getRootConstituent(sentenceId);
+        int offset = c.getStartSpan();
+        
+        // now adjust each of the tree pairs to the constituents offset.
+        adjustTree(labeledSpans, offset);
+        return getConstituentSubTree(labeledSpans);
     }
 
     private Tree<Constituent> getConstituentSubTree(Tree<Pair<String, IntPair>> parseTree) {
