@@ -37,11 +37,6 @@ public class PredictedMentionReader implements Parser{
         }
         return name + "_OP";
     }
-    private static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
-                                                           TextAnnotation textAnnotation,
-                                                           String viewName) {
-        return ACEMentionReader.getEntityHeadForConstituent(extentConstituent, textAnnotation, viewName);
-    }
 
     public boolean skipTypes(String type){
         if (type.equals("Ownership") || type.equals("Ownership_OP")
@@ -121,7 +116,7 @@ public class PredictedMentionReader implements Parser{
                 Map<Constituent, Constituent> consMap = new HashMap<Constituent, Constituent>();
                 for (Constituent c : goldView.getConstituents()){
                     consMap.put(c,null);
-                    Constituent ch = getEntityHeadForConstituent(c, ta, "TESTG");
+                    Constituent ch = RelationFeatureExtractor.getEntityHeadForConstituent(c, ta, "TESTG");
                     for (Constituent pc : predictedView.getConstituents()){
                         Constituent pch = MentionAnnotator.getHeadConstituent(pc, "TESTP");
                         if (ch.getStartSpan() == pch.getStartSpan() && ch.getEndSpan() == pch.getEndSpan()){

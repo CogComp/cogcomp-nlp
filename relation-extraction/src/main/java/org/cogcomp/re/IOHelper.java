@@ -182,18 +182,18 @@ public class IOHelper {
     public static void produceFiveFoldReader(){
         for (int i = 0; i < 5; i++){
             ACEMentionReader curTrain = new ACEMentionReader("data/partition_with_dev/train/" + i, "relation_full_bi_test");
-            serializeDataOut(curTrain, "preprocess/reader/train_fold_" + i);
+            serializeDataOut(curTrain, "relation-extraction/preprocess/reader/train_fold_" + i);
             ACEMentionReader curTest = new ACEMentionReader("data/partition_with_dev/eval/" + i, "relation_full_bi_test");
-            serializeDataOut(curTest, "preprocess/reader/test_fold_" + i);
+            serializeDataOut(curTest, "relation-extraction/preprocess/reader/test_fold_" + i);
         }
     }
 
     public static ACEMentionReader readFiveFold(int fold, String mode){
         if (mode.equals("TRAIN")) {
-            return serializeDataIn("preprocess/reader/train_fold_" + fold);
+            return serializeDataIn("relation-extraction/preprocess/reader/train_fold_" + fold);
         }
         else {
-            return serializeDataIn("preprocess/reader/test_fold_" + fold);
+            return serializeDataIn("relation-extraction/preprocess/reader/test_fold_" + fold);
         }
     }
 
@@ -210,6 +210,6 @@ public class IOHelper {
     }
 
     public static void main (String[] args){
-        List<Relation> ret = inputRelationsNonBinary("preprocess/relations/PHYS_MAN_NON_BIN.txt");
+        produceFiveFoldReader();
     }
 }

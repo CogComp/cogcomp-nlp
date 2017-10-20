@@ -3,7 +3,6 @@ import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
-import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
@@ -13,7 +12,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.pipeline.common.Stanford331Configurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
-import edu.illinois.cs.cogcomp.edison.annotators.*;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
@@ -27,8 +25,8 @@ import java.lang.*;
 
 public class ACEMentionReader implements Parser, Serializable
 {
-    private List<Relation> relations_mono;
-    private List<Relation> relations_bi;
+    public List<Relation> relations_mono;
+    public List<Relation> relations_bi;
     private String readType;
     private int relationIdx;
 
@@ -112,7 +110,6 @@ public class ACEMentionReader implements Parser, Serializable
                             boolean found_as_source = false;
                             boolean found_as_target = false;
                             for (Relation r : existRelations){
-                                //if (r.getSource() == firstArg && r.getTarget() == secondArg){
                                 if (r.getSource().getStartSpan() == firstArg.getStartSpan() && r.getSource().getEndSpan() == firstArg.getEndSpan()
                                         && r.getTarget().getStartSpan() == secondArg.getStartSpan() && r.getTarget().getEndSpan() == secondArg.getEndSpan()){
                                     relations_mono.add(r);
@@ -127,7 +124,6 @@ public class ACEMentionReader implements Parser, Serializable
                                     relations_bi.add(opdir);
                                     break;
                                 }
-                                //if (r.getTarget() == firstArg && r.getSource() == secondArg){
                                 if (r.getTarget().getStartSpan() == firstArg.getStartSpan() && r.getTarget().getEndSpan() == firstArg.getEndSpan()
                                         && r.getSource().getStartSpan() == secondArg.getStartSpan() && r.getSource().getEndSpan() == secondArg.getEndSpan()){
                                     relations_mono.add(r);
@@ -187,6 +183,9 @@ public class ACEMentionReader implements Parser, Serializable
         else{
             return null;
         }
+    }
+    public List<Relation> readList(){
+        return relations_mono;
     }
 
     public void reset(){

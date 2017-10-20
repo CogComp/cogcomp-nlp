@@ -1,5 +1,6 @@
 package org.cogcomp.re;
 
+import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.Score;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
@@ -74,34 +75,10 @@ public class ACERelationTester {
     }
 
     /*
-     * This function trains and tests the five fold cv
-     * It uses pre-extract and has the same result as lbjava:compile
-     */
-    public static void test_normal_cross_validation(){
-        for (int i = 0; i < 5; i++) {
-            is_null_label output = new is_null_label();
-            Parser train_parser = new ACEMentionReader("data/partition/train/" + i, "relation_full_trim");
-            relation_classifier classifier = new relation_classifier();
-            classifier.setLexiconLocation("src/main/java/org/cogcomp/re/classifier_fold_" + i + ".lex");
-            BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
-            Lexicon lexicon = trainer.preExtract("src/main/java/org/cogcomp/re/classifier_fold_" + i + ".ex", true);
-            classifier.setLexicon(lexicon);
-            trainer.train(1,10);
-            Parser parser_full = new ACEMentionReader("data/partition/eval/" + i, "relation_full_bi");
-            TestDiscrete tester_full = TestDiscrete.testDiscrete(classifier, output, parser_full);
-            tester_full.printPerformance(System.out);
-            classifier.forget();
-            parser_full.reset();
-            train_parser.reset();
-        }
-        //delete_files();
-    }
-
-    /*
      * This function only tests the constrained classifier
      * It performs a similar five-fold cv
      */
-    public static void test_constraint(){
+    public static void test_cv(){
         int total_correct = 0;
         int total_labeled = 0;
         int total_predicted = 0;
@@ -126,71 +103,30 @@ public class ACERelationTester {
         int null_relation_f = 0;
         int null_relation_all = 0;
         for (int i = 0; i < 5; i++) {
-            //binary_relation_classifier binary_classifier = new binary_relation_classifier("models/binary_classifier_fold_" + i + ".lc",
-              //      "models/binary_classifier_fold_" + i + ".lex");
             fine_relation_label output = new fine_relation_label();
-            ACEMentionReader train_parser_from_file = IOHelper.readFiveFold(i, "TRAIN");
+            //ACEMentionReader train_parser = new ACEMentionReader("data/partition_with_dev/train/" + i, "relations_mono");
+            ACEMentionReader train_parser = IOHelper.readFiveFold(i, "TRAIN");
+
             relation_classifier classifier = new relation_classifier();
             classifier.setLexiconLocation("models/relation_classifier_fold_" + i + ".lex");
-            BatchTrainer trainer = new BatchTrainer(classifier, train_parser_from_file);
+            BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
             Learner preExtractLearner = trainer.preExtract("models/relation_classifier_fold_" + i + ".ex", true, Lexicon.CountPolicy.none);
             preExtractLearner.saveLexicon();
             Lexicon lexicon = preExtractLearner.getLexicon();
             classifier.setLexicon(lexicon);
-            int examples = train_parser_from_file.readList().size();
+            int examples = train_parser.relations_mono.size();
             classifier.initialize(examples, preExtractLearner.getLexicon().size());
-            for (Relation r : train_parser_from_file.readList()){
-                //if (is_null(binary_classifier, r)){
-                    //continue;
-                //}
+            for (Relation r : train_parser.relations_mono){
                 classifier.learn(r);
             }
             classifier.doneWithRound();
             classifier.doneLearning();
 
             ACERelationConstrainedClassifier constrainedClassifier = new ACERelationConstrainedClassifier(classifier);
-            ACEMentionReader test_parser_from_file = IOHelper.readFiveFold(i, "TEST");
-            for (Relation example : test_parser_from_file.readList()){
-                List<String> outputs = new ArrayList<String>();
-                String predicted_label = constrainedClassifier.discreteValue(example);
-                String gold_label = output.discreteValue(example);
-                Relation r = (Relation)example;
-                Relation oppoR = new Relation("TO_TEST", r.getTarget(), r.getSource(), 1.0f);
-                String oppo_predicted_label = constrainedClassifier.discreteValue((Object)oppoR);
-                if (!predicted_label.equals(ACEMentionReader.getOppoName(oppo_predicted_label))){
-                    ScoreSet scores = classifier.scores(example);
-                    Score[] scoresArray = scores.toArray();
-                    double score_curtag = 0.0;
-                    double score_opptag = 0.0;
-                    for (Score score : scoresArray){
-                        if (score.value.equals(predicted_label)){
-                            score_curtag = score.score;
-                        }
-                        if (score.value.equals(ACEMentionReader.getOppoName(oppo_predicted_label))){
-                            score_opptag = score.score;
-                        }
-                    }
-                    scores = classifier.scores((Object)oppoR);
-                    scoresArray = scores.toArray();
-                    double oppo_score_opptag = 0.0;
-                    double oppo_score_curtag = 0.0;
-                    for (Score score : scoresArray){
-                        if (score.value.equals(oppo_predicted_label)){
-                            oppo_score_opptag = score.score;
-                        }
-                        if (score.value.equals(ACEMentionReader.getOppoName(predicted_label))){
-                            oppo_score_curtag = score.score;
-                        }
-                    }
-                    //if (score_curtag + oppo_score_curtag < score_opptag + oppo_score_opptag){
-                    if (score_curtag < oppo_score_opptag && oppo_score_opptag - score_curtag > 0.005){
-                        predicted_label = ACEMentionReader.getOppoName(oppo_predicted_label);
-                    }
-                }
-                //if (is_null(binary_classifier, example)){
-                    //predicted_label = "NOT_RELATED";
-                    //continue;
-                //}
+            ACEMentionReader test_parser = IOHelper.readFiveFold(i, "TEST");
+            for (Relation r : test_parser.relations_mono){
+                String predicted_label = constrainedClassifier.discreteValue(r);
+                String gold_label = output.discreteValue(r);
                 if (predicted_label.equals("NOT_RELATED") == false){
                     if (pMap.containsKey(predicted_label)){
                         pMap.put(predicted_label, pMap.get(predicted_label) + 1);
@@ -231,62 +167,9 @@ public class ACERelationTester {
                         null_total_correct++;
                     }
                 }
-                /*
-                if (!predicted_label.equals(gold_label) && !gold_label.equals("NOT_RELATED")){
-                    Constituent source = r.getSource();
-                    Constituent target = r.getTarget();
-                    TextAnnotation ta = source.getTextAnnotation();
-                    System.out.println(ta.getSentenceFromToken(source.getStartSpan()));
-                    System.out.println("Gold: " + gold_label + " Predicted: " + predicted_label);
-                    System.out.println(source.toString() + " || " + target.toString());
-                    System.out.println();
-                }
-                */
-                if (r.getAttribute("RelationSubtype").equals("NOT_RELATED")){
-                    total_null_relation++;
-                    if (RelationFeatureExtractor.isPremodifier(r)){
-                        null_relation_pm++;
-                    }
-                    if (RelationFeatureExtractor.isPossessive(r)){
-                        null_relation_ps++;
-                    }
-                    if (RelationFeatureExtractor.isPreposition(r)){
-                        null_relation_pp++;
-                    }
-                    if (RelationFeatureExtractor.isFormulaic(r)){
-                        null_relation_f++;
-                    }
-                    if (RelationFeatureExtractor.isFourType(r)){
-                        null_relation_all++;
-                    }
-                }
-                else {
-                    total_real_relation++;
-                    if (RelationFeatureExtractor.isPremodifier(r)){
-                        real_relation_pm++;
-                    }
-                    if (RelationFeatureExtractor.isPossessive(r)){
-                        real_relation_ps++;
-                    }
-                    if (RelationFeatureExtractor.isPreposition(r)){
-
-                        real_relation_pp++;
-                    }
-                    if (RelationFeatureExtractor.isFormulaic(r)){
-                        real_relation_f++;
-                    }
-                    if (RelationFeatureExtractor.isFourType(r)){
-                        real_relation_all++;
-                    }
-                }
             }
             classifier.forget();
         }
-        /*
-        for (String o : outputs){
-            System.out.println(o);
-        }
-        */
         for (String s : lMap.keySet()){
             System.out.println(s + "\t" + lMap.get(s) + "\t" + pMap.get(s) + "\t" + cMap.get(s));
         }
@@ -304,30 +187,6 @@ public class ACERelationTester {
         System.out.println("Precision: " + p);
         System.out.println("Recall: " + r);
         System.out.println("F1: " + f);
-        //delete_files();
-    }
-
-    public static boolean is_null(Learner classifier, Object example){
-        String predicted_label = classifier.discreteValue(example);
-        ScoreSet scores = classifier.scores(example);
-        Score[] scoresArray = scores.toArray();
-        double positive_score = 0.0;
-        for (Score score : scoresArray){
-            if (score.score < 0){
-                positive_score = -score.score;
-            }
-            else{
-                positive_score = score.score;
-            }
-            break;
-        }
-        if (predicted_label.equals("null")){
-            if (positive_score < 1.0){
-                predicted_label = "not_null";
-            }
-        }
-        if (predicted_label.equals("null")) return true;
-        return false;
     }
 
     public static void test_constraint_predicted(){
@@ -348,9 +207,9 @@ public class ACERelationTester {
             preExtractLearner.saveLexicon();
             Lexicon lexicon = preExtractLearner.getLexicon();
             classifier.setLexicon(lexicon);
-            int examples = train_parser_from_file.readList().size();
+            int examples = train_parser_from_file.relations_mono.size();
             classifier.initialize(examples, preExtractLearner.getLexicon().size());
-            for (Relation r : train_parser_from_file.readList()){
+            for (Relation r : train_parser_from_file.relations_mono){
                 //if (is_null(binary_classifier, r)){
                 //continue;
                 //}
@@ -531,6 +390,6 @@ public class ACERelationTester {
         System.out.println("F1: " + f * 100.0);
     }
     public static void main(String[] args){
-        test_constraint();
+        test_cv();
     }
 }
