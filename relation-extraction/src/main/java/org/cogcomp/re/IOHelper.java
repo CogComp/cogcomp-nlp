@@ -27,9 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * Created by xuany on 10/6/2017.
- */
 public class IOHelper {
     public static void serializeDataOut(ACEMentionReader input, String outputFile){
         String fileName= outputFile;

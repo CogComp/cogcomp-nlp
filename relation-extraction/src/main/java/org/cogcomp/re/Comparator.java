@@ -24,9 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by xuany on 10/12/2017.
- */
 public class Comparator {
     private WordSim wordSim = null;
     private Metric llmStringSim = null;

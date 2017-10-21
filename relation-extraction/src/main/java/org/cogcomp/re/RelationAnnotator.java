@@ -39,7 +39,7 @@ public class RelationAnnotator extends Annotator {
 
 
     public RelationAnnotator(boolean lazilyInitialize) {
-        super("RELATION_EXTRACTION", new String[]{ViewNames.POS, ViewNames.DEPENDENCY, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
+        super("RELATION_EXTRACTION", new String[]{ViewNames.POS, ViewNames.DEPENDENCY_STANFORD, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
         relationClassifier = new relation_classifier();
         constrainedClassifier = new org.cogcomp.re.ACERelationConstrainedClassifier(relationClassifier);
     }
@@ -62,6 +62,15 @@ public class RelationAnnotator extends Annotator {
 
     @Override
     public void addView(TextAnnotation record) throws AnnotatorException {
+        if (!record.hasView(ViewNames.POS) ){
+            throw new AnnotatorException("Missing required view POS");
+        }
+        if (!record.hasView(ViewNames.DEPENDENCY_STANFORD)){
+            throw new AnnotatorException("Missing required view DEPENDENCY_STANFORD");
+        }
+        if (!record.hasView(ViewNames.SHALLOW_PARSE)){
+            throw new AnnotatorException("Missing required view SHALLOW_PARSE");
+        }
         mentionAnnotator.addView(record);
         View mentionView = record.getView(ViewNames.MENTION);
         View relationView = new SpanLabelView(ViewNames.RELATION, RelationAnnotator.class.getCanonicalName(), record, 1.0f, true);

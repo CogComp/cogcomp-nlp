@@ -28,10 +28,15 @@ import java.util.Set;
 
 public class RelationFeatureExtractor {
 
-    /*
-     * getEntityHeadForConstituent
-     * This is the helper function to get entity head constituent for each mention
-     * The returned constituent may contain multiple tokens
+    /**
+     * Return the head Constituent
+     * @param extentConstituent The extent Constituent
+     * @param textAnnotation The TextAnnotation that contains extentConstituent
+     * @param viewName The desired view name for the output Constituent
+     * @return A Constituent that represents the head
+     *
+     * Note: ACEReader represents head in a different way as MentionAnnotator does
+     *       This method checks which way the input uses and adapt automatically.
      */
     public static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
                                                            TextAnnotation textAnnotation,
@@ -67,6 +72,11 @@ public class RelationFeatureExtractor {
         return null;
     }
 
+    /**
+     * Checks if the input relation forms possessive structure
+     * @param r The input relation
+     * @return A boolean
+     */
     public static boolean isPossessive(Relation r){
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
@@ -114,6 +124,11 @@ public class RelationFeatureExtractor {
         return false;
     }
 
+    /**
+     * A helper function that checks if the POS tag is noun
+     * @param posTag POS Tag
+     * @return A boolean
+     */
     public static boolean isNoun(String posTag){
         if (posTag.startsWith("NN") || posTag.startsWith("RB") || posTag.startsWith("WP")){
             return true;
@@ -121,6 +136,11 @@ public class RelationFeatureExtractor {
         return false;
     }
 
+    /**
+     * Checks if the input relation forms preposition structure
+     * @param r The input relation
+     * @return A boolean
+     */
     public static boolean isPreposition(Relation r){
         if (RelationFeatureExtractor.isPossessive(r)){
             //return false;
@@ -162,20 +182,6 @@ public class RelationFeatureExtractor {
             return true;
         }
         boolean found_in = false;
-        noNp = true;
-        /*
-        for (int i = front_head.getStartSpan() - 1; i >= SentenceStart; i--){
-            if (isNoun(posView.getLabelsCoveringToken(i).get(0))){
-                noNp = false;
-            }
-            if (posView.getLabelsCoveringToken(i).get(0).equals("IN")){
-                found_in = true;
-            }
-        }
-        if (found_in && noNp) {
-            return true;
-        }
-        */
         found_in_to = false;
         noNp = true;
         boolean non_overlap = false;
@@ -206,6 +212,11 @@ public class RelationFeatureExtractor {
         return false;
     }
 
+    /**
+     * Checks if the input relation forms formulaic structure
+     * @param r The input relation
+     * @return A boolean
+     */
     public static boolean isFormulaic(Relation r){
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
@@ -242,6 +253,12 @@ public class RelationFeatureExtractor {
         return false;
     }
 
+    /**
+     * A helper that checks if the two inputs have only noun phrases between
+     * @param front The Constituent at the front
+     * @param back The second Consituent
+     * @return A boolean
+     */
     public static boolean onlyNounBetween(Constituent front, Constituent back){
         TextAnnotation ta = front.getTextAnnotation();
         View posView = ta.getView(ViewNames.POS);
@@ -254,6 +271,11 @@ public class RelationFeatureExtractor {
         return true;
     }
 
+    /**
+     * Checks if the input relation forms pre-modifier structure
+     * @param r The input relation
+     * @return A boolean
+     */
     public static boolean isPremodifier(Relation r){
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
@@ -306,11 +328,11 @@ public class RelationFeatureExtractor {
         return false;
     }
 
-    public static boolean isFourType (Relation r){
-        return (isPremodifier(r) || isPossessive(r) || isFormulaic(r) || isPreposition(r));
-    }
-
-
+    /**
+     * Lexical Feature Extractor Part A
+     * @Extract source mention BOW
+     * @return A List of String features
+     */
     public List<String> getLexicalFeaturePartA(Relation r){
 
         List<String> ret_features = new ArrayList<String>();
@@ -321,6 +343,12 @@ public class RelationFeatureExtractor {
         }
         return ret_features;
     }
+
+    /**
+     * Lexical Feature Extractor Part B
+     * @Extract target mention BOW
+     * @return A List of String features
+     */
     public List<String> getLexicalFeaturePartB(Relation r){
         List<String> ret_features = new ArrayList<String>();
         Constituent target = r.getTarget();
@@ -330,11 +358,16 @@ public class RelationFeatureExtractor {
         }
         return ret_features;
     }
+
+    /**
+     * Lexical Feature Extractor Part C
+     * @Extract the only word (if exists) between two argument extents
+     * @return A List of String features
+     */
     public List<String> getLexicalFeaturePartC(Relation r){
         List<String> ret_features = new ArrayList<String>();
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
-        TextAnnotation ta = source.getTextAnnotation();
         if (source.getEndSpan() == target.getStartSpan() - 1){
             ret_features.add("singleword_" + source.getTextAnnotation().getToken(source.getEndSpan()));
         }
@@ -346,6 +379,12 @@ public class RelationFeatureExtractor {
         }
         return ret_features;
     }
+
+    /**
+     * Lexical Feature Extractor Part C-C
+     * @Extract BOW between mention heads
+     * @return A List of String features
+     */
     public List<String> getLexicalFeaturePartCC(Relation r){
         List<String> ret_features = new ArrayList<String>();
         Constituent source = r.getSource();
@@ -365,6 +404,13 @@ public class RelationFeatureExtractor {
         }
         return ret_features;
     }
+
+    /**
+     * Lexical Feature Extractor Part D
+     * @Extract First word between mentions
+     *           BOW between mentions
+     * @return A List of String features
+     */
     public List<String> getLexicalFeaturePartD(Relation r){
         List<String> ret_features = new ArrayList<String>();
         Constituent source = r.getSource();
@@ -393,6 +439,12 @@ public class RelationFeatureExtractor {
         }
         return ret_features;
     }
+
+    /**
+     * Lexical Feature Extractor Part E
+     * @Extract Structural words
+     * @return A List of String features
+     */
     public List<String> getLexicalFeaturePartE(Relation r){
         List<String> ret_features = new ArrayList<String>();
         Constituent source = r.getSource();
@@ -410,7 +462,7 @@ public class RelationFeatureExtractor {
             }
         }
         else{
-            ret_features.add("fwM2_NULL");
+            ret_features.add("fwM1_NULL");
             ret_features.add("swM1_NULL");
         }
         if (sentenceEnd - target.getEndSpan() > 0){
@@ -429,6 +481,11 @@ public class RelationFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * Lexical Feature Extractor Part F
+     * @Extracts Head forms
+     * @return A List of String features
+     */
     public List<String> getLexicalFeaturePartF(Relation r){
         List<String> ret_features = new ArrayList<String>();
         Constituent source = r.getSource();
@@ -443,10 +500,10 @@ public class RelationFeatureExtractor {
         return ret_features;
     }
 
-    /*
-     * getCollocationsFeature
-     * This function extracts the collocation feature set defined at
-     * http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+    /**
+     * @Extract Collocations features in
+     *          http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+     * @return A list of String features
      */
     public List<String> getCollocationsFeature(Relation r){
         List<String> ret_features = new ArrayList<String>();
@@ -536,16 +593,23 @@ public class RelationFeatureExtractor {
         return ret_features;
     }
 
-    /*
-     * getStructualFeature
-     * This function extracts the structual feature set defined at
-     * http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+    /**
+     * @Extract Structural features in
+     *          http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+     * @return A list of String features
      */
     public List<String> getStructualFeature(Relation r){
         List<String> ret = new ArrayList<String>();
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
-        View mentionView = source.getTextAnnotation().getView(ViewNames.MENTION_ACE);
+        String mentionViewName = ViewNames.MENTION_ACE;
+        if (!r.getSource().getTextAnnotation().hasView(mentionViewName)){
+            mentionViewName = ViewNames.MENTION_ERE;
+        }
+        if (!r.getSource().getTextAnnotation().hasView(mentionViewName)){
+            mentionViewName = ViewNames.MENTION;
+        }
+        View mentionView = source.getTextAnnotation().getView(mentionViewName);
         if (target.getStartSpan() > source.getEndSpan()){
             List<Constituent> middle = mentionView.getConstituentsCoveringSpan(source.getEndSpan(), target.getStartSpan() - 1);
             ret.add("middle_mention_size_" + Integer.toString(middle.size()));
@@ -575,10 +639,10 @@ public class RelationFeatureExtractor {
         return ret;
     }
 
-    /*
-     * getMentionFeature
-     * This function extracts the mention feature set defined at
-     * http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+    /**
+     * @Extract Mention features in
+     *          http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+     * @return A list of String features
      */
     public List<String> getMentionFeature(Relation r){
         List<String> ret = new ArrayList<String>();
@@ -610,12 +674,9 @@ public class RelationFeatureExtractor {
         return ret;
     }
 
-    /*
-     * getDependenceFeature
-     * This function extracts the dependency feature set defined at
-     * http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
-     * Notice: This function expects View DEPENDENCY_STANFORD
-     * The feature "dep labels between m1 and m2" was commented due to performance issues
+    /**
+     * @Extract Features utilizing dependency path
+     * @return A list of Pair features (name, value)
      */
     public static List<Pair<String, String>> getDependencyFeature(Relation r){
         List<Pair<String, String>> ret = new ArrayList<>();
@@ -654,6 +715,10 @@ public class RelationFeatureExtractor {
         return ret;
     }
 
+    /**
+     * @Extract Features utilizing shallow parser result
+     * @return A list of Pair features (name, value)
+     */
     public List<Pair<String, String>> getShallowParseFeature(Relation r) {
         List<Pair<String, String>> ret = new ArrayList<>();
         Constituent source = r.getSource();
@@ -708,6 +773,10 @@ public class RelationFeatureExtractor {
         return ret;
     }
 
+    /**
+     * @Extract A template tag if the input fits any
+     * @return A list of String features
+     */
     public List<String> getTemplateFeature(Relation r){
         List<String> ret_features = new ArrayList<String>();
         if (isFormulaic(r)){
@@ -725,6 +794,10 @@ public class RelationFeatureExtractor {
         return  ret_features;
     }
 
+    /**
+     * Checks if the two mentions are co-referencing each other
+     * @return A boolean
+     */
     public String getCorefTag(Relation r){
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
@@ -736,6 +809,10 @@ public class RelationFeatureExtractor {
         return "FALSE";
     }
 
+    /**
+     * A special feature set that checks if the relation fits any pre-defined patterns
+     * @return A list of String feature
+     */
     public static List<String> patternRecognition(Constituent source, Constituent target){
         Set<String> ret = new HashSet<>();
         TextAnnotation ta = source.getTextAnnotation();

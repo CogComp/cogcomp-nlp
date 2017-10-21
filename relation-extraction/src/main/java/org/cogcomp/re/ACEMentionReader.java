@@ -55,9 +55,6 @@ public class ACEMentionReader implements Parser, Serializable
         return new ArrayList<String>(Arrays.asList(arr));
     }
 
-    public static Relation getOppoRelation(Relation r){
-        return new Relation("TO_TEST", r.getTarget(), r.getSource(), 1.0f);
-    }
     public ACEMentionReader(String file, String type) {
         readType = type;
         relations_mono = new ArrayList<>();
