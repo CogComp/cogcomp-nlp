@@ -7,7 +7,6 @@
  */
 package org.cogcomp.md;
 
-import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -21,9 +20,16 @@ import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import org.cogcomp.md.LbjGen.bio_classifier_nam;
+import org.cogcomp.md.LbjGen.bio_classifier_nom;
+import org.cogcomp.md.LbjGen.bio_classifier_pro;
+import org.cogcomp.md.LbjGen.bio_label;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -257,6 +263,9 @@ public class BIOTester {
         int chosen = -1;
 
         for (int i = 0; i < candidates.length; i++){
+            if (candidates[i] == null){
+                continue;
+            }
             String prediction = candidates[i].discreteValue(t);
             preBIOLevel1[i] = prediction;
             if (prediction.startsWith("B") || prediction.startsWith("U")){
