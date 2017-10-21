@@ -169,6 +169,15 @@ public abstract class Annotator {
     }
 
     /**
+     Add the content of the annotators to a given TextAnnotation object.
+     @param runtimeAttributes the parameters that might change the behavior of the annotator while after initialization and while running.
+     */
+    protected void addView(TextAnnotation ta,  ResourceManager runtimeAttributes) throws AnnotatorException {
+        logger.warn("This annotator does not accept run-time attributes. You have to run `addView() function without the attributes parameter. `");
+        addView(ta);
+    }
+
+    /**
      * First, checks whether model is initialized, and calls initialize() if not. Then, calls
      * addView(). IMPORTANT: clients should always call getView().
      * 
@@ -181,7 +190,6 @@ public abstract class Annotator {
         }
         addView(ta);
     }
-
 
     /**
      * Can be used internally by {@link BasicAnnotatorService} to check for pre-requisites before
