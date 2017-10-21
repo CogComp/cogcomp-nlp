@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package org.cogcomp.re;
 
 import edu.illinois.cs.cogcomp.config.SimConfigurator;
@@ -8,9 +15,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.features.helpers.PathFeatureHelper;
-import edu.illinois.cs.cogcomp.sim.*;
-
-import org.cogcomp.re.LbjGen.*;
+import edu.illinois.cs.cogcomp.sim.LLMStringSim;
+import edu.illinois.cs.cogcomp.sim.Metric;
+import edu.illinois.cs.cogcomp.sim.MetricResponse;
+import edu.illinois.cs.cogcomp.sim.WordSim;
 
 import java.util.ArrayList;
 import java.util.Arrays;

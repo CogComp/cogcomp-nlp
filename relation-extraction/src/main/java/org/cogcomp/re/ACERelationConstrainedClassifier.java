@@ -1,11 +1,20 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package org.cogcomp.re;
+
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.DiscretePrimitiveStringFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.Feature;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.infer.InferenceManager;
-import org.cogcomp.re.LbjGen.*;
+import org.cogcomp.re.LbjGen.constrained_RE;
+import org.cogcomp.re.LbjGen.relation_classifier;
 
 /*
  * This Classifier is a wrapper for testing purposes used by org.cogcomp.re.ACERelationTester

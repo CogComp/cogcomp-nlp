@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.pipeline.handlers;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
@@ -15,7 +22,9 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.pipeline.TrueCaseAnnotator;
 import edu.stanford.nlp.util.CoreMap;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Recognizes the true case of tokens in text where this information was lost, e.g., all upper case text.
