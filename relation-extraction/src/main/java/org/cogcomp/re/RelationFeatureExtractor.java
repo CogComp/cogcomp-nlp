@@ -526,82 +526,6 @@ public class RelationFeatureExtractor {
         return ret_features;
     }
 
-    public List<String> getCollocationsFeatureHeadOnly(Relation r){
-        List<String> ret_features = new ArrayList<String>();
-        Constituent source = r.getSource();
-        Constituent target = r.getTarget();
-        Constituent sourceHead = getEntityHeadForConstituent(source, source.getTextAnnotation(), "EntityHeads");
-        Constituent targetHead = getEntityHeadForConstituent(target, target.getTextAnnotation(), "EntityHeads");
-        String sourceHeadWord = sourceHead.toString();
-        String targetHeadWord = targetHead.toString();
-
-        //Source Features
-        String source_c_m1_p1 = "s_m1_p1_";
-        for (int i = sourceHead.getStartSpan() - 1; i < sourceHead.getEndSpan() + 1; i++) {
-            if (i >= 0 && i < source.getTextAnnotation().getTokens().length) {
-                source_c_m1_p1 = source_c_m1_p1 + source.getTextAnnotation().getToken(i);
-            }
-        }
-        ret_features.add(source_c_m1_p1);
-
-        String source_c_m2_m1 = "s_m2_m1_";
-        for (int i = sourceHead.getStartSpan() - 2; i < sourceHead.getStartSpan(); i++){
-            if (i >= 0 && i < source.getTextAnnotation().getTokens().length) {
-                source_c_m2_m1 = source_c_m2_m1 + source.getTextAnnotation().getToken(i);
-            }
-        }
-        ret_features.add(source_c_m2_m1);
-
-        String source_c_p1_p2 = "s_p1_p2_";
-        for (int i = sourceHead.getEndSpan(); i < sourceHead.getEndSpan() + 2; i++){
-            if (i >= 0 && i < source.getTextAnnotation().getTokens().length) {
-                source_c_p1_p2 = source_c_p1_p2 + source.getTextAnnotation().getToken(i);
-            }
-        }
-        ret_features.add(source_c_p1_p2);
-
-        if (sourceHead.getStartSpan() > 0) {
-            ret_features.add("s_m1_m1_" + source.getTextAnnotation().getToken(sourceHead.getStartSpan() - 1));
-        }
-        if (sourceHead.getEndSpan() < source.getTextAnnotation().getTokens().length) {
-            ret_features.add("s_p1_p1_" + source.getTextAnnotation().getToken(sourceHead.getEndSpan()));
-        }
-
-        //Target Features
-        String target_c_m1_p1 = "t_m1_p1_";
-        for (int i = targetHead.getStartSpan() - 1; i < targetHead.getEndSpan() + 1; i++) {
-            if (i >= 0 && i < source.getTextAnnotation().getTokens().length) {
-                target_c_m1_p1 = target_c_m1_p1 + target.getTextAnnotation().getToken(i);
-            }
-        }
-        ret_features.add(target_c_m1_p1);
-
-        String target_c_m2_m1 = "t_m2_m1_";
-        for (int i = targetHead.getStartSpan() - 2; i < targetHead.getStartSpan(); i++){
-            if (i >= 0 && i < source.getTextAnnotation().getTokens().length) {
-                target_c_m2_m1 = target_c_m2_m1 + target.getTextAnnotation().getToken(i);
-            }
-        }
-        ret_features.add(target_c_m2_m1);
-
-        String target_c_p1_p2 = "t_p1_p2_";
-        for (int i = targetHead.getEndSpan(); i < targetHead.getEndSpan() + 2; i++){
-            if (i >= 0 && i < source.getTextAnnotation().getTokens().length) {
-                target_c_p1_p2 = target_c_p1_p2 + target.getTextAnnotation().getToken(i);
-            }
-        }
-        ret_features.add(target_c_p1_p2);
-
-        if (targetHead.getStartSpan() > 0) {
-            ret_features.add("t_m1_m1_" + target.getTextAnnotation().getToken(targetHead.getStartSpan() - 1));
-        }
-        if (targetHead.getEndSpan() < target.getTextAnnotation().getTokens().length) {
-            ret_features.add("t_p1_p1_" + target.getTextAnnotation().getToken(targetHead.getEndSpan()));
-        }
-
-        return ret_features;
-    }
-
     /*
      * getStructualFeature
      * This function extracts the structual feature set defined at
@@ -611,8 +535,6 @@ public class RelationFeatureExtractor {
         List<String> ret = new ArrayList<String>();
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
-        Constituent sourceHead = getEntityHeadForConstituent(source, source.getTextAnnotation(), "EntityHeads");
-        Constituent targetHead = getEntityHeadForConstituent(target, target.getTextAnnotation(), "EntityHeads");
         View mentionView = source.getTextAnnotation().getView(ViewNames.MENTION_ACE);
         if (target.getStartSpan() > source.getEndSpan()){
             List<Constituent> middle = mentionView.getConstituentsCoveringSpan(source.getEndSpan(), target.getStartSpan() - 1);
@@ -631,17 +553,14 @@ public class RelationFeatureExtractor {
         if (source.doesConstituentCover(target)){
             ret.add("m2_in_m1");
             ret.add("cb1_" + source.getAttribute("EnityType") + "_" + target.getAttribute("EntityType")+ "_m2_in_m1");
-            //ret.add("cb2_" + sourceHead.toString() + "_" + targetHead.toString() + "_m2_in_m1");
         }
         else if (target.doesConstituentCover(source)){
             ret.add("m1_in_m2");
             ret.add("cb1_" + source.getAttribute("EnityType") + "_" + target.getAttribute("EntityType")+ "_m1_in_m2");
-            //ret.add("cb2_" + sourceHead.toString() + "_" + targetHead.toString() + "_m1_in_m2");
         }
         else{
             ret.add("m1_m2_no_coverage");
             ret.add("cb1_" + source.getAttribute("EnityType") + "_" + target.getAttribute("EntityType")+ "_m1_m2_no_coverage");
-           // ret.add("cb2_" + sourceHead.toString() + "_" + targetHead.toString() + "_m1_m2_no_coverage");
         }
         return ret;
     }
@@ -664,33 +583,20 @@ public class RelationFeatureExtractor {
         String target_m_lvl = target.getAttribute("EntityMentionType");
         String source_main_type = source.getAttribute("EntityType");
         String target_main_type = target.getAttribute("EntityType");
-        String source_sub_type = source.getAttribute("EntitySubtype");
-        String target_sub_type = target.getAttribute("EntitySubtype");
 
         ret.add("source_mtype_" + source_main_type);
         ret.add("target_mtype_" + target_main_type);
-        //ret.add("source_stype_" + source_sub_type);
-        //ret.add("target_stype_" + target_sub_type);
 
         ret.add("mlvl_" + source_m_lvl + "_" + target_m_lvl);
         ret.add("mt_" + source_main_type + "_" + target_main_type);
-        ret.add("st_" + source_sub_type + "_" + target_sub_type);
         ret.add("mlvl_mt_" + source_m_lvl + "_" + source_main_type + "_" + target_m_lvl + "_" + target_main_type);
-        ret.add("mlvl_st_" + source_m_lvl + "_" + source_sub_type + "_" + target_m_lvl + "_" + target_sub_type);
 
         if (target.doesConstituentCover(source)){
             ret.add("mlvl_cont_1_" + source_m_lvl + "_" + target_m_lvl + "_" + "True");
         }
-        else{
-            //ret.add("mlvl_cont_1_" + source_m_lvl + "_" + target_m_lvl + "_" + "False");
-        }
         if (source.doesConstituentCover(target)){
             ret.add("mlvl_cont_2_" + source_m_lvl + "_" + target_m_lvl + "_" + "True");
         }
-        else{
-            //ret.add("mlvl_cont_2_" + source_m_lvl + "_" + target_m_lvl + "_" + "False");
-        }
-
         return ret;
     }
 

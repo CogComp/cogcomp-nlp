@@ -181,9 +181,9 @@ public class IOHelper {
 
     public static void produceFiveFoldReader(){
         for (int i = 0; i < 5; i++){
-            ACEMentionReader curTrain = new ACEMentionReader("data/partition_with_dev/train/" + i, "relation_full_bi_test");
+            ACEMentionReader curTrain = new ACEMentionReader("data/partition_with_dev/train/" + i, "relations_mono");
             serializeDataOut(curTrain, "relation-extraction/preprocess/reader/train_fold_" + i);
-            ACEMentionReader curTest = new ACEMentionReader("data/partition_with_dev/eval/" + i, "relation_full_bi_test");
+            ACEMentionReader curTest = new ACEMentionReader("data/partition_with_dev/eval/" + i, "relations_mono");
             serializeDataOut(curTest, "relation-extraction/preprocess/reader/test_fold_" + i);
         }
     }
@@ -210,6 +210,7 @@ public class IOHelper {
     }
 
     public static void main (String[] args){
-        produceFiveFoldReader();
+        ACEMentionReader full = new ACEMentionReader("data/all", "relations_mono");
+        serializeDataOut(full, "relation-extraction/preprocess/reader/all");
     }
 }

@@ -18,8 +18,6 @@ discrete relation_label(Relation r) <- {
     return r.getAttribute("RelationType");
 }
 
-//Returns the fine-grained label of an relation
-//Whether the label is bi-directional depends on the relation reader type
 discrete fine_relation_label(Relation r) <- {
     return r.getAttribute("RelationSubtype");
 }

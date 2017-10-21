@@ -17,45 +17,10 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/*
- * Class RelationAnnotator
- * Generates View "RELATION_EXTRACTION"
- * This is a annotator that currently relies on gold mentions from MENTION_ACE view
- * It reads all the pairs of mentions in all the sentences in the TextAnnotation
- * For each pair, the annotator predicts its relation label
- * If the label is not NULL, the annotator puts the relation to the generating new view
- * For the new relations, attribute "RelationSubtype" is set
- */
-
 public class RelationAnnotator extends Annotator {
 
-    private static final String NAME = RelationAnnotator.class.getCanonicalName();
-    private final Logger logger = LoggerFactory.getLogger(RelationAnnotator.class);
     private relation_classifier relationClassifier;
     private org.cogcomp.re.ACERelationConstrainedClassifier constrainedClassifier;
-
-    private static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
-                                                           TextAnnotation textAnnotation,
-                                                           String viewName) {
-        int startCharOffset =
-                Integer.parseInt(extentConstituent
-                        .getAttribute(ACEReader.EntityHeadStartCharOffset));
-        int endCharOffset =
-                Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadEndCharOffset)) - 1;
-        int startToken = textAnnotation.getTokenIdFromCharacterOffset(startCharOffset);
-        int endToken = textAnnotation.getTokenIdFromCharacterOffset(endCharOffset);
-        if (startToken >= 0 && endToken >= 0 && !(endToken - startToken < 0)) {
-            Constituent cons =
-                    new Constituent(extentConstituent.getLabel(), 1.0, viewName, textAnnotation,
-                            startToken, endToken + 1);
-            for (String attributeKey : extentConstituent.getAttributeKeys()) {
-                cons.addAttribute(attributeKey, extentConstituent.getAttribute(attributeKey));
-            }
-            return cons;
-        }
-        return null;
-    }
 
     public RelationAnnotator() {
         this(true);
@@ -83,26 +48,30 @@ public class RelationAnnotator extends Annotator {
             e.printStackTrace();
         }
         View mentionView = record.getView(ViewNames.MENTION);
-        View relationView = new SpanLabelView("RELATION_EXTRACTION_RELATIONS", RelationAnnotator.class.getCanonicalName(), record, 1.0f, true);
+        View relationView = new SpanLabelView(ViewNames.RELATION, RelationAnnotator.class.getCanonicalName(), record, 1.0f, true);
         for (int i = 0; i < record.getNumberOfSentences(); i++){
             Sentence curSentence = record.getSentence(i);
             List<Constituent> cins = mentionView.getConstituentsCoveringSpan(curSentence.getStartSpan(), curSentence.getEndSpan());
             for (int j = 0; j < cins.size(); j++){
-                for (int k = 0; k < cins.size(); k++){
+                for (int k = j + 1; k < cins.size(); k++){
                     if (k == j) continue;
                     Constituent source = cins.get(j);
                     Constituent target = cins.get(k);
-                    Relation for_test = new Relation("PredictedRE", source, target, 1.0f);
-                    String tag = constrainedClassifier.discreteValue(for_test);
-                    if (tag.equals("NOT_RELATED") == false){
-                        Relation newRelation = new Relation(tag, source, target, 1.0f);
-                        newRelation.addAttribute("RelationSubtype", tag);
-                        relationView.addRelation(newRelation);
+                    Relation for_test_forward = new Relation("PredictedRE", source, target, 1.0f);
+                    Relation for_test_backward = new Relation("PredictedRE", target, source, 1.0f);
+                    String tag_forward = constrainedClassifier.discreteValue(for_test_forward);
+                    String tag_backward = constrainedClassifier.discreteValue(for_test_backward);
+                    if (!tag_forward.equals("NOT_RELATED")){
+                        Relation r = new Relation(tag_forward, source, target, 1.0f);
+                        relationView.addRelation(r);
+                    }
+                    else if (!tag_backward.equals("NOT_RELATED")){
+                        Relation r = new Relation(tag_backward, target, source, 1.0f);
+                        relationView.addRelation(r);
                     }
                 }
             }
         }
-        record.addView("RELATION_EXTRACTION_MENTIONS", mentionView);
-        record.addView("RELATION_EXTRACTION_RELATIONS", relationView);
+        record.addView(ViewNames.RELATION, relationView);
     }
 }

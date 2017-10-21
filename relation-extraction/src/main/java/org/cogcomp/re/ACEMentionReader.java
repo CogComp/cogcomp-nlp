@@ -162,7 +162,7 @@ public class ACEMentionReader implements Parser, Serializable
 
     public void close(){}
     public Object next(){
-        if (readType == "relations_mono"){
+        if (readType.equals("relations_mono")){
             if (relationIdx == relations_mono.size()){
                 return null;
             }
@@ -171,7 +171,7 @@ public class ACEMentionReader implements Parser, Serializable
                 return relations_mono.get(relationIdx- 1);
             }
         }
-        else if (readType == "relations_bi"){
+        else if (readType.equals("relations_bi")){
             if (relationIdx == relations_bi.size()){
                 return null;
             }
