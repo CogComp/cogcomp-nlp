@@ -1,19 +1,11 @@
 package org.cogcomp.re;
 
-import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
-import edu.illinois.cs.cogcomp.lbjava.classify.Score;
-import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
-import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
-import edu.illinois.cs.cogcomp.lbjava.learn.*;
-import edu.illinois.cs.cogcomp.lbjava.parse.*;
-
-import org.cogcomp.re.LbjGen.*;
-
-import java.io.File;
-import java.util.*;
-
-import java.lang.*;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
+import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
+import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
+import org.cogcomp.re.LbjGen.fine_relation_label;
+import org.cogcomp.re.LbjGen.relation_classifier;
 
 public class ACERelationTester {
 
@@ -123,70 +115,13 @@ public class ACERelationTester {
         System.out.println("Coarse Type F1: " + f * (double)total_coarse_correct / (double)total_correct);
     }
 
-    public static void test_cv_predicted(){
-        int total_correct = 0;
-        int total_labeled = 0;
-        int total_predicted = 0;
-        int total_coarse_correct = 0;
-
-        for (int i = 0; i < 5; i++) {
-            fine_relation_label output = new fine_relation_label();
-            ACEMentionReader train_parser = IOHelper.readFiveFold(i, "TRAIN");
-
-            relation_classifier classifier = new relation_classifier();
-            classifier.setLexiconLocation("models/relation_classifier_fold_" + i + ".lex");
-            BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
-            Learner preExtractLearner = trainer.preExtract("models/relation_classifier_fold_" + i + ".ex", true, Lexicon.CountPolicy.none);
-            preExtractLearner.saveLexicon();
-            Lexicon lexicon = preExtractLearner.getLexicon();
-            classifier.setLexicon(lexicon);
-            int examples = train_parser.relations_mono.size();
-            classifier.initialize(examples, preExtractLearner.getLexicon().size());
-            for (Relation r : train_parser.relations_mono){
-                classifier.learn(r);
-            }
-            classifier.doneWithRound();
-            classifier.doneLearning();
-
-            ACERelationConstrainedClassifier constrainedClassifier = new ACERelationConstrainedClassifier(classifier);
-            ACEMentionReader test_parser = IOHelper.readFiveFold(i, "TEST");
-            for (Relation r : test_parser.relations_mono){
-                String predicted_label = constrainedClassifier.discreteValue(r);
-                String gold_label = output.discreteValue(r);
-                if (!predicted_label.equals("NOT_RELATED")){
-                    total_predicted ++;
-                }
-                if (!gold_label.equals("NOT_RELATED")){
-                    total_labeled ++;
-                }
-                if (predicted_label.equals(gold_label)){
-                    if (!predicted_label.equals("NOT_RELATED")){
-                        total_correct ++;
-                    }
-                }
-                if (getCoarseType(predicted_label).equals(getCoarseType(gold_label))){
-                    if (!predicted_label.equals("NOT_RELATED")){
-                        total_coarse_correct ++;
-                    }
-                }
-            }
-            classifier.forget();
-        }
-        System.out.println("Total labeled: " + total_labeled);
-        System.out.println("Total predicted: " + total_predicted);
-        System.out.println("Total correct: " + total_correct);
-        System.out.println("Total coarse correct: " + total_coarse_correct);
-        double p = (double)total_correct * 100.0/ (double)total_predicted;
-        double r = (double)total_correct * 100.0/ (double)total_labeled;
-        double f = 2 * p * r / (p + r);
-        System.out.println("Precision: " + p);
-        System.out.println("Recall: " + r);
-        System.out.println("Fine Type F1: " + f);
-        System.out.println("Coarse Type F1: " + f * (double)total_coarse_correct / (double)total_correct);
-    }
-
     public static void testAnnotator(){
-
+        try {
+            //ACEReader aceReader = new ACEReader()
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void generateModel(){

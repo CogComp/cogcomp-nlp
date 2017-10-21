@@ -1,15 +1,16 @@
 package org.cogcomp.re;
+
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.pipeline.common.Stanford331Configurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
@@ -20,8 +21,10 @@ import org.cogcomp.md.BIOFeatureExtractor;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.*;
-import java.lang.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 public class ACEMentionReader implements Parser, Serializable
 {
@@ -59,7 +62,7 @@ public class ACEMentionReader implements Parser, Serializable
             ChunkerAnnotator chunker  = new ChunkerAnnotator(true);
             chunker.initialize(new ChunkerConfigurator().getDefaultConfig());
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
+            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             WordNetManager.loadConfigAsClasspathResource(true);
             WordNetManager wordNet = WordNetManager.getInstance();

@@ -4,17 +4,18 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
+import org.cogcomp.Datastore;
+import org.cogcomp.md.BIOFeatureExtractor;
 import org.cogcomp.md.MentionAnnotator;
-import org.cogcomp.re.LbjGen.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.cogcomp.re.LbjGen.relation_classifier;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 
 public class RelationAnnotator extends Annotator {
@@ -40,15 +41,34 @@ public class RelationAnnotator extends Annotator {
 
     @Override
     public void addView(TextAnnotation record) throws AnnotatorException {
+        Gazetteers gazetteers = null;
+        WordNetManager wordNet = null;
         try {
             MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             mentionAnnotator.addView(record);
+            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
+            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            WordNetManager.loadConfigAsClasspathResource(true);
+            wordNet = WordNetManager.getInstance();
+            gazetteers = GazetteersFactory.get();
         }
         catch (Exception e){
             e.printStackTrace();
         }
         View mentionView = record.getView(ViewNames.MENTION);
         View relationView = new SpanLabelView(ViewNames.RELATION, RelationAnnotator.class.getCanonicalName(), record, 1.0f, true);
+        View annotatedTokenView = new SpanLabelView("RE_ANNOTATED", record);
+        for (Constituent co : record.getView(ViewNames.TOKENS).getConstituents()){
+            Constituent c = co.cloneForNewView("RE_ANNOTATED");
+            for (String s : co.getAttributeKeys()){
+                c.addAttribute(s, co.getAttribute(s));
+            }
+            c.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, c));
+            c.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, c));
+            annotatedTokenView.addConstituent(c);
+        }
+        record.addView("RE_ANNOTATED", annotatedTokenView);
         for (int i = 0; i < record.getNumberOfSentences(); i++){
             Sentence curSentence = record.getSentence(i);
             List<Constituent> cins = mentionView.getConstituentsCoveringSpan(curSentence.getStartSpan(), curSentence.getEndSpan());
@@ -57,16 +77,26 @@ public class RelationAnnotator extends Annotator {
                     if (k == j) continue;
                     Constituent source = cins.get(j);
                     Constituent target = cins.get(k);
+                    Constituent sourceHead = MentionAnnotator.getHeadConstituent(source, "");
+                    Constituent targetHead = MentionAnnotator.getHeadConstituent(target, "");
+                    source.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotatePhrase(sourceHead));
+                    target.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotatePhrase(targetHead));
                     Relation for_test_forward = new Relation("PredictedRE", source, target, 1.0f);
                     Relation for_test_backward = new Relation("PredictedRE", target, source, 1.0f);
                     String tag_forward = constrainedClassifier.discreteValue(for_test_forward);
                     String tag_backward = constrainedClassifier.discreteValue(for_test_backward);
                     if (!tag_forward.equals("NOT_RELATED")){
-                        Relation r = new Relation(tag_forward, source, target, 1.0f);
+                        String coarseType = ACERelationTester.getCoarseType(tag_forward);
+                        Relation r = new Relation(coarseType, source, target, 1.0f);
+                        r.addAttribute("RelationType", coarseType);
+                        r.addAttribute("RelationSubtype", tag_forward);
                         relationView.addRelation(r);
                     }
                     else if (!tag_backward.equals("NOT_RELATED")){
-                        Relation r = new Relation(tag_backward, target, source, 1.0f);
+                        String coarseType = ACERelationTester.getCoarseType(tag_backward);
+                        Relation r = new Relation(coarseType, target, source, 1.0f);
+                        r.addAttribute("RelationType", coarseType);
+                        r.addAttribute("RelationSubtype", tag_backward);
                         relationView.addRelation(r);
                     }
                 }
