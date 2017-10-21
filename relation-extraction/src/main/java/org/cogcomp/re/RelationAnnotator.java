@@ -22,6 +22,9 @@ public class RelationAnnotator extends Annotator {
 
     private relation_classifier relationClassifier;
     private org.cogcomp.re.ACERelationConstrainedClassifier constrainedClassifier;
+    private Gazetteers gazetteers;
+    private WordNetManager wordNet;
+    private MentionAnnotator mentionAnnotator;
 
     public RelationAnnotator() {
         this(true);
@@ -29,23 +32,15 @@ public class RelationAnnotator extends Annotator {
 
 
     public RelationAnnotator(boolean lazilyInitialize) {
-        super("RELATION_EXTRACTION", new String[]{ViewNames.POS}, lazilyInitialize);
+        super("RELATION_EXTRACTION", new String[]{ViewNames.POS, ViewNames.DEPENDENCY, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
         relationClassifier = new relation_classifier();
         constrainedClassifier = new org.cogcomp.re.ACERelationConstrainedClassifier(relationClassifier);
     }
 
     @Override
     public void initialize(ResourceManager rm) {
-
-    }
-
-    @Override
-    public void addView(TextAnnotation record) throws AnnotatorException {
-        Gazetteers gazetteers = null;
-        WordNetManager wordNet = null;
         try {
-            MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
-            mentionAnnotator.addView(record);
+            mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
@@ -56,6 +51,11 @@ public class RelationAnnotator extends Annotator {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void addView(TextAnnotation record) throws AnnotatorException {
+        mentionAnnotator.addView(record);
         View mentionView = record.getView(ViewNames.MENTION);
         View relationView = new SpanLabelView(ViewNames.RELATION, RelationAnnotator.class.getCanonicalName(), record, 1.0f, true);
         View annotatedTokenView = new SpanLabelView("RE_ANNOTATED", record);
