@@ -222,6 +222,13 @@ constraint Located_ET (Relation r)
                                           entity_label(r.getTarget())::"LOC" \/
                                           entity_label(r.getTarget())::"GPE");
 }
+constraint Located_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Located_OP" => entity_label(r.getTarget())::"PER" /\
+                                            (entity_label(r.getSource())::"FAC" \/
+                                             entity_label(r.getSource())::"LOC" \/
+                                             entity_label(r.getSource())::"GPE");
+}
 constraint Artifact_ET (Relation r)
 {
     relation_classifier(r)::"Artifact" => (entity_label(r.getSource())::"VEH" /\
@@ -229,9 +236,21 @@ constraint Artifact_ET (Relation r)
                                           (entity_label(r.getSource())::"WEA" /\
                                            entity_label(r.getTarget())::"WEA");
 }
+constraint Artifact_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Artifact_OP" => (entity_label(r.getSource())::"VEH" /\
+                                           entity_label(r.getTarget())::"VEH") \/
+                                          (entity_label(r.getSource())::"WEA" /\
+                                           entity_label(r.getTarget())::"WEA");
+}
 constraint Business_ET (Relation r)
 {
     relation_classifier(r)::"Business" => entity_label(r.getSource())::"PER" /\
+                                          entity_label(r.getTarget())::"PER";
+}
+constraint Business_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Business_OP" => entity_label(r.getSource())::"PER" /\
                                           entity_label(r.getTarget())::"PER";
 }
 constraint CRRE_ET (Relation r)
@@ -242,15 +261,34 @@ constraint CRRE_ET (Relation r)
                                                                      entity_label(r.getTarget())::"ORG" \/
                                                                      entity_label(r.getTarget())::"PER");
 }
+constraint CRRE_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Citizen-Resident-Religion-Ethnicity_OP" => entity_label(r.getTarget())::"PER" /\
+                                                                    (entity_label(r.getSource())::"LOC" \/
+                                                                     entity_label(r.getSource())::"GPE" \/
+                                                                     entity_label(r.getSource())::"ORG" \/
+                                                                     entity_label(r.getSource())::"PER");
+}
 constraint Employment_ET (Relation r)
 {
     relation_classifier(r)::"Employment" => entity_label(r.getSource())::"PER" /\
                                            (entity_label(r.getTarget())::"ORG" \/
                                             entity_label(r.getTarget())::"GPE");
 }
+constraint Employment_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Employment_OP" => entity_label(r.getTarget())::"PER" /\
+                                           (entity_label(r.getSource())::"ORG" \/
+                                            entity_label(r.getSource())::"GPE");
+}
 constraint Family_ET (Relation r)
 {
     relation_classifier(r)::"Family" => entity_label(r.getSource())::"PER" /\
+                                        entity_label(r.getTarget())::"PER";
+}
+constraint Family_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Family_OP" => entity_label(r.getSource())::"PER" /\
                                         entity_label(r.getTarget())::"PER";
 }
 constraint Founder_ET (Relation r)
@@ -260,9 +298,25 @@ constraint Founder_ET (Relation r)
                                          (entity_label(r.getTarget())::"ORG" \/
                                           entity_label(r.getTarget())::"GPE");
 }
+constraint Founder_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Founder_OP" => (entity_label(r.getTarget())::"PER" \/
+                                          entity_label(r.getTarget())::"ORG") /\
+                                         (entity_label(r.getSource())::"ORG" \/
+                                          entity_label(r.getSource())::"GPE");
+}
 constraint Geographical_ET (Relation r)
 {
     relation_classifier(r)::"Geographical" => (entity_label(r.getSource())::"FAC" \/
+                                               entity_label(r.getSource())::"LOC" \/
+                                               entity_label(r.getSource())::"GPE") /\
+                                              (entity_label(r.getTarget())::"FAC" \/
+                                               entity_label(r.getTarget())::"LOC" \/
+                                               entity_label(r.getTarget())::"GPE");
+}
+constraint Geographical_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Geographical_OP" => (entity_label(r.getSource())::"FAC" \/
                                                entity_label(r.getSource())::"LOC" \/
                                                entity_label(r.getSource())::"GPE") /\
                                               (entity_label(r.getTarget())::"FAC" \/
@@ -277,9 +331,22 @@ constraint IS_ET (Relation r)
                                                       (entity_label(r.getTarget())::"ORG" \/
                                                        entity_label(r.getTarget())::"GPE");
 }
+constraint IS_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Investor-Shareholder_OP" => (entity_label(r.getTarget())::"PER" \/
+                                                       entity_label(r.getTarget())::"ORG" \/
+                                                       entity_label(r.getTarget())::"GPE") /\
+                                                      (entity_label(r.getSource())::"ORG" \/
+                                                       entity_label(r.getSource())::"GPE");
+}
 constraint LP_ET (Relation r)
 {
     relation_classifier(r)::"Lasting-Personal" => entity_label(r.getSource())::"PER" /\
+                                                  entity_label(r.getTarget())::"PER";
+}
+constraint LP_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Lasting-Personal_OP" => entity_label(r.getSource())::"PER" /\
                                                   entity_label(r.getTarget())::"PER";
 }
 constraint Membership_ET (Relation r)
@@ -288,6 +355,13 @@ constraint Membership_ET (Relation r)
                                              entity_label(r.getSource())::"ORG" \/
                                              entity_label(r.getSource())::"GPE") /\
                                              entity_label(r.getTarget())::"ORG";
+}
+constraint Membership_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Membership_OP" => (entity_label(r.getTarget())::"PER" \/
+                                             entity_label(r.getTarget())::"ORG" \/
+                                             entity_label(r.getTarget())::"GPE") /\
+                                             entity_label(r.getSource())::"ORG";
 }
 constraint Near_ET (Relation r)
 {
@@ -300,25 +374,56 @@ constraint Near_ET (Relation r)
                                        entity_label(r.getTarget())::"LOC" \/
                                        entity_label(r.getTarget())::"PER");
 }
+constraint Near_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Near_OP" => (entity_label(r.getTarget())::"PER" \/
+                                       entity_label(r.getTarget())::"FAC" \/
+                                       entity_label(r.getTarget())::"GPE" \/
+                                       entity_label(r.getTarget())::"LOC") /\
+                                      (entity_label(r.getSource())::"FAC" \/
+                                       entity_label(r.getSource())::"GPE" \/
+                                       entity_label(r.getSource())::"LOC");
+}
 constraint OL_ET (Relation r)
 {
     relation_classifier(r)::"Org-Location" => entity_label(r.getSource())::"ORG" /\
                                              (entity_label(r.getTarget())::"LOC" \/
                                               entity_label(r.getTarget())::"GPE");
 }
+constraint OL_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Org-Location_OP" => entity_label(r.getTarget())::"ORG" /\
+                                             (entity_label(r.getSource())::"LOC" \/
+                                              entity_label(r.getSource())::"GPE");
+}
 constraint Ownership_ET (Relation r)
 {
     relation_classifier(r)::"Ownership" => entity_label(r.getSource())::"PER" /\
                                            entity_label(r.getTarget())::"ORG";
+}
+constraint Ownership_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Ownership_OP" => entity_label(r.getSource())::"ORG" /\
+                                              entity_label(r.getTarget())::"PER";
 }
 constraint SA_ET (Relation r)
 {
     relation_classifier(r)::"Sports-Affiliation" => entity_label(r.getSource())::"PER" /\
                                                     entity_label(r.getTarget())::"ORG";
 }
+constraint SA_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Sports-Affiliation_OP" => entity_label(r.getSource())::"ORG" /\
+                                                       entity_label(r.getTarget())::"PER";
+}
 constraint SAL_ET (Relation r)
 {
     relation_classifier(r)::"Student-Alum" => entity_label(r.getSource())::"PER" /\
+                                              entity_label(r.getTarget())::"ORG";
+}
+constraint SAL_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Student-Alum_OP" => entity_label(r.getSource())::"PER" /\
                                               entity_label(r.getTarget())::"ORG";
 }
 constraint Subsidiary_ET (Relation r)
@@ -326,6 +431,12 @@ constraint Subsidiary_ET (Relation r)
     relation_classifier(r)::"Subsidiary" => entity_label(r.getSource())::"ORG" /\
                                            (entity_label(r.getTarget())::"ORG" \/
                                             entity_label(r.getTarget())::"GPE");
+}
+constraint Subsidiary_OP_ET (Relation r)
+{
+    relation_classifier(r)::"Subsidiary_OP" => entity_label(r.getTarget())::"ORG" /\
+                                           (entity_label(r.getSource())::"ORG" \/
+                                            entity_label(r.getSource())::"GPE");
 }
 constraint UOIM_ET (Relation r)
 {
@@ -336,17 +447,26 @@ constraint UOIM_ET (Relation r)
                                                                    entity_label(r.getTarget())::"VEH" \/
                                                                    entity_label(r.getTarget())::"FAC");
 }
+constraint UOIM_OP_ET (Relation r)
+{
+    relation_classifier(r)::"User-Owner-Inventor-Manufacturer_OP" => (entity_label(r.getTarget())::"PER" \/
+                                                                   entity_label(r.getTarget())::"ORG" \/
+                                                                   entity_label(r.getTarget())::"GPE") /\
+                                                                  (entity_label(r.getSource())::"WEA" \/
+                                                                   entity_label(r.getSource())::"VEH" \/
+                                                                   entity_label(r.getSource())::"FAC");
+}
 
 inference constrained_RE head Relation r {
     Relation r {return r;}
-    subjectto {@Located_ET(r) /\ @Artifact_ET(r) /\
-               @Business_ET(r) /\ @CRRE_ET(r) /\
-               @Employment_ET(r) /\ @Family_ET(r) /\
-               @Founder_ET(r) /\ @Geographical_ET(r) /\
-               @IS_ET(r) /\ @LP_ET(r) /\ @Membership_ET(r) /\
-               @Near_ET(r) /\ @OL_ET(r) /\ @Ownership_ET(r) /\
-               @SA_ET(r) /\ @SAL_ET(r) /\ @Subsidiary_ET(r) /\
-               @UOIM_ET(r);}
+    subjectto {@Located_ET(r) /\ @Located_OP_ET(r) /\ @Artifact_ET(r) /\ @Artifact_OP_ET(r) /\
+               @Business_ET(r) /\ @CRRE_ET(r) /\ @CRRE_OP_ET(r) /\
+               @Employment_ET(r) /\ @Employment_OP_ET(r) /\ @Family_ET(r) /\
+               @Founder_ET(r) /\ @Founder_OP_ET(r) /\ @Geographical_ET(r) /\ @Geographical_OP_ET(r) /\
+               @IS_ET(r) /\ @IS_OP_ET(r) /\ @LP_ET(r) /\ @Membership_ET(r) /\ @Membership_OP_ET(r) /\
+               @Near_ET(r) /\ @OL_ET(r) /\ @OL_OP_ET(r) /\ @Ownership_ET(r) /\ @Ownership_OP_ET(r) /\
+               @SA_ET(r) /\ @SA_OP_ET(r) /\ @SAL_ET(r) /\ @SAL_OP_ET(r) /\ @Subsidiary_ET(r) /\ @Subsidiary_OP_ET(r) /\
+               @UOIM_ET(r) /\ @UOIM_OP_ET(r);}
     with new ILPInference(new OJalgoHook())
 }
 

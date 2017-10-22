@@ -52,7 +52,7 @@ public class ACEMentionReader implements Parser, Serializable
 
     public static List<String> getTypes(){
         String[] arr = new String[]{"Org-Location_OP", "Employment_OP", "Lasting-Personal", "Sports-Affiliation_OP", "Founder", "Investor-Shareholder", "Founder_OP", "Sports-Affiliation", "Employment", "Located", "Subsidiary", "Org-Location", "Membership", "Citizen-Resident-Religion-Ethnicity", "Geographical_OP", "Citizen-Resident-Religion-Ethnicity_OP", "User-Owner-Inventor-Manufacturer_OP", "Business", "Subsidiary_OP", "Membership_OP", "Near", "Geographical", "Investor-Shareholder_OP", "User-Owner-Inventor-Manufacturer", "Located_OP", "Family"};
-        return new ArrayList<String>(Arrays.asList(arr));
+        return new ArrayList<>(Arrays.asList(arr));
     }
 
     public ACEMentionReader(String file, String type) {
@@ -120,13 +120,12 @@ public class ACEMentionReader implements Parser, Serializable
                                 if (r.getSource().getStartSpan() == firstArg.getStartSpan() && r.getSource().getEndSpan() == firstArg.getEndSpan()
                                         && r.getTarget().getStartSpan() == secondArg.getStartSpan() && r.getTarget().getEndSpan() == secondArg.getEndSpan()){
                                     relations_mono.add(r);
-                                    Relation opdirNeg = new Relation("NOT_RELATED", secondArg, firstArg, 1.0f);
-                                    opdirNeg.addAttribute("RelationType", "NOT_RELATED");
                                     found_as_source = true;
-                                    String opTypeName = getOppoName(r.getAttribute("RelationSubtype"));
-                                    Relation opdir = new Relation(opTypeName, secondArg, firstArg, 1.0f);
-                                    opdir.addAttribute("RelationSubtype", opTypeName);
-                                    opdir.addAttribute("RelationType", r.getAttribute("RelationType") + "_OP");
+                                    String opTagFine = getOppoName(r.getAttribute("RelationSubtype"));
+                                    String opTagCoarse = ACERelationTester.getCoarseType(opTagFine);
+                                    Relation opdir = new Relation(opTagCoarse, secondArg, firstArg, 1.0f);
+                                    opdir.addAttribute("RelationSubtype", opTagFine);
+                                    opdir.addAttribute("RelationType", opTagCoarse);
                                     relations_bi.add(r);
                                     relations_bi.add(opdir);
                                     break;
@@ -134,13 +133,12 @@ public class ACEMentionReader implements Parser, Serializable
                                 if (r.getTarget().getStartSpan() == firstArg.getStartSpan() && r.getTarget().getEndSpan() == firstArg.getEndSpan()
                                         && r.getSource().getStartSpan() == secondArg.getStartSpan() && r.getSource().getEndSpan() == secondArg.getEndSpan()){
                                     relations_mono.add(r);
-                                    Relation opdirNeg = new Relation("NOT_RELATED", firstArg, secondArg, 1.0f);
-                                    opdirNeg.addAttribute("RelationType", "NOT_RELATED");
                                     found_as_target = true;
-                                    String opTypeName = getOppoName(r.getAttribute("RelationSubtype"));
-                                    Relation opdir = new Relation(opTypeName, firstArg, secondArg, 1.0f);
-                                    opdir.addAttribute("RelationSubtype", opTypeName);
-                                    opdir.addAttribute("RelationType", r.getAttribute("RelationType") + "_OP");
+                                    String opTagFine = getOppoName(r.getAttribute("RelationSubtype"));
+                                    String opTagCoarse = ACERelationTester.getCoarseType(opTagFine);
+                                    Relation opdir = new Relation(opTagCoarse, firstArg, secondArg, 1.0f);
+                                    opdir.addAttribute("RelationSubtype", opTagFine);
+                                    opdir.addAttribute("RelationType", opTagCoarse);
                                     relations_bi.add(r);
                                     relations_bi.add(opdir);
                                     break;
@@ -191,8 +189,11 @@ public class ACEMentionReader implements Parser, Serializable
             return null;
         }
     }
-    public List<Relation> readList(){
+    public List<Relation> readListMono(){
         return relations_mono;
+    }
+    public List<Relation> readListBi(){
+        return relations_bi;
     }
 
     public void reset(){

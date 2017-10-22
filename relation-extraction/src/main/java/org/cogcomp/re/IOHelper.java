@@ -214,6 +214,7 @@ public class IOHelper {
     }
 
     public static void main (String[] args){
+        produceFiveFoldReader();
         ACEMentionReader full = new ACEMentionReader("data/all", "relations_mono");
         serializeDataOut(full, "relation-extraction/preprocess/reader/all");
     }

@@ -648,11 +648,6 @@ public class RelationFeatureExtractor {
         List<String> ret = new ArrayList<String>();
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
-        if (source.getStartSpan() > target.getStartSpan()){
-            Constituent temp = source;
-            source = target;
-            target = temp;
-        }
         String source_m_lvl = source.getAttribute("EntityMentionType");
         String target_m_lvl = target.getAttribute("EntityMentionType");
         String source_main_type = source.getAttribute("EntityType");
@@ -683,11 +678,6 @@ public class RelationFeatureExtractor {
         TreeView parse = (TreeView) r.getSource().getTextAnnotation().getView(ViewNames.DEPENDENCY_STANFORD);
         Constituent source = r.getSource();
         Constituent target = r.getTarget();
-        if (source.getStartSpan() > target.getStartSpan()){
-            Constituent temp = source;
-            source = target;
-            target = temp;
-        }
         Constituent source_head = getEntityHeadForConstituent(source, source.getTextAnnotation(), "EntityHeads");
         Constituent target_head = getEntityHeadForConstituent(target, target.getTextAnnotation(), "EntityHeads");
         View annotatedView = source.getTextAnnotation().getView("RE_ANNOTATED");

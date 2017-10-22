@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.illinois.cs.cogcomp.lbjava.classify.Score;
+import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
@@ -28,7 +30,7 @@ import java.util.List;
 public class RelationAnnotator extends Annotator {
 
     private relation_classifier relationClassifier;
-    private org.cogcomp.re.ACERelationConstrainedClassifier constrainedClassifier;
+    private ACERelationConstrainedClassifier constrainedClassifier;
     private Gazetteers gazetteers;
     private WordNetManager wordNet;
     private MentionAnnotator mentionAnnotator;
@@ -40,8 +42,10 @@ public class RelationAnnotator extends Annotator {
 
     public RelationAnnotator(boolean lazilyInitialize) {
         super("RELATION_EXTRACTION", new String[]{ViewNames.POS, ViewNames.DEPENDENCY_STANFORD, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
-        relationClassifier = new relation_classifier();
-        constrainedClassifier = new org.cogcomp.re.ACERelationConstrainedClassifier(relationClassifier);
+        File modelFile = new File("models/ACE_GOLD_BI.lc");
+        File lexFile = new File("models/ACE_GOLD_BI.lex");
+        relationClassifier = new relation_classifier(modelFile.getAbsolutePath(), lexFile.getAbsolutePath());
+        constrainedClassifier = new ACERelationConstrainedClassifier(relationClassifier);
     }
 
     @Override
@@ -62,6 +66,9 @@ public class RelationAnnotator extends Annotator {
 
     @Override
     public void addView(TextAnnotation record) throws AnnotatorException {
+        if (!isInitialized()){
+            doInitialize();
+        }
         if (!record.hasView(ViewNames.POS) ){
             throw new AnnotatorException("Missing required view POS");
         }
@@ -73,7 +80,6 @@ public class RelationAnnotator extends Annotator {
         }
         mentionAnnotator.addView(record);
         View mentionView = record.getView(ViewNames.MENTION);
-        View relationView = new SpanLabelView(ViewNames.RELATION, RelationAnnotator.class.getCanonicalName(), record, 1.0f, true);
         View annotatedTokenView = new SpanLabelView("RE_ANNOTATED", record);
         for (Constituent co : record.getView(ViewNames.TOKENS).getConstituents()){
             Constituent c = co.cloneForNewView("RE_ANNOTATED");
@@ -99,25 +105,63 @@ public class RelationAnnotator extends Annotator {
                     target.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotatePhrase(targetHead));
                     Relation for_test_forward = new Relation("PredictedRE", source, target, 1.0f);
                     Relation for_test_backward = new Relation("PredictedRE", target, source, 1.0f);
-                    String tag_forward = constrainedClassifier.discreteValue(for_test_forward);
-                    String tag_backward = constrainedClassifier.discreteValue(for_test_backward);
-                    if (!tag_forward.equals("NOT_RELATED")){
-                        String coarseType = ACERelationTester.getCoarseType(tag_forward);
-                        Relation r = new Relation(coarseType, source, target, 1.0f);
+                    //String tag_forward = constrainedClassifier.discreteValue(for_test_forward);
+                    //String tag_backward = constrainedClassifier.discreteValue(for_test_backward);
+                    String tag_forward = relationClassifier.discreteValue(for_test_forward);
+                    String tag_backward = relationClassifier.discreteValue(for_test_backward);
+
+                    if (tag_forward.equals(ACEMentionReader.getOppoName(tag_backward)) && !tag_forward.equals("NOT_RELATED")){
+                        String tag = tag_forward;
+                        Constituent first = source;
+                        Constituent second = target;
+                        if (tag_forward.length() > tag_backward.length()){
+                            tag = tag_backward;
+                            first = target;
+                            second = source;
+                        }
+                        String coarseType = ACERelationTester.getCoarseType(tag);
+                        Relation r = new Relation(coarseType, first, second, 1.0f);
                         r.addAttribute("RelationType", coarseType);
-                        r.addAttribute("RelationSubtype", tag_forward);
-                        relationView.addRelation(r);
+                        r.addAttribute("RelationSubtype", tag);
+                        mentionView.addRelation(r);
                     }
-                    else if (!tag_backward.equals("NOT_RELATED")){
-                        String coarseType = ACERelationTester.getCoarseType(tag_backward);
-                        Relation r = new Relation(coarseType, target, source, 1.0f);
-                        r.addAttribute("RelationType", coarseType);
-                        r.addAttribute("RelationSubtype", tag_backward);
-                        relationView.addRelation(r);
+                    if (!tag_forward.equals(ACEMentionReader.getOppoName(tag_backward)) &&
+                            (!tag_forward.equals("NOT_RELATED") || !tag_backward.equals("NOT_RELATED"))){
+                        double forward_score = 0.0;
+                        double backward_score = 0.0;
+                        ScoreSet scores = relationClassifier.scores(for_test_forward);
+                        Score[] scoresArray = scores.toArray();
+                        for (Score s : scoresArray){
+                            if (s.value.equals(tag_forward)){
+                                forward_score = s.score;
+                            }
+                        }
+                        scores = relationClassifier.scores(for_test_backward);
+                        scoresArray = scores.toArray();
+                        for (Score s : scoresArray){
+                            if (s.value.equals(tag_forward)){
+                                backward_score = s.score;
+                            }
+                        }
+                        String tag = tag_forward;
+                        Constituent first = source;
+                        Constituent second = target;
+                        if (backward_score > forward_score){
+                            tag = tag_backward;
+                            first = target;
+                            second = source;
+                        }
+                        if (!tag.equals("NOT_RELATED")){
+                            String coarseType = ACERelationTester.getCoarseType(tag);
+                            Relation r = new Relation(coarseType, first, second, 1.0f);
+                            r.addAttribute("RelationType", coarseType);
+                            r.addAttribute("RelationSubtype", tag);
+                            mentionView.addRelation(r);
+                        }
                     }
                 }
             }
         }
-        record.addView(ViewNames.RELATION, relationView);
+        record.addView(ViewNames.MENTION, mentionView);
     }
 }
