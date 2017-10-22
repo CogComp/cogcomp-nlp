@@ -469,6 +469,3 @@ inference constrained_RE head Relation r {
                @UOIM_ET(r) /\ @UOIM_OP_ET(r);}
     with new ILPInference(new OJalgoHook())
 }
-
-discrete test_cre (Relation r) <-
-    constrained_RE(relation_classifier)

@@ -41,11 +41,7 @@ public class RelationAnnotator extends Annotator {
 
 
     public RelationAnnotator(boolean lazilyInitialize) {
-        super("RELATION_EXTRACTION", new String[]{ViewNames.POS, ViewNames.DEPENDENCY_STANFORD, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
-        File modelFile = new File("models/ACE_GOLD_BI.lc");
-        File lexFile = new File("models/ACE_GOLD_BI.lex");
-        relationClassifier = new relation_classifier(modelFile.getAbsolutePath(), lexFile.getAbsolutePath());
-        constrainedClassifier = new ACERelationConstrainedClassifier(relationClassifier);
+        super(ViewNames.MENTION, new String[]{ViewNames.POS, ViewNames.DEPENDENCY_STANFORD, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
     }
 
     @Override
@@ -53,6 +49,13 @@ public class RelationAnnotator extends Annotator {
         try {
             mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            File modelDir = ds.getDirectory("org.cogcomp.re", "ACE_GOLD_BI", 1.0, false);
+            String modelFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lc";
+            String lexFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lex";
+            relationClassifier = new relation_classifier();
+            relationClassifier.readModel(modelFile);
+            relationClassifier.readLexicon(lexFile);
+            constrainedClassifier = new ACERelationConstrainedClassifier(relationClassifier);
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             WordNetManager.loadConfigAsClasspathResource(true);
@@ -105,10 +108,8 @@ public class RelationAnnotator extends Annotator {
                     target.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotatePhrase(targetHead));
                     Relation for_test_forward = new Relation("PredictedRE", source, target, 1.0f);
                     Relation for_test_backward = new Relation("PredictedRE", target, source, 1.0f);
-                    //String tag_forward = constrainedClassifier.discreteValue(for_test_forward);
-                    //String tag_backward = constrainedClassifier.discreteValue(for_test_backward);
-                    String tag_forward = relationClassifier.discreteValue(for_test_forward);
-                    String tag_backward = relationClassifier.discreteValue(for_test_backward);
+                    String tag_forward = constrainedClassifier.discreteValue(for_test_forward);
+                    String tag_backward = constrainedClassifier.discreteValue(for_test_backward);
 
                     if (tag_forward.equals(ACEMentionReader.getOppoName(tag_backward)) && !tag_forward.equals("NOT_RELATED")){
                         String tag = tag_forward;
@@ -146,7 +147,7 @@ public class RelationAnnotator extends Annotator {
                         String tag = tag_forward;
                         Constituent first = source;
                         Constituent second = target;
-                        if (backward_score > forward_score){
+                        if (forward_score < backward_score && backward_score - forward_score > 0.005){
                             tag = tag_backward;
                             first = target;
                             second = source;

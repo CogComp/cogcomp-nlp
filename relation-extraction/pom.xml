@@ -75,6 +75,15 @@
                         <param>${project.basedir}/src/lbj/re.lbj</param>
                     </lbjavaInputFileList>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>clean</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
