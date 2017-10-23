@@ -29,7 +29,7 @@ The user will be responsible for finding and setting up the original training
 and testing data as described in the benchmark.sh script file. The user will 
 not run the "benchmark.sh" script themselves, that will be done automatically
 by a tool that allows us to run several benchmarks simultaneously. The 
-benchmark directory should be placed in the top level directory where "cogcomp-nlp"
+"benchmark" directory should be placed in the top level directory where "cogcomp-nlp"
 is located. Each configuration file must contain the 4 entries as described in 
 the next section.
 

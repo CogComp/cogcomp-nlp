@@ -42,10 +42,10 @@ bash -c "cd cogcomp-nlp/md ; mvn clean"
 bash -c "cd cogcomp-nlp/pos ; mvn clean"
 
 # learning rates and thickness range
-learnrateL1=(.01 .02 .04 .06 .08)
-thicknessL1=(20 40 60 80)
-learnrateL2=(.01 .02 .04 .06 .08)
-thicknessL2=(20 40 60 80)
+learnrateL1=(.01 .03)
+thicknessL1=(10 30)
+learnrateL2=(.02 .04)
+thicknessL2=(20 40)
 
 #
 # copy the code all over the place.
