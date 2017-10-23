@@ -299,7 +299,7 @@ public class ACERelationTester {
 
     public static void main(String[] args){
         //generateModel("relation-extraction/preprocess/reader/all", "models/ACE_GOLD_BI");
-        testAnnotator();
-        //test_cv_gold();
+        //testAnnotator();
+        test_cv_gold();
     }
 }

@@ -89,6 +89,11 @@
             <artifactId>illinois-md</artifactId>
             <version>3.1.33</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-relation-extraction</artifactId>
+            <version>3.1.33</version>
+        </dependency>
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>

@@ -52,17 +52,7 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-similarity</artifactId>
-            <version>3.1.33</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>3.1.33</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-nlp-pipeline</artifactId>
             <version>3.1.33</version>
         </dependency>
         <dependency>
@@ -72,7 +62,12 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-similarity</artifactId>
+            <artifactId>illinois-md</artifactId>
+            <version>3.1.33</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-chunker</artifactId>
             <version>3.1.33</version>
         </dependency>
         <dependency>

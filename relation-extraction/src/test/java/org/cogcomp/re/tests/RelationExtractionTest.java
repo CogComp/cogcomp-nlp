@@ -43,12 +43,12 @@ public class RelationExtractionTest {
         File modelDir = null;
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            modelDir = ds.getDirectory("org.cogcomp.re", "ACE_TEST_DOCS", 1.0, false);
+            modelDir = ds.getDirectory("org.cogcomp.re", "ACE_TEST_DOCS", 1.1, false);
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        ACEMentionReader train_parser = new ACEMentionReader(modelDir.getAbsolutePath() + File.separator + "ACE_TEST_DOCS", "relations_bi");
+        ACEMentionReader train_parser = new ACEMentionReader(modelDir.getPath() + File.separator + "ACE_TEST_DOCS", "relations_bi");
         relation_classifier classifier = new relation_classifier();
         classifier.setLexiconLocation("src/test/tmp.lex");
         BatchTrainer trainer = new BatchTrainer(classifier, train_parser);

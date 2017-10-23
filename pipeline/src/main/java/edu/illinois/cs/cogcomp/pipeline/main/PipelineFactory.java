@@ -34,8 +34,8 @@ import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerConfigura
 import edu.illinois.cs.cogcomp.verbsense.VerbSenseAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
-
 import org.cogcomp.md.MentionAnnotator;
+import org.cogcomp.re.RelationAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -372,6 +372,10 @@ public class PipelineFactory {
         if (rm.getBoolean(PipelineConfigurator.USE_MENTION)){
             MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_RELATION)){
+            RelationAnnotator relationAnnotator = new RelationAnnotator();
+            viewGenerators.put(ViewNames.MENTION, relationAnnotator);
         }
         if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)){
             Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
