@@ -208,6 +208,8 @@
                         <exclude>**/WikifierFeatures.java</exclude>
                         <exclude>**/AffixesZH.java</exclude>
 
+                        <exclude>**/LbjGen/*</exclude>
+
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>
                         <exclude>**/*.config</exclude>

@@ -37,7 +37,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Testing class for Mention Detection
  */
-public class RelationExtractionTests {
+public class RelationExtractionTest {
     @Test
     public void testSimpleTraining(){
         File modelDir = null;
