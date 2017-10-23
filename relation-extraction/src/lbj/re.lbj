@@ -2,12 +2,12 @@ package org.cogcomp.re.LbjGen;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import java.util.List;
 import java.lang.*;
-import org.cogcomp.re.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import org.cogcomp.md.BIOFeatureExtractor;
+import org.cogcomp.re.RelationFeatureExtractor;
 
 discrete entity_label(Constituent c) <- {
     return c.getAttribute("EntityType");
@@ -202,12 +202,9 @@ discrete% baseFeatures (Relation r) <-
 discrete relation_classifier(Relation r) <-
 learn fine_relation_label
     using baseFeatures, wordNetFeatures, gazetteerFeatures, dependency_features, patternFeatures, shallow_parse_features
-    from new ACEMentionReader("data/onedoc", "relation_full_bi_test")
-    1 rounds
     with SupportVectorMachine{
 
     }
-    testFrom new ACEMentionReader("data/partition/eval/0", "relation_full_bi_test")
     progressOutput 20000
 end
 
