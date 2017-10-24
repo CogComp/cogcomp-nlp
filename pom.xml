@@ -19,6 +19,7 @@
         <module>chunker</module>
         <module>md</module>
         <module>ner</module>
+        <module>relation-extraction</module>
         <module>corpusreaders</module>
         <module>lbjava-nlp-tools</module>
         <module>big-data-utils</module>
@@ -206,6 +207,9 @@
                         <exclude>**/prevTagsForContextLevel2.java</exclude>
                         <exclude>**/WikifierFeatures.java</exclude>
                         <exclude>**/AffixesZH.java</exclude>
+
+                        <exclude>**/LbjGen/*</exclude>
+                        <exclude>**/data/*</exclude>
 
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>
