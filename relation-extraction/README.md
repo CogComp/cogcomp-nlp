@@ -1,6 +1,6 @@
 # Relation Extraction
 
-See the [parent package reademe](https://github.com/CogComp/cogcomp-nlp/blob/master/README.md) first
+See the [parent package readme](https://github.com/CogComp/cogcomp-nlp/blob/master/README.md) first
 
 ## Introduction
 
@@ -38,6 +38,11 @@ Since the model is built on ACE2005, the model identifes the following types:
 
 We test results on both Coarse Type and Fine Type, and on both gold mention data (i.e. the mentions are given) and predicted mention data (i.e. use MD to detect mentions).
 
+|                   | Coarse Type | Fine Type |
+|-------------------|-------------|-----------|
+| Gold Mention      | 58.35       | 62.54     |
+| Predicted Mention | 44.07       | 41.90     |
+
 ## Usage
 
 ### Install with Maven
@@ -54,20 +59,20 @@ If you want to use the illinois-relation-extraction package independently, you c
 
 ### Using Annotator
 
-Using the annotator `RelationAnnotator()` is the preferred way to use relation extraction package. This annotator annotates mentions, and then annotate relations. If you have a pre-defined mention set, please refer to [Using Relation Classifier Only](#using-relation-classifier-only)
+Using the annotator `RelationAnnotator()` is the preferred and the easiest way to use relation extraction package. This annotator annotates mentions, and then annotate relations. If you have a pre-defined mention set, please refer to [Using Relation Classifier Only](#using-relation-classifier-only)
 
 Using the annotator is easy.
 
 ```java
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import org.cogcomp.re.RelationAnnotator;
-
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import java.util.List;
 import java.io.IOException;
 import java.util.List;
 
@@ -75,37 +80,56 @@ public class app
 {
     public static void main( String[] args ) throws IOException, AnnotatorException
     {
-        String text = "Good afternoon, gentlemen. I am a HAL-9000 "
-                + "computer. I was born in Urbana, Il. in 1992";
+        String text = "He went to Chicago after his Father moved there.";
 
-        String corpus = "2001_ODYSSEY";
+        String corpus = "story";
         String textId = "001";
 
         // Create a TextAnnotation From Text
-        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotation(corpus, textId, text);
-        
+        TextAnnotationBuilder stab =
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+        TextAnnotation ta = stab.createTextAnnotation(corpus, textId, text);
+
+        //Use Annotators or pipeline to annotate required Views:
+        //POS, SHALLOW_PARSE, DEPENDENCY_STANFORD
+
         RelationAnnotator relationAnnotator = new RelationAnnotator();
-        relationAnnotator.addView(ta);
+        try {
+            relationAnnotator.addView(ta);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         View mentionView = ta.getView(ViewNames.MENTION);
+
         List<Constituent> predictedMentions = mentionView.getConstituents();
         List<Relation> predictedRelations = mentionView.getRelations();
-        
+
+        for (Relation r : predictedRelations){
+            IOHelper.printRelation(r);
+        }
     }
 }
 ```
 
 As the sample indicates, the annotator annotates the view `ViewNames.MENTION`, which contains both predicted mentions and predicted relations. Please refer to the structure of [Relation](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/datastructures/textannotation/Relation.java).
 
+For a full version of this demo, please refer to [`AnnotatorExample`](../blob/master/relation-extraction/src/main/java/org/cogcomp/re/AnnotatorExample.java)
+
 ### Using Relation Classifier Only
+
+Please refer to the inner implementation of `addView()` in [`RelationAnnotator`](../blob/master/relation-extraction/src/main/java/org/cogcomp/re/RelationAnnotator.java) to see how to do this.
 
 ## Run Tests
 
 ### Data Pre-process
 
-There is a handy `IOHelper` class which pre-annotates a large corpus and save them into single files. 
+There is a handy [`IOHelper`](../blob/master/relation-extraction/src/main/java/org/cogcomp/re/IOHelper.java) class which pre-annotates a large corpus and save them into single files. 
 
 ### Custom training/testing
+
+Please refer to the three tests placed in [`ACERelationTester`](../blob/master/relation-extraction/src/main/java/org/cogcomp/re/ACERelationTester.java) to see how to train models.
 
 ## Citation
 If you use this tool, please cite the following works.
