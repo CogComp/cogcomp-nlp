@@ -205,7 +205,13 @@ learn fine_relation_label
     with SupportVectorMachine{
 
     }
-    progressOutput 20000
+end
+
+discrete semeval_relation_classifier (Relation r) <-
+learn fine_relation_label
+    using lexical_features, collocations_features, wordNetFeatures, gazetteerFeatures, dependency_features, shallow_parse_features, template_features, mention_features
+    with SupportVectorMachine{
+    }
 end
 
 constraint coref_constraint(Relation r)

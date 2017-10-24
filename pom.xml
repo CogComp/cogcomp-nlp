@@ -209,6 +209,7 @@
                         <exclude>**/AffixesZH.java</exclude>
 
                         <exclude>**/LbjGen/*</exclude>
+                        <exclude>**/data/*</exclude>
 
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>

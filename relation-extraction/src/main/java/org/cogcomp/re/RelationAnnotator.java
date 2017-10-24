@@ -165,4 +165,5 @@ public class RelationAnnotator extends Annotator {
         }
         record.addView(ViewNames.MENTION, mentionView);
     }
+
 }
