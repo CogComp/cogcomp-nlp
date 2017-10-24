@@ -43,6 +43,12 @@ We test results on both Coarse Type and Fine Type, and on both gold mention data
 | Gold Mention      | 58.35       | 62.54     |
 | Predicted Mention | 44.07       | 41.90     |
 
+We also provides results tested on SemEval-2008 dataset. The task defined in this set is slightly different and the classifier is not feature engineered for this dataset.
+
+|             | Precision | Recall | F1    |
+|-------------|-----------|--------|-------|
+| SemEval2008 | 78.04     | 82.59  | 80.25 |
+
 ## Usage
 
 ### Install with Maven
@@ -120,6 +126,10 @@ For a full version of this demo, please refer to [`AnnotatorExample`](../blob/ma
 ### Using Relation Classifier Only
 
 Please refer to the inner implementation of `addView()` in [`RelationAnnotator`](../blob/master/relation-extraction/src/main/java/org/cogcomp/re/RelationAnnotator.java) to see how to do this.
+
+### Classify SemEval Relations
+
+Please refer to [`ExampleUsage`](../blob/master/relation-extraction/src/main/java/org/cogcomp/re/ExampleUsage.java)
 
 ## Run Tests
 
