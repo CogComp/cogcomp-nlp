@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.ner.config;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -118,7 +119,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
     private final static String DEFAULT_MODEL_NAME = "CoNLL_enron";
-    private final static String DEFAULT_LANGUAGE = "en";
+    private final static String DEFAULT_LANGUAGE = Language.English.getCode();
 
     private static final String DEFAULT_RANDOM_NOISE_LEVEL = "0.1";
     private static final String DEFAULT_OMISSION_RATE = "0.2";
