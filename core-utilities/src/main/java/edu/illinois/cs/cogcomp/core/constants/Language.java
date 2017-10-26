@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * List of languages used in the packages.
- * The code names follow the ISO 639-3 standard
+ * The code names follow the ISO 639-3 standard.
  * @author Chen-Tse
  * @author Daniel
  */
