@@ -12,11 +12,14 @@ import java.util.Arrays;
 
 /**
  * This class implements an expandable array of <code>double</code>s that should be faster than
- * java's <code>Vector</code>.
+ * java's <code>Vector</code>. Vector was changed to <code>floats</code> for efficiency.
  *
  * @author Nick Rizzolo
- **/
+ */
 public class DVector implements Cloneable, java.io.Serializable {
+    /** generated */
+    private static final long serialVersionUID = 2318393173918599422L;
+
     /** The default capacity of a vector upon first construction. */
     protected static final int defaultCapacity = 8;
 
@@ -28,7 +31,7 @@ public class DVector implements Cloneable, java.io.Serializable {
 
     /**
      * Constructs a new vector with capacity equal to {@link #defaultCapacity}.
-     **/
+     */
     public DVector() {
         this(defaultCapacity);
     }
@@ -37,7 +40,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * Constructs a new vector with the specified capacity.
      *
      * @param c The initial capacity for the new vector.
-     **/
+     */
     public DVector(int c) {
         vector = new float[Math.max(defaultCapacity, c)];
     }
@@ -46,7 +49,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * Constructs a new vector using the specified array as a starting point.
      *
      * @param v The initial array.
-     **/
+     */
     public DVector(double[] v) {
         if (v.length == 0)
             vector = new float[defaultCapacity];
@@ -65,7 +68,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param i The index of the value to retrieve.
      * @return The retrieved value.
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
+     */
     public double get(int i) {
         return get(i, 0);
     }
@@ -78,7 +81,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param d The default value.
      * @return The retrieved value.
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
+     */
     public double get(int i, double d) {
         return i < size ? vector[i] : d;
     }
@@ -91,7 +94,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param v The new value at that index.
      * @return The value that used to be at index <code>i</code>.
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
+     */
     public double set(int i, double v) {
         return set(i, v, 0);
     }
@@ -105,7 +108,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param d The default value for other new indexes that might get created.
      * @return The value that used to be at index <code>i</code>.
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
+     */
     public double set(int i, double v, double d) {
         expandFor(i, d);
         double result = vector[i];
@@ -118,7 +121,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * Adds the specified value on to the end of the vector, expanding its capacity as necessary.
      *
      * @param v The new value to appear last in the vector.
-     **/
+     */
     public void add(double v) {
         expandFor(size, 0);
         vector[size - 1] = (float)v;
@@ -130,7 +133,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * necessary.
      *
      * @param v The new vector of values to appear at the end of this vector.
-     **/
+     */
     public void addAll(DVector v) {
         expandFor(size + v.size - 1, 0);
         System.arraycopy(v.vector, 0, vector, size - v.size, v.size);
@@ -142,7 +145,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      *
      * @param i The index of the element to remove.
      * @return The removed element.
-     **/
+     */
     public double remove(int i) {
         if (i >= size)
             throw new ArrayIndexOutOfBoundsException("LBJ: DVector: Can't remove element at index "
@@ -155,13 +158,13 @@ public class DVector implements Cloneable, java.io.Serializable {
     }
 
 
-    /** Returns the value of {@link #size}. */
+    /** @return the value of {@link #size}. */
     public int size() {
         return size;
     }
 
 
-    /** Returns the value of the maximum element in the vector. */
+    /** @return the value of the maximum element in the vector. */
     public double max() {
     	double result = -Double.MAX_VALUE;
         for (int i = 0; i < size; ++i)
@@ -190,7 +193,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      *         the first element greater than <code>v</code>, or the size of the vector if all
      *         elements in the list are less than <code>v</code>. Note that this guarantees that the
      *         return value will be &gt;= 0 if and only if <code>v</code> is found.
-     **/
+     */
     public int binarySearch(double v) {
         int a = 0, b = size;
 
@@ -214,7 +217,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      *
      * @param index The index where a new value will be stored.
      * @param d The default value for other new indexes that might get created.
-     **/
+     */
     protected void expandFor(int index, double d) {
         if (index < size)
             return;
@@ -233,8 +236,8 @@ public class DVector implements Cloneable, java.io.Serializable {
 
 
     /**
-     * Returns a new array of <code>double</code>s containing the same data as this vector.
-     **/
+     * @return a new array of <code>double</code>s containing the same data as this vector.
+     */
     public double[] toArray() {
         double[] result = new double[size];
         System.arraycopy(vector, 0, result, 0, size);
@@ -245,7 +248,7 @@ public class DVector implements Cloneable, java.io.Serializable {
     /**
      * Two <code>DVector</code>s are considered equal if they contain the same elements and have the
      * same size.
-     **/
+     */
     public boolean equals(Object o) {
         if (!(o instanceof DVector))
             return false;
@@ -298,7 +301,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * old models.
      *
      * @param out The output stream.
-     **/
+     */
     public void write(ExceptionlessOutputStream out) {
         out.writeInt(-size);
         for (int i = 0; i < size; ++i)
@@ -313,7 +316,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * precision data.
      *
      * @param in The input stream.
-     **/
+     */
     public void read(ExceptionlessInputStream in) {
         size = in.readInt();
         if (size == 0)

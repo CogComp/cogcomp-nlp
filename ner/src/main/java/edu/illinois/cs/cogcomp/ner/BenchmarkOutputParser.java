@@ -39,6 +39,49 @@ public class BenchmarkOutputParser {
         + " Label[^\\n]*[\\n]+"
         + "--[^\\n]*[\\n]+"
         + "LOC[^\\n]*[\\n]+"
+        + "MISC[^\\n]*[\\n]+"
+        + "ORG[^\\n]*[\\n]+"
+        + "PER[^\\n]*[\\n]+"
+        + "---[^\\n]*[\\n]+"
+        + "O[^\\n]*[\\n]+"
+        + "----[^\\n]*[\\n]+"
+        + "Overall[\\s]*[\\d\\.]+[\\s]*[\\d\\.]+[\\s]*([\\d\\.]+)");
+        
+    /** get the F1 score for token only.  */
+    static Pattern ol2tokenlevelpattern = Pattern.compile(
+        "Token-level Acc Level2:[^\n]*[\n]+"
+        + "[^\\n]*[\\n]+"
+        + "--[^\\n]*[\\n]+"
+        + "CARD[^\\n]*[\\n]+"
+        + "DATE[^\\n]*[\\n]+"
+        + "EVENT[^\\n]*[\\n]+"
+        + "FAC[^\\n]*[\\n]+"
+        + "GPE[^\\n]*[\\n]+"
+        + "LAN[^\\n]*[\\n]+"
+        + "LAW[^\\n]*[\\n]+"
+        + "LOC[^\\n]*[\\n]+"
+        + "MON[^\\n]*[\\n]+"
+        + "NORP[^\\n]*[\\n]+"
+        + "ORDINAL[^\\n]*[\\n]+"
+        + "ORG[^\\n]*[\\n]+"
+        + "PERCENT[^\\n]*[\\n]+"
+        + "PERSON[^\\n]*[\\n]+"
+        + "PRODUCT[^\\n]*[\\n]+"
+        + "QUANTITY[^\\n]*[\\n]+"
+        + "TIME[^\\n]*[\\n]+"
+        + "WORK_OF_ART[^\\n]*[\\n]+"
+        + "---[^\\n]*[\\n]+"
+        + "O[^\\n]*[\\n]+"
+        + "----[^\\n]*[\\n]+"
+        + "Overall[\\s]*[\\d\\.]+[\\s]*[\\d\\.]+[\\s]*([\\d\\.]+)");
+
+    /** get the F1 score for token only.  */
+    static Pattern l1tokenlevelpattern = Pattern.compile(
+        "Token-level Acc Level1:[^\n]*[\n]+"
+        + " Label[^\\n]*[\\n]+"
+        + "--[^\\n]*[\\n]+"
+        + "LOC[^\\n]*[\\n]+"
+        + "MISC[^\\n]*[\\n]+"
         + "ORG[^\\n]*[\\n]+"
         + "PER[^\\n]*[\\n]+"
         + "---[^\\n]*[\\n]+"
@@ -47,17 +90,32 @@ public class BenchmarkOutputParser {
         + "Overall[\\s]*[\\d\\.]+[\\s]*[\\d\\.]+[\\s]*([\\d\\.]+)");
     
     /** get the F1 score for token only.  */
-    static Pattern l1tokenlevelpattern = Pattern.compile(
+    static Pattern ol1tokenlevelpattern = Pattern.compile(
         "Token-level Acc Level1:[^\n]*[\n]+"
-        + " Label[^\\n]*[\\n]+"
-        + "--[^\\n]*[\\n]+"
-        + "LOC[^\\n]*[\\n]+"
-        + "ORG[^\\n]*[\\n]+"
-        + "PER[^\\n]*[\\n]+"
-        + "---[^\\n]*[\\n]+"
-        + "O[^\\n]*[\\n]+"
-        + "----[^\\n]*[\\n]+"
-        + "Overall[\\s]*[\\d\\.]+[\\s]*[\\d\\.]+[\\s]*([\\d\\.]+)");
+            + "[^\\n]*[\\n]+"
+            + "--[^\\n]*[\\n]+"
+            + "CARD[^\\n]*[\\n]+"
+            + "DATE[^\\n]*[\\n]+"
+            + "EVENT[^\\n]*[\\n]+"
+            + "FAC[^\\n]*[\\n]+"
+            + "GPE[^\\n]*[\\n]+"
+            + "LAN[^\\n]*[\\n]+"
+            + "LAW[^\\n]*[\\n]+"
+            + "LOC[^\\n]*[\\n]+"
+            + "MON[^\\n]*[\\n]+"
+            + "NORP[^\\n]*[\\n]+"
+            + "ORDINAL[^\\n]*[\\n]+"
+            + "ORG[^\\n]*[\\n]+"
+            + "PERCENT[^\\n]*[\\n]+"
+            + "PERSON[^\\n]*[\\n]+"
+            + "PRODUCT[^\\n]*[\\n]+"
+            + "QUANTITY[^\\n]*[\\n]+"
+            + "TIME[^\\n]*[\\n]+"
+            + "WORK_OF_ART[^\\n]*[\\n]+"
+            + "---[^\\n]*[\\n]+"
+            + "O[^\\n]*[\\n]+"
+            + "----[^\\n]*[\\n]+"
+            + "Overall[\\s]*[\\d\\.]+[\\s]*[\\d\\.]+[\\s]*([\\d\\.]+)");
     
     /** get the F1 score for phrase only.  */
     static Pattern phraselevelpattern = Pattern.compile(
@@ -99,8 +157,8 @@ public class BenchmarkOutputParser {
     
     /**
      * get the learning rates and thicknesses from the file name.
-     * @param name
-     * @return
+     * @param file the file containing the results to parse, filename includes the params.
+     * @return the set of parameters for the learner.
      */
     static Parameters parseFilename(File file) {
         String name = file.getName();
@@ -134,6 +192,77 @@ public class BenchmarkOutputParser {
      * @param args
      * @throws IOException 
      */
+    public static void main1(String[] args) throws IOException {
+        /** get the F1 score for token only.  */
+        String fuck = "Token-level Acc Level1:\n" + 
+            "   Label    Precision Recall   F1   LCount PCount\n" + 
+            "-------------------------------------------------\n" + 
+            "CARDINAL       80.556 84.083 82.281   1690   1764\n" + 
+            "DATE           92.273 86.528 89.308   5990   5617\n" + 
+            "EVENT          89.668 47.184 61.832    515    271\n" + 
+            "FAC            74.494 33.273 46.000    553    247\n" + 
+            "GPE            92.100 92.054 92.077   4002   4000\n" + 
+            "LANGUAGE       81.818 42.857 56.250     21     11\n" + 
+            "LAW            76.531 27.881 40.872    269     98\n" + 
+            "LOC            76.068 71.429 73.675    623    585\n" + 
+            "MONEY          94.816 91.446 93.100   1660   1601\n" + 
+            "NORP           92.418 93.841 93.125   1299   1319\n" + 
+            "ORDINAL        80.051 94.627 86.731    335    396\n" + 
+            "ORG            88.290 88.837 88.563   8080   8130\n" + 
+            "PERCENT        96.899 92.957 94.887   1647   1580\n" + 
+            "PERSON         93.896 94.858 94.374   4492   4538\n" + 
+            "PRODUCT        74.658 50.463 60.221    216    146\n" + 
+            "QUANTITY       96.581 72.128 82.582    470    351\n" + 
+            "TIME           83.688 55.573 66.792    637    423\n" + 
+            "WORK_OF_ART    73.611 33.491 46.037    633    288\n" + 
+            "-------------------------------------------------\n" + 
+            "O              98.293 99.313 98.801 170279 172046\n" + 
+            "-------------------------------------------------\n" + 
+            "Overall        90.171 85.362 87.700  33132  31365\n" + 
+            "Accuracy       97.041   -      -      -    203411\n" + 
+            "";
+        Pattern tt = Pattern.compile(
+            "Token-level Acc Level1:[^\n]*[\n]+"
+            + "[^\\n]*[\\n]+"
+            + "--[^\\n]*[\\n]+"
+            + "CARD[^\\n]*[\\n]+"
+            + "DATE[^\\n]*[\\n]+"
+            + "EVENT[^\\n]*[\\n]+"
+            + "FAC[^\\n]*[\\n]+"
+            + "GPE[^\\n]*[\\n]+"
+            + "LAN[^\\n]*[\\n]+"
+            + "LAW[^\\n]*[\\n]+"
+            + "LOC[^\\n]*[\\n]+"
+            + "MON[^\\n]*[\\n]+"
+            + "NORP[^\\n]*[\\n]+"
+            + "ORDINAL[^\\n]*[\\n]+"
+            + "ORG[^\\n]*[\\n]+"
+            + "PERCENT[^\\n]*[\\n]+"
+            + "PERSON[^\\n]*[\\n]+"
+            + "PRODUCT[^\\n]*[\\n]+"
+            + "QUANTITY[^\\n]*[\\n]+"
+            + "TIME[^\\n]*[\\n]+"
+            + "WORK_OF_ART[^\\n]*[\\n]+"
+            + "---[^\\n]*[\\n]+"
+            + "O[^\\n]*[\\n]+"
+            + "----[^\\n]*[\\n]+"
+            + "Overall[\\s]*[\\d\\.]+[\\s]*[\\d\\.]+[\\s]*([\\d\\.]+)");
+        
+        Matcher matcher = tt.matcher(fuck);
+        if (matcher.find()) {
+            String tokenL2 = matcher.group(1);
+            System.out.println(tokenL2);
+        } else System.err.println("NOT");
+
+
+    }
+    /**
+     * This main method will take one required argument, idenfitying the file containing 
+     * the results. Optionally, "-single" may also be passed indicating it will extract
+     * the F1 value for single token values only.
+     * @param args
+     * @throws IOException 
+     */
     public static void main(String[] args) throws IOException {
         parseArgs(args);
         System.out.println("L1lr,L1t,L2lr,L2t,L1 token,L2 token,F1,F2");
@@ -141,23 +270,42 @@ public class BenchmarkOutputParser {
             if (file.getName().startsWith("L1r")) {
                 File resultsfile = new File(file, "ner/results.out");
                 if (resultsfile.exists()) {
+                    try {
                     Parameters p = parseFilename(file);
                     String lines = FileUtils.readFileToString(resultsfile);
                     
                     // get the token level score.
+                    String tokenL2 = null, tokenL1 = null;
                     Matcher matcher = l2tokenlevelpattern.matcher(lines);
-                    matcher.find();
-                    String tokenL2 = matcher.group(1);
+                    if (matcher.find())
+                        tokenL2 = matcher.group(1);
+                    else {
+                        matcher = ol2tokenlevelpattern.matcher(lines);
+                        if (matcher.find())
+                            tokenL2 = matcher.group(1);
+                        else
+                            System.err.println("No token level match");
+                    }
                     
                     matcher = l1tokenlevelpattern.matcher(lines);
-                    matcher.find();
-                    String tokenL1 = matcher.group(1);
+                    if (matcher.find())
+                        tokenL1 = matcher.group(1);
+                    else {
+                        matcher = ol1tokenlevelpattern.matcher(lines);
+                        if (matcher.find())
+                            tokenL1 = matcher.group(1);
+                        else
+                            System.err.println("No token level match");
+                    }
                     
                     matcher = phraselevelpattern.matcher(lines);
                     matcher.find();
                     String phraseL1 = matcher.group(1);
                     String phraseL2 = matcher.group(2);
                     System.out.println(p.toString()+","+tokenL1+","+tokenL2+","+phraseL1+","+phraseL2);
+                    } catch (java.lang.IllegalStateException ise) {
+                        System.err.println("The results file could not be parsed : \""+resultsfile+"\"");
+                    }
                 } else {
                     System.err.println("no results in "+resultsfile);
                 }
