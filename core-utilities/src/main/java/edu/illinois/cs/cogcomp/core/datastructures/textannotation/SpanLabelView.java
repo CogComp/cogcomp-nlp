@@ -62,7 +62,17 @@ public class SpanLabelView extends View {
     public void addConstituent(Constituent constituent) {
         super.addConstituent(constituent);
 
-        Collections.sort(this.constituents, TextAnnotationUtilities.constituentStartComparator);
+        // this sort is grossly inefficient when appending contiguous tokens one at a time. 
+        // we add a check so we only do the sort if the constituents are added out of order.
+        // Better yet use an ordered tree map representation, do an insertion sort.
+        int size = this.constituents.size();
+        if (size > 1) {
+            Constituent before = this.constituents.get(size-2);
+            Constituent after = this.constituents.get(size-1);
+            if (before.getStartSpan() > after.getStartSpan()) {
+                Collections.sort(this.constituents, TextAnnotationUtilities.constituentStartComparator);
+            }
+        }
     }
 
     /**

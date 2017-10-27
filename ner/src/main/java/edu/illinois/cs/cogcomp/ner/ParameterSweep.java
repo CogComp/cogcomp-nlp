@@ -51,7 +51,7 @@ public class ParameterSweep {
 		File[] directories = new File(".").listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.startsWith("r.");
+				return name.startsWith("L1r.");
 			}
 		});
 		

@@ -13,8 +13,10 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
@@ -24,6 +26,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes.utils.DocumentIterator;
@@ -293,12 +296,18 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
                     System.out.print(" "+rclabel);
                 }
                 args.add(rc);
+                tempArgLabels.add(a.argument);
             }
         }
         if (debug) 
             System.out.println();
-        String[] argLabels = tempArgLabels.toArray(new String[args.size()]);
-        double[] scores = new double[args.size()];
+        String[] argLabels = tempArgLabels.toArray(new String[tempArgLabels.size()]);
+        double[] scores = new double[tempArgLabels.size()];
+        for (int i = 0; i < scores.length; i++) scores[i] = 1.0;
+        
+        //public void addPredicateArguments(Constituent predicate, List<Constituent> args,
+        //    String[] relations, double[] scores) {
+ 
         srlView.addPredicateArguments(predicate, args, argLabels, scores, continuationArgs);
     }
     
@@ -330,9 +339,32 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
         String topdir = args[0];
         OntonotesPropbankReader otr = new OntonotesPropbankReader(topdir, args[1]);
         int count = 0;
+        int hashcollisions = 0;
         while (otr.hasNext()) {
             TextAnnotation ta = otr.next();
             if (ta != null) {
+                
+                // check the view for hash collisions
+                View view = ta.getView(ViewNames.SRL_VERB);
+                List<Constituent> constituents = view.getConstituents();
+                HashMap<Integer, Constituent> hashmap = new HashMap<>();
+
+                // add each constituent to the map keyed by it's hashcode. Check first to see if the hashcode
+                // is already used, if it is report it.
+                for (Constituent c : constituents) {
+                    int code = c.hashCode();
+                    if (hashmap.containsKey(code)) {
+                        Constituent dup = hashmap.get(code);
+                        System.err.println(c+" == "+dup);
+                        int chash = c.hashCode();
+                        int dhash = dup.hashCode();
+                        hashcollisions++;
+                    } else {
+                        hashmap.put(code, c);
+                    }
+                }
+                
+                // write the serialized form
                 String json = SerializationHelper.serializeToJson(ta);
                 String outfile = otr.currentfile.replace(topdir, args[2]);
                 File outputfile = new File(outfile);
@@ -346,6 +378,7 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
                     System.out.println("Completed "+count+" of "+otr.filelist.size());
             }
         }
+        System.out.println(hashcollisions+" collisions in "+count+" documents.");
         System.out.println(otr.generateReport());
     }
 }

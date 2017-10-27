@@ -251,96 +251,6 @@ public class Constituent implements Serializable, HasAttributes {
         return true;
     }
 
-    /**
-     * This function can be used in scenarios where there is a need for Constituent equality, ignoring the values
-     * of the attributes. Note that many equality functions in Java automatically call the `equals' function.
-     * @param that the input constituent you compare with
-     * @return whether the two constituents are the same or not.
-     */
-    public boolean equalsWithoutAttributeEqualityCheck(Constituent that) {
-        if (this.getIncomingRelations().size() != that.getIncomingRelations().size())
-            return false;
-
-        for (int relationId = 0; relationId < this.getIncomingRelations().size(); relationId++) {
-            Relation myRelation = this.getIncomingRelations().get(relationId);
-            Relation otherRelation = that.getIncomingRelations().get(relationId);
-
-            int myRelationName = myRelation.relationName;
-
-            int otherRelationName = otherRelation.relationName;
-            if (myRelationName != otherRelationName)
-                return false;
-
-            if (!myRelation.getSource().getSpan().equals(otherRelation.getSource().getSpan()))
-                return false;
-            
-            if (myRelation.getSource().label != otherRelation.getSource().label)
-                return false;
-        }
-
-        if (this.getOutgoingRelations().size() != that.getOutgoingRelations().size())
-            return false;
-
-        for (int relationId = 0; relationId < this.getOutgoingRelations().size(); relationId++) {
-            Relation myRelation = this.getOutgoingRelations().get(relationId);
-            Relation otherRelation = that.getOutgoingRelations().get(relationId);
-
-            int myRelationName = myRelation.relationName;
-
-            int otherRelationName = otherRelation.relationName;
-
-            if (myRelationName != otherRelationName)
-                return false;
-
-            if (!myRelation.getTarget().getSpan().equals(otherRelation.getTarget().getSpan()))
-                return false;
-            
-            if (myRelation.getTarget().label != otherRelation.getTarget().label)
-                return false;
-        }
-
-        return this.textAnnotation.getText().equals(that.textAnnotation.getText())
-                && this.getStartSpan() == that.getStartSpan()
-                && this.getEndSpan() == that.getEndSpan()
-                && this.getLabel().equals(that.getLabel())
-                && this.constituentScore == that.constituentScore
-                && this.getViewName().equals(that.getViewName());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (!(obj instanceof Constituent))
-            return false;
-
-        Constituent that = (Constituent) obj;
-
-        if (this.getStartSpan() < 0) {
-            return false;
-        }
-
-        if (this.attributes == null && that.attributes != null)
-            return false;
-        if (this.attributes != null && that.attributes == null)
-            return false;
-
-        if (this.attributes != null && that.attributes != null)
-            if (!this.attributes.equals(that.attributes))
-                return false;
-
-        if (null != this.labelsToScores && null == that.labelsToScores)
-            return false;
-        if (null == this.labelsToScores && null != that.labelsToScores)
-            return false;
-        if ( null != this.labelsToScores && null != that.labelsToScores)
-            if (!this.labelsToScores.equals(that.labelsToScores))
-                return false;
-
-        return equalsWithoutAttributeEqualityCheck(that);
-    }
-
     public String getAttribute(String key) {
         if (attributes == null)
             return null;
@@ -444,13 +354,103 @@ public class Constituent implements Serializable, HasAttributes {
         return (this.attributes != null) && (attributes.containsKey(key));
     }
 
+
+    /**
+     * This function can be used in scenarios where there is a need for Constituent equality, ignoring the values
+     * of the attributes. Note that many equality functions in Java automatically call the `equals' function.
+     * @param that the input constituent you compare with
+     * @return whether the two constituents are the same or not.
+     */
+    public boolean equalsWithoutAttributeEqualityCheck(Constituent that) {
+        if (this.getIncomingRelations().size() != that.getIncomingRelations().size())
+            return false;
+
+        for (int relationId = 0; relationId < this.getIncomingRelations().size(); relationId++) {
+            Relation myRelation = this.getIncomingRelations().get(relationId);
+            Relation otherRelation = that.getIncomingRelations().get(relationId);
+
+            int myRelationName = myRelation.relationName;
+
+            int otherRelationName = otherRelation.relationName;
+            if (myRelationName != otherRelationName)
+                return false;
+
+            if (!myRelation.getSource().getSpan().equals(otherRelation.getSource().getSpan()))
+                return false;
+            
+            if (myRelation.getSource().label != otherRelation.getSource().label)
+                return false;
+        }
+
+        if (this.getOutgoingRelations().size() != that.getOutgoingRelations().size())
+            return false;
+
+        for (int relationId = 0; relationId < this.getOutgoingRelations().size(); relationId++) {
+            Relation myRelation = this.getOutgoingRelations().get(relationId);
+            Relation otherRelation = that.getOutgoingRelations().get(relationId);
+
+            int myRelationName = myRelation.relationName;
+
+            int otherRelationName = otherRelation.relationName;
+
+            if (myRelationName != otherRelationName)
+                return false;
+
+            if (!myRelation.getTarget().getSpan().equals(otherRelation.getTarget().getSpan()))
+                return false;
+            
+            if (myRelation.getTarget().label != otherRelation.getTarget().label)
+                return false;
+        }
+
+        return /*this.textAnnotation.getText().equals(that.textAnnotation.getText())
+                && */this.getStartSpan() == that.getStartSpan()
+                && this.getEndSpan() == that.getEndSpan()
+                && this.getLabel().equals(that.getLabel())
+                //&& this.constituentScore == that.constituentScore
+                && this.getViewName().equals(that.getViewName());
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Constituent))
+            return false;
+
+        Constituent that = (Constituent) obj;
+
+        if (this.getStartSpan() < 0) {
+            return false;
+        }
+
+        if (this.attributes == null && that.attributes != null)
+            return false;
+        if (this.attributes != null && that.attributes == null)
+            return false;
+
+        if (this.attributes != null && that.attributes != null)
+            if (!this.attributes.equals(that.attributes))
+                return false;
+
+        if (null != this.labelsToScores && null == that.labelsToScores)
+            return false;
+        if (null == this.labelsToScores && null != that.labelsToScores)
+            return false;
+        if ( null != this.labelsToScores && null != that.labelsToScores)
+            if (!this.labelsToScores.equals(that.labelsToScores))
+                return false;
+
+        return equalsWithoutAttributeEqualityCheck(that);
+    }
+
     /**
      * @return
      */
     @Override
     public int hashCode() {
 
-        int hashCode = this.getTextAnnotation().getText().hashCode() * 37;
+        int hashCode = 1 /*+ this.getTextAnnotation().getText().hashCode() * 37*/;
 
         hashCode += this.getStartSpan() * 41;
         hashCode += this.getEndSpan() * 43;
@@ -458,8 +458,8 @@ public class Constituent implements Serializable, HasAttributes {
         hashCode += this.getLabel().hashCode() * 91;
         hashCode += (this.attributes == null ? 0 : this.attributes.hashCode() * 7);
         hashCode += (this.labelsToScores == null ? 0 : this.labelsToScores.hashCode() * 23);
-        hashCode += (new Double(this.constituentScore)).hashCode() * 67;
-        hashCode += this.getViewName().hashCode();
+        //hashCode += (new Double(this.constituentScore)).hashCode() * 67;
+        hashCode += this.getViewName().hashCode() * 67;
 
         for (Relation relation : this.getIncomingRelations()) {
 
