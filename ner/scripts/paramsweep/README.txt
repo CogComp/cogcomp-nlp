@@ -1,4 +1,4 @@
-This process describes the process of doing a parameter sweep to get the
+This document describes the process of doing a parameter sweep to get the
 optimal runtime arguments for Illinois CogComp NER system. This is a
 highly technical process, and should not be attempted without first 
 evaluating the effectiveness of the machine to do the computation.
@@ -36,7 +36,7 @@ the next section.
 3. Generate the Sweep
 
 For NER, the learning rate and thickness for new training is codified in the 
-configuration file. Each configuration file MUST define the learning rate and thickness
+configuration file. Each configuration files MUST define the learning rate and thickness
 for each of the models explicitly like so:
 
 # parameter sweep reveals these to be the best params, L1 model is best.
@@ -45,9 +45,9 @@ thicknessPredictionsLevel1 100
 learningRatePredictionsLevel2 .02
 thicknessPredictionsLevel2 200
 
-If these configuration parameters do not exist in the config files, they must be added,
-although it does not matter what values they have intially. These configuration parameters
-are replaced by the "generatesweep.sh" script in order to set the learning rates and 
+If these configuration parameters do not exist in the configuration files, they must be added,
+although it does not matter what values they have initially. These configuration parameters
+are replaced by the "generatesweep.sh" script to set the learning rates and 
 thicknesses for that run. For example, L1r.01-t10L2r.02-t20 indicates a directory 
 containing a run where the SparseAveragedPerceptron was run with default parameters 
 of learning rate = .01 and thickness = 10 for the L1 model, and lr = .02 and thickness 
@@ -59,7 +59,7 @@ The "generatesweep.sh" command line tool will compile the software, copy the com
 software into a number of directories reflecting the learner parameters as described
 above. With this done, it will create the benchmarks directory in each of the copied 
 directories. From the example above, it would create the 
-"L1r.01-t10L2r.02-t20/ner/benchmark/" and populate it approriately. It will copy the
+"L1r.01-t10L2r.02-t20/ner/benchmark/" and populate it appropriately. It will copy the
 configuration files (since they will be changed in a later step), but it will link
 the training data to avoid unnecessary disk usage. When all the benchmark directories are
 created, it will go through and modify the learning rates and thicknesses. The range of the
@@ -96,7 +96,7 @@ processes.
 
 To run the sweep, simply execute the run command from the top level directory:
 
-./run.sh
+nohup ./run.sh >& run.out &
 
 When this execution completes, there should be a results.out file in each of the generated
 ner directories containing results. Errors will be logged in errors.out in the generated
