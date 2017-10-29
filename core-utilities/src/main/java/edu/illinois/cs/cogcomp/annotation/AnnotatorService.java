@@ -10,8 +10,11 @@ package edu.illinois.cs.cogcomp.annotation;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization; 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
@@ -23,6 +26,9 @@ import java.util.Set;
  * @author Narender Gupta
  */
 public interface AnnotatorService {
+
+    static Logger logger = LoggerFactory.getLogger(AnnotatorService.class);
+
     /**
      * A convenience method for creating a
      * {@link TextAnnotation}. Typically,
@@ -150,6 +156,11 @@ public interface AnnotatorService {
      */
     boolean addView(TextAnnotation ta, String viewName) throws AnnotatorException;
 
+    /**
+     Add the content of the annotators to a given TextAnnotation object.
+     @param runtimeAttributes the parameters that might change the behavior of the annotator while after initialization and while running.
+     */
+    boolean addView(TextAnnotation textAnnotation, String viewName, ResourceManager runtimeAttributes) throws AnnotatorException;
 
     /**
      * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
