@@ -378,7 +378,7 @@ public class PipelineFactory {
         }
         if (rm.getBoolean(PipelineConfigurator.USE_RELATION)){
             RelationAnnotator relationAnnotator = new RelationAnnotator();
-            viewGenerators.put(ViewNames.MENTION, relationAnnotator);
+            viewGenerators.put(ViewNames.RELATION, relationAnnotator);
         }
         if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)){
             Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
