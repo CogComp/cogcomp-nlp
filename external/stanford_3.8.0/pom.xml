@@ -2,7 +2,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.34</version>
+        <version>3.1.35</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -16,12 +16,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.1.34</version>
+            <version>3.1.35</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>external-commons</artifactId>
-            <version>3.1.34</version>
+            <version>3.1.35</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
