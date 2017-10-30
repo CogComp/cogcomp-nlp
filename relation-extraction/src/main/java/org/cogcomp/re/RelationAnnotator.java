@@ -33,25 +33,36 @@ public class RelationAnnotator extends Annotator {
     private ACERelationConstrainedClassifier constrainedClassifier;
     private Gazetteers gazetteers;
     private WordNetManager wordNet;
-    private MentionAnnotator mentionAnnotator;
+    private String type = "ACE"; // default relation type
 
     public RelationAnnotator() {
         this(true);
     }
 
-
     public RelationAnnotator(boolean lazilyInitialize) {
-        super(ViewNames.MENTION, new String[]{ViewNames.POS, ViewNames.DEPENDENCY_STANFORD, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
+        this(lazilyInitialize, "ACE");
+    }
+
+    public RelationAnnotator(boolean lazilyInitialize, String type) {
+        super(ViewNames.RELATION, new String[]{ViewNames.MENTION, ViewNames.POS, ViewNames.DEPENDENCY_STANFORD, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
+        this.type = (type.contains("ACE")) ? "ACE" : "SEMEVAL";
     }
 
     @Override
     public void initialize(ResourceManager rm) {
         try {
-            mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            File modelDir = ds.getDirectory("org.cogcomp.re", "ACE_GOLD_BI", 1.0, false);
-            String modelFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lc";
-            String lexFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lex";
+            String modelFile;
+            String lexFile;
+            if (type.equals("ACE")) {
+                File modelDir = ds.getDirectory("org.cogcomp.re", "ACE_GOLD_BI", 1.0, false);
+                modelFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lc";
+                lexFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lex";
+            } else {
+                File modelDir = ds.getDirectory("org.cogcomp.re", "SEMEVAL", 1.1, false);
+                modelFile = modelDir.getPath() + File.separator + "SEMEVAL" + File.separator + "SEMEVAL.lc";
+                lexFile = modelDir.getPath() + File.separator + "SEMEVAL" + File.separator + "SEMEVAL.lex";
+            }
             relationClassifier = new relation_classifier();
             relationClassifier.readModel(modelFile);
             relationClassifier.readLexicon(lexFile);
@@ -61,32 +72,35 @@ public class RelationAnnotator extends Annotator {
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
             gazetteers = GazetteersFactory.get();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void addView(TextAnnotation record) throws AnnotatorException {
-        if (!isInitialized()){
+        if (!isInitialized()) {
             doInitialize();
         }
-        if (!record.hasView(ViewNames.POS) ){
+        if (!record.hasView(ViewNames.POS)) {
             throw new AnnotatorException("Missing required view POS");
         }
-        if (!record.hasView(ViewNames.DEPENDENCY_STANFORD)){
+        if (!record.hasView(ViewNames.DEPENDENCY_STANFORD)) {
             throw new AnnotatorException("Missing required view DEPENDENCY_STANFORD");
         }
-        if (!record.hasView(ViewNames.SHALLOW_PARSE)){
+        if (!record.hasView(ViewNames.SHALLOW_PARSE)) {
             throw new AnnotatorException("Missing required view SHALLOW_PARSE");
         }
-        mentionAnnotator.addView(record);
+        if (!record.hasView(ViewNames.MENTION)) {
+            // TODO: show error messages if the mentions are not typed.
+            throw new AnnotatorException("Missing required view MENTION");
+        }
+
         View mentionView = record.getView(ViewNames.MENTION);
         View annotatedTokenView = new SpanLabelView("RE_ANNOTATED", record);
-        for (Constituent co : record.getView(ViewNames.TOKENS).getConstituents()){
+        for (Constituent co : record.getView(ViewNames.TOKENS).getConstituents()) {
             Constituent c = co.cloneForNewView("RE_ANNOTATED");
-            for (String s : co.getAttributeKeys()){
+            for (String s : co.getAttributeKeys()) {
                 c.addAttribute(s, co.getAttribute(s));
             }
             c.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, c));
@@ -94,28 +108,28 @@ public class RelationAnnotator extends Annotator {
             annotatedTokenView.addConstituent(c);
         }
         record.addView("RE_ANNOTATED", annotatedTokenView);
-        for (int i = 0; i < record.getNumberOfSentences(); i++){
+        for (int i = 0; i < record.getNumberOfSentences(); i++) {
             Sentence curSentence = record.getSentence(i);
             List<Constituent> cins = mentionView.getConstituentsCoveringSpan(curSentence.getStartSpan(), curSentence.getEndSpan());
-            for (int j = 0; j < cins.size(); j++){
-                for (int k = j + 1; k < cins.size(); k++){
+            for (int j = 0; j < cins.size(); j++) {
+                for (int k = j + 1; k < cins.size(); k++) {
                     if (k == j) continue;
                     Constituent source = cins.get(j);
                     Constituent target = cins.get(k);
                     Constituent sourceHead = MentionAnnotator.getHeadConstituent(source, "");
                     Constituent targetHead = MentionAnnotator.getHeadConstituent(target, "");
                     source.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotatePhrase(sourceHead));
-                    target.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotatePhrase(targetHead));
+                    target.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotatePhrase(targetHead));
                     Relation for_test_forward = new Relation("PredictedRE", source, target, 1.0f);
                     Relation for_test_backward = new Relation("PredictedRE", target, source, 1.0f);
                     String tag_forward = constrainedClassifier.discreteValue(for_test_forward);
                     String tag_backward = constrainedClassifier.discreteValue(for_test_backward);
 
-                    if (tag_forward.equals(ACEMentionReader.getOppoName(tag_backward)) && !tag_forward.equals("NOT_RELATED")){
+                    if (tag_forward.equals(ACEMentionReader.getOppoName(tag_backward)) && !tag_forward.equals("NOT_RELATED")) {
                         String tag = tag_forward;
                         Constituent first = source;
                         Constituent second = target;
-                        if (tag_forward.length() > tag_backward.length()){
+                        if (tag_forward.length() > tag_backward.length()) {
                             tag = tag_backward;
                             first = target;
                             second = source;
@@ -127,32 +141,32 @@ public class RelationAnnotator extends Annotator {
                         mentionView.addRelation(r);
                     }
                     if (!tag_forward.equals(ACEMentionReader.getOppoName(tag_backward)) &&
-                            (!tag_forward.equals("NOT_RELATED") || !tag_backward.equals("NOT_RELATED"))){
+                            (!tag_forward.equals("NOT_RELATED") || !tag_backward.equals("NOT_RELATED"))) {
                         double forward_score = 0.0;
                         double backward_score = 0.0;
                         ScoreSet scores = relationClassifier.scores(for_test_forward);
                         Score[] scoresArray = scores.toArray();
-                        for (Score s : scoresArray){
-                            if (s.value.equals(tag_forward)){
+                        for (Score s : scoresArray) {
+                            if (s.value.equals(tag_forward)) {
                                 forward_score = s.score;
                             }
                         }
                         scores = relationClassifier.scores(for_test_backward);
                         scoresArray = scores.toArray();
-                        for (Score s : scoresArray){
-                            if (s.value.equals(tag_forward)){
+                        for (Score s : scoresArray) {
+                            if (s.value.equals(tag_forward)) {
                                 backward_score = s.score;
                             }
                         }
                         String tag = tag_forward;
                         Constituent first = source;
                         Constituent second = target;
-                        if (forward_score < backward_score && backward_score - forward_score > 0.005){
+                        if (forward_score < backward_score && backward_score - forward_score > 0.005) {
                             tag = tag_backward;
                             first = target;
                             second = source;
                         }
-                        if (!tag.equals("NOT_RELATED")){
+                        if (!tag.equals("NOT_RELATED")) {
                             String coarseType = ACERelationTester.getCoarseType(tag);
                             Relation r = new Relation(coarseType, first, second, 1.0f);
                             r.addAttribute("RelationType", coarseType);
@@ -163,7 +177,7 @@ public class RelationAnnotator extends Annotator {
                 }
             }
         }
-        record.addView(ViewNames.MENTION, mentionView);
+        record.addView(ViewNames.RELATION, mentionView);
     }
 
 }
