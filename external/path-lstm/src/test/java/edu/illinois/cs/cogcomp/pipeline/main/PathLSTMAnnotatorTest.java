@@ -1,7 +1,7 @@
 /**
  * This software is released under the University of Illinois/Research and Academic Use License. See
  * the LICENSE file in the root folder for details. Copyright (c) 2016
- *
+ * <p>
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
@@ -42,6 +42,7 @@ public class PathLSTMAnnotatorTest {
         this.ta3 = service.createBasicTextAnnotation("", "", sampleText3);
     }
 
+    @Ignore
     @Test
     public void testExternalAnnotators() throws AnnotatorException {
         // sample text 1
