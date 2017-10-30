@@ -141,6 +141,7 @@ public class ViewNames {
             case SENTENCE:
             case PARAGRAPH:
             case MENTION:
+            case RELATION:
             case MENTION_ACE:
             case MENTION_ERE:
             case NER_CONLL:

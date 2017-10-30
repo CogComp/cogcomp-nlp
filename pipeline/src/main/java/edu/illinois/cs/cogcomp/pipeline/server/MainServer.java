@@ -58,7 +58,7 @@ public class MainServer {
         pipeline = service;
     }
 
-    public static void setPipeline(Logger logger) {
+    public static void setPipeline() {
         try {
             logger.info("Starting to load the pipeline . . . ");
             printMemoryDetails(logger);
@@ -82,7 +82,7 @@ public class MainServer {
         }
     }
 
-    public static void startServer(String[] args, Logger logger) {
+    public static void startServer(String[] args) {
         Namespace parseResults;
 
         try {
@@ -168,8 +168,8 @@ public class MainServer {
     }
 
     public static void main(String[] args) {
-        setPipeline(logger);
-        startServer(args, logger);
+        setPipeline();
+        startServer(args);
     }
 
     private static String annotateText(AnnotatorService finalPipeline, String text, String views,
