@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.pipeline.main;
 import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.comma.CommaLabeler;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -130,6 +131,9 @@ public class PipelineFactory {
                                 Configurator.TRUE);
                         break;
                     case ViewNames.MENTION:
+                        nonDefaultValues.put(PipelineConfigurator.USE_MENTION.key,
+                                Configurator.TRUE);
+                    case ViewNames.RELATION:
                         nonDefaultValues.put(PipelineConfigurator.USE_RELATION.key,
                                 Configurator.TRUE);
                         break;
@@ -351,8 +355,10 @@ public class PipelineFactory {
         }
 
         if (rm.getBoolean(PipelineConfigurator.USE_TRANSLITERATION)) {
-            TransliterationAnnotator transliterationAnnotator = new TransliterationAnnotator();
-            viewGenerators.put(ViewNames.TRANSLITERATION, transliterationAnnotator);
+            for(Language lang : TransliterationAnnotator.supportedLanguages) {
+                TransliterationAnnotator transliterationAnnotator = new TransliterationAnnotator(true, lang);
+                viewGenerators.put(ViewNames.TRANSLITERATION + "_" + lang.getCode(), transliterationAnnotator);
+            }
         }
 
         if (rm.getBoolean(PipelineConfigurator.USE_SRL_PREP)) {
@@ -374,8 +380,7 @@ public class PipelineFactory {
             viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
         }
         if (rm.getBoolean(PipelineConfigurator.USE_RELATION)){
-            RelationAnnotator relationAnnotator = new RelationAnnotator();
-            viewGenerators.put(ViewNames.MENTION, relationAnnotator);
+            viewGenerators.put(ViewNames.RELATION, new RelationAnnotator(true));
         }
         if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)){
             Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();

@@ -10,10 +10,12 @@ package edu.illinois.cs.cogcomp.pipeline.handlers.clausie;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TestClausIEAnnotator {
+    @Ignore
     @Test
     public void testAnnotator() throws AnnotatorException {
         TextAnnotation ta = DummyTextAnnotationGenerator.
