@@ -39,7 +39,7 @@ public class TransliterationAnnotatorTest {
         List<Constituent> consList = ta.getView(ViewNames.TRANSLITERATION).getConstituents();
         boolean hasJohn = false;
         for (Constituent c : consList) {
-            if (c.getLabel().contains("جان")) hasJohn = true;
+            if (c.getLabel().contains("جان")) hasJohn = true; // Persian transliteration of "John"
         }
         assertTrue(hasJohn);
     }
