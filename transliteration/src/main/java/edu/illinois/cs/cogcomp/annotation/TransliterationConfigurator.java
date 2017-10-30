@@ -13,13 +13,11 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 public class TransliterationConfigurator extends Configurator {
 
-    public static final Property LANGUAGE = new Property("usePos", FALSE);
-
-    public static final Property MODEL_PATH = new Property("transliterationModelPath", ""); // todo: fix this
+    // nothing here for now; use it in future
 
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] properties = { MODEL_PATH, LANGUAGE };
+        Property[] properties = { };
         return (new TransliterationConfigurator().getConfig(new ResourceManager(generateProperties(properties))));
     }
 

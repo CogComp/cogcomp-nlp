@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.pipeline.main;
 import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.comma.CommaLabeler;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -351,8 +352,10 @@ public class PipelineFactory {
         }
 
         if (rm.getBoolean(PipelineConfigurator.USE_TRANSLITERATION)) {
-            TransliterationAnnotator transliterationAnnotator = new TransliterationAnnotator();
-            viewGenerators.put(ViewNames.TRANSLITERATION, transliterationAnnotator);
+            for(Language lang : TransliterationAnnotator.supportedLanguages) {
+                TransliterationAnnotator transliterationAnnotator = new TransliterationAnnotator(true, lang);
+                viewGenerators.put(ViewNames.TRANSLITERATION + "_" + lang.getCode(), transliterationAnnotator);
+            }
         }
 
         if (rm.getBoolean(PipelineConfigurator.USE_SRL_PREP)) {

@@ -98,28 +98,27 @@ public class MainServer {
 
         // create a hashmap to keep track of client ip addresses and their
         int rate = parseResults.getInt("rate");
-        if( rate > 0) {
+        if (rate > 0) {
             clients = new HashMap<String, Integer>();
         }
 
         AnnotatorService finalPipeline = pipeline;
-        get("/annotate", "application/json", (request, response)->{
+        get("/annotate", "application/json", (request, response) -> {
             logger.info("GET request . . . ");
             boolean canServe = true;
-            if(rate > 0) {
+            if (rate > 0) {
                 resetServer();
                 String ip = request.ip();
                 int callsSofar = (Integer) clients.getOrDefault(ip, 0);
-                if( callsSofar > rate ) canServe = false;
+                if (callsSofar > rate) canServe = false;
                 clients.put(ip, callsSofar + 1);
             }
-            if(canServe) {
+            if (canServe) {
                 logger.info("request.body(): " + request.body());
                 String text = request.queryParams("text");
                 String views = request.queryParams("views");
                 return annotateText(finalPipeline, text, views, logger);
-            }
-            else {
+            } else {
                 response.status(429);
                 return "You have reached your maximum daily query limit :-/ ";
             }
@@ -129,22 +128,21 @@ public class MainServer {
                 {
                     logger.info("POST request . . . ");
                     boolean canServe = true;
-                    if(rate > 0) {
+                    if (rate > 0) {
                         resetServer();
                         String ip = request.ip();
                         int callsSofar = (Integer) clients.getOrDefault(ip, 0);
-                        if( callsSofar > rate ) canServe = false;
+                        if (callsSofar > rate) canServe = false;
                         clients.put(ip, callsSofar + 1);
                     }
-                    if(canServe) {
-                        logger.info( "request.body(): " + request.body());
+                    if (canServe) {
+                        logger.info("request.body(): " + request.body());
                         Map<String, String> map = splitQuery(request.body());
                         System.out.println("POST body parameters parsed: " + map);
                         String text = map.get("text");
                         String views = map.get("views");
                         return annotateText(finalPipeline, text, views, logger);
-                    }
-                    else {
+                    } else {
                         response.status(429);
                         return "You have reached your maximum daily query limit :-/ ";
                     }
@@ -153,7 +151,7 @@ public class MainServer {
 
         // api to get name of the available views
         String viewsString = "";
-        for(String view : pipeline.getAvailableViews()) {
+        for (String view : pipeline.getAvailableViews()) {
             viewsString += ", " + view;
         }
         String finalViewsString = viewsString;
@@ -175,7 +173,7 @@ public class MainServer {
     }
 
     private static String annotateText(AnnotatorService finalPipeline, String text, String views,
-            Logger logger) throws AnnotatorException {
+                                       Logger logger) throws AnnotatorException {
         if (views == null || text == null) {
             return "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=POS,NER";
         } else {

@@ -31,13 +31,16 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.1.34</version>
         </dependency>
-
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-edison</artifactId>
+            <version>3.1.34</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -49,25 +52,21 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
             <version>2.5.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.13</version>
         </dependency>
-
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
             <version>56.1</version>
         </dependency>
-
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-abstract-server</artifactId>
@@ -78,7 +77,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <artifactId>curator-interfaces</artifactId>
             <version>0.7</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.thrift</groupId>
             <artifactId>libthrift</artifactId>
@@ -89,7 +87,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <artifactId>curator-utils</artifactId>
             <version>0.0.4-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -122,13 +119,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh</artifactId>
-                <version>2.4</version>
-            </extension>
-        </extensions>
     </build>
 
 </project>
