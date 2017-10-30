@@ -23,7 +23,6 @@ import org.cogcomp.Datastore;
 import org.cogcomp.md.BIOFeatureExtractor;
 import org.cogcomp.md.MentionAnnotator;
 import org.cogcomp.re.LbjGen.relation_classifier;
-import org.cogcomp.re.LbjGen.semeval_relation_classifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,47 +34,29 @@ public class RelationAnnotator extends Annotator {
     private static Logger logger = LoggerFactory.getLogger(RelationAnnotator.class);
 
     private relation_classifier relationClassifier;
-    private semeval_relation_classifier semeval_relation_classifier;
     private ACERelationConstrainedClassifier constrainedClassifier;
     private Gazetteers gazetteers;
     private WordNetManager wordNet;
-    private String type = "ACE"; // default relation type
 
     public RelationAnnotator() {
         this(true);
     }
 
     public RelationAnnotator(boolean lazilyInitialize) {
-        this(lazilyInitialize, "ACE");
-    }
-
-    public RelationAnnotator(boolean lazilyInitialize, String type) {
         super(ViewNames.RELATION, new String[]{ViewNames.MENTION, ViewNames.POS, ViewNames.DEPENDENCY_STANFORD, ViewNames.SHALLOW_PARSE}, lazilyInitialize);
-        this.type = (type.contains("ACE")) ? "ACE" : "SEMEVAL";
     }
 
     @Override
     public void initialize(ResourceManager rm) {
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            String modelFile;
-            String lexFile;
-            if (type.equals("ACE")) {
-                File modelDir = ds.getDirectory("org.cogcomp.re", "ACE_GOLD_BI", 1.0, false);
-                modelFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lc";
-                lexFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lex";
-                relationClassifier = new relation_classifier();
-                relationClassifier.readModel(modelFile);
-                relationClassifier.readLexicon(lexFile);
-                constrainedClassifier = new ACERelationConstrainedClassifier(relationClassifier);
-            } else {
-                File modelDir = ds.getDirectory("org.cogcomp.re", "SEMEVAL", 1.1, false);
-                modelFile = modelDir.getPath() + File.separator + "SEMEVAL" + File.separator + "SEMEVAL.lc";
-                lexFile = modelDir.getPath() + File.separator + "SEMEVAL" + File.separator + "SEMEVAL.lex";
-                semeval_relation_classifier = new semeval_relation_classifier();
-                semeval_relation_classifier.readLexicon(lexFile);
-                semeval_relation_classifier.readModel(modelFile);
-            }
+            File modelDir = ds.getDirectory("org.cogcomp.re", "ACE_GOLD_BI", 1.0, false);
+            String modelFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lc";
+            String lexFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lex";
+            relationClassifier = new relation_classifier();
+            relationClassifier.readModel(modelFile);
+            relationClassifier.readLexicon(lexFile);
+            constrainedClassifier = new ACERelationConstrainedClassifier(relationClassifier);
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             WordNetManager.loadConfigAsClasspathResource(true);
@@ -103,7 +84,7 @@ public class RelationAnnotator extends Annotator {
         if (!record.hasView(ViewNames.MENTION)) {
             throw new AnnotatorException("Missing required view MENTION");
         }
-        if (record.getView(ViewNames.MENTION).getConstituents().get(0).getAttribute("EntityType").equals("MENTION")){
+        if (record.getView(ViewNames.MENTION).getConstituents().get(0).getAttribute("EntityType").equals("MENTION")) {
             logger.error("The mentions don't have types; this will cause poor performance in predictions.. . ");
         }
 
@@ -188,7 +169,7 @@ public class RelationAnnotator extends Annotator {
                 }
             }
         }
-        record.addView(ViewNames.RELATION + "_" + type, mentionView);
+        record.addView(ViewNames.RELATION, mentionView);
     }
 
 }
