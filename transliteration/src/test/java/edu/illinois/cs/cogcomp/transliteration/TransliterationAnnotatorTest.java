@@ -32,7 +32,7 @@ public class TransliterationAnnotatorTest {
     }
 
     @Test
-    public void testCleanText() throws AnnotatorException {
+    public void testTransliterationWorks() throws AnnotatorException {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
         annotator.getView(ta);
         assertEquals(true, ta.hasView(ViewNames.TRANSLITERATION));

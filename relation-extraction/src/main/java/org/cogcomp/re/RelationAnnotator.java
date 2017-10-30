@@ -23,6 +23,7 @@ import org.cogcomp.Datastore;
 import org.cogcomp.md.BIOFeatureExtractor;
 import org.cogcomp.md.MentionAnnotator;
 import org.cogcomp.re.LbjGen.relation_classifier;
+import org.cogcomp.re.LbjGen.semeval_relation_classifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,7 @@ public class RelationAnnotator extends Annotator {
     private static Logger logger = LoggerFactory.getLogger(RelationAnnotator.class);
 
     private relation_classifier relationClassifier;
+    private semeval_relation_classifier semeval_relation_classifier;
     private ACERelationConstrainedClassifier constrainedClassifier;
     private Gazetteers gazetteers;
     private WordNetManager wordNet;
@@ -62,15 +64,18 @@ public class RelationAnnotator extends Annotator {
                 File modelDir = ds.getDirectory("org.cogcomp.re", "ACE_GOLD_BI", 1.0, false);
                 modelFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lc";
                 lexFile = modelDir.getPath() + File.separator + "ACE_GOLD_BI" + File.separator + "ACE_GOLD_BI.lex";
+                relationClassifier = new relation_classifier();
+                relationClassifier.readModel(modelFile);
+                relationClassifier.readLexicon(lexFile);
+                constrainedClassifier = new ACERelationConstrainedClassifier(relationClassifier);
             } else {
                 File modelDir = ds.getDirectory("org.cogcomp.re", "SEMEVAL", 1.1, false);
                 modelFile = modelDir.getPath() + File.separator + "SEMEVAL" + File.separator + "SEMEVAL.lc";
                 lexFile = modelDir.getPath() + File.separator + "SEMEVAL" + File.separator + "SEMEVAL.lex";
+                semeval_relation_classifier = new semeval_relation_classifier();
+                semeval_relation_classifier.readLexicon(lexFile);
+                semeval_relation_classifier.readModel(modelFile);
             }
-            relationClassifier = new relation_classifier();
-            relationClassifier.readModel(modelFile);
-            relationClassifier.readLexicon(lexFile);
-            constrainedClassifier = new ACERelationConstrainedClassifier(relationClassifier);
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             WordNetManager.loadConfigAsClasspathResource(true);
