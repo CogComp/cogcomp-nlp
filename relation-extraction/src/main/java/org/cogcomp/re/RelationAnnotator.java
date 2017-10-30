@@ -23,11 +23,15 @@ import org.cogcomp.Datastore;
 import org.cogcomp.md.BIOFeatureExtractor;
 import org.cogcomp.md.MentionAnnotator;
 import org.cogcomp.re.LbjGen.relation_classifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
 
 public class RelationAnnotator extends Annotator {
+
+    private static Logger logger = LoggerFactory.getLogger(RelationAnnotator.class);
 
     private relation_classifier relationClassifier;
     private ACERelationConstrainedClassifier constrainedClassifier;
@@ -92,8 +96,10 @@ public class RelationAnnotator extends Annotator {
             throw new AnnotatorException("Missing required view SHALLOW_PARSE");
         }
         if (!record.hasView(ViewNames.MENTION)) {
-            // TODO: show error messages if the mentions are not typed.
             throw new AnnotatorException("Missing required view MENTION");
+        }
+        if (record.getView(ViewNames.MENTION).getConstituents().get(0).getAttribute("EntityType").equals("MENTION")){
+            logger.error("The mentions don't have types; this will cause poor performance in predictions.. . ");
         }
 
         View mentionView = record.getView(ViewNames.MENTION);
@@ -177,7 +183,7 @@ public class RelationAnnotator extends Annotator {
                 }
             }
         }
-        record.addView(ViewNames.RELATION, mentionView);
+        record.addView(ViewNames.RELATION + "_" + type, mentionView);
     }
 
 }
