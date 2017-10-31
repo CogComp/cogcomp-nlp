@@ -343,8 +343,11 @@ public class BIOTester {
                 endIdx ++;
             }
         }
-
-        Constituent wholeMention = new Constituent(curToken.getLabel(), 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
+        String entityType = goldType;
+        if (!isGold){
+            entityType = mostCommon(predictedTypes);
+        }
+        Constituent wholeMention = new Constituent(entityType, 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
         if (isGold){
             wholeMention.addAttribute("EntityType", goldType);
             wholeMention.addAttribute("EntityMentionType", curToken.getAttribute("EntityMentionType"));

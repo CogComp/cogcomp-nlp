@@ -84,11 +84,16 @@ public class RelationAnnotator extends Annotator {
         if (!record.hasView(ViewNames.MENTION)) {
             throw new AnnotatorException("Missing required view MENTION");
         }
-        if (record.getView(ViewNames.MENTION).getConstituents().get(0).getAttribute("EntityType").equals("MENTION")) {
+        View mentionView = record.getView(ViewNames.MENTION);
+
+        //Add the original mention view if no mentions are predicted.
+        if (mentionView.getConstituents().size() == 0){
+            record.addView(ViewNames.RELATION, mentionView);
+            return;
+        }
+        if (mentionView.getConstituents().get(0).getAttribute("EntityType").equals("MENTION")) {
             logger.error("The mentions don't have types; this will cause poor performance in predictions.. . ");
         }
-
-        View mentionView = record.getView(ViewNames.MENTION);
         View annotatedTokenView = new SpanLabelView("RE_ANNOTATED", record);
         for (Constituent co : record.getView(ViewNames.TOKENS).getConstituents()) {
             Constituent c = co.cloneForNewView("RE_ANNOTATED");
