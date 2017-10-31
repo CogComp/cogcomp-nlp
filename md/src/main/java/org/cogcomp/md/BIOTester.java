@@ -344,22 +344,17 @@ public class BIOTester {
             }
         }
         String entityType = goldType;
+        String entityMentionType = curToken.getAttribute("EntityMentionType");
         if (!isGold){
             entityType = mostCommon(predictedTypes);
-        }
-        Constituent wholeMention = new Constituent(entityType, 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
-        if (isGold){
-            wholeMention.addAttribute("EntityType", goldType);
-            wholeMention.addAttribute("EntityMentionType", curToken.getAttribute("EntityMentionType"));
-        }
-        else{
-            wholeMention.addAttribute("EntityType", mostCommon(predictedTypes));
             String className = classifier.getClass().toString();
             //The className variable is in form "...bio_classifier_[TYPE]"
             //Take the last three characters which stands for the mention level.
-            String emt = className.substring(className.length() - 3).toUpperCase();
-            wholeMention.addAttribute("EntityMentionType", emt);
+            entityMentionType = className.substring(className.length() - 3).toUpperCase();
         }
+        Constituent wholeMention = new Constituent(entityMentionType + "-" + entityType, 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
+        wholeMention.addAttribute("EntityType", entityType);
+        wholeMention.addAttribute("EntityMentionType", entityMentionType);
         return wholeMention;
     }
 

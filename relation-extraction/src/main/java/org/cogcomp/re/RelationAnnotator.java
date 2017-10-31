@@ -85,10 +85,10 @@ public class RelationAnnotator extends Annotator {
             throw new AnnotatorException("Missing required view MENTION");
         }
         View mentionView = record.getView(ViewNames.MENTION);
-
+        View relationView = new SpanLabelView(ViewNames.RELATION, record);
         //Add the original mention view if no mentions are predicted.
         if (mentionView.getConstituents().size() == 0){
-            record.addView(ViewNames.RELATION, mentionView);
+            record.addView(ViewNames.RELATION, relationView);
             return;
         }
         if (mentionView.getConstituents().get(0).getAttribute("EntityType").equals("MENTION")) {
@@ -105,6 +105,7 @@ public class RelationAnnotator extends Annotator {
             annotatedTokenView.addConstituent(c);
         }
         record.addView("RE_ANNOTATED", annotatedTokenView);
+
         for (int i = 0; i < record.getNumberOfSentences(); i++) {
             Sentence curSentence = record.getSentence(i);
             List<Constituent> cins = mentionView.getConstituentsCoveringSpan(curSentence.getStartSpan(), curSentence.getEndSpan());
@@ -132,10 +133,14 @@ public class RelationAnnotator extends Annotator {
                             second = source;
                         }
                         String coarseType = ACERelationTester.getCoarseType(tag);
-                        Relation r = new Relation(coarseType, first, second, 1.0f);
+                        Constituent firstMention = first.cloneForNewView(ViewNames.RELATION);
+                        Constituent secondMention = second.cloneForNewView(ViewNames.RELATION);
+                        Relation r = new Relation(coarseType + "-" + tag, firstMention, secondMention, 1.0f);
                         r.addAttribute("RelationType", coarseType);
                         r.addAttribute("RelationSubtype", tag);
-                        mentionView.addRelation(r);
+                        relationView.addConstituent(firstMention);
+                        relationView.addConstituent(secondMention);
+                        relationView.addRelation(r);
                     }
                     if (!tag_forward.equals(ACEMentionReader.getOppoName(tag_backward)) &&
                             (!tag_forward.equals("NOT_RELATED") || !tag_backward.equals("NOT_RELATED"))) {
@@ -165,16 +170,20 @@ public class RelationAnnotator extends Annotator {
                         }
                         if (!tag.equals("NOT_RELATED")) {
                             String coarseType = ACERelationTester.getCoarseType(tag);
-                            Relation r = new Relation(coarseType, first, second, 1.0f);
+                            Constituent firstMention = first.cloneForNewView(ViewNames.RELATION);
+                            Constituent secondMention = second.cloneForNewView(ViewNames.RELATION);
+                            Relation r = new Relation(coarseType + "-" + tag, firstMention, secondMention, 1.0f);
                             r.addAttribute("RelationType", coarseType);
                             r.addAttribute("RelationSubtype", tag);
-                            mentionView.addRelation(r);
+                            relationView.addConstituent(firstMention);
+                            relationView.addConstituent(secondMention);
+                            relationView.addRelation(r);
                         }
                     }
                 }
             }
         }
-        record.addView(ViewNames.RELATION, mentionView);
+        record.addView(ViewNames.RELATION, relationView);
     }
 
 }
