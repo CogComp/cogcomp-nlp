@@ -18,7 +18,7 @@ import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordTrueCaseHandler;
 import java.io.File;
 import java.util.List;
 
-public class ACEReaderWithTrueCaseFixer extends ACEReader{
+public class ACEReaderWithTrueCaseFixer extends ACEReader {
 
     private StanfordTrueCaseHandler stanfordTrueCaseHandler = null;
 
@@ -50,9 +50,9 @@ public class ACEReaderWithTrueCaseFixer extends ACEReader{
 
         try {
             File sectionDir = new File(this.aceCorpusHome + File.separator + section);
-            doc = fileProcessor.processAceEntry(sectionDir, fileName);
+            doc = ACEReader.fileProcessor.processAceEntry(sectionDir, fileName);
         } catch (Exception ex) {
-            logger.warn("Error while reading document - " + fileName, ex);
+            ACEReader.logger.warn("Error while reading document - " + fileName, ex);
             return null;
         }
 
@@ -61,7 +61,7 @@ public class ACEReaderWithTrueCaseFixer extends ACEReader{
         // Adding `section/fileName` as textId for annotation.
         String textId = fileName.substring(fileName.indexOf(section + File.separator));
         TextAnnotation ta =
-                taBuilder.createTextAnnotation(
+                ACEReader.taBuilder.createTextAnnotation(
                         this.corpusId,
                         textId,
                         doc.contentRemovingTags);
@@ -109,7 +109,7 @@ public class ACEReaderWithTrueCaseFixer extends ACEReader{
         String groupName = fileNameGroup[fileNameGroup.length - 2];
         if (groupName.equals("bn")) {
             ta =
-                    taBuilder.createTextAnnotation(
+                    ACEReader.taBuilder.createTextAnnotation(
                             this.corpusId,
                             textId,
                             resText);
