@@ -17,7 +17,6 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFil
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,17 +51,23 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
     public static final String RelationTenseAttribute = "RelationTense"; /* Optional */
     public static final String RelationMentionIDAttribute = "RelationMentionID";
     public static final String RelationMentionLexicalConditionAttribute = "RelationMentionLexicalCondition";
-    private static final String RelationFirstArgumentTag = "Arg-1";
-    private static final String RelationSecondArgumentTag = "Arg-2";
-    private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
-    private static final AceFileProcessor fileProcessor = new AceFileProcessor();
-    private static final TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
-    private final String aceCorpusHome;
-    private final boolean is2004mode;
-    private final String corpusId;
-    private AtomicReference<TextAnnotation> currentTextAnnotation;
-    private List<Pair<String, String>> fileList;
-    private AtomicInteger fileListPosition;
+    protected static final String RelationFirstArgumentTag = "Arg-1";
+    protected static final String RelationSecondArgumentTag = "Arg-2";
+    protected static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
+    protected static final AceFileProcessor fileProcessor = new AceFileProcessor();
+    protected static final TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+    protected final String aceCorpusHome;
+    protected final boolean is2004mode;
+    protected final String corpusId;
+    protected AtomicReference<TextAnnotation> currentTextAnnotation;
+    protected List<Pair<String, String>> fileList;
+    protected AtomicInteger fileListPosition;
+
+    public ACEReader(){
+        this.aceCorpusHome = null;
+        this.is2004mode = false;
+        this.corpusId = null;
+    }
 
     /**
      * Constructor for the ACE Data-set Reader
@@ -126,7 +131,7 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
     /**
      * Helper function to create a head constituent from an extent constituent.
      */
-    private static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
+    public static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
                                                            TextAnnotation textAnnotation,
                                                            String viewName) {
         int startCharOffset =
@@ -174,7 +179,7 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
      * @param fileName Name of the annotation file.
      * @return TextAnnotation instance.
      */
-    private TextAnnotation parseSingleACEFile(String section, String fileName) {
+    protected TextAnnotation parseSingleACEFile(String section, String fileName) {
         ACEDocument doc;
 
         // TODO: Static field might cause issue if we try to parse both versions in parallel.
@@ -224,7 +229,7 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
      * @param docAnnotation Annotation for the current document.
      * @param file Link to the .apf.xml file for the current document.
      */
-    private void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
+    protected void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
         SpanLabelView entityView =
                 new SpanLabelView(ViewNames.MENTION_ACE,
                         ACEReader.class.getCanonicalName(), ta, 1.0f, true);
@@ -340,7 +345,7 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
      * @param docAnnotation Annotation for the current document.
      * @param file Link to the .apf.xml file for the current document.
      */
-    private void addEntityRelations(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
+    protected void addEntityRelations(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
         SpanLabelView entityView = (SpanLabelView) ta.getView(ViewNames.MENTION_ACE);
         Map<Pair<String, String>, Constituent> entityIdMap = new HashMap<>();
 

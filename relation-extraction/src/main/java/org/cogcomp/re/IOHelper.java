@@ -96,6 +96,7 @@ public class IOHelper {
         Constituent source_head = RelationFeatureExtractor.getEntityHeadForConstituent(source, ta, "");
         Constituent target_head = RelationFeatureExtractor.getEntityHeadForConstituent(target, ta, "");
         System.out.println(ta.getSentenceFromToken(source.getStartSpan()));
+        System.out.println(r.getRelationName());
         System.out.println(r.getAttribute("RelationType") + ":" + r.getAttribute("RelationSubtype"));
         System.out.println(source.toString() + " || " + target.toString());
         System.out.println(source_head.toString() + " || " + target_head.toString());

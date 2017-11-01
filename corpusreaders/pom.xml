@@ -40,7 +40,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.34</version>
         </dependency>
-        
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>stanford_3.3.1</artifactId>
+            <version>3.1.35</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>

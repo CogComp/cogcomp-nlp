@@ -7,6 +7,7 @@
  */
 package org.cogcomp.re;
 
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -19,11 +20,14 @@ import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pipeline.common.Stanford331Configurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
+import org.cogcomp.md.MentionAnnotator;
 import org.cogcomp.re.LbjGen.fine_relation_label;
 import org.cogcomp.re.LbjGen.relation_classifier;
 
@@ -232,15 +236,17 @@ public class ACERelationTester {
             ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
             StanfordDepHandler stanfordDepHandler = new StanfordDepHandler(posAnnotator, parseAnnotator);
             ACEReader aceReader = new ACEReader("data/partition_with_dev/dev", false);
+            MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             RelationAnnotator relationAnnotator = new RelationAnnotator();
             for (TextAnnotation ta : aceReader){
                 ta.addView(pos_annotator);
                 stanfordDepHandler.addView(ta);
                 chunker.addView(ta);
+                mentionAnnotator.addView(ta);
                 relationAnnotator.addView(ta);
                 total_labeled += ta.getView(ViewNames.MENTION_ACE).getRelations().size();
-                total_predicted += ta.getView(ViewNames.MENTION).getRelations().size();
-                for (Relation pr : ta.getView(ViewNames.MENTION).getRelations()){
+                total_predicted += ta.getView(ViewNames.RELATION).getRelations().size();
+                for (Relation pr : ta.getView(ViewNames.RELATION).getRelations()){
                     for (Relation gr : ta.getView(ViewNames.MENTION_ACE).getRelations()){
                         Constituent prSourceHead = RelationFeatureExtractor.getEntityHeadForConstituent(pr.getSource(), ta, "");
                         Constituent grSourceHead = RelationFeatureExtractor.getEntityHeadForConstituent(gr.getSource(), ta, "");
@@ -277,6 +283,43 @@ public class ACERelationTester {
         System.out.println("Coarse Type F1: " + f * (double)total_coarse_correct / (double)total_correct);
     }
 
+    public static void testRandomText(String text){
+        String corpus = "";
+        String textId = "";
+
+        TextAnnotationBuilder stab =
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+        TextAnnotation ta = stab.createTextAnnotation(corpus, textId, text);
+
+        try {
+            POSAnnotator pos_annotator = new POSAnnotator();
+            ChunkerAnnotator chunker = new ChunkerAnnotator(true);
+            chunker.initialize(new ChunkerConfigurator().getDefaultConfig());
+            Properties stanfordProps = new Properties();
+            stanfordProps.put("annotators", "pos, parse");
+            stanfordProps.put("parse.originalDependencies", true);
+            stanfordProps.put("parse.maxlen", Stanford331Configurator.STFRD_MAX_SENTENCE_LENGTH);
+            stanfordProps.put("parse.maxtime", Stanford331Configurator.STFRD_TIME_PER_SENTENCE);
+            POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
+            ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
+            StanfordDepHandler stanfordDepHandler = new StanfordDepHandler(posAnnotator, parseAnnotator);
+            MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
+            RelationAnnotator relationAnnotator = new RelationAnnotator();
+            ta.addView(pos_annotator);
+            stanfordDepHandler.addView(ta);
+            chunker.addView(ta);
+            mentionAnnotator.addView(ta);
+            relationAnnotator.addView(ta);
+            for (Relation r : ta.getView(ViewNames.RELATION).getRelations()){
+                IOHelper.printRelation(r);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     public static void generateModel(String serializedDataInput, String modelLoc){
         ACEMentionReader train_parser = IOHelper.serializeDataIn(serializedDataInput);
         relation_classifier classifier = new relation_classifier();
@@ -298,8 +341,9 @@ public class ACERelationTester {
     }
 
     public static void main(String[] args){
-        //generateModel("relation-extraction/preprocess/reader/all", "models/ACE_GOLD_BI");
-        testAnnotator();
+        //generateModel("relation-extraction/preprocess/reader/all", "models/ACE_GOLD_BI_NO_LEXICAL");
+        //testAnnotator();
         //test_cv_gold();
+        testRandomText("The Italian Ministry of Defense visited Tel Aviv’s company and traveled to Chicago, Illinois, with the President of the US.");
     }
 }
