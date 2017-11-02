@@ -169,10 +169,17 @@ public class RelationAnnotator extends Annotator {
                             second = source;
                         }
                         if (!tag.equals("NOT_RELATED")) {
-                            String coarseType = ACERelationTester.getCoarseType(tag);
                             Constituent firstMention = first.cloneForNewView(ViewNames.RELATION);
                             Constituent secondMention = second.cloneForNewView(ViewNames.RELATION);
-                            Relation r = new Relation(coarseType + "-" + tag, firstMention, secondMention, 1.0f);
+                            Relation r;
+                            String coarseType = ACERelationTester.getCoarseType(tag);
+                            if (tag.contains("_OP")){
+                                tag = ACEMentionReader.getOppoName(tag);
+                                r = new Relation(coarseType + "-" + tag, secondMention, firstMention, 1.0f);
+                            }
+                            else {
+                                r = new Relation(coarseType + "-" + tag, firstMention, secondMention, 1.0f);
+                            }
                             r.addAttribute("RelationType", coarseType);
                             r.addAttribute("RelationSubtype", tag);
                             relationView.addConstituent(firstMention);

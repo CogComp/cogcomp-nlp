@@ -17,13 +17,14 @@ import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReaderWithTrueCaseFixer;
 import edu.illinois.cs.cogcomp.pipeline.common.Stanford331Configurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 import org.cogcomp.Datastore;
+import org.cogcomp.md.MentionAnnotator;
 import org.cogcomp.re.ACEMentionReader;
 import org.cogcomp.re.LbjGen.relation_classifier;
 import org.cogcomp.re.RelationAnnotator;
@@ -76,17 +77,16 @@ public class RelationExtractionTest {
 
     @Test
     public void testAnnotator(){
-        RelationAnnotator relationAnnotator = new RelationAnnotator();
         File modelDir = null;
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            modelDir = ds.getDirectory("org.cogcomp.re", "ACE_TEST_DOCS", 1.0, false);
+            modelDir = ds.getDirectory("org.cogcomp.re", "ACE_TEST_DOCS", 1.1, false);
         }
         catch (Exception e){
             e.printStackTrace();
         }
         try {
-            ACEReader aceReader = new ACEReader(modelDir.getAbsolutePath() + File.separator + "ACE_TEST_DOCS", false);
+            ACEReaderWithTrueCaseFixer aceReader = new ACEReaderWithTrueCaseFixer(modelDir.getAbsolutePath() + File.separator + "ACE_TEST_DOCS", false);
             POSAnnotator pos_annotator = new POSAnnotator();
             ChunkerAnnotator chunker  = new ChunkerAnnotator(true);
             chunker.initialize(new ChunkerConfigurator().getDefaultConfig());
@@ -98,14 +98,18 @@ public class RelationExtractionTest {
             POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
             ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
             StanfordDepHandler stanfordDepHandler = new StanfordDepHandler(posAnnotator, parseAnnotator);
+            MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
+            RelationAnnotator relationAnnotator = new RelationAnnotator();
             for (TextAnnotation ta : aceReader){
                 ta.addView(pos_annotator);
                 chunker.addView(ta);
                 stanfordDepHandler.addView(ta);
+                mentionAnnotator.addView(ta);
                 relationAnnotator.addView(ta);
                 View mentionView = ta.getView(ViewNames.MENTION);
                 assertTrue(mentionView.getConstituents().size() > 0);
-                assertTrue(mentionView.getRelations().size() > 0);
+                View relationView = ta.getView(ViewNames.RELATION);
+                assertTrue(relationView.getRelations().size() > 0);
             }
         }
         catch (Exception e){

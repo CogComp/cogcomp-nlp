@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReaderWithTrueCaseFixer;
 import edu.illinois.cs.cogcomp.pipeline.common.Stanford331Configurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
@@ -61,7 +62,7 @@ public class ACEMentionReader implements Parser, Serializable
         relations_bi = new ArrayList<>();
 
         try {
-            ACEReader reader = new ACEReader(file, new String[]{"bn", "nw"}, false);
+            ACEReader reader = new ACEReaderWithTrueCaseFixer(file, new String[]{"bn", "nw"}, false);
             POSAnnotator pos_annotator = new POSAnnotator();
             ChunkerAnnotator chunker  = new ChunkerAnnotator(true);
             chunker.initialize(new ChunkerConfigurator().getDefaultConfig());
