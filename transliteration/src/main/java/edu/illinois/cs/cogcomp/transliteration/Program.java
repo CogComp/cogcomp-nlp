@@ -13,14 +13,11 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.utils.Dictionaries;
 import edu.illinois.cs.cogcomp.utils.InternDictionary;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
-import edu.illinois.cs.cogcomp.utils.TopList;
+import net.sourceforge.pinyin4j.PinyinHelper;
 
 import java.io.FileNotFoundException;
 import java.text.Normalizer;
 import java.util.*;
-
-
-import net.sourceforge.pinyin4j.PinyinHelper;
 
 class Program {
 
@@ -28,8 +25,6 @@ class Program {
         //RussianDiscoveryTest(); return;
         //ChineseDiscoveryTest(); return;
         HebrewDiscoveryTest();
-
-
     }
 
     public static String StripAccent(String stIn) {
@@ -649,6 +644,7 @@ class Program {
         System.out.println(correct + " predictions exactly correct (" + (((double) correct) / testingPairs.size()) + ")");
         System.out.println("MRR: " + mrr);
     }
+
 
     public static SparseDoubleVector<Production> InitializeWithRomanization(SparseDoubleVector<Production> probs, List<Triple<String, String, Double>> trainingTriples, List<Example> testing) {
 

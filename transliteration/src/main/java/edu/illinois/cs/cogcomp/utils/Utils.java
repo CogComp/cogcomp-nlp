@@ -7,11 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.utils;
 
-import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.Transliterator;
 import edu.illinois.cs.cogcomp.core.algorithms.LevensteinDistance;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
 import edu.illinois.cs.cogcomp.transliteration.Example;
 import edu.illinois.cs.cogcomp.transliteration.MultiExample;
 import edu.illinois.cs.cogcomp.transliteration.SPModel;
