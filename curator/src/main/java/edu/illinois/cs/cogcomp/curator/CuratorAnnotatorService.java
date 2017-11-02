@@ -266,6 +266,12 @@ public class CuratorAnnotatorService implements AnnotatorService {
         return isUpdated;
     }
 
+    @Override
+    public boolean addView(TextAnnotation textAnnotation, String viewName, ResourceManager runtimeAttributes) throws AnnotatorException {
+        logger.error("This function is not implemented for curator");
+        return false;
+    }
+
     /**
      * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
      * known to this {@link AnnotatorService}.

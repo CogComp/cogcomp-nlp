@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.pipeline.main;
 import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.comma.CommaLabeler;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -34,8 +35,8 @@ import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerConfigura
 import edu.illinois.cs.cogcomp.verbsense.VerbSenseAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
-
 import org.cogcomp.md.MentionAnnotator;
+import org.cogcomp.re.RelationAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,12 +122,19 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_VERB_SENSE.key,
                                 Configurator.TRUE);
                         break;
+                    case ViewNames.TRANSLITERATION:
+                        nonDefaultValues.put(PipelineConfigurator.USE_TRANSLITERATION.key,
+                                Configurator.TRUE);
+                        break;
                     case ViewNames.TIMEX3:
                         nonDefaultValues.put(PipelineConfigurator.USE_TIMEX3.key,
                                 Configurator.TRUE);
                         break;
                     case ViewNames.MENTION:
                         nonDefaultValues.put(PipelineConfigurator.USE_MENTION.key,
+                                Configurator.TRUE);
+                    case ViewNames.RELATION:
+                        nonDefaultValues.put(PipelineConfigurator.USE_RELATION.key,
                                 Configurator.TRUE);
                         break;
                     default:
@@ -346,6 +354,13 @@ public class PipelineFactory {
             viewGenerators.put(ViewNames.QUANTITIES, quantifierAnnotator);
         }
 
+        if (rm.getBoolean(PipelineConfigurator.USE_TRANSLITERATION)) {
+            for(Language lang : TransliterationAnnotator.supportedLanguages) {
+                TransliterationAnnotator transliterationAnnotator = new TransliterationAnnotator(true, lang);
+                viewGenerators.put(ViewNames.TRANSLITERATION + "_" + lang.getCode(), transliterationAnnotator);
+            }
+        }
+
         if (rm.getBoolean(PipelineConfigurator.USE_SRL_PREP)) {
             PrepSRLAnnotator prepSRLAnnotator = new PrepSRLAnnotator();
             viewGenerators.put(ViewNames.SRL_PREP, prepSRLAnnotator);
@@ -363,6 +378,9 @@ public class PipelineFactory {
         if (rm.getBoolean(PipelineConfigurator.USE_MENTION)){
             MentionAnnotator mentionAnnotator = new MentionAnnotator("ACE_TYPE");
             viewGenerators.put(ViewNames.MENTION, mentionAnnotator);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_RELATION)){
+            viewGenerators.put(ViewNames.RELATION, new RelationAnnotator(true));
         }
         if (rm.getBoolean(PipelineConfigurator.USE_TIMEX3)){
             Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();

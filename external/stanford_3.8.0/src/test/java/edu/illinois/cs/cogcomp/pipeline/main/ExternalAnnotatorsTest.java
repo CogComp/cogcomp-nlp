@@ -31,6 +31,7 @@ public class ExternalAnnotatorsTest {
     private TextAnnotation ta2 = null;
     private TextAnnotation ta3 = null;
 
+    @Ignore
     @Before
     public void init() throws IOException, AnnotatorException {
         Stanford_3_8_0_AnnotatorService.initialize();
@@ -42,6 +43,7 @@ public class ExternalAnnotatorsTest {
         this.ta3 = service.createBasicTextAnnotation("", "", sampleText3);
     }
 
+    @Ignore
     @Test
     public void testExternalAnnotators() throws AnnotatorException {
         service.addView(ta, StanfordOpenIEHandler.viewName);

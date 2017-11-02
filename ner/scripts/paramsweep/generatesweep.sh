@@ -7,7 +7,7 @@
 #
 
 #
-# first build cogcomp-nlp. Oddly enought, take much long to build than to
+# first build of cogcomp-nlp. Oddly enough, takes longer to build than to
 # move it already built.
 #
 echo "Building cogcomp-nlp"

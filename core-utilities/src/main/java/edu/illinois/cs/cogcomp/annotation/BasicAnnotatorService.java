@@ -323,6 +323,35 @@ public class BasicAnnotatorService implements AnnotatorService {
         return isUpdated;
     }
 
+    @Override
+    public boolean addView(TextAnnotation textAnnotation, String viewName, ResourceManager runtimeAttributes) throws AnnotatorException {
+        boolean isUpdated = false;
+
+        if (ViewNames.SENTENCE.equals(viewName) || ViewNames.TOKENS.equals(viewName))
+            return false;
+
+        if ( !textAnnotation.hasView( viewName )  || forceUpdate ) {
+            isUpdated = true;
+
+            if ( !viewProviders.containsKey(viewName) )
+                throw new AnnotatorException( "View '" + viewName + "' cannot be provided by this AnnotatorService." );
+
+            Annotator annotator = viewProviders.get( viewName );
+
+            for ( String prereqView : annotator.getRequiredViews() ) {
+                addView( textAnnotation, prereqView, runtimeAttributes);
+            }
+
+            View v = annotator.getView(textAnnotation, runtimeAttributes);
+
+            textAnnotation.addView( annotator.getViewName(), v );
+        }
+
+        if (isUpdated && throwExceptionIfNotCached)
+            throwNotCachedException(textAnnotation.getCorpusId(), textAnnotation.getId(), textAnnotation.getText());
+        return isUpdated;
+    }
+
     protected void throwNotCachedException(String corpusId, String docId, String text) throws AnnotatorException {
         throw new AnnotatorException("text with corpusid '" + corpusId + "', docId '" + docId +
                 "', value '" + text + "' was not in cache, and the field 'throwExceptionIfNotCached' is 'true'.");

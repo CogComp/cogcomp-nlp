@@ -42,6 +42,7 @@ public class PathLSTMAnnotatorTest {
         this.ta3 = service.createBasicTextAnnotation("", "", sampleText3);
     }
 
+    @Ignore
     @Test
     public void testExternalAnnotators() throws AnnotatorException {
         // sample text 1

@@ -90,6 +90,11 @@
             <artifactId>illinois-md</artifactId>
             <version>4.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-relation-extraction</artifactId>
+            <version>4.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -137,7 +142,11 @@
             <artifactId>illinois-time</artifactId>
             <version>4.0.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-transliteration</artifactId>
+            <version>4.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

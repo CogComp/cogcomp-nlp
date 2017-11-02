@@ -113,7 +113,7 @@ public class TextCleanerTest {
         String cleanText = TextCleaner.replaceTildesAndStars(badText);
 
         boolean isGood = !(cleanText.contains("~"));
-        logger.error(cleanText);
+        logger.info(cleanText);
         assertEquals(true, isGood);
     }
 
@@ -168,7 +168,7 @@ public class TextCleanerTest {
 
         boolean isGood = !(cleanText.contains("^@"));
 
-        logger.error(cleanText);
+        logger.info(cleanText);
 
         assertEquals(true, isGood);
     }

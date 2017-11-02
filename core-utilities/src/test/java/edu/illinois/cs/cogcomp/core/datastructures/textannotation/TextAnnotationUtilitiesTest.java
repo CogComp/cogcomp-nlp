@@ -78,6 +78,4 @@ public class TextAnnotationUtilitiesTest {
         String mappedParse = parseView.toString().trim();
         assertEquals(parse, mappedParse);
     }
-
-
 }
