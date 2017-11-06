@@ -15,6 +15,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import org.joda.time.DateTime;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,17 +24,17 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Created by zhilifeng on 8/8/17.
+ * @author zhilifeng
  */
 public class Timex3PipelineTest {
     private static BasicAnnotatorService timex3Processor;
 
-    @BeforeClass
+    @BeforeClass @Ignore
     public static void init() throws IOException, AnnotatorException {
         timex3Processor = PipelineFactory.buildPipeline(ViewNames.POS, ViewNames.TIMEX3);
     }
 
-    @Test
+    @Test @Ignore
     public void testSentencePipeline() {
         TextAnnotation ta = null;
         try {
