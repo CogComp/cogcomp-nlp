@@ -13,7 +13,6 @@ import edu.illinois.cs.cogcomp.utils.InternDictionary;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,17 +21,13 @@ import java.util.List;
 /**
  * I don't know what CSPTransliteration or CSPModel are for. --Stephen
  */
-class CSPTransliteration
-{
+class CSPTransliteration {
 
-    public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> CreateFallbackPair(SparseDoubleVector<Pair<Triple<String, String, String>, String>> counts, InternDictionary<String> internTable)
-    {
+    public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> CreateFallbackPair(SparseDoubleVector<Pair<Triple<String, String, String>, String>> counts, InternDictionary<String> internTable) {
         SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<>();
-        for (Pair<Triple<String, String, String>, String> key : counts.keySet())
-        {
+        for (Pair<Triple<String, String, String>, String> key : counts.keySet()) {
             Double value = counts.get(key);
-            for (int i = 0; i <= key.getFirst().getFirst().length(); i++)
-            {
+            for (int i = 0; i <= key.getFirst().getFirst().length(); i++) {
                 Pair<Triple<String, String, String>, String> reskey = new Pair<>(
                         new Triple<>(
                                 internTable.Intern(key.getFirst().getFirst().substring(i)),
@@ -46,14 +41,11 @@ class CSPTransliteration
         return result;
     }
 
-    public static SparseDoubleVector<Triple<String, String, String>> CreateFallback(SparseDoubleVector<Triple<String, String, String>> segCounts, InternDictionary<String> internTable)
-    {
+    public static SparseDoubleVector<Triple<String, String, String>> CreateFallback(SparseDoubleVector<Triple<String, String, String>> segCounts, InternDictionary<String> internTable) {
         SparseDoubleVector<Triple<String, String, String>> result = new SparseDoubleVector<>();
-        for (Triple<String, String, String> key : segCounts.keySet())
-        {
+        for (Triple<String, String, String> key : segCounts.keySet()) {
             Double value = segCounts.get(key);
-            for (int i = 0; i <= key.getFirst().length(); i++)
-            {
+            for (int i = 0; i <= key.getFirst().length(); i++) {
                 Triple<String, String, String> reskey = new Triple<>(internTable.Intern(key.getFirst().substring(i)),
                         internTable.Intern(key.getSecond()),
                         internTable.Intern(key.getThird().substring(0, key.getThird().length() - i)));
@@ -64,8 +56,7 @@ class CSPTransliteration
         return result;
     }
 
-    public static CSPModel LearnModel(List<Triple<String, String, Double>> examples, CSPModel model)
-    {
+    public static CSPModel LearnModel(List<Triple<String, String, Double>> examples, CSPModel model) {
         // odd notation...
         CSPExampleCounts counts = new CSPTransliteration().new CSPExampleCounts();
         //CSPExampleCounts intCounts = new CSPExampleCounts();
@@ -73,8 +64,7 @@ class CSPTransliteration
         counts.productionCounts = new SparseDoubleVector<>();
         counts.segCounts = new SparseDoubleVector<>();
 
-        for (Triple<String, String, Double> example : examples)
-        {
+        for (Triple<String, String, Double> example : examples) {
             CSPExampleCounts exampleCount = LearnModel(example.getFirst(), example.getSecond(), model);
             counts.productionCounts.put(example.getThird(), exampleCount.productionCounts);
             counts.segCounts.put(example.getThird(), exampleCount.segCounts);
@@ -83,14 +73,14 @@ class CSPTransliteration
             //intCounts.segCounts += exampleCount.segCounts.Sign();
         }
 
-        CSPModel result = (CSPModel)model.clone();
+        CSPModel result = (CSPModel) model.clone();
 
         //normalize to get "joint"
         result.productionProbs = counts.productionCounts.divide(counts.productionCounts.PNorm(1));
 
         InternDictionary<String> internTable = new InternDictionary<>();
 
-        SparseDoubleVector<Pair<Triple<String, String, String>, String>> oldProbs=null;
+        SparseDoubleVector<Pair<Triple<String, String, String>, String>> oldProbs = null;
         if (model.underflowChecking)
             oldProbs = result.productionProbs;
 
@@ -100,8 +90,7 @@ class CSPTransliteration
         //finally, make it conditional
         result.productionProbs = PSecondGivenFirst(result.productionProbs);
 
-        if (model.underflowChecking)
-        {
+        if (model.underflowChecking) {
             //go through and ensure that Sum_X(P(Y|X)) == 1...or at least > 0!
             SparseDoubleVector<Triple<String, String, String>> sums = new SparseDoubleVector<>();
             for (Pair<Triple<String, String, String>, String> key : model.productionProbs.keySet()) {
@@ -132,12 +121,10 @@ class CSPTransliteration
 
         //get conditional segmentation probs
         if (model.segMode == CSPModel.SegMode.Count)
-            result.segProbs = CreateFallback(PSegGivenFlatOccurence(counts.segCounts,examples,model.segContextSize),internTable); // counts.segCounts / counts.segCounts.PNorm(1);
-        else if (model.segMode == CSPModel.SegMode.Entropy)
-        {
+            result.segProbs = CreateFallback(PSegGivenFlatOccurence(counts.segCounts, examples, model.segContextSize), internTable); // counts.segCounts / counts.segCounts.PNorm(1);
+        else if (model.segMode == CSPModel.SegMode.Entropy) {
             SparseDoubleVector<Triple<String, String, String>> totals = new SparseDoubleVector<>();
-            for (Pair<Triple<String, String, String>, String> key : result.productionProbs.keySet())
-            {
+            for (Pair<Triple<String, String, String>, String> key : result.productionProbs.keySet()) {
                 Double value = result.productionProbs.get(key);
 
                 //totals[pair.Key.x] -= pair.Value * Math.Log(pair.Value, 2);
@@ -157,18 +144,15 @@ class CSPTransliteration
         return result;
     }
 
-    private static Triple<String, String, String> GetContextTriple(String originalWord, int index, int length, int contextSize)
-    {
+    private static Triple<String, String, String> GetContextTriple(String originalWord, int index, int length, int contextSize) {
         return new Triple<>(WikiTransliteration.GetLeftContext(originalWord, index, contextSize),
                 originalWord.substring(index, length),
                 WikiTransliteration.GetRightContext(originalWord, index + length, contextSize));
     }
 
-    public static SparseDoubleVector<Triple<String, String, String>> PSegGivenFlatOccurence(SparseDoubleVector<Triple<String, String, String>> segCounts, List<Triple<String, String, Double>> examples, int contextSize)
-    {
+    public static SparseDoubleVector<Triple<String, String, String>> PSegGivenFlatOccurence(SparseDoubleVector<Triple<String, String, String>> segCounts, List<Triple<String, String, Double>> examples, int contextSize) {
         SparseDoubleVector<Triple<String, String, String>> counts = new SparseDoubleVector<>();
-        for (Triple<String, String, Double> example : examples)
-        {
+        for (Triple<String, String, Double> example : examples) {
             String word = StringUtils.repeat('_', contextSize) + example.getFirst() + StringUtils.repeat('_', contextSize);
             for (int i = contextSize; i < word.length() - contextSize; i++) {
                 for (int j = i; j < word.length() - contextSize; j++) {
@@ -194,8 +178,7 @@ class CSPTransliteration
 //        return result;
 //    }
 
-    public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> PSecondGivenFirst(SparseDoubleVector<Pair<Triple<String, String, String>, String>> counts)
-    {
+    public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> PSecondGivenFirst(SparseDoubleVector<Pair<Triple<String, String, String>, String>> counts) {
         SparseDoubleVector<Triple<String, String, String>> totals = new SparseDoubleVector<>();
         for (Pair<Triple<String, String, String>, String> key : counts.keySet()) {
             Double value = counts.get(key);
@@ -203,27 +186,25 @@ class CSPTransliteration
         }
 
         SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<>(counts.size());
-        for (Pair<Triple<String, String, String>, String> key : counts.keySet())
-        {
+        for (Pair<Triple<String, String, String>, String> key : counts.keySet()) {
             Double value = counts.get(key);
             double total = totals.get(key.getFirst());
             if (total == 0) {
                 result.put(key, 0.0);
-            }else{
-                result.put(key, value/total);
+            } else {
+                result.put(key, value / total);
             }
         }
 
         return result;
     }
 
-    public static CSPExampleCounts LearnModel(String word1, String word2, CSPModel model)
-    {
+    public static CSPExampleCounts LearnModel(String word1, String word2, CSPModel model) {
         CSPExampleCounts result = new CSPTransliteration().new CSPExampleCounts();
 
         int paddingSize = Math.max(model.productionContextSize, model.segContextSize);
         String paddedWord = StringUtils.repeat('_', paddingSize) + word1 + StringUtils.repeat('_', paddingSize);
-        HashMap<Triple<Double,String,String>,Pair<SparseDoubleVector<Triple<Integer,String,String>>,Double>> lastArg = new HashMap<>();
+        HashMap<Triple<Double, String, String>, Pair<SparseDoubleVector<Triple<Integer, String, String>>, Double>> lastArg = new HashMap<>();
 
         Pair<SparseDoubleVector<Triple<Integer, String, String>>, Double> raw = LearnModel(paddingSize, paddedWord, word1, word2, model, lastArg);
 
@@ -231,11 +212,10 @@ class CSPTransliteration
             raw.setFirst(new SparseDoubleVector<Triple<Integer, String, String>>());
         else
             //raw.x = Program.segSums[Math.Min(39,word1.length()-1)][Math.Min(39,word2.length()-1)] * (raw.x);
-            raw.setFirst( raw.getFirst().divide(raw.getSecond()) );
+            raw.setFirst(raw.getFirst().divide(raw.getSecond()));
         //raw.x = raw.y >= 1 ? raw.x : raw.x / raw.y;
 
-        if (model.emMode == CSPModel.EMMode.MaxSourceSeg)
-        {
+        if (model.emMode == CSPModel.EMMode.MaxSourceSeg) {
             HashMap<Pair<Integer, String>, Triple<Integer, String, String>> bestProdProbs = new HashMap<>();
             SparseDoubleVector<Pair<Integer, String>> maxProdProbs = new SparseDoubleVector<>();
             for (Triple<Integer, String, String> key : raw.getFirst().keySet()) {
@@ -253,9 +233,7 @@ class CSPTransliteration
             for (Triple<Integer, String, String> triple : bestProdProbs.values())
                 raw.getFirst().put(triple, 1.0);
 
-        }
-        else if (model.emMode == CSPModel.EMMode.BySourceSeg)
-        {
+        } else if (model.emMode == CSPModel.EMMode.BySourceSeg) {
             //Dictionary<Pair<int, String>, Triple<int, String, String>> bestProdProbs = new Dictionary<Pair<int, String>, Triple<int, String, String>>();
             SparseDoubleVector<Pair<Integer, String>> sumProdProbs = new SparseDoubleVector<>();
             for (Triple<Integer, String, String> key : raw.getFirst().keySet()) {
@@ -288,26 +266,26 @@ class CSPTransliteration
         return result;
     }
 
-    public static char[] vowels = new char[] { 'a', 'e', 'i', 'o', 'u', 'y' };
+    public static char[] vowels = new char[]{'a', 'e', 'i', 'o', 'u', 'y'};
 
     /**
      * Gets counts for productions by (conceptually) summing over all the possible alignments
      * and weighing each alignment (and its constituent productions) by the given probability table.
      * probSum is important (and memoized for input word pairs)--it keeps track and returns the sum of the probabilities of all possible alignments for the word pair
-     * @param position ?
-     * @param originalWord1 ?
-     * @param word1 ?
-     * @param word2 ?
-     * @param model ?
+     *
+     * @param position         ?
+     * @param originalWord1    ?
+     * @param word1            ?
+     * @param word2            ?
+     * @param model            ?
      * @param memoizationTable ?
      * @return ?
      */
-     public static Pair<SparseDoubleVector<Triple<Integer, String, String>>, Double> LearnModel(int position, String originalWord1, String word1, String word2, CSPModel model, HashMap<Triple<Double, String, String>, Pair<SparseDoubleVector<Triple<Integer, String, String>>, Double>> memoizationTable)
-    {
+    public static Pair<SparseDoubleVector<Triple<Integer, String, String>>, Double> LearnModel(int position, String originalWord1, String word1, String word2, CSPModel model, HashMap<Triple<Double, String, String>, Pair<SparseDoubleVector<Triple<Integer, String, String>>, Double>> memoizationTable) {
         Pair<SparseDoubleVector<Triple<Integer, String, String>>, Double> memoization;
 
         Triple check = new Triple<>(position, word1, word2);
-        if(memoizationTable.containsKey(check)){
+        if (memoizationTable.containsKey(check)) {
             return memoizationTable.get(check);
         }
 
@@ -323,16 +301,16 @@ class CSPTransliteration
         int maxSubstringLength1f = Math.min(word1.length(), model.maxSubstringLength);
         int maxSubstringLength2f = Math.min(word2.length(), model.maxSubstringLength);
 
-        String[] leftContexts = WikiTransliteration.GetLeftFallbackContexts(originalWord1,position, Math.max(model.segContextSize, model.productionContextSize));
+        String[] leftContexts = WikiTransliteration.GetLeftFallbackContexts(originalWord1, position, Math.max(model.segContextSize, model.productionContextSize));
 
-        int firstVowel = -1; int secondVowel = -1;
-        if (model.syllabic)
-        {
+        int firstVowel = -1;
+        int secondVowel = -1;
+        if (model.syllabic) {
             for (int i = 0; i < word1.length(); i++) {
 
-                if (Arrays.asList(vowels).contains(word1.charAt(i))){
+                if (Arrays.asList(vowels).contains(word1.charAt(i))) {
                     firstVowel = i;
-                }else if(firstVowel >= 0){
+                } else if (firstVowel >= 0) {
                     break;
                 }
             }
@@ -352,9 +330,7 @@ class CSPTransliteration
                 firstVowel = maxSubstringLength1f - 1;
                 secondVowel = maxSubstringLength1f;
             }
-        }
-        else
-        {
+        } else {
             firstVowel = 0;
             secondVowel = maxSubstringLength1f;
         }
@@ -368,12 +344,11 @@ class CSPTransliteration
             double segProb;
             if (model.segProbs.size() == 0)
                 segProb = 1;
-            else
-            {
+            else {
                 segProb = 0;
                 int minK = model.fallbackStrategy == FallbackStrategy.NotDuringTraining ? model.segContextSize : 0;
-                for (int k = model.segContextSize; k >= minK; k--){
-                    if (model.segProbs.containsKey(new Triple<>(leftContexts[k], substring1, rightContexts[k]))){
+                for (int k = model.segContextSize; k >= minK; k--) {
+                    if (model.segProbs.containsKey(new Triple<>(leftContexts[k], substring1, rightContexts[k]))) {
                         segProb = model.segProbs.get(new Triple<>(leftContexts[k], substring1, rightContexts[k]));
                         break;
                     }
@@ -390,8 +365,7 @@ class CSPTransliteration
                     double prob;
                     if (model.productionProbs.size() == 0)
                         prob = 1;
-                    else
-                    {
+                    else {
                         prob = 0;
                         int minK = model.fallbackStrategy == FallbackStrategy.NotDuringTraining ? model.productionContextSize : 0;
                         for (int k = model.productionContextSize; k >= minK; k--) {
@@ -402,7 +376,8 @@ class CSPTransliteration
                             }
                         }
 
-                        if (model.emMode == CSPModel.EMMode.Smoothed) prob = Math.max(model.minProductionProbability, prob);
+                        if (model.emMode == CSPModel.EMMode.Smoothed)
+                            prob = Math.max(model.minProductionProbability, prob);
                     }
 
                     Pair<SparseDoubleVector<Triple<Integer, String, String>>, Double> remainder = LearnModel(position + i, originalWord1, word1.substring(i), word2.substring(j), model, memoizationTable);
@@ -420,34 +395,30 @@ class CSPTransliteration
             }
         }
 
-        memoizationTable.put(new Triple<>((double)position, word1, word2), result);
+        memoizationTable.put(new Triple<>((double) position, word1, word2), result);
         return result;
     }
 
 
-    public static double GetProbability(String word1, String word2, CSPModel model)
-    {
+    public static double GetProbability(String word1, String word2, CSPModel model) {
         int paddingSize = Math.max(model.productionContextSize, model.segContextSize);
         String paddedWord = StringUtils.repeat('_', paddingSize) + word1 + StringUtils.repeat('_', paddingSize);
 
-        if (model.segMode != CSPModel.SegMode.Best)
-        {
+        if (model.segMode != CSPModel.SegMode.Best) {
             Pair<Double, Double> raw = GetProbability(paddingSize, paddedWord, word1, word2, model, new HashMap<Triple<Integer, String, String>, Pair<Double, Double>>());
             return raw.getFirst() / raw.getSecond(); //normalize the segmentation probabilities by dividing by the sum of probabilities for all segmentations
-        }
-        else
+        } else
             return GetBestProbability(paddingSize, paddedWord, word1, word2, model, new HashMap<Triple<Integer, String, String>, Double>());
     }
 
     //Gets the "best" alignment for a given word pair, defined as max P(s,t|S,T).
-    public static double GetBestProbability(int position, String originalWord1, String word1, String word2, CSPModel model, HashMap<Triple<Integer, String, String>, Double> memoizationTable)
-    {
+    public static double GetBestProbability(int position, String originalWord1, String word1, String word2, CSPModel model, HashMap<Triple<Integer, String, String>, Double> memoizationTable) {
         double result;
         Triple<Integer, String, String> v = new Triple<Integer, String, String>(position, word1, word2);
-        if (memoizationTable.containsKey(v)){
+        if (memoizationTable.containsKey(v)) {
             return memoizationTable.get(v); //we've been down this road before
         }
-            
+
 
         result = 0;
 
@@ -472,8 +443,7 @@ class CSPTransliteration
             double segProb;
             if (model.segProbs.size() == 0)
                 segProb = 1;
-            else
-            {
+            else {
                 segProb = 0;
                 for (int k = model.productionContextSize; k >= 0; k--) {
                     Triple<String, String, String> v5 = new Triple<>(leftContexts[k], substring1, rightContexts[k]);
@@ -505,16 +475,15 @@ class CSPTransliteration
                     double prob;
                     if (model.productionProbs.size() == 0)
                         prob = 1;
-                    else
-                    {
+                    else {
                         prob = 0;
                         for (int k = model.productionContextSize; k >= 0; k--) {
                             Pair<Triple<String, String, String>, String> v4 = new Pair<>(new Triple<>(leftContexts[k], substring1, rightContexts[k]), substring2);
-                            if (model.productionProbs.containsKey(v4)){
+                            if (model.productionProbs.containsKey(v4)) {
                                 prob = model.productionProbs.get(v4);
                                 break;
                             }
-                                
+
                         }
 
                         prob = Math.max(prob, minProductionProbability);
@@ -535,17 +504,16 @@ class CSPTransliteration
         return result;
     }
 
-//    //Gets counts for productions by (conceptually) summing over all the possible alignments
+    //    //Gets counts for productions by (conceptually) summing over all the possible alignments
 //    //and weighing each alignment (and its constituent productions) by the given probability table.
 //    //probSum is important (and memoized for input word pairs)--it keeps track and returns the sum of the probabilities of all possible alignments for the word pair
-    public static Pair<Double, Double> GetProbability(int position, String originalWord1, String word1, String word2, CSPModel model, HashMap<Triple<Integer, String, String>, Pair<Double, Double>> memoizationTable)
-    {
+    public static Pair<Double, Double> GetProbability(int position, String originalWord1, String word1, String word2, CSPModel model, HashMap<Triple<Integer, String, String>, Pair<Double, Double>> memoizationTable) {
         Pair<Double, Double> result;
         Triple<Integer, String, String> v = new Triple<>(position, word1, word2);
-        if(memoizationTable.containsKey(v)){
+        if (memoizationTable.containsKey(v)) {
             return memoizationTable.get(v);
         }
-        
+
         result = new Pair<>(0.0, 0.0);
 
         if (word1.length() == 0 && word2.length() == 0) //record probabilities
@@ -572,8 +540,7 @@ class CSPTransliteration
             double segProb;
             if (model.segProbs.size() == 0)
                 segProb = 1;
-            else
-            {
+            else {
                 segProb = 0;
                 for (int k = model.productionContextSize; k >= 0; k--) {
 
@@ -606,8 +573,7 @@ class CSPTransliteration
                     double prob;
                     if (model.productionProbs.size() == 0)
                         prob = 1;
-                    else
-                    {
+                    else {
                         prob = 0;
                         for (int k = model.productionContextSize; k >= 0; k--) {
                             Pair<Triple<String, String, String>, String> v3 = new Pair<>(new Triple<>(leftContexts[k], substring1, rightContexts[k]), substring2);
@@ -633,11 +599,9 @@ class CSPTransliteration
         memoizationTable.put(new Triple<>(position, word1, word2), result);
         return result;
     }
-    
 
 
-    class CSPExampleCounts
-    {
+    class CSPExampleCounts {
         public SparseDoubleVector<Pair<Triple<String, String, String>, String>> productionCounts;
         public SparseDoubleVector<Triple<String, String, String>> segCounts;
     }
