@@ -24,12 +24,12 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Created by zhilifeng on 8/8/17.
+ * @author zhilifeng
  */
 public class Timex3PipelineTest {
     private static BasicAnnotatorService timex3Processor;
 
-    @BeforeClass
+    @BeforeClass @Ignore
     public static void init() throws IOException, AnnotatorException {
         timex3Processor = PipelineFactory.buildPipeline(ViewNames.POS, ViewNames.TIMEX3);
     }
