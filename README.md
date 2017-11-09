@@ -60,7 +60,7 @@ To include one of the modules in your Maven project, add the following snippet w
         <repository>
             <id>CogCompSoftware</id>
             <name>CogCompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+            <url>http://cogcomp.org/m2repo/</url>
         </repository>
     </repositories>
 ```

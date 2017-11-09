@@ -16,13 +16,6 @@
         <lbjava-version>1.2.26</lbjava-version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>CogcompSoftware</id>
-            <name>CogcompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-        </repository>
-    </repositories>
     <pluginRepositories>
         <pluginRepository>
             <id>CogcompSoftware</id>

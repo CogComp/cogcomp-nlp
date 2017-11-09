@@ -20,7 +20,6 @@
     </pluginRepositories>
 
     <dependencies>
-         
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
