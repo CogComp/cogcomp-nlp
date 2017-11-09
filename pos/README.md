@@ -13,7 +13,7 @@ Here is how you can add maven dependencies into your program:
         <repository>
             <id>CogCompSoftware</id>
             <name>CogCompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+            <url>http://cogcomp.org/m2repo/</url>
         </repository>
     </repositories>
     

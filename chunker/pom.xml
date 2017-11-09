@@ -90,17 +90,4 @@
         <!--</plugins>-->
     <!--</build>-->
 
-    <!--<pluginRepositories>-->
-        <!--<pluginRepository>-->
-            <!--<id>CogcompSoftware</id>-->
-            <!--<name>CogcompSoftware</name>-->
-            <!--<url>http://cogcomp.cs.illinois.edu/m2repo/</url>-->
-            <!--<releases>-->
-                <!--<enabled>true</enabled>-->
-            <!--</releases>-->
-            <!--<snapshots>-->
-                <!--<enabled>true</enabled>-->
-            <!--</snapshots>-->
-        <!--</pluginRepository>-->
-    <!--</pluginRepositories>-->
 </project>
