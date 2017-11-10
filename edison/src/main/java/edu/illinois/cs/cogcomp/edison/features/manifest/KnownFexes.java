@@ -8,10 +8,10 @@
 package edu.illinois.cs.cogcomp.edison.features.manifest;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.CurrencyIndicator;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.*;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
@@ -25,7 +25,7 @@ class KnownFexes {
     private static final Set<Feature> bias = Collections
             .unmodifiableSet(new LinkedHashSet<Feature>(Collections.singletonList(DiscreteFeature
                     .create("bias"))));
-    private final static FeatureExtractor biasFeature = new FeatureExtractor() {
+    private final static FeatureExtractor biasFeature = new FeatureExtractor<Constituent>() {
 
         @Override
         public String getName() {
@@ -55,7 +55,7 @@ class KnownFexes {
         fexes.put("word", word);
         fexes.put("word-case", wordCase);
 
-        fexes.put("label", new FeatureExtractor() {
+        fexes.put("label", new FeatureExtractor<Constituent>() {
 
             @Override
             public String getName() {
@@ -74,7 +74,7 @@ class KnownFexes {
         fexes.put("months", ListFeatureFactory.months);
         fexes.put("possessive-pronouns", ListFeatureFactory.possessivePronouns);
 
-        fexes.put("length", SpanLengthFeature.instance);
+        fexes.put("length", SpanLengthConstituentFeature.instance);
 
         fexes.put("chunk-embedding", ChunkEmbedding.SHALLOW_PARSE);
         fexes.put("ne-embedding", ChunkEmbedding.NER);
@@ -84,22 +84,22 @@ class KnownFexes {
         fexes.put("linear-position", LinearPosition.instance);
         fexes.put("linear-distance", LinearDistance.instance);
 
-        fexes.put("nom-lex-class", NomLexClassFeature.instance);
+        fexes.put("nom-lex-class", NomLexClassConstituentFeature.instance);
         fexes.put("is-negated", ChunkPropertyFeatureFactory.isNegated);
         fexes.put("has-modal-verb", ChunkPropertyFeatureFactory.hasModalVerb);
 
-        fexes.put("levin-verb-class", LevinVerbClassFeature.instance);
+        fexes.put("levin-verb-class", LevinVerbClassConstituentFeature.instance);
 
-        // fexes.put("clauses-charniak", ClauseFeatureExtractor.CHARNIAK);
-        // fexes.put("clauses-stanford", ClauseFeatureExtractor.STANFORD);
-        // fexes.put("clauses-berkeley", ClauseFeatureExtractor.BERKELEY);
+        // fexes.put("clauses-charniak", ClauseConstituentFeatureExtractor.CHARNIAK);
+        // fexes.put("clauses-stanford", ClauseConstituentFeatureExtractor.STANFORD);
+        // fexes.put("clauses-berkeley", ClauseConstituentFeatureExtractor.BERKELEY);
 
         fexes.put("currency", CurrencyIndicator.instance);
 
-        fexes.put("brown-clusters-100", BrownClusterFeatureExtractor.instance100);
-        fexes.put("brown-clusters-320", BrownClusterFeatureExtractor.instance320);
-        fexes.put("brown-clusters-1000", BrownClusterFeatureExtractor.instance1000);
-        fexes.put("brown-clusters-3200", BrownClusterFeatureExtractor.instance3200);
+        fexes.put("brown-clusters-100", BrownClusterConstituentFeatureExtractor.instance100);
+        fexes.put("brown-clusters-320", BrownClusterConstituentFeatureExtractor.instance320);
+        fexes.put("brown-clusters-1000", BrownClusterConstituentFeatureExtractor.instance1000);
+        fexes.put("brown-clusters-3200", BrownClusterConstituentFeatureExtractor.instance3200);
 
 //        fexes.put("gazetteers", WordFeatureExtractorFactory.getGazetteerFeatureExtractor(
 //                "gazetteers", GazetteerViewGenerator.gazetteersInstance));
@@ -107,7 +107,7 @@ class KnownFexes {
 //        fexes.put("cbc", WordFeatureExtractorFactory.getGazetteerFeatureExtractor("cbc",
 //                GazetteerViewGenerator.gazetteersInstance));
 
-        fexes.put("CORLEX", CorelexFeatureExtractor.instance);
+        fexes.put("CORLEX", CorelexConstituentFeatureExtractor.instance);
         fexes.put("roget-thesaurus", RogetThesaurusFeatures.INSTANCE);
 
     }

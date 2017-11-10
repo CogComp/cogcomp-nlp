@@ -9,9 +9,9 @@ package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 
@@ -24,7 +24,7 @@ import java.util.*;
  * 
  */
 
-public class POSMikheevFeatureExtractor implements FeatureExtractor {
+public class POSMikheevConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
     private final String viewName;
     protected POSMikheevCounter counter;
 
@@ -34,7 +34,7 @@ public class POSMikheevFeatureExtractor implements FeatureExtractor {
      * @param viewName Name of view
      * @param counter trained POS Mikheev counter
      */
-    public POSMikheevFeatureExtractor(String viewName, POSMikheevCounter counter) {
+    public POSMikheevConstituentFeatureExtractor(String viewName, POSMikheevCounter counter) {
         this.viewName = viewName;
         this.counter = counter;
     }
@@ -47,7 +47,7 @@ public class POSMikheevFeatureExtractor implements FeatureExtractor {
      * @param home file name or directory name of the source corpus
      * @throws Exception
      */
-    public POSMikheevFeatureExtractor(String viewName, String corpusName, String home)
+    public POSMikheevConstituentFeatureExtractor(String viewName, String corpusName, String home)
             throws Exception {
         this.viewName = viewName;
         this.counter = new POSMikheevCounter(corpusName);
@@ -61,7 +61,7 @@ public class POSMikheevFeatureExtractor implements FeatureExtractor {
      * @param viewName Name of view
      * @param json JSON format of trained counter
      */
-    public POSMikheevFeatureExtractor(String viewName, String json) {
+    public POSMikheevConstituentFeatureExtractor(String viewName, String json) {
         this.viewName = viewName;
         this.counter = POSMikheevCounter.read(json);
     }

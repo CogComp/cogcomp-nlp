@@ -8,8 +8,8 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Classifier;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -23,10 +23,10 @@ import java.util.Set;
  * @keywords SRL, Nom, nominalization, nominal, classifier, argument
  * @author Xinbo Wu
  */
-public class SrlNomArgumentFeatureConjunction implements FeatureExtractor {
-    private final FeatureCollection base = new FeatureCollection(this.getName());
+public class SrlNomArgumentConstituentFeatureConjunction implements FeatureExtractor<Constituent> {
+    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
 
-    public SrlNomArgumentFeatureConjunction() throws Exception {
+    public SrlNomArgumentConstituentFeatureConjunction() throws Exception {
         this.base.addFeatureExtractor(FeatureUtilities.conjoin(new SrlNomArgumentFeatures(),
                 new SrlNomArgumentFeatures()));
     }

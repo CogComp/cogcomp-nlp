@@ -11,8 +11,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
-import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagFeature;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.WordNetFeatureClass;
+import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagConstituentFeature;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.POSContextWindowTwo;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordContextWindowTwo;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -25,25 +25,25 @@ import java.util.Set;
  * Extracts a collection of features used to classify SRL Nominal frame arguments:
  * {@link WordFeatureExtractorFactory} word, pos, numberNormalizer, gerundMarker,
  * nominalizationMarker, and dateMarker; {@link ListFeatureFactory} daysOfTheWeek and months;
- * {@link WordNetFeatureExtractor} synsetsFirstSense and hypernymsFirstSense;
- * {@link ParseHeadWordFeatureExtractor}; {@link CurrencyIndicator}; {@link LinearPosition};
- * {@link HyphenTagFeature}; {@link ParsePhraseType}; {@link ParsePath}; {@link ChunkEmbedding}
+ * {@link WordNetConstituentFeatureExtractor} synsetsFirstSense and hypernymsFirstSense;
+ * {@link ParseHeadWordConstituentFeatureExtractor}; {@link CurrencyIndicator}; {@link LinearPosition};
+ * {@link HyphenTagConstituentFeature}; {@link ParsePhraseType}; {@link ParsePath}; {@link ChunkEmbedding}
  * shallow parse and NER; {@link ChunkPathPattern}; {@link ParseSiblings};
  * {@link WordContextWindowTwo}; {@link POSContextWindowTwo}
  *
  * @keywords SRL, Nom, Nominal, classifier, arguments
  * @author Xinbo Wu
  */
-public class SrlNomArgumentFeatures implements FeatureExtractor {
-    private final FeatureCollection base = new FeatureCollection(this.getName());
+public class SrlNomArgumentFeatures implements FeatureExtractor<Constituent> {
+    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
 
     public SrlNomArgumentFeatures() throws EdisonException {
-        ArrayList<FeatureCollection> tmp = new ArrayList<FeatureCollection>();
+        ArrayList<ConstituentFeatureCollection> tmp = new ArrayList<ConstituentFeatureCollection>();
 
-        tmp.add(new FeatureCollection("", FeatureInputTransformer.constituentParent,
+        tmp.add(new ConstituentFeatureCollection("", FeatureInputTransformer.constituentParent,
                 new SrlNomClassifierPredicateFeatures("")));
 
-        tmp.add(new FeatureCollection(""));
+        tmp.add(new ConstituentFeatureCollection(""));
         tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.word);
         tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.pos);
         tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.numberNormalizer);
@@ -54,7 +54,7 @@ public class SrlNomArgumentFeatures implements FeatureExtractor {
         tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.dateMarker);
 
         try {
-            WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
+            WordNetConstituentFeatureExtractor wn = new WordNetConstituentFeatureExtractor();
             wn.addFeatureType(WordNetFeatureClass.synsetsFirstSense);
             wn.addFeatureType(WordNetFeatureClass.hypernymsFirstSense);
 
@@ -64,13 +64,13 @@ public class SrlNomArgumentFeatures implements FeatureExtractor {
         }
 
         this.base.addFeatureExtractor(tmp.get(0));
-        this.base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD,
+        this.base.addFeatureExtractor(new ParseHeadWordConstituentFeatureExtractor(ViewNames.PARSE_STANFORD,
                 tmp.get(1)));
 
         this.base.addFeatureExtractor(CurrencyIndicator.instance);
         this.base.addFeatureExtractor(LinearPosition.instance);
 
-        this.base.addFeatureExtractor(new HyphenTagFeature());
+        this.base.addFeatureExtractor(new HyphenTagConstituentFeature());
 
         this.base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
 

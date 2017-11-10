@@ -48,7 +48,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class DependencyPath implements FeatureExtractor {
+public class DependencyPath implements FeatureExtractor<Constituent> {
     public static DependencyPath EASY_FIRST = new DependencyPath(ViewNames.DEPENDENCY);
 
     public static DependencyPath STANFORD = new DependencyPath(ViewNames.DEPENDENCY_STANFORD);

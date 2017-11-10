@@ -12,7 +12,6 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.List;
@@ -60,8 +59,8 @@ public class TestNGramFeatures {
     }
 
 
-    private void testBigrams(WordFeatureExtractor f) throws EdisonException {
-        final NgramFeatureExtractor bigrams = NgramFeatureExtractor.bigrams(f);
+    private void testBigrams(WordConstituentFeatureExtractor f) throws EdisonException {
+        final NgramConstituentFeatureExtractor bigrams = NgramConstituentFeatureExtractor.bigrams(f);
 
         for (final TextAnnotation ta : tas) {
 
@@ -83,8 +82,8 @@ public class TestNGramFeatures {
         }
     }
 
-    private void testTrigrams(WordFeatureExtractor f) throws EdisonException {
-        NgramFeatureExtractor trigrams = NgramFeatureExtractor.trigrams(f);
+    private void testTrigrams(WordConstituentFeatureExtractor f) throws EdisonException {
+        NgramConstituentFeatureExtractor trigrams = NgramConstituentFeatureExtractor.trigrams(f);
 
         for (TextAnnotation ta : tas) {
 

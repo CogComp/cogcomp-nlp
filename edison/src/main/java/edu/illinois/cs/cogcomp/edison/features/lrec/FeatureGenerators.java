@@ -8,9 +8,9 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureInputTransformer;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -23,7 +23,7 @@ import java.util.*;
 @SuppressWarnings("serial")
 public class FeatureGenerators {
 
-    public static FeatureExtractor hasVerb = new FeatureExtractor() {
+    public static FeatureExtractor hasVerb = new FeatureExtractor<Constituent>() {
 
         @Override
         public String getName() {
@@ -77,7 +77,7 @@ public class FeatureGenerators {
                 }
             };
 
-    public static FeatureExtractor hyphenTagFeature = new FeatureExtractor() {
+    public static FeatureExtractor hyphenTagFeature = new FeatureExtractor<Constituent>() {
 
         @Override
         public String getName() {
@@ -121,7 +121,7 @@ public class FeatureGenerators {
     };
 
     public static FeatureExtractor ppFeatures(final String parseViewName) {
-        return new FeatureExtractor() {
+        return new FeatureExtractor<Constituent>() {
 
             @Override
             public String getName() {

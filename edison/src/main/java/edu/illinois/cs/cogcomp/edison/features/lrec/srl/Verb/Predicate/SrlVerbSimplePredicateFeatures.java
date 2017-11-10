@@ -8,9 +8,8 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Predicate;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.AttributeFeature;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.*;
+import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
 import edu.illinois.cs.cogcomp.edison.features.factory.SubcategorizationFrame;
@@ -31,9 +30,9 @@ import java.util.Set;
  *
  * @author Xinbo Wu
  */
-public class SrlVerbSimplePredicateFeatures implements FeatureExtractor {
+public class SrlVerbSimplePredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final FeatureCollection base;
+    private final ConstituentFeatureCollection base;
 
     public SrlVerbSimplePredicateFeatures() {
         this("#predicateFeatures#");
@@ -41,7 +40,7 @@ public class SrlVerbSimplePredicateFeatures implements FeatureExtractor {
 
     public SrlVerbSimplePredicateFeatures(String name) {
         this.name = name;
-        this.base = new FeatureCollection(this.getName());
+        this.base = new ConstituentFeatureCollection(this.getName());
 
         this.base.addFeatureExtractor(new WordContextWindowTwo(""));
         this.base.addFeatureExtractor(new POSContextWindowTwo(""));
@@ -49,7 +48,7 @@ public class SrlVerbSimplePredicateFeatures implements FeatureExtractor {
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.lemma);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.capitalization);
-        this.base.addFeatureExtractor(new AttributeFeature("predicate"));
+        this.base.addFeatureExtractor(new AttributeConstituentFeature("predicate"));
         this.base.addFeatureExtractor(SubcategorizationFrame.STANFORD);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.numberNormalizer);
         this.base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);

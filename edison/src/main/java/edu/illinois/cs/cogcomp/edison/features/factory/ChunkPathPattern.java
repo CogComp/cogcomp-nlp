@@ -9,9 +9,9 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.RealFeature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -38,7 +38,7 @@ import java.util.*;
  *
  * @author Vivek Srikumar
  */
-public class ChunkPathPattern implements FeatureExtractor {
+public class ChunkPathPattern implements FeatureExtractor<Constituent> {
 
     public static ChunkPathPattern SHALLOW_PARSE = new ChunkPathPattern(ViewNames.SHALLOW_PARSE);
 

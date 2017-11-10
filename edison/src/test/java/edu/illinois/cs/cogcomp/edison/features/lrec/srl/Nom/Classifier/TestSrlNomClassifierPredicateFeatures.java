@@ -18,7 +18,6 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.lrec.FeatureGenerators;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Constant;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Classifier.SrlNomClassifierPredicateFeatures;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.SRLFeaturesComparator;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
 import junit.framework.TestCase;

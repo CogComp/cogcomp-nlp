@@ -11,7 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.*;
-import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagFeature;
+import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagConstituentFeature;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.POSContextWindowTwo;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordContextWindowTwo;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -23,20 +23,20 @@ import java.util.Set;
 /**
  * Extracts features for Nom SRL argument identification. Combines {@link SrlNomHeadWordFeatures},
  * {@link ParsePath}, {@link LinearPosition}, {@link ParsePhraseType},
- * {@link SrlNomHeadWordFeatures}, {@link HyphenTagFeature}, {@link ChunkEmbedding} NER and Shallow
+ * {@link SrlNomHeadWordFeatures}, {@link HyphenTagConstituentFeature}, {@link ChunkEmbedding} NER and Shallow
  * Parse views, {@link ChunkPathPattern}, {@link CurrencyIndicator}, {@link ParseSiblings},
  * {@link WordContextWindowTwo}, and {@link POSContextWindowTwo}
  *
  * @keywords SRL, Nominalization, Nom, Nominal, argument, identification
  * @author Xinbo Wu
  */
-public class SrlNomIdentifier implements FeatureExtractor {
-    private final FeatureCollection base = new FeatureCollection(this.getName());
+public class SrlNomIdentifier implements FeatureExtractor<Constituent> {
+    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
 
     public SrlNomIdentifier() {
-        ArrayList<FeatureCollection> tmp = new ArrayList<FeatureCollection>();
+        ArrayList<ConstituentFeatureCollection> tmp = new ArrayList<ConstituentFeatureCollection>();
 
-        tmp.add(new FeatureCollection(""));
+        tmp.add(new ConstituentFeatureCollection(""));
         tmp.get(0).addFeatureExtractor(new SrlNomHeadWordFeatures(""));
         tmp.get(0).addFeatureExtractor(new ParsePath(ViewNames.PARSE_STANFORD));
         tmp.get(0).addFeatureExtractor(LinearPosition.instance);
@@ -46,7 +46,7 @@ public class SrlNomIdentifier implements FeatureExtractor {
         this.base.addFeatureExtractor(LinearPosition.instance);
         this.base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
         this.base.addFeatureExtractor(new ParsePath(ViewNames.PARSE_STANFORD));
-        this.base.addFeatureExtractor(new HyphenTagFeature());
+        this.base.addFeatureExtractor(new HyphenTagConstituentFeature());
 
         this.base.addFeatureExtractor(FeatureUtilities.conjoin(
                 new SrlNomIdentifierPredicateFeatures(""), tmp.get(0)));

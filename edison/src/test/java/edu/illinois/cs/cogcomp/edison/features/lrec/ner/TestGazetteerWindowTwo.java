@@ -10,7 +10,7 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
 import org.junit.Test;
 
 /**
- * Standard FeatureExtractor test for GazetteerWindowTwo
+ * Standard ConstituentFeatureExtractor test for GazetteerWindowTwo
  *
  * @author mssammon
  */

@@ -22,9 +22,9 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 
-public class SrlVerbPredicateFeatures implements FeatureExtractor {
+public class SrlVerbPredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final FeatureCollection base;
+    private final ConstituentFeatureCollection base;
 
     public SrlVerbPredicateFeatures() {
         this("#predicateFeatures#");
@@ -32,9 +32,9 @@ public class SrlVerbPredicateFeatures implements FeatureExtractor {
 
     public SrlVerbPredicateFeatures(String name) {
         this.name = name;
-        this.base = new FeatureCollection(this.getName());
+        this.base = new ConstituentFeatureCollection(this.getName());
 
-        this.base.addFeatureExtractor(new AttributeFeature("predicate"));
+        this.base.addFeatureExtractor(new AttributeConstituentFeature("predicate"));
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
         this.base.addFeatureExtractor(VerbVoiceIndicator.STANFORD);
         this.base.addFeatureExtractor(SubcategorizationFrame.STANFORD);
@@ -42,8 +42,8 @@ public class SrlVerbPredicateFeatures implements FeatureExtractor {
         this.base.addFeatureExtractor(ChunkPropertyFeatureFactory.isNegated);
         this.base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
 
-        ContextFeatureExtractor context = new ContextFeatureExtractor(1, true, false);
-        FeatureCollection tmp = new FeatureCollection("");
+        ContextConstituentFeatureExtractor context = new ContextConstituentFeatureExtractor(1, true, false);
+        ConstituentFeatureCollection tmp = new ConstituentFeatureCollection("");
         tmp.addFeatureExtractor(WordFeatureExtractorFactory.word);
         tmp.addFeatureExtractor(WordFeatureExtractorFactory.pos);
         tmp.addFeatureExtractor(FeatureUtilities.conjoin(WordFeatureExtractorFactory.word,
@@ -51,7 +51,7 @@ public class SrlVerbPredicateFeatures implements FeatureExtractor {
         context.addFeatureExtractor(tmp);
         this.base.addFeatureExtractor(context);
 
-        this.base.addFeatureExtractor(LevinVerbClassFeature.instance);
+        this.base.addFeatureExtractor(LevinVerbClassConstituentFeature.instance);
     }
 
 

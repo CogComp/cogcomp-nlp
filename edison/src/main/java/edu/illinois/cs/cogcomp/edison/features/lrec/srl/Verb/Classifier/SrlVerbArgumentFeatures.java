@@ -28,34 +28,34 @@ import java.util.Set;
  * tranformed using {@link FeatureInputTransformer} constituentParent; {@link ParsePhraseType};
  * {@link LinearPosition}; {@link ParsePath}; {@link WordAndPos } in a context window of size 2;
  * parse siblings; {@link PPFeatures}; {@link ProjectedPath}; {@link ChunkPathPattern} for shallow
- * parse; {@link ChunkEmbedding} for NER and shallow parse; {@link ClauseFeatureExtractor};
- * {@link SpanLengthFeature}; {@link SyntacticFrame}; and {@link ParseHeadWordFeatureExtractor}.
+ * parse; {@link ChunkEmbedding} for NER and shallow parse; {@link ClauseConstituentFeatureExtractor};
+ * {@link SpanLengthConstituentFeature}; {@link SyntacticFrame}; and {@link ParseHeadWordConstituentFeatureExtractor}.
  *
  * @keywords SRL, verb, arguments, mixed
  * @author Xinbo Wu
  */
-public class SrlVerbArgumentFeatures implements FeatureExtractor {
-    private final FeatureCollection base = new FeatureCollection(this.getName());
+public class SrlVerbArgumentFeatures implements FeatureExtractor<Constituent> {
+    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
 
     public SrlVerbArgumentFeatures() {
-        base.addFeatureExtractor(new FeatureCollection("",
+        base.addFeatureExtractor(new ConstituentFeatureCollection("",
                 FeatureInputTransformer.constituentParent, new SrlVerbPredicateFeatures("")));
         base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
         base.addFeatureExtractor(LinearPosition.instance);
         base.addFeatureExtractor(ParsePath.STANFORD);
-        ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
+        ContextConstituentFeatureExtractor context = new ContextConstituentFeatureExtractor(2, true, true);
         context.addFeatureExtractor(new WordAndPos(""));
         base.addFeatureExtractor(context);
 
-        base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.firstWord,
+        base.addFeatureExtractor(new ConstituentFeatureCollection("", FeatureInputTransformer.firstWord,
                 new WordAndPos("")));
 
-        base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.lastWord,
+        base.addFeatureExtractor(new ConstituentFeatureCollection("", FeatureInputTransformer.lastWord,
                 new WordAndPos("")));
 
-        base.addFeatureExtractor(new FeatureCollection("", new GetParseLeftSibling(
+        base.addFeatureExtractor(new ConstituentFeatureCollection("", new GetParseLeftSibling(
                 ViewNames.PARSE_STANFORD), new ParseSibling("")));
-        base.addFeatureExtractor(new FeatureCollection("", new GetParseRightSibling(
+        base.addFeatureExtractor(new ConstituentFeatureCollection("", new GetParseRightSibling(
                 ViewNames.PARSE_STANFORD), new ParseSibling("")));
         base.addFeatureExtractor(new PPFeatures(ViewNames.PARSE_STANFORD));
 
@@ -63,13 +63,13 @@ public class SrlVerbArgumentFeatures implements FeatureExtractor {
 
         base.addFeatureExtractor(ChunkEmbedding.NER);
 
-        base.addFeatureExtractor(SpanLengthFeature.instance);
+        base.addFeatureExtractor(SpanLengthConstituentFeature.instance);
         base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);
         base.addFeatureExtractor(ChunkPathPattern.SHALLOW_PARSE);
-        base.addFeatureExtractor(ClauseFeatureExtractor.STANFORD);
+        base.addFeatureExtractor(ClauseConstituentFeatureExtractor.STANFORD);
         base.addFeatureExtractor(SyntacticFrame.STANFORD);
 
-        base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD,
+        base.addFeatureExtractor(new ParseHeadWordConstituentFeatureExtractor(ViewNames.PARSE_STANFORD,
                 new WordAndPos("")));
     }
 

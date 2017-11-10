@@ -29,7 +29,7 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
  * @keywords pos-tagger, window
  * @author Xinbo Wu
  */
-public class POSWindow implements FeatureExtractor {
+public class POSWindow implements FeatureExtractor<Constituent> {
     private final String viewName;
     private final boolean isPOSFromCounting;
     private final boolean isBaseLineCounting;

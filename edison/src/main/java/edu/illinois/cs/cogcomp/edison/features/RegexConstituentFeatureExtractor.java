@@ -13,31 +13,28 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * @author Vivek Srikumar
- */
-public class AttributeFeature implements FeatureExtractor {
+public class RegexConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
 
-    private String attributeName;
+    private final static DiscreteFeature matches = DiscreteFeature.create("Y");
+    private final String regex;
 
-    public AttributeFeature(String attributeName) {
-        this.attributeName = attributeName;
-
+    public RegexConstituentFeatureExtractor(String regex) {
+        this.regex = regex;
     }
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        Set<Feature> feature = new LinkedHashSet<>();
 
-        Set<Feature> set = new LinkedHashSet<>();
-        if (c.hasAttribute(attributeName)) {
-            set.add(DiscreteFeature.create(c.getAttribute(attributeName)));
-        }
-        return set;
+        if (c.getTokenizedSurfaceForm().matches(regex))
+            feature.add(matches);
+
+        return feature;
     }
 
     @Override
     public String getName() {
-        return "#" + attributeName;
+        return "regex:" + regex;
     }
 
 }

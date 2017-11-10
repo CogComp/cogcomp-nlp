@@ -10,7 +10,7 @@ package edu.illinois.cs.cogcomp.edison.utilities;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
-import edu.illinois.cs.cogcomp.edison.features.factory.LevinVerbClassFeature;
+import edu.illinois.cs.cogcomp.edison.features.factory.LevinVerbClassConstituentFeature;
 import org.cogcomp.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +76,7 @@ public class VerbClassDictionary {
 
     public static VerbClassDictionary getDictionaryFromDatastore() {
         if (verbClassDictionary == null) {
-            synchronized (LevinVerbClassFeature.class) {
+            synchronized (LevinVerbClassConstituentFeature.class) {
 
                 if (verbClassDictionary == null) {
                     log.info("Reading verb class dictionary. Looking for " + verbClassFile + " in the datastore");
@@ -102,14 +102,14 @@ public class VerbClassDictionary {
     @Deprecated
     public static VerbClassDictionary getDictionaryFromClassPath() {
         if (verbClassDictionary == null) {
-            synchronized (LevinVerbClassFeature.class) {
+            synchronized (LevinVerbClassConstituentFeature.class) {
 
                 if (verbClassDictionary == null) {
 
                     log.info("Reading verb class dictionary. Looking for " + verbClassFile
                             + " in the classpath");
                     try {
-                        URL url = IOUtils.lsResources(LevinVerbClassFeature.class, verbClassFile).get(0);
+                        URL url = IOUtils.lsResources(LevinVerbClassConstituentFeature.class, verbClassFile).get(0);
                         InputStream resource = url.openStream();
                         verbClassDictionary = new VerbClassDictionary(resource);
                     } catch (Exception e) {

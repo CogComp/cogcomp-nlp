@@ -15,7 +15,6 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import junit.framework.TestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,8 +61,8 @@ public class TestPOSBaseLineFeatureExtractor {
         // logger.info(TestPOSBaseLineFeatureExtractor.class.getProtectionDomain().getCodeSource().getLocation());
         // logger.info(System.getProperty("user.dir"));
 
-        POSBaseLineFeatureExtractor posBaseLine =
-                new POSBaseLineFeatureExtractor("posBaseLine", "test_corpus", TestPosHelper.corpus);
+        POSBaseLineConstituentFeatureExtractor posBaseLine =
+                new POSBaseLineConstituentFeatureExtractor("posBaseLine", "test_corpus", TestPosHelper.corpus);
 
         ArrayList<Set<Feature>> featslist = new ArrayList<>();
 

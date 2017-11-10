@@ -10,7 +10,6 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureCreatorUtil;
@@ -29,7 +28,7 @@ import java.util.Set;
  * @keywords gazetteer, ner
  * @author mssammon
  */
-public class GazetteerWindowTwo implements FeatureExtractor {
+public class GazetteerWindowTwo implements FeatureExtractor<Constituent> {
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         Set<Feature> feats = new HashSet<>();

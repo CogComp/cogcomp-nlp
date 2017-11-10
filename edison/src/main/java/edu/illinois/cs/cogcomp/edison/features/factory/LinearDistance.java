@@ -9,9 +9,9 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.LinkedHashSet;
@@ -32,7 +32,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class LinearDistance implements FeatureExtractor {
+public class LinearDistance implements FeatureExtractor<Constituent> {
 
     private static final DiscreteFeature ZERO = DiscreteFeature.create("0");
 

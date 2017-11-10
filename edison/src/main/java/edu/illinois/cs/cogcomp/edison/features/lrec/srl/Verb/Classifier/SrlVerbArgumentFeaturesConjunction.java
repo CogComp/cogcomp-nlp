@@ -9,7 +9,7 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Classifier;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -23,8 +23,8 @@ import java.util.Set;
  * @keywords SRL, Verb, conjunction, argument, classifier
  * @author Xinbo Wu
  */
-public class SrlVerbArgumentFeaturesConjunction implements FeatureExtractor {
-    private final FeatureCollection base = new FeatureCollection(this.getName());
+public class SrlVerbArgumentFeaturesConjunction implements FeatureExtractor<Constituent> {
+    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
 
     public SrlVerbArgumentFeaturesConjunction() {
         this.base.addFeatureExtractor(FeatureUtilities.conjoin(new SrlVerbArgumentFeatures(),

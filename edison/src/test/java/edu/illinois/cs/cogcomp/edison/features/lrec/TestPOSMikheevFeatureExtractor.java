@@ -16,7 +16,6 @@ import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import org.slf4j.Logger;
@@ -25,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.*;
 
 
 public class TestPOSMikheevFeatureExtractor {
@@ -44,8 +42,8 @@ public class TestPOSMikheevFeatureExtractor {
     @Test
     public final void test() throws Exception {
 
-        POSMikheevFeatureExtractor posMikheev =
-                new POSMikheevFeatureExtractor("posMikheev", "test_corpus", TestPosHelper.corpus);
+        POSMikheevConstituentFeatureExtractor posMikheev =
+                new POSMikheevConstituentFeatureExtractor("posMikheev", "test_corpus", TestPosHelper.corpus);
 
         logger.info("POSMikheev Feature Extractor");
         logger.info("Only print the features with known tags");

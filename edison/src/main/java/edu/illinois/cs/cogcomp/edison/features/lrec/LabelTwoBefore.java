@@ -14,9 +14,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSBaseLineCounter;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
@@ -28,7 +28,7 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
  * @keywords pos-tagger, before
  * @author Xinbo Wu
  */
-public class LabelTwoBefore implements FeatureExtractor {
+public class LabelTwoBefore implements FeatureExtractor<Constituent> {
     private final String viewName;
     private final boolean isPOSFromCounting;
     private final boolean isBaseLineCounting;

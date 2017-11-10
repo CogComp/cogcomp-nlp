@@ -76,7 +76,7 @@ public class PrepSRLClassifier extends SparseNetworkLearner {
 
         public FeatureExtractor() {
             containingPackage = PACKAGE_NAME;
-            name = CLASS_NAME + "$FeatureExtractor";
+            name = CLASS_NAME + "$ConstituentFeatureExtractor";
             featureSet =
                     new Classifier[] {new WordContextBigrams(), new POSContextBigrams(),
                             new WordBigrams(), new POSBigrams(), govFeatures, objFeatures,

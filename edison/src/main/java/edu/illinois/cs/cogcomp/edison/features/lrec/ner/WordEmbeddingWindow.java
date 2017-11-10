@@ -10,9 +10,7 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureCreatorUtil;
@@ -31,12 +29,11 @@ import java.util.Set;
  * @keywords embedding, window, token
  * @author mssammon
  */
-public class WordEmbeddingWindow implements FeatureExtractor {
+public class WordEmbeddingWindow implements FeatureExtractor<Constituent> {
 
     private final int windowStart;
     private final int windowEnd;
     private final boolean ignoreSentenceBoundaries;
-
 
     public WordEmbeddingWindow(int windowSize, boolean ignoreSentenceBoundaries) throws IOException {
         this.windowStart = 0 - windowSize;
@@ -45,7 +42,6 @@ public class WordEmbeddingWindow implements FeatureExtractor {
 
         WordEmbeddings.initWithDefaults();
     }
-
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {

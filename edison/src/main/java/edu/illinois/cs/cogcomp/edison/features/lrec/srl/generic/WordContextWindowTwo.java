@@ -8,10 +8,9 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.ContextFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.*;
+import edu.illinois.cs.cogcomp.edison.features.ContextConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
@@ -24,8 +23,8 @@ import java.util.Set;
  * @keywords SRL, generic, word, context
  * @author Xinbo Wu
  */
-public class WordContextWindowTwo implements FeatureExtractor {
-    private final FeatureCollection base;
+public class WordContextWindowTwo implements FeatureExtractor<Constituent> {
+    private final ConstituentFeatureCollection base;
     private final String name;
 
     public WordContextWindowTwo() {
@@ -33,11 +32,11 @@ public class WordContextWindowTwo implements FeatureExtractor {
     }
 
     public WordContextWindowTwo(String name) {
-        // ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
+        // ContextConstituentFeatureExtractor context = new ContextConstituentFeatureExtractor(2, true, true);
         this.name = name;
-        this.base = new FeatureCollection(this.getName());
+        this.base = new ConstituentFeatureCollection(this.getName());
 
-        ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
+        ContextConstituentFeatureExtractor context = new ContextConstituentFeatureExtractor(2, true, true);
         context.addFeatureExtractor(WordFeatureExtractorFactory.word);
         base.addFeatureExtractor(context);
     }

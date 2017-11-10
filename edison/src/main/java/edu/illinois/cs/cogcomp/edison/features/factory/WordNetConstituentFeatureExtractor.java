@@ -10,7 +10,7 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
-import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetHelper;
@@ -27,13 +27,13 @@ import java.util.Set;
  * This feature extractor generates the following WordNet based features from a word: synonyms,
  * synsets, hypernyms, hypernym-sets.
  * <p>
- * The behavior for multiple word constituents is just like the {@link WordFeatureExtractor}:
+ * The behavior for multiple word constituents is just like the {@link WordConstituentFeatureExtractor}:
  * <p>
  * If the input constituent is not a word, then the feature extractor can do one of two things: If a
  * flag is set in the constructor, then it will generate features from the last word of the
  * constituent. If the flag is not set, then it will throw a {@code FeatureException}.
  * <p>
- * Note: you must call {@link WordNetFeatureExtractor#addFeatureType(WordNetFeatureClass)} in order
+ * Note: you must call {@link WordNetConstituentFeatureExtractor#addFeatureType(WordNetFeatureClass)} in order
  * to specify which types of WordNet features you would like. If you do not add any feature types,
  * no features will be returned. See {@link WordNetFeatureClass} to learn about WordNet feature
  * types.
@@ -41,18 +41,18 @@ import java.util.Set;
  * 
  * @author Vivek Srikumar
  */
-public class WordNetFeatureExtractor extends WordFeatureExtractor {
+public class WordNetConstituentFeatureExtractor extends WordConstituentFeatureExtractor {
 
     public static WordNetManager wnManager = null;
     private final Set<WordNetFeatureClass> featureClasses;
 
     /**
-     * Creates a new WordNetFeatureExtractor.
+     * Creates a new WordNetConstituentFeatureExtractor.
      * <p>
      * It is probably safest to the parameter {@code useLastWord} to true. This will provide a check
-     * to ensure that the WordNetFeatureExtractor only sees words.
+     * to ensure that the WordNetConstituentFeatureExtractor only sees words.
      */
-    public WordNetFeatureExtractor(boolean useLastWord) throws FileNotFoundException, JWNLException {
+    public WordNetConstituentFeatureExtractor(boolean useLastWord) throws FileNotFoundException, JWNLException {
         super(useLastWord);
 
         featureClasses = new LinkedHashSet<>();
@@ -63,14 +63,14 @@ public class WordNetFeatureExtractor extends WordFeatureExtractor {
     }
 
     /**
-     * Creates a new WordNetFeatureExtractor. This constructor is equivalent to calling
-     * {@code new WordNetFeatureExtractor(false)}.
+     * Creates a new WordNetConstituentFeatureExtractor. This constructor is equivalent to calling
+     * {@code new WordNetConstituentFeatureExtractor(false)}.
      *
      * @throws JWNLException
      * @throws java.io.FileNotFoundException
-     * @see edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor#WordNetFeatureExtractor(boolean)
+     * @see WordNetConstituentFeatureExtractor#WordNetConstituentFeatureExtractor(boolean)
      */
-    public WordNetFeatureExtractor() throws FileNotFoundException, JWNLException {
+    public WordNetConstituentFeatureExtractor() throws FileNotFoundException, JWNLException {
         this(true);
     }
 
@@ -296,7 +296,7 @@ public class WordNetFeatureExtractor extends WordFeatureExtractor {
     }
 
     /**
-     * Feature types as used in {@link WordNetFeatureExtractor#addFeatureType(WordNetFeatureClass)}.
+     * Feature types as used in {@link WordNetConstituentFeatureExtractor#addFeatureType(WordNetFeatureClass)}.
      * These specify different types of features available from WordNet.
      *
      * All features classes containing 'firstSense' in the name apply only on the first sense in the

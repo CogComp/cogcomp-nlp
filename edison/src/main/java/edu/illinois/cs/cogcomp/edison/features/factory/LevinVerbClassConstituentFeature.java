@@ -10,9 +10,9 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.VerbClassDictionary;
@@ -34,10 +34,10 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class LevinVerbClassFeature implements FeatureExtractor {
+public class LevinVerbClassConstituentFeature implements FeatureExtractor<Constituent> {
 
     private static final DiscreteFeature UNKNOWN = DiscreteFeature.create("*");
-    public static LevinVerbClassFeature instance = new LevinVerbClassFeature();
+    public static LevinVerbClassConstituentFeature instance = new LevinVerbClassConstituentFeature();
 
     VerbClassDictionary dictionary = VerbClassDictionary.getDictionaryFromDatastore();
 

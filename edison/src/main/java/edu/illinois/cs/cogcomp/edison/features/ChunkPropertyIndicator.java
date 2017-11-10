@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class ChunkPropertyIndicator implements FeatureExtractor {
+public class ChunkPropertyIndicator implements FeatureExtractor<Constituent> {
 
     private static final DiscreteFeature N = DiscreteFeature.create("N");
     private static final DiscreteFeature Y = DiscreteFeature.create("Y");

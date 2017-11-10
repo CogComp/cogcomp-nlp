@@ -11,9 +11,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
@@ -30,7 +30,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ParseHeadWordPOS implements FeatureExtractor {
+public class ParseHeadWordPOS implements FeatureExtractor<Constituent> {
 
     public static ParseHeadWordPOS CHARNIAK = new ParseHeadWordPOS(ViewNames.PARSE_CHARNIAK);
     public static ParseHeadWordPOS STANFORD = new ParseHeadWordPOS(ViewNames.PARSE_STANFORD);

@@ -7,16 +7,16 @@
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
-import edu.illinois.cs.cogcomp.edison.features.ListFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.ListConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordLists;
 
 public abstract class ListFeatureFactory {
-    public static final ListFeatureExtractor daysOfTheWeek = new ListFeatureExtractor("days",
+    public static final ListConstituentFeatureExtractor daysOfTheWeek = new ListConstituentFeatureExtractor("days",
             WordLists.DAYS_OF_WEEK, false);
 
-    public static final ListFeatureExtractor months = new ListFeatureExtractor("mnths",
+    public static final ListConstituentFeatureExtractor months = new ListConstituentFeatureExtractor("mnths",
             WordLists.MONTHS, false);
 
-    public static final ListFeatureExtractor possessivePronouns = new ListFeatureExtractor(
+    public static final ListConstituentFeatureExtractor possessivePronouns = new ListConstituentFeatureExtractor(
             "poss-pron", WordLists.POSSESSIVE_PRONOUNS, false);
 }

@@ -8,7 +8,7 @@
 package edu.illinois.cs.cogcomp.quant.features;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.ContextFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.ContextConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -21,7 +21,7 @@ public class POSContextBigrams extends LBJavaFeatureExtractor {
 
     @Override
     public Set<Feature> getFeatures(Constituent instance) throws EdisonException {
-        ContextFeatureExtractor f = new ContextFeatureExtractor(2, true, true);
+        ContextConstituentFeatureExtractor f = new ContextConstituentFeatureExtractor(2, true, true);
         f.addFeatureExtractor(WordFeatureExtractorFactory.pos);
         return f.getFeatures(instance);
     }

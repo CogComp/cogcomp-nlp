@@ -7,11 +7,11 @@
  */
 package edu.illinois.cs.cogcomp.edison.features.manifest;
 
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.WordNetFeatureClass;
 
 import java.util.*;
 
-import static edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass.*;
+import static edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.WordNetFeatureClass.*;
 
 class WordNetClasses {
 

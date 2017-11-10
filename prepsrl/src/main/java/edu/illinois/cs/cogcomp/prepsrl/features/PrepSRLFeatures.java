@@ -10,13 +10,12 @@ package edu.illinois.cs.cogcomp.prepsrl.features;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.*;
+import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.FeatureInputTransformer;
 import edu.illinois.cs.cogcomp.edison.features.factory.RogetThesaurusFeatures;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
@@ -26,11 +25,11 @@ import java.util.List;
 import java.util.Set;
 
 import static edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory.*;
-import static edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.*;
+import static edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.*;
 
 public class PrepSRLFeatures extends LBJavaFeatureExtractor {
     private final FeatureExtractor fex;
-    private static WordNetFeatureExtractor firstSense, wordNetFexes;
+    private static WordNetConstituentFeatureExtractor firstSense, wordNetFexes;
     static {
         try {
             firstSense = getWordNetFeatureExtractor(WordNetFeatureClass.synsetsFirstSense);
@@ -94,13 +93,13 @@ public class PrepSRLFeatures extends LBJavaFeatureExtractor {
     };
 
     public static PrepSRLFeatures prevWordFeatures =
-            new PrepSRLFeatures(new FeatureCollection("#prev-word-lemma+firstSense",
+            new PrepSRLFeatures(new ConstituentFeatureCollection("#prev-word-lemma+firstSense",
                     FeatureInputTransformer.previousWord, lemma, firstSense));
 
-    public static PrepSRLFeatures prevVerbFeatures = new PrepSRLFeatures(new FeatureCollection(
+    public static PrepSRLFeatures prevVerbFeatures = new PrepSRLFeatures(new ConstituentFeatureCollection(
             "#prev-verb-lemma+firstSense", previousVerb, lemma, firstSense));
 
-    public static PrepSRLFeatures govFeatures = new PrepSRLFeatures(new FeatureCollection(
+    public static PrepSRLFeatures govFeatures = new PrepSRLFeatures(new ConstituentFeatureCollection(
             "#govFeats", FeatureInputTransformer.dependencyGovernor, wordNetFexes,
             RogetThesaurusFeatures.INSTANCE, WordFeatureExtractorFactory.word,
             WordFeatureExtractorFactory.pos, WordFeatureExtractorFactory.capitalization,
@@ -109,7 +108,7 @@ public class PrepSRLFeatures extends LBJavaFeatureExtractor {
             WordFeatureExtractorFactory.deNominalNounProducingSuffixes,
             WordFeatureExtractorFactory.deVerbalSuffix, WordFeatureExtractorFactory.knownPrefixes,
             WordFeatureExtractorFactory.prefixSuffixes));
-    public static PrepSRLFeatures objFeatures = new PrepSRLFeatures(new FeatureCollection(
+    public static PrepSRLFeatures objFeatures = new PrepSRLFeatures(new ConstituentFeatureCollection(
             "#govFeats", FeatureInputTransformer.dependencyObject, wordNetFexes,
             RogetThesaurusFeatures.INSTANCE, WordFeatureExtractorFactory.word,
             WordFeatureExtractorFactory.pos, WordFeatureExtractorFactory.capitalization,

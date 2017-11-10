@@ -17,14 +17,15 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class PrefixFeatureExtractor extends WordFeatureExtractor {
-    private final Feature featureName;
-    protected List<String> prefixes;
+public class SuffixConstituentFeatureExtractor extends WordConstituentFeatureExtractor {
 
-    public PrefixFeatureExtractor(List<String> prefixes, String featureName,
-            boolean useLastWordOfMultiwordConstituents) {
+    private final Feature featureName;
+    protected List<String> suffixes;
+
+    public SuffixConstituentFeatureExtractor(List<String> deAdjSuffixes, String featureName,
+                                             boolean useLastWordOfMultiwordConstituents) {
         super(useLastWordOfMultiwordConstituents);
-        this.prefixes = prefixes;
+        this.suffixes = deAdjSuffixes;
         this.featureName = DiscreteFeature.create(featureName);
     }
 
@@ -36,8 +37,8 @@ public class PrefixFeatureExtractor extends WordFeatureExtractor {
         Set<Feature> feats = new LinkedHashSet<>();
 
         boolean found = false;
-        for (String s : prefixes) {
-            if (word.startsWith(s)) {
+        for (String s : suffixes) {
+            if (word.endsWith(s)) {
                 feats.add(DiscreteFeature.create(featureName.getName() + ":" + s));
                 found = true;
             }
@@ -52,6 +53,6 @@ public class PrefixFeatureExtractor extends WordFeatureExtractor {
 
     @Override
     public String getName() {
-        return "#prefix#" + featureName;
+        return "#suffix#" + featureName;
     }
 }

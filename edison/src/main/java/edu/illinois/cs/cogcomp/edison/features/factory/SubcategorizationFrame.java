@@ -11,9 +11,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.LinkedHashSet;
@@ -28,7 +28,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class SubcategorizationFrame implements FeatureExtractor {
+public class SubcategorizationFrame implements FeatureExtractor<Constituent> {
 
     public static SubcategorizationFrame CHARNIAK = new SubcategorizationFrame(
             ViewNames.PARSE_CHARNIAK);

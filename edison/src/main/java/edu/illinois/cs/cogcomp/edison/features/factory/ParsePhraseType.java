@@ -32,7 +32,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ParsePhraseType implements FeatureExtractor {
+public class ParsePhraseType implements FeatureExtractor<Constituent> {
 
     public static ParsePhraseType CHARNIAK = new ParsePhraseType(ViewNames.PARSE_CHARNIAK);
     public static ParsePhraseType STANFORD = new ParsePhraseType(ViewNames.PARSE_STANFORD);

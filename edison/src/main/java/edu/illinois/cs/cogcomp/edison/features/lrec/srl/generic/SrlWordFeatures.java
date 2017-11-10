@@ -8,14 +8,14 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.WordNetFeatureClass;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
@@ -28,14 +28,14 @@ import java.util.Set;
  * deAdjectivalAbstractNounSuffixes, and knownPrefixes; {@link WordNetFeatureClass} existsEntry,
  * synsetsFirstSense, synsetsAllSenses, hypernymsFirstSense, hypernymsAllSenses,
  * partHolonymsFirstSense, memberHolonymsFirstSense, and substanceHolonymsFirstSense;
- * {@link ChunkEmbedding} NER; and {@link BrownClusterFeatureExtractor} instance1000.
+ * {@link ChunkEmbedding} NER; and {@link BrownClusterConstituentFeatureExtractor} instance1000.
  *
  * @keywords lexical, word, WordNet, SRL, Nominalization, nom, nominal, predicate
  * @author Xinbo Wu
  */
-public class SrlWordFeatures implements FeatureExtractor {
+public class SrlWordFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final FeatureCollection base;
+    private final ConstituentFeatureCollection base;
 
     public SrlWordFeatures() throws Exception {
         this("#WordFeatures#");
@@ -43,7 +43,7 @@ public class SrlWordFeatures implements FeatureExtractor {
 
     public SrlWordFeatures(String name) throws Exception {
         this.name = name;
-        this.base = new FeatureCollection(this.getName());
+        this.base = new ConstituentFeatureCollection(this.getName());
 
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.word);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
@@ -53,7 +53,7 @@ public class SrlWordFeatures implements FeatureExtractor {
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.gerundMarker);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.nominalizationMarker);
         this.base.addFeatureExtractor(ChunkEmbedding.NER);
-        this.base.addFeatureExtractor(BrownClusterFeatureExtractor.instance1000);
+        this.base.addFeatureExtractor(BrownClusterConstituentFeatureExtractor.instance1000);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.deVerbalSuffix);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.deNominalNounProducingSuffixes);
         this.base
@@ -61,7 +61,7 @@ public class SrlWordFeatures implements FeatureExtractor {
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.knownPrefixes);
 
         try {
-            WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
+            WordNetConstituentFeatureExtractor wn = new WordNetConstituentFeatureExtractor();
             wn.addFeatureType(WordNetFeatureClass.existsEntry);
             wn.addFeatureType(WordNetFeatureClass.synsetsFirstSense);
             wn.addFeatureType(WordNetFeatureClass.synsetsAllSenses);

@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * Standard unit test for WordEmbeddingsWindow FeatureExtractor. Currently inactive because not
+ * Standard unit test for WordEmbeddingsWindow ConstituentFeatureExtractor. Currently inactive because not
  * active in NER, needs embedding resource.
  *
  * @author mssammon

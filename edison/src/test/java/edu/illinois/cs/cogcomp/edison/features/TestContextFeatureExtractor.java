@@ -12,7 +12,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -28,9 +27,9 @@ public class TestContextFeatureExtractor {
 
     @Test
     public void testGetFeaturesIndexWithoutConstituent() throws EdisonException {
-        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, true);
+        ContextConstituentFeatureExtractor fex = new ContextConstituentFeatureExtractor(2, true, true);
 
-        fex.addFeatureExtractor(new WordFeatureExtractor() {
+        fex.addFeatureExtractor(new WordConstituentFeatureExtractor() {
 
             @Override
             public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
@@ -73,9 +72,9 @@ public class TestContextFeatureExtractor {
 
     @Test
     public void testGetFeaturesIndexWithConstituent() throws EdisonException {
-        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, false);
+        ContextConstituentFeatureExtractor fex = new ContextConstituentFeatureExtractor(2, true, false);
 
-        fex.addFeatureExtractor(new WordFeatureExtractor() {
+        fex.addFeatureExtractor(new WordConstituentFeatureExtractor() {
 
             @Override
             public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
@@ -120,9 +119,9 @@ public class TestContextFeatureExtractor {
 
     @Test
     public void testGetFeaturesNoIndexWithoutConstituent() throws EdisonException {
-        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, true);
+        ContextConstituentFeatureExtractor fex = new ContextConstituentFeatureExtractor(2, false, true);
 
-        fex.addFeatureExtractor(new WordFeatureExtractor() {
+        fex.addFeatureExtractor(new WordConstituentFeatureExtractor() {
 
             @Override
             public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
@@ -164,9 +163,9 @@ public class TestContextFeatureExtractor {
 
     @Test
     public void testGetFeaturesNoIndexWithConstituent() throws EdisonException {
-        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, false);
+        ContextConstituentFeatureExtractor fex = new ContextConstituentFeatureExtractor(2, false, false);
 
-        fex.addFeatureExtractor(new WordFeatureExtractor() {
+        fex.addFeatureExtractor(new WordConstituentFeatureExtractor() {
 
             @Override
             public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)

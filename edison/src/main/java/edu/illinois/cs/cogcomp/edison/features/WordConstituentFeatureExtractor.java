@@ -22,35 +22,35 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public abstract class WordFeatureExtractor implements FeatureExtractor {
+public abstract class WordConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final boolean useLastWordOfMultiwordConstituents;
 
     /**
-     * Creates a new WordFeatureExtractor. If parameter {@code useLastWordOfMultiwordConstituents}
+     * Creates a new WordConstituentFeatureExtractor. If parameter {@code useLastWordOfMultiwordConstituents}
      * is {@code true}, then the feature extractor will generate features from the last word of
      * multi-word constituents. If it is not true, then the feature extractor will throw an
      * exception on seeing a multi-word constituent.
      * <p>
      * It is probably safest to the parameter to {@code true}. This will provide a check to ensure
-     * that the WordFeatureExtractor only sees words.
+     * that the WordConstituentFeatureExtractor only sees words.
      */
-    public WordFeatureExtractor(boolean useLastWordOfMultiwordConstituents) {
+    public WordConstituentFeatureExtractor(boolean useLastWordOfMultiwordConstituents) {
         this.useLastWordOfMultiwordConstituents = useLastWordOfMultiwordConstituents;
     }
 
     /**
-     * Creates a new {@link edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor}. This
-     * constructor is equivalent to calling {@code new WordFeatureExtractor(true)}.
+     * Creates a new {@link WordConstituentFeatureExtractor}. This
+     * constructor is equivalent to calling {@code new WordConstituentFeatureExtractor(true)}.
      *
-     * @see edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor#WordFeatureExtractor(boolean)
+     * @see WordConstituentFeatureExtractor#WordConstituentFeatureExtractor(boolean)
      */
-    public WordFeatureExtractor() {
+    public WordConstituentFeatureExtractor() {
         this(true);
     }
 
-    public static WordFeatureExtractor convertToWordFeatureExtractor(final FeatureExtractor fex) {
-        return new WordFeatureExtractor() {
+    public static WordConstituentFeatureExtractor convertToWordFeatureExtractor(final FeatureExtractor fex) {
+        return new WordConstituentFeatureExtractor() {
 
             @Override
             public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
@@ -69,7 +69,7 @@ public abstract class WordFeatureExtractor implements FeatureExtractor {
                 wordPosition = c.getEndSpan() - 1;
             else
                 throw new EdisonException("Input \"" + c.getTokenizedSurfaceForm()
-                        + "\" to WordFeatureExtractor is not a single word. ");
+                        + "\" to WordConstituentFeatureExtractor is not a single word. ");
         } else
             wordPosition = c.getStartSpan();
 

@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class FeatureCollection implements FeatureExtractor {
+public class ConstituentFeatureCollection implements FeatureExtractor<Constituent> {
     private static final DiscreteFeature NULL_INPUT = DiscreteFeature.create("NULL");
 
     protected final List<FeatureExtractor> generators;
@@ -30,18 +30,18 @@ public class FeatureCollection implements FeatureExtractor {
 
     /**
      * Create a new feature extractor. By itself, it does not generate any features. Use
-     * {@code FeatureExtractor#addFeatureGenerator(IFeatureExtractor))} to add feature generators.
+     * {@code ConstituentFeatureExtractor#addFeatureGenerator(IFeatureExtractor))} to add feature generators.
      */
-    public FeatureCollection(String name) {
+    public ConstituentFeatureCollection(String name) {
         this(name, FeatureInputTransformer.identity);
     }
 
-    public FeatureCollection(String name, FeatureExtractor... feats) {
+    public ConstituentFeatureCollection(String name, FeatureExtractor... feats) {
         this(name, FeatureInputTransformer.identity, feats);
     }
 
-    public FeatureCollection(String name, FeatureInputTransformer inputTransformer,
-            FeatureExtractor... feats) {
+    public ConstituentFeatureCollection(String name, FeatureInputTransformer inputTransformer,
+                                        FeatureExtractor... feats) {
         this.name = name;
         this.generators = new ArrayList<>();
 
@@ -51,7 +51,7 @@ public class FeatureCollection implements FeatureExtractor {
         this.inputTransformer = inputTransformer;
     }
 
-    public FeatureCollection(String name, FeatureInputTransformer inputTransformer) {
+    public ConstituentFeatureCollection(String name, FeatureInputTransformer inputTransformer) {
         this.name = name;
         this.generators = new ArrayList<>();
         this.inputTransformer = inputTransformer;

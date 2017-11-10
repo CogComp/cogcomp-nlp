@@ -7,7 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
-import edu.illinois.cs.cogcomp.edison.features.factory.CorelexFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.CorelexConstituentFeatureExtractor;
 import org.apache.commons.lang.ArrayUtils;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -51,7 +51,7 @@ public class TestCorlex extends TestCase {
 
         log.debug("Got tokens FROM TextAnnotation");
 
-        CorelexFeatureExtractor testInstance = new CorelexFeatureExtractor(true);
+        CorelexConstituentFeatureExtractor testInstance = new CorelexConstituentFeatureExtractor(true);
 
         Set<Feature> feats = testInstance.getWordFeatures(ta,1);
         String[] expected_outputs =

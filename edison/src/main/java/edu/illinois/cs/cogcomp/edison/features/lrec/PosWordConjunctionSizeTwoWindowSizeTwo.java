@@ -11,9 +11,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.LinkedHashSet;
@@ -26,7 +26,7 @@ import java.util.Set;
  * @keywords pos-tagger, words, tokens, window
  * @author Paul Vijayakumar, Mazin Bokhari, Christos Christodoulopoulos
  */
-public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor {
+public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor<Constituent> {
 
     private final String viewName;
 

@@ -8,9 +8,9 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
@@ -23,9 +23,9 @@ import java.util.Set;
  * @keywords word, pos, part of speech, conjunction
  * @author Xinbo Wu
  */
-public class WordAndPos implements FeatureExtractor {
+public class WordAndPos implements FeatureExtractor<Constituent> {
     private final String name;
-    private final FeatureCollection base;
+    private final ConstituentFeatureCollection base;
 
     public WordAndPos() {
         this("#wordPos#");
@@ -33,7 +33,7 @@ public class WordAndPos implements FeatureExtractor {
 
     public WordAndPos(String name) {
         this.name = name;
-        this.base = new FeatureCollection(this.getName());
+        this.base = new ConstituentFeatureCollection(this.getName());
 
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.word);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);

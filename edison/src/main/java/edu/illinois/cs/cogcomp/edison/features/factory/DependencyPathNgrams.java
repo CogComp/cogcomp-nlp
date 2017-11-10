@@ -14,8 +14,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
 import edu.illinois.cs.cogcomp.edison.features.helpers.PathFeatureHelper;
@@ -51,7 +51,7 @@ import java.util.Set;
  * @author Vivek Srikumar
  */
 @SuppressWarnings("serial")
-public class DependencyPathNgrams implements FeatureExtractor {
+public class DependencyPathNgrams implements FeatureExtractor<Constituent> {
 
     private final static ITransformer<String, String> transformer =
             new ITransformer<String, String>() {

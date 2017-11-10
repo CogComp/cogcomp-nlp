@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,7 +123,7 @@ public class FeatureManifest {
     }
 
     /**
-     * Alternate version, calls {@link FeatureManifest#populateFex(FeatureCollection)}
+     * Alternate version, calls {@link FeatureManifest#populateFex(ConstituentFeatureCollection)}
      * 
      * @return
      * @throws EdisonException
@@ -143,11 +143,11 @@ public class FeatureManifest {
             name = sb.toString();
         }
 
-        return populateFex(new FeatureCollection(name));
+        return populateFex(new ConstituentFeatureCollection(name));
     }
 
     public FeatureExtractor createFex(FeatureInputTransformer transformer) throws EdisonException {
-        return populateFex(new FeatureCollection(parser.getName(), transformer));
+        return populateFex(new ConstituentFeatureCollection(parser.getName(), transformer));
     }
 
 
@@ -183,10 +183,10 @@ public class FeatureManifest {
         FeatureExtractor ifTrue = createFex(tree.getChild(1), cf);
         FeatureExtractor ifFalse = createFex(tree.getChild(2), cf);
 
-        ConditionalFeatureExtractor fex =
-                new ConditionalFeatureExtractor(predicate, ifTrue, ifFalse);
+        ConditionalConstituentFeatureExtractor fex =
+                new ConditionalConstituentFeatureExtractor(predicate, ifTrue, ifFalse);
 
-        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        CachedConstituentFeatureCollection cfx = new CachedConstituentFeatureCollection("", fex);
         cf.put(uniqueLabel, cfx);
         return cfx;
     }
@@ -266,8 +266,8 @@ public class FeatureManifest {
 
         FeatureInputTransformer fit = KnownTransformers.transformers.get(transformer);
 
-        CachedFeatureCollection cfx =
-                new CachedFeatureCollection("", fit, createFex(tree.getChild(1), cf));
+        CachedConstituentFeatureCollection cfx =
+                new CachedConstituentFeatureCollection("", fit, createFex(tree.getChild(1), cf));
         cf.put(uniqueLabel, cfx);
 
         return cfx;
@@ -275,9 +275,9 @@ public class FeatureManifest {
     }
 
     private FeatureExtractor getNonAttributeFeatureExtractors(Tree<String> tree,
-            Map<String, FeatureExtractor> cf) throws EdisonException {
+                                                              Map<String, FeatureExtractor> cf) throws EdisonException {
 
-        FeatureCollection f = new FeatureCollection("");
+        ConstituentFeatureCollection f = new ConstituentFeatureCollection("");
         int childId = 0;
 
         boolean found = false;
@@ -308,14 +308,14 @@ public class FeatureManifest {
                 ParameterizedFeatureExtractors.getParameterizedFeatureExtractor(tree,
                         getNonAttributeFeatureExtractors(tree, cf), parser.getVariables());
 
-        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        CachedConstituentFeatureCollection cfx = new CachedConstituentFeatureCollection("", fex);
         cf.put(uniquify(tree), cfx);
 
         return cfx;
     }
 
-    private WordFeatureExtractor getWordFex(final FeatureExtractor fex) {
-        return new WordFeatureExtractor() {
+    private WordConstituentFeatureExtractor getWordFex(final FeatureExtractor fex) {
+        return new WordConstituentFeatureExtractor() {
 
             @Override
             public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
@@ -337,9 +337,9 @@ public class FeatureManifest {
         }
 
         FeatureExtractor fex =
-                NgramFeatureExtractor.bigrams(getWordFex(createFex(tree.getChild(0), cf)));
+                NgramConstituentFeatureExtractor.bigrams(getWordFex(createFex(tree.getChild(0), cf)));
 
-        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        CachedConstituentFeatureCollection cfx = new CachedConstituentFeatureCollection("", fex);
         cf.put(uniquify(tree), cfx);
 
         return cfx;
@@ -357,21 +357,21 @@ public class FeatureManifest {
         }
 
         FeatureExtractor fex =
-                NgramFeatureExtractor.trigrams(getWordFex(createFex(tree.getChild(0), cf)));
+                NgramConstituentFeatureExtractor.trigrams(getWordFex(createFex(tree.getChild(0), cf)));
 
-        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        CachedConstituentFeatureCollection cfx = new CachedConstituentFeatureCollection("", fex);
         cf.put(uniquify(tree), cfx);
 
         return cfx;
     }
 
     private FeatureExtractor processIncludeWithPrefix(Tree<String> tree,
-            Map<String, FeatureExtractor> cf) throws EdisonException {
+                                                      Map<String, FeatureExtractor> cf) throws EdisonException {
         String uniqueLabel = uniquify(tree);
         if (cf.containsKey(uniqueLabel))
             return cf.get(uniqueLabel);
 
-        FeatureCollection fex = new FeatureCollection("");
+        ConstituentFeatureCollection fex = new ConstituentFeatureCollection("");
 
         if (tree.getNumberOfChildren() == 0)
             throw new EdisonException("Invalid declaration for conjoin-and-include\n" + tree);
@@ -381,7 +381,7 @@ public class FeatureManifest {
 
         if (tree.getNumberOfChildren() > 1) {
 
-            FeatureExtractor conjoin = new FeatureCollection("", firstChild);
+            FeatureExtractor conjoin = new ConstituentFeatureCollection("", firstChild);
 
             for (int childId = 1; childId < tree.getNumberOfChildren(); childId++) {
                 FeatureExtractor ff = createFex(tree.getChild(childId), cf);
@@ -393,7 +393,7 @@ public class FeatureManifest {
             fex.addFeatureExtractor(conjoin);
         }
 
-        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        CachedConstituentFeatureCollection cfx = new CachedConstituentFeatureCollection("", fex);
         cf.put(uniquify(tree), cfx);
 
         return cfx;
@@ -416,7 +416,7 @@ public class FeatureManifest {
             fex = FeatureUtilities.conjoin(fex, createFex(tree.getChild(i), cf));
         }
 
-        CachedFeatureCollection f = new CachedFeatureCollection("", fex);
+        CachedConstituentFeatureCollection f = new CachedConstituentFeatureCollection("", fex);
 
         cf.put(uniqueLabel, f);
 
@@ -430,7 +430,7 @@ public class FeatureManifest {
         if (cf.containsKey(uniqueLabel))
             return cf.get(uniqueLabel);
 
-        CachedFeatureCollection fc = new CachedFeatureCollection("");
+        CachedConstituentFeatureCollection fc = new CachedConstituentFeatureCollection("");
 
         List<String> wnLabels = new ArrayList<>();
 
@@ -452,12 +452,12 @@ public class FeatureManifest {
     }
 
     /**
-     * Given a leaf name, find the corresponding FeatureExtractor, as defined in
+     * Given a leaf name, find the corresponding ConstituentFeatureExtractor, as defined in
      * {@link KnownFexes#fexes}
      * 
      * @param label string, needs to be in {@link KnownFexes#fexes}
-     * @param cf used for memoization, maps label to FeatureExtractor
-     * @return the corresponding FeatureExtractor
+     * @param cf used for memoization, maps label to ConstituentFeatureExtractor
+     * @return the corresponding ConstituentFeatureExtractor
      * @throws EdisonException
      */
     private FeatureExtractor getLeafFeature(String label, Map<String, FeatureExtractor> cf)
@@ -470,10 +470,10 @@ public class FeatureManifest {
         if (!KnownFexes.fexes.containsKey(label))
             throw new EdisonException("Unknown feature extractor '" + label
                     + "', expecting one of " + KnownFexes.fexes.keySet());
-        FeatureExtractor featureExtractor = KnownFexes.fexes.get(label);
+        FeatureExtractor constituentFeatureExtractor = KnownFexes.fexes.get(label);
 
-        cf.put(uniqueLabel, featureExtractor);
-        return featureExtractor;
+        cf.put(uniqueLabel, constituentFeatureExtractor);
+        return constituentFeatureExtractor;
 
     }
 
@@ -496,14 +496,14 @@ public class FeatureManifest {
     }
 
     private FeatureExtractor getWordNetFeatureExtractor(List<String> wnLabels,
-            Map<String, FeatureExtractor> cf) throws EdisonException {
+                                                        Map<String, FeatureExtractor> cf) throws EdisonException {
 
         String uniqueLabel = uniquify(wnLabels);
         if (cf.containsKey(uniqueLabel))
             return cf.get(uniqueLabel);
 
         try {
-            WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
+            WordNetConstituentFeatureExtractor wn = new WordNetConstituentFeatureExtractor();
 
             for (String label : wnLabels) {
                 if (!WordNetClasses.wnClasses.containsKey(label))
@@ -512,7 +512,7 @@ public class FeatureManifest {
                 wn.addFeatureType(WordNetClasses.wnClasses.get(label));
             }
 
-            CachedFeatureCollection f = new CachedFeatureCollection("", wn);
+            CachedConstituentFeatureCollection f = new CachedConstituentFeatureCollection("", wn);
 
             cf.put(uniqueLabel, f);
             return f;
@@ -543,14 +543,14 @@ public class FeatureManifest {
     }
 
     /**
-     * This adds a FeatureExtractor to the input FeatureCollection. Typically the FeatureCollection
+     * This adds a ConstituentFeatureExtractor to the input ConstituentFeatureCollection. Typically the ConstituentFeatureCollection
      * is empty, having only a name.
      * 
      * @param fex
      * @return
      * @throws EdisonException
      */
-    private FeatureExtractor populateFex(FeatureCollection fex) throws EdisonException {
+    private FeatureExtractor populateFex(ConstituentFeatureCollection fex) throws EdisonException {
 
         // cached features.
         Map<String, FeatureExtractor> cf = new HashMap<>();
@@ -566,7 +566,7 @@ public class FeatureManifest {
 
             FeatureExtractor body = this.createFex(defn.getChild(1), cf);
 
-            cf.put(definition(name), new CachedFeatureCollection("", body));
+            cf.put(definition(name), new CachedConstituentFeatureCollection("", body));
         }
 
         fex.addFeatureExtractor(this.createFex(parser.getFeatureDescriptor(), cf));

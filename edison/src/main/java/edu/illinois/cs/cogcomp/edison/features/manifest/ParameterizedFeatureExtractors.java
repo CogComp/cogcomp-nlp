@@ -26,7 +26,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     return new VerbVoiceIndicator(attributes.get(PARSE_VIEW));
                 }
             };
@@ -35,16 +35,16 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     String parse = attributes.get(PARSE_VIEW);
 
                     switch (parse) {
                         case ViewNames.PARSE_CHARNIAK:
-                            return ClauseFeatureExtractor.CHARNIAK;
+                            return ClauseConstituentFeatureExtractor.CHARNIAK;
                         case ViewNames.PARSE_BERKELEY:
-                            return ClauseFeatureExtractor.BERKELEY;
+                            return ClauseConstituentFeatureExtractor.BERKELEY;
                         case ViewNames.PARSE_STANFORD:
-                            return ClauseFeatureExtractor.STANFORD;
+                            return ClauseConstituentFeatureExtractor.STANFORD;
                         default:
                             throw new EdisonException("Cannot generate clause view for using "
                                     + parse);
@@ -57,8 +57,8 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
-                    return new AttributeFeature(attributes.get(":name"));
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                    return new AttributeConstituentFeature(attributes.get(":name"));
                 }
             };
     private static final ParameterizedFeatureGenerator subcatGenerator =
@@ -66,7 +66,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     return new SubcategorizationFrame(attributes.get(PARSE_VIEW));
                 }
             };
@@ -75,7 +75,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     return new ParsePhraseType(attributes.get(PARSE_VIEW));
                 }
             };
@@ -84,7 +84,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
 
                     return new ParsePath(attributes.get(PARSE_VIEW));
                 }
@@ -94,7 +94,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     return new SyntacticFrame(attributes.get(PARSE_VIEW));
                 }
             };
@@ -103,7 +103,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     return new DependencyPath(attributes.get(PARSE_VIEW));
                 }
             };
@@ -112,7 +112,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
 
                     if (fex == null) {
                         throw new EdisonException("Invalid definition of head-features\n" + tree);
@@ -121,7 +121,7 @@ class ParameterizedFeatureExtractors {
                     String parseView = attributes.get(PARSE_VIEW);
                     if (parseView.equals(ViewNames.PARSE_GOLD)
                             || parseView.equals(ViewNames.PARSE_STANFORD))
-                        return new ParseHeadWordFeatureExtractor(parseView, fex);
+                        return new ParseHeadWordConstituentFeatureExtractor(parseView, fex);
 
                     FeatureInputTransformer transformer;
                     switch (parseView) {
@@ -142,7 +142,7 @@ class ParameterizedFeatureExtractors {
                                     + tree);
                     }
 
-                    return new FeatureCollection("", transformer, fex);
+                    return new ConstituentFeatureCollection("", transformer, fex);
 
                 }
             };
@@ -151,7 +151,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
 
                     if (fex == null) {
                         throw new EdisonException("Invalid definition of head-features\n" + tree);
@@ -181,7 +181,7 @@ class ParameterizedFeatureExtractors {
                                     + tree);
                     }
 
-                    return new FeatureCollection("", transformer, fex);
+                    return new ConstituentFeatureCollection("", transformer, fex);
 
                 }
             };
@@ -190,7 +190,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
 
                     if (fex == null) {
                         throw new EdisonException("Invalid definition of head-features\n" + tree);
@@ -212,7 +212,7 @@ class ParameterizedFeatureExtractors {
                     else
                         throw new EdisonException("Invalid parse view: " + parseView + "\n" + tree);
 
-                    return new FeatureCollection("", transformer, fex);
+                    return new ConstituentFeatureCollection("", transformer, fex);
 
                 }
             };
@@ -221,7 +221,7 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                            Tree<String> tree, FeatureExtractor fex) throws EdisonException {
 
                     String viewName = attributes.get(PARSE_VIEW);
                     int n = Integer.parseInt(attributes.get(":n"));
@@ -234,14 +234,14 @@ class ParameterizedFeatureExtractors {
 
         @Override
         FeatureExtractor getFeatureExtractor(Map<String, String> attributes, Tree<String> tree,
-                FeatureExtractor fex) throws EdisonException {
+                                             FeatureExtractor fex) throws EdisonException {
 
             int size = Integer.parseInt(attributes.get(":size"));
             boolean specifyIndex = Boolean.parseBoolean(attributes.get(":include-index"));
             boolean ignoreConstituent = Boolean.parseBoolean(attributes.get(":ignore-center"));
 
-            ContextFeatureExtractor f =
-                    new ContextFeatureExtractor(size, specifyIndex, ignoreConstituent);
+            ContextConstituentFeatureExtractor f =
+                    new ContextConstituentFeatureExtractor(size, specifyIndex, ignoreConstituent);
 
             f.addFeatureExtractor(fex);
             return f;
@@ -254,10 +254,10 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                                                     Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     String viewName = attributes.get(PARSE_VIEW);
 
-                    return new DependencyModifierFeatureExtractor(viewName, fex);
+                    return new DependencyModifierConstituentFeatureExtractor(viewName, fex);
                 }
             };
 
@@ -266,7 +266,7 @@ class ParameterizedFeatureExtractors {
 
         @Override
         FeatureExtractor getFeatureExtractor(Map<String, String> attributes, Tree<String> tree,
-                FeatureExtractor fex) throws EdisonException {
+                                             FeatureExtractor fex) throws EdisonException {
             String viewName = attributes.get(PARSE_VIEW);
 
             return new ParseSiblings(viewName);
@@ -278,8 +278,8 @@ class ParameterizedFeatureExtractors {
 
                 @Override
                 FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                        Tree<String> tree, FeatureExtractor fex) throws EdisonException {
-                    return new RegexFeatureExtractor(attributes.get(":regex"));
+                                                     Tree<String> tree, FeatureExtractor fex) throws EdisonException {
+                    return new RegexConstituentFeatureExtractor(attributes.get(":regex"));
                 }
             };
 
@@ -303,7 +303,7 @@ class ParameterizedFeatureExtractors {
     }
 
     static FeatureExtractor getParameterizedFeatureExtractor(Tree<String> tree,
-            FeatureExtractor fex, HashMap<String, String> variables) throws EdisonException {
+                                                             FeatureExtractor fex, HashMap<String, String> variables) throws EdisonException {
 
         ParameterizedFeatureGenerator gen = fexes.get(tree.getLabel());
 
@@ -332,7 +332,7 @@ class ParameterizedFeatureExtractors {
         }
 
         FeatureExtractor getFeatureExtractor(Tree<String> tree, FeatureExtractor fex,
-                HashMap<String, String> variables) throws EdisonException {
+                                             HashMap<String, String> variables) throws EdisonException {
             Map<String, String> attributes = getAttributes(tree, variables);
             for (String preReq : preReqs) {
                 checkPrerequisites(attributes, tree, preReq);
@@ -341,7 +341,7 @@ class ParameterizedFeatureExtractors {
         }
 
         abstract FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
-                Tree<String> tree, FeatureExtractor fex) throws EdisonException;
+                                                      Tree<String> tree, FeatureExtractor fex) throws EdisonException;
 
         private void checkPrerequisites(Map<String, String> attributes, Tree<String> tree,
                 String name) throws EdisonException {

@@ -14,9 +14,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -30,7 +28,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ParsePhraseTypeOnly implements FeatureExtractor {
+public class ParsePhraseTypeOnly implements FeatureExtractor<Constituent> {
 
     public static ParsePhraseTypeOnly CHARNIAK = new ParsePhraseTypeOnly(ViewNames.PARSE_CHARNIAK);
     public static ParsePhraseTypeOnly STANFORD = new ParsePhraseTypeOnly(ViewNames.PARSE_STANFORD);

@@ -35,7 +35,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ChunkEmbedding implements FeatureExtractor {
+public class ChunkEmbedding implements FeatureExtractor<Constituent> {
 
     public final static ChunkEmbedding NER = new ChunkEmbedding(ViewNames.NER_CONLL);
     public final static ChunkEmbedding SHALLOW_PARSE = new ChunkEmbedding(ViewNames.SHALLOW_PARSE);

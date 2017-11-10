@@ -9,7 +9,7 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Identifier;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.NomLexClassFeature;
+import edu.illinois.cs.cogcomp.edison.features.factory.NomLexClassConstituentFeature;
 import edu.illinois.cs.cogcomp.edison.features.factory.SubcategorizationFrame;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -23,9 +23,9 @@ import java.util.Set;
  * @keywords semantic role labeling, srl, nominal, nom, identifier, predicate
  * @author Xinbo Wu
  */
-public class SrlNomIdentifierPredicateFeatures implements FeatureExtractor {
+public class SrlNomIdentifierPredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final FeatureCollection base;
+    private final ConstituentFeatureCollection base;
 
     public SrlNomIdentifierPredicateFeatures() {
         this("#predicateFeatures#");
@@ -33,22 +33,22 @@ public class SrlNomIdentifierPredicateFeatures implements FeatureExtractor {
 
     public SrlNomIdentifierPredicateFeatures(String name) {
         this.name = name;
-        this.base = new FeatureCollection(this.getName());
+        this.base = new ConstituentFeatureCollection(this.getName());
 
-        ArrayList<CachedFeatureCollection> tmp = new ArrayList<CachedFeatureCollection>();
+        ArrayList<CachedConstituentFeatureCollection> tmp = new ArrayList<CachedConstituentFeatureCollection>();
 
-        tmp.add(new CachedFeatureCollection(""));
+        tmp.add(new CachedConstituentFeatureCollection(""));
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.word);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.pos);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.lemma);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.capitalization);
 
-        tmp.get(0).addFeatureExtractor(new AttributeFeature("predicate"));
+        tmp.get(0).addFeatureExtractor(new AttributeConstituentFeature("predicate"));
 
         tmp.get(0).addFeatureExtractor(SubcategorizationFrame.STANFORD);
-        tmp.get(0).addFeatureExtractor(NomLexClassFeature.instance);
+        tmp.get(0).addFeatureExtractor(NomLexClassConstituentFeature.instance);
 
-        tmp.add(new CachedFeatureCollection("", FeatureInputTransformer.constituentParent, tmp
+        tmp.add(new CachedConstituentFeatureCollection("", FeatureInputTransformer.constituentParent, tmp
                 .get(0)));
 
         this.base.addFeatureExtractor(tmp.get(1));

@@ -9,10 +9,9 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Identifier;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.*;
+import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.ParseHeadWordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ListFeatureFactory;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -25,14 +24,14 @@ import java.util.Set;
  * Extracts lexical and parse structure features for identifying Nom SRL arguments. Combines
  * {@link WordFeatureExtractorFactory} word, pos, numberNormalizer, gerundMarker,
  * nominalizationMarker, and dateMarker; {@link ListFeatureFactory} daysOfTheWeek and months; and
- * {@link ParseHeadWordFeatureExtractor}.
+ * {@link ParseHeadWordConstituentFeatureExtractor}.
  *
  * @keywords SRL, Nom, nominalization, nominal, identifier, argument
  * @author Xinbo Wu
  */
-public class SrlNomHeadWordFeatures implements FeatureExtractor {
+public class SrlNomHeadWordFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final FeatureCollection base;
+    private final ConstituentFeatureCollection base;
 
     public SrlNomHeadWordFeatures() {
         this("#HeadWordFeatures#");
@@ -40,11 +39,11 @@ public class SrlNomHeadWordFeatures implements FeatureExtractor {
 
     public SrlNomHeadWordFeatures(String name) {
         this.name = name;
-        this.base = new FeatureCollection(this.getName());
+        this.base = new ConstituentFeatureCollection(this.getName());
 
-        ArrayList<FeatureCollection> tmp = new ArrayList<FeatureCollection>();
+        ArrayList<ConstituentFeatureCollection> tmp = new ArrayList<ConstituentFeatureCollection>();
 
-        tmp.add(new FeatureCollection(""));
+        tmp.add(new ConstituentFeatureCollection(""));
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.word);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.pos);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.numberNormalizer);
@@ -54,7 +53,7 @@ public class SrlNomHeadWordFeatures implements FeatureExtractor {
         tmp.get(0).addFeatureExtractor(ListFeatureFactory.months);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.dateMarker);
 
-        this.base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD,
+        this.base.addFeatureExtractor(new ParseHeadWordConstituentFeatureExtractor(ViewNames.PARSE_STANFORD,
                 tmp.get(0)));
     }
 

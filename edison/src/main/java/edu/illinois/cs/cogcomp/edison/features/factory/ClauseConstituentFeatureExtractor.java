@@ -23,18 +23,18 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class ClauseFeatureExtractor implements FeatureExtractor {
+public class ClauseConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
 
-    public static ClauseFeatureExtractor CHARNIAK = new ClauseFeatureExtractor(
+    public static ClauseConstituentFeatureExtractor CHARNIAK = new ClauseConstituentFeatureExtractor(
             ViewNames.PSEUDO_PARSE_CHARNIAK, ViewNames.CLAUSES_CHARNIAK);
-    public static ClauseFeatureExtractor STANFORD = new ClauseFeatureExtractor(
+    public static ClauseConstituentFeatureExtractor STANFORD = new ClauseConstituentFeatureExtractor(
             ViewNames.PSEUDO_PARSE_STANFORD, ViewNames.CLAUSES_STANFORD);
-    public static ClauseFeatureExtractor BERKELEY = new ClauseFeatureExtractor(
+    public static ClauseConstituentFeatureExtractor BERKELEY = new ClauseConstituentFeatureExtractor(
             ViewNames.PSEUDO_PARSE_BERKELEY, ViewNames.CLAUSES_BERKELEY);
     private final String parseViewName;
     private final String clauseViewName;
 
-    public ClauseFeatureExtractor(String pseudoParseViewName, String clauseViewName) {
+    public ClauseConstituentFeatureExtractor(String pseudoParseViewName, String clauseViewName) {
         this.parseViewName = pseudoParseViewName;
         this.clauseViewName = clauseViewName;
     }

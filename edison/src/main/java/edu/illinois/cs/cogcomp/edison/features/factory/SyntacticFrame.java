@@ -13,9 +13,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
@@ -29,7 +29,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class SyntacticFrame implements FeatureExtractor {
+public class SyntacticFrame implements FeatureExtractor<Constituent> {
 
     public static final FeatureExtractor CHARNIAK = new SyntacticFrame(ViewNames.PARSE_CHARNIAK);
     public static final FeatureExtractor STANFORD = new SyntacticFrame(ViewNames.PARSE_STANFORD);

@@ -28,7 +28,7 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
  * @keywords pos-tagger, before
  * @author Xinbo Wu
  */
-public class LabelOneBefore implements FeatureExtractor {
+public class LabelOneBefore implements FeatureExtractor<Constituent> {
     private final String viewName;
     private final boolean isPOSFromCounting;
     private final boolean isBaseLineCounting;

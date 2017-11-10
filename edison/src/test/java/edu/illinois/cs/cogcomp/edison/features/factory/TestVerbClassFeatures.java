@@ -13,7 +13,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -65,7 +64,7 @@ public class TestVerbClassFeatures {
         PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
         for (Constituent predicate : pav.getPredicates()) {
             Constituent p = predicate.cloneForNewView("dummy");
-            String response = p + "\t" + LevinVerbClassFeature.instance.getFeatures(p);
+            String response = p + "\t" + LevinVerbClassConstituentFeature.instance.getFeatures(p);
             assertTrue(correctResponses.contains(response));
         }
     }

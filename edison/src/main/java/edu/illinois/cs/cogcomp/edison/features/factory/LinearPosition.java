@@ -32,7 +32,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class LinearPosition implements FeatureExtractor {
+public class LinearPosition implements FeatureExtractor<Constituent> {
 
     private static final DiscreteFeature CONTAINS = DiscreteFeature.create("C");
 

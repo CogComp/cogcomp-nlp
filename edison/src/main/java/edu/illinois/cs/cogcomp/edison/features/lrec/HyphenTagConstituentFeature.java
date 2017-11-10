@@ -22,7 +22,7 @@ import java.util.Set;
  * 
  * @author Xinbo Wu
  */
-public class HyphenTagFeature implements FeatureExtractor {
+public class HyphenTagConstituentFeature implements FeatureExtractor<Constituent> {
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {

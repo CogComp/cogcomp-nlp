@@ -8,8 +8,8 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
 
 import java.util.*;
 

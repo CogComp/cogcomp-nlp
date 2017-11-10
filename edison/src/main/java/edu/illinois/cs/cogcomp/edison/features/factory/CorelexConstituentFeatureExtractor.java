@@ -12,7 +12,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import io.minio.errors.InvalidEndpointException;
@@ -34,11 +34,11 @@ import java.util.*;
  * Buitelaar, Paul. "CORELEX: An ontology of systematic polysemous classes." (1998): 221-235.
  */
 
-public class CorelexFeatureExtractor extends WordFeatureExtractor {
-    private static Logger logger = LoggerFactory.getLogger(CorelexFeatureExtractor.class);
+public class CorelexConstituentFeatureExtractor extends WordConstituentFeatureExtractor {
+    private static Logger logger = LoggerFactory.getLogger(CorelexConstituentFeatureExtractor.class);
 
-    public static final CorelexFeatureExtractor instance = new CorelexFeatureExtractor(true);
-    private final static Logger log = LoggerFactory.getLogger(CorelexFeatureExtractor.class);
+    public static final CorelexConstituentFeatureExtractor instance = new CorelexConstituentFeatureExtractor(true);
+    private final static Logger log = LoggerFactory.getLogger(CorelexConstituentFeatureExtractor.class);
     private static String CORLEX_FILE;
     static {
         try {
@@ -58,11 +58,11 @@ public class CorelexFeatureExtractor extends WordFeatureExtractor {
 
     private final static Map<String, String> data = new HashMap<>();
 
-    public CorelexFeatureExtractor(boolean useLastWordOfMultiwordConstituents) {
+    public CorelexConstituentFeatureExtractor(boolean useLastWordOfMultiwordConstituents) {
         super(useLastWordOfMultiwordConstituents);
     }
 
-    public CorelexFeatureExtractor() {
+    public CorelexConstituentFeatureExtractor() {
         super();
     }
 

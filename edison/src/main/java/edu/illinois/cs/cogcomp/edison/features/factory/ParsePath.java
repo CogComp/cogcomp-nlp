@@ -48,7 +48,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ParsePath implements FeatureExtractor {
+public class ParsePath implements FeatureExtractor<Constituent> {
     public static ParsePath CHARNIAK = new ParsePath(ViewNames.PARSE_CHARNIAK);
     public static ParsePath STANFORD = new ParsePath(ViewNames.PARSE_STANFORD);
 

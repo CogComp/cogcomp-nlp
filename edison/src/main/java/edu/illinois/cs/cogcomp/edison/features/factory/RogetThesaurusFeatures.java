@@ -11,9 +11,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import org.cogcomp.Datastore;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ import java.util.*;
  * A BIG dictionary of words (and multi-word phrases) and their synonyms.
  * Probably useful for many applications, e.g. QA, paraphrase, etc.
  */
-public class RogetThesaurusFeatures implements FeatureExtractor {
+public class RogetThesaurusFeatures implements FeatureExtractor<Constituent> {
 
     public static final RogetThesaurusFeatures INSTANCE = new RogetThesaurusFeatures();
 

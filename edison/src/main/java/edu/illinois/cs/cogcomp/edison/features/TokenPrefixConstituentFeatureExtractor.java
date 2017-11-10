@@ -18,13 +18,12 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class TokenPrefixFeatureExtractor implements FeatureExtractor {
+public class TokenPrefixConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final FeatureExtractor base;
 
-    public TokenPrefixFeatureExtractor(FeatureExtractor base) {
+    public TokenPrefixConstituentFeatureExtractor(FeatureExtractor base) {
         this.base = base;
-
     }
 
     @Override
