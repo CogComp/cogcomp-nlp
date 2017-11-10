@@ -193,7 +193,7 @@ public class WordFeatureExtractorFactory {
      * An indicator for whether the word starts with one of the following: `poly`, `ultra`, `post`,
      * `multi`, `pre`, `fore`, `ante`, `pro`, `meta` or `out`
      */
-    public static PrefixConstituentFeatureExtractor knownPrefixes = new PrefixConstituentFeatureExtractor(
+    public static PrefixFeatureExtractor knownPrefixes = new PrefixFeatureExtractor(
             WordLists.PREFIXES, "prefixes", true);
 
     /**

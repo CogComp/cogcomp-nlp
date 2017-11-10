@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class SrlVerbPredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final ConstituentFeatureCollection base;
+    private final FeatureCollection base;
 
     public SrlVerbPredicateFeatures() {
         this("#predicateFeatures#");
@@ -32,9 +32,9 @@ public class SrlVerbPredicateFeatures implements FeatureExtractor<Constituent> {
 
     public SrlVerbPredicateFeatures(String name) {
         this.name = name;
-        this.base = new ConstituentFeatureCollection(this.getName());
+        this.base = new FeatureCollection(this.getName());
 
-        this.base.addFeatureExtractor(new AttributeConstituentFeature("predicate"));
+        this.base.addFeatureExtractor(new AttributeFeature("predicate"));
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
         this.base.addFeatureExtractor(VerbVoiceIndicator.STANFORD);
         this.base.addFeatureExtractor(SubcategorizationFrame.STANFORD);
@@ -42,8 +42,8 @@ public class SrlVerbPredicateFeatures implements FeatureExtractor<Constituent> {
         this.base.addFeatureExtractor(ChunkPropertyFeatureFactory.isNegated);
         this.base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
 
-        ContextConstituentFeatureExtractor context = new ContextConstituentFeatureExtractor(1, true, false);
-        ConstituentFeatureCollection tmp = new ConstituentFeatureCollection("");
+        ContextFeatureExtractor context = new ContextFeatureExtractor(1, true, false);
+        FeatureCollection tmp = new FeatureCollection("");
         tmp.addFeatureExtractor(WordFeatureExtractorFactory.word);
         tmp.addFeatureExtractor(WordFeatureExtractorFactory.pos);
         tmp.addFeatureExtractor(FeatureUtilities.conjoin(WordFeatureExtractorFactory.word,

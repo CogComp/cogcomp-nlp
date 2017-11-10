@@ -11,7 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.RogetThesaurusFeatures;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
@@ -93,13 +93,13 @@ public class PrepSRLFeatures extends LBJavaFeatureExtractor {
     };
 
     public static PrepSRLFeatures prevWordFeatures =
-            new PrepSRLFeatures(new ConstituentFeatureCollection("#prev-word-lemma+firstSense",
+            new PrepSRLFeatures(new FeatureCollection("#prev-word-lemma+firstSense",
                     FeatureInputTransformer.previousWord, lemma, firstSense));
 
-    public static PrepSRLFeatures prevVerbFeatures = new PrepSRLFeatures(new ConstituentFeatureCollection(
+    public static PrepSRLFeatures prevVerbFeatures = new PrepSRLFeatures(new FeatureCollection(
             "#prev-verb-lemma+firstSense", previousVerb, lemma, firstSense));
 
-    public static PrepSRLFeatures govFeatures = new PrepSRLFeatures(new ConstituentFeatureCollection(
+    public static PrepSRLFeatures govFeatures = new PrepSRLFeatures(new FeatureCollection(
             "#govFeats", FeatureInputTransformer.dependencyGovernor, wordNetFexes,
             RogetThesaurusFeatures.INSTANCE, WordFeatureExtractorFactory.word,
             WordFeatureExtractorFactory.pos, WordFeatureExtractorFactory.capitalization,
@@ -108,7 +108,7 @@ public class PrepSRLFeatures extends LBJavaFeatureExtractor {
             WordFeatureExtractorFactory.deNominalNounProducingSuffixes,
             WordFeatureExtractorFactory.deVerbalSuffix, WordFeatureExtractorFactory.knownPrefixes,
             WordFeatureExtractorFactory.prefixSuffixes));
-    public static PrepSRLFeatures objFeatures = new PrepSRLFeatures(new ConstituentFeatureCollection(
+    public static PrepSRLFeatures objFeatures = new PrepSRLFeatures(new FeatureCollection(
             "#govFeats", FeatureInputTransformer.dependencyObject, wordNetFexes,
             RogetThesaurusFeatures.INSTANCE, WordFeatureExtractorFactory.word,
             WordFeatureExtractorFactory.pos, WordFeatureExtractorFactory.capitalization,

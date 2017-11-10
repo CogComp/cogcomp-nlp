@@ -10,31 +10,34 @@ package edu.illinois.cs.cogcomp.edison.features;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Prefixes a base feature extractor with the lower-cased surface string of the input constituent.
- * Typically, the input constituent for this feature extractor is a single token.
- *
  * @author Vivek Srikumar
  */
-public class TokenPrefixConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
+public class AttributeFeature implements FeatureExtractor<Constituent> {
 
-    private final FeatureExtractor base;
+    private String attributeName;
 
-    public TokenPrefixConstituentFeatureExtractor(FeatureExtractor base) {
-        this.base = base;
+    public AttributeFeature(String attributeName) {
+        this.attributeName = attributeName;
+
     }
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-        return FeatureUtilities.prefix(c.getTokenizedSurfaceForm().toLowerCase().trim(),
-                base.getFeatures(c));
+
+        Set<Feature> set = new LinkedHashSet<>();
+        if (c.hasAttribute(attributeName)) {
+            set.add(DiscreteFeature.create(c.getAttribute(attributeName)));
+        }
+        return set;
     }
 
     @Override
     public String getName() {
-        return base.getName();
+        return "#" + attributeName;
     }
 
 }

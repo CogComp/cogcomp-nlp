@@ -8,7 +8,7 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterConstituentFeatureExtractor;
@@ -35,7 +35,7 @@ import java.util.Set;
  */
 public class SrlWordFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final ConstituentFeatureCollection base;
+    private final FeatureCollection base;
 
     public SrlWordFeatures() throws Exception {
         this("#WordFeatures#");
@@ -43,7 +43,7 @@ public class SrlWordFeatures implements FeatureExtractor<Constituent> {
 
     public SrlWordFeatures(String name) throws Exception {
         this.name = name;
-        this.base = new ConstituentFeatureCollection(this.getName());
+        this.base = new FeatureCollection(this.getName());
 
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.word);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);

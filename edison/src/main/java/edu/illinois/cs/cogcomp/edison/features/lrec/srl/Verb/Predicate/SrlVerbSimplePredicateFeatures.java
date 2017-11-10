@@ -9,7 +9,7 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Predicate;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
 import edu.illinois.cs.cogcomp.edison.features.factory.SubcategorizationFrame;
@@ -32,7 +32,7 @@ import java.util.Set;
  */
 public class SrlVerbSimplePredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final ConstituentFeatureCollection base;
+    private final FeatureCollection base;
 
     public SrlVerbSimplePredicateFeatures() {
         this("#predicateFeatures#");
@@ -40,7 +40,7 @@ public class SrlVerbSimplePredicateFeatures implements FeatureExtractor<Constitu
 
     public SrlVerbSimplePredicateFeatures(String name) {
         this.name = name;
-        this.base = new ConstituentFeatureCollection(this.getName());
+        this.base = new FeatureCollection(this.getName());
 
         this.base.addFeatureExtractor(new WordContextWindowTwo(""));
         this.base.addFeatureExtractor(new POSContextWindowTwo(""));
@@ -48,7 +48,7 @@ public class SrlVerbSimplePredicateFeatures implements FeatureExtractor<Constitu
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.lemma);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.capitalization);
-        this.base.addFeatureExtractor(new AttributeConstituentFeature("predicate"));
+        this.base.addFeatureExtractor(new AttributeFeature("predicate"));
         this.base.addFeatureExtractor(SubcategorizationFrame.STANFORD);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.numberNormalizer);
         this.base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);

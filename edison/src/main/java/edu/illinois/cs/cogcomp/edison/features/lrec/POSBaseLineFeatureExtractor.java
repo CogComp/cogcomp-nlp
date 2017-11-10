@@ -22,7 +22,7 @@ import java.util.*;
  * 
  * @author Xinbo Wu
  */
-public class POSBaseLineConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
+public class POSBaseLineFeatureExtractor implements FeatureExtractor<Constituent> {
     private final String viewName;
     protected POSBaseLineCounter counter;
 
@@ -32,7 +32,7 @@ public class POSBaseLineConstituentFeatureExtractor implements FeatureExtractor<
      * @param viewName Name of view
      * @param counter trained POS baseline counter
      */
-    public POSBaseLineConstituentFeatureExtractor(String viewName, POSBaseLineCounter counter) {
+    public POSBaseLineFeatureExtractor(String viewName, POSBaseLineCounter counter) {
         this.viewName = viewName;
         this.counter = counter;
     }
@@ -45,7 +45,7 @@ public class POSBaseLineConstituentFeatureExtractor implements FeatureExtractor<
      * @param home file name or directory name of the source corpus
      * @throws Exception
      */
-    public POSBaseLineConstituentFeatureExtractor(String viewName, String corpusName, String home)
+    public POSBaseLineFeatureExtractor(String viewName, String corpusName, String home)
             throws Exception {
         this.viewName = viewName;
         this.counter = new POSBaseLineCounter(corpusName);
@@ -58,7 +58,7 @@ public class POSBaseLineConstituentFeatureExtractor implements FeatureExtractor<
      * @param viewName Name of view
      * @param json JSON format of POSBaseLineCounter instance
      */
-    public POSBaseLineConstituentFeatureExtractor(String viewName, String json) {
+    public POSBaseLineFeatureExtractor(String viewName, String json) {
         this.viewName = viewName;
         this.counter = POSBaseLineCounter.read(json);
     }

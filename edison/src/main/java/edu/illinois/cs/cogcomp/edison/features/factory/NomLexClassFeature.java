@@ -39,11 +39,11 @@ import java.util.Set;
  * @keywords SRL, Nom, Nominal, Nominalization, NomLex
  * @author Vivek Srikumar
  */
-public class NomLexClassConstituentFeature implements FeatureExtractor<Constituent> {
+public class NomLexClassFeature implements FeatureExtractor<Constituent> {
 
     private static final DiscreteFeature DE_ADJECTIVAL = DiscreteFeature.create("nom-adj");
     private static final DiscreteFeature DE_VERBAL = DiscreteFeature.create("nom-vb");
-    public static NomLexClassConstituentFeature instance = new NomLexClassConstituentFeature();
+    public static NomLexClassFeature instance = new NomLexClassFeature();
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {

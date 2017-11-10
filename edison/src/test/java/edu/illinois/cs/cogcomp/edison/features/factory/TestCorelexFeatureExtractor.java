@@ -22,9 +22,9 @@ public class TestCorelexFeatureExtractor {
     @Test
     public final void test() throws EdisonException {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
-        assertEquals(CorelexConstituentFeatureExtractor.instance.getWordFeatures(ta, 1).toString(), "[cae]");  // construction
-        assertEquals(CorelexConstituentFeatureExtractor.instance.getWordFeatures(ta, 20).toString(), "[avt]"); // paving
-        assertEquals(CorelexConstituentFeatureExtractor.instance.getWordFeatures(ta, 24).toString(), "[com]"); // will
-        assertEquals(CorelexConstituentFeatureExtractor.instance.getWordFeatures(ta, 27).toString(), "[tme]"); // June
+        assertEquals(CorelexFeatureExtractor.instance.getWordFeatures(ta, 1).toString(), "[cae]");  // construction
+        assertEquals(CorelexFeatureExtractor.instance.getWordFeatures(ta, 20).toString(), "[avt]"); // paving
+        assertEquals(CorelexFeatureExtractor.instance.getWordFeatures(ta, 24).toString(), "[com]"); // will
+        assertEquals(CorelexFeatureExtractor.instance.getWordFeatures(ta, 27).toString(), "[tme]"); // June
     }
 }

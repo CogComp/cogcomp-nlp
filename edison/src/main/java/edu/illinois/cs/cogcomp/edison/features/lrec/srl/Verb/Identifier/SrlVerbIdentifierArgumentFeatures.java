@@ -29,27 +29,27 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor<Constituent> {
-    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
+    private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlVerbIdentifierArgumentFeatures() {
-        base.addFeatureExtractor(new ConstituentFeatureCollection("",
+        base.addFeatureExtractor(new FeatureCollection("",
                 FeatureInputTransformer.constituentParent, new SrlVerbPredicateFeatures("")));
         base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
         base.addFeatureExtractor(LinearPosition.instance);
         base.addFeatureExtractor(ParsePath.STANFORD);
-        ContextConstituentFeatureExtractor context = new ContextConstituentFeatureExtractor(2, true, true);
+        ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
         context.addFeatureExtractor(new WordAndPos(""));
         base.addFeatureExtractor(context);
 
-        base.addFeatureExtractor(new ConstituentFeatureCollection("", FeatureInputTransformer.firstWord,
+        base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.firstWord,
                 new WordAndPos("")));
 
-        base.addFeatureExtractor(new ConstituentFeatureCollection("", FeatureInputTransformer.lastWord,
+        base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.lastWord,
                 new WordAndPos("")));
 
-        base.addFeatureExtractor(new ConstituentFeatureCollection("", new GetParseLeftSibling(
+        base.addFeatureExtractor(new FeatureCollection("", new GetParseLeftSibling(
                 ViewNames.PARSE_STANFORD), new ParseSibling("")));
-        base.addFeatureExtractor(new ConstituentFeatureCollection("", new GetParseRightSibling(
+        base.addFeatureExtractor(new FeatureCollection("", new GetParseRightSibling(
                 ViewNames.PARSE_STANFORD), new ParseSibling("")));
         base.addFeatureExtractor(new PPFeatures(ViewNames.PARSE_STANFORD));
 
@@ -57,7 +57,7 @@ public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor<Const
 
         base.addFeatureExtractor(ChunkEmbedding.NER);
 
-        ConstituentFeatureCollection tmp = new ConstituentFeatureCollection("");
+        FeatureCollection tmp = new FeatureCollection("");
         tmp.addFeatureExtractor(ParsePath.STANFORD);
         tmp.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
         tmp.addFeatureExtractor(LinearPosition.instance);
@@ -68,7 +68,7 @@ public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor<Const
         base.addFeatureExtractor(SpanLengthConstituentFeature.instance);
         base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);
         base.addFeatureExtractor(ChunkPathPattern.SHALLOW_PARSE);
-        base.addFeatureExtractor(ClauseConstituentFeatureExtractor.STANFORD);
+        base.addFeatureExtractor(ClauseFeatureExtractor.STANFORD);
 
         base.addFeatureExtractor(SyntacticFrame.STANFORD);
 

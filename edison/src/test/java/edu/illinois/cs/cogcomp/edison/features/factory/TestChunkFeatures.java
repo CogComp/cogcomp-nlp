@@ -13,7 +13,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
@@ -62,7 +62,7 @@ public class TestChunkFeatures {
                 ViewNames.NER_CONLL, ViewNames.SHALLOW_PARSE);
 
         logger.info("\n\tTesting NER and chunks");
-        testFex(new ConstituentFeatureCollection("", ChunkEmbedding.NER, ChunkEmbedding.SHALLOW_PARSE), false,
+        testFex(new FeatureCollection("", ChunkEmbedding.NER, ChunkEmbedding.SHALLOW_PARSE), false,
                 "");
     }
 

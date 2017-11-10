@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * Extracts a range of lexical and dependency parse features to identify SRL Nominal predicates.
  * Combines {@link WordFeatureExtractorFactory} word, pos, lemma;
- * {@link ChunkPropertyFeatureFactory} hasModalVerb and isNegated; {@link NgramConstituentFeatureExtractor}
+ * {@link ChunkPropertyFeatureFactory} hasModalVerb and isNegated; {@link NgramFeatureExtractor}
  * word bigrams and trigrams; and transformations {@link FeatureInputTransformer} stanfordGovernor
  * and stanfordObject applied to {@link SrlWordFeatures}.
  * 
@@ -29,12 +29,12 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class SrlSenseFeatures implements FeatureExtractor<Constituent> {
-    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
+    private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlSenseFeatures() throws Exception {
-        ArrayList<ContextConstituentFeatureExtractor> tmp = new ArrayList<ContextConstituentFeatureExtractor>();
+        ArrayList<ContextFeatureExtractor> tmp = new ArrayList<ContextFeatureExtractor>();
 
-        tmp.add(new ContextConstituentFeatureExtractor(3, true, true));
+        tmp.add(new ContextFeatureExtractor(3, true, true));
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.word);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.pos);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.lemma);
@@ -42,11 +42,11 @@ public class SrlSenseFeatures implements FeatureExtractor<Constituent> {
         tmp.get(0).addFeatureExtractor(ChunkPropertyFeatureFactory.hasModalVerb);
         tmp.get(0).addFeatureExtractor(ChunkPropertyFeatureFactory.isNegated);
 
-        tmp.add(new ContextConstituentFeatureExtractor(1, true, true));
+        tmp.add(new ContextFeatureExtractor(1, true, true));
         tmp.get(1).addFeatureExtractor(
-                NgramConstituentFeatureExtractor.bigrams(WordFeatureExtractorFactory.word));
+                NgramFeatureExtractor.bigrams(WordFeatureExtractorFactory.word));
         tmp.get(1).addFeatureExtractor(
-                NgramConstituentFeatureExtractor.trigrams(WordFeatureExtractorFactory.word));
+                NgramFeatureExtractor.trigrams(WordFeatureExtractorFactory.word));
 
 
 
@@ -54,9 +54,9 @@ public class SrlSenseFeatures implements FeatureExtractor<Constituent> {
         this.base.addFeatureExtractor(tmp.get(1));
 
 
-        this.base.addFeatureExtractor(new ConstituentFeatureCollection("",
+        this.base.addFeatureExtractor(new FeatureCollection("",
                 FeatureInputTransformer.stanfordGovernor, new SrlWordFeatures("")));
-        this.base.addFeatureExtractor(new ConstituentFeatureCollection("",
+        this.base.addFeatureExtractor(new FeatureCollection("",
                 FeatureInputTransformer.stanfordObject, new SrlWordFeatures("")));
     }
 

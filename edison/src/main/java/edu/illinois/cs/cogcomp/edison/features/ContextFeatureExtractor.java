@@ -15,11 +15,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * A ContextConstituentFeatureExtractor generates features from the <b>words</b> in the context of the
+ * A ContextFeatureExtractor generates features from the <b>words</b> in the context of the
  * specified constituent. The constructor specifies the context size.
  * <p>
  * To use this class, after creating the object, add other feature extractors using the
- * {@link ContextConstituentFeatureExtractor#addFeatureExtractor(FeatureExtractor)}
+ * {@link ContextFeatureExtractor#addFeatureExtractor(FeatureExtractor)}
  * method. Then, for each neighboring word, the feature extractor will generate features using all
  * the extractors that have been added.
  * <p>
@@ -28,14 +28,14 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ContextConstituentFeatureExtractor extends ConstituentFeatureCollection {
+public class ContextFeatureExtractor extends FeatureCollection {
 
     private final boolean specifyIndex;
     private final int contextSize;
     private final boolean ignoreConstituent;
 
     /**
-     * Create a new ContextConstituentFeatureExtractor.
+     * Create a new ContextFeatureExtractor.
      *
      * @param contextSize The number of tokens to the left and right of the constituent from which
      *        the features should be extracted.
@@ -43,15 +43,15 @@ public class ContextConstituentFeatureExtractor extends ConstituentFeatureCollec
      * @param ignoreConstituent Should the tokens in the constituent itself be ignored while
      *        generating the features.
      */
-    public ContextConstituentFeatureExtractor(int contextSize, boolean specifyIndex, boolean ignoreConstituent) {
+    public ContextFeatureExtractor(int contextSize, boolean specifyIndex, boolean ignoreConstituent) {
         super("");
         this.contextSize = contextSize;
         this.specifyIndex = specifyIndex;
         this.ignoreConstituent = ignoreConstituent;
     }
 
-    public ContextConstituentFeatureExtractor(int contextSize, boolean specifyIndex,
-                                              boolean ignoreConstituent, WordConstituentFeatureExtractor... fex) {
+    public ContextFeatureExtractor(int contextSize, boolean specifyIndex,
+                                   boolean ignoreConstituent, WordConstituentFeatureExtractor... fex) {
         super("");
         this.contextSize = contextSize;
         this.specifyIndex = specifyIndex;

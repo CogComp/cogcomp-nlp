@@ -17,12 +17,12 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class PrefixConstituentFeatureExtractor extends WordConstituentFeatureExtractor {
+public class PrefixFeatureExtractor extends WordConstituentFeatureExtractor {
     private final Feature featureName;
     protected List<String> prefixes;
 
-    public PrefixConstituentFeatureExtractor(List<String> prefixes, String featureName,
-                                             boolean useLastWordOfMultiwordConstituents) {
+    public PrefixFeatureExtractor(List<String> prefixes, String featureName,
+                                  boolean useLastWordOfMultiwordConstituents) {
         super(useLastWordOfMultiwordConstituents);
         this.prefixes = prefixes;
         this.featureName = DiscreteFeature.create(featureName);

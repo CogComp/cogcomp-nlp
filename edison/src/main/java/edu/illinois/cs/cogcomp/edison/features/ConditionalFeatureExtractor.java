@@ -13,14 +13,14 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
 
-public class ConditionalConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
+public class ConditionalFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private Predicate<Constituent> condition;
     private FeatureExtractor ifTrue;
     private FeatureExtractor ifFalse;
 
-    public ConditionalConstituentFeatureExtractor(Predicate<Constituent> condition, FeatureExtractor ifTrue,
-                                                  FeatureExtractor ifFalse) {
+    public ConditionalFeatureExtractor(Predicate<Constituent> condition, FeatureExtractor ifTrue,
+                                       FeatureExtractor ifFalse) {
         this.condition = condition;
         this.ifTrue = ifTrue;
         this.ifFalse = ifFalse;

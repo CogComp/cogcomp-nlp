@@ -10,7 +10,7 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.WordNetFeatureClass;
@@ -177,7 +177,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testFeatureCollection() throws Exception {
-        ConstituentFeatureCollection f = new ConstituentFeatureCollection("features");
+        FeatureCollection f = new FeatureCollection("features");
         f.addFeatureExtractor(WordFeatureExtractorFactory.conflatedPOS);
         f.addFeatureExtractor(WordFeatureExtractorFactory.gerundMarker);
         f.addFeatureExtractor(WordFeatureExtractorFactory.nominalizationMarker);

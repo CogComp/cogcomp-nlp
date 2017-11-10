@@ -8,9 +8,9 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Sense;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.SrlSenseFeatures;
@@ -26,7 +26,7 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class LemmaAndSrlNomSense implements FeatureExtractor<Constituent> {
-    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
+    private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public LemmaAndSrlNomSense() throws Exception {
         this.base.addFeatureExtractor(FeatureUtilities.conjoin(WordFeatureExtractorFactory.lemma,

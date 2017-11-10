@@ -10,7 +10,7 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Identifier;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ListFeatureFactory;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
@@ -31,7 +31,7 @@ import java.util.Set;
  */
 public class SrlNomHeadWordFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final ConstituentFeatureCollection base;
+    private final FeatureCollection base;
 
     public SrlNomHeadWordFeatures() {
         this("#HeadWordFeatures#");
@@ -39,11 +39,11 @@ public class SrlNomHeadWordFeatures implements FeatureExtractor<Constituent> {
 
     public SrlNomHeadWordFeatures(String name) {
         this.name = name;
-        this.base = new ConstituentFeatureCollection(this.getName());
+        this.base = new FeatureCollection(this.getName());
 
-        ArrayList<ConstituentFeatureCollection> tmp = new ArrayList<ConstituentFeatureCollection>();
+        ArrayList<FeatureCollection> tmp = new ArrayList<FeatureCollection>();
 
-        tmp.add(new ConstituentFeatureCollection(""));
+        tmp.add(new FeatureCollection(""));
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.word);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.pos);
         tmp.get(0).addFeatureExtractor(WordFeatureExtractorFactory.numberNormalizer);

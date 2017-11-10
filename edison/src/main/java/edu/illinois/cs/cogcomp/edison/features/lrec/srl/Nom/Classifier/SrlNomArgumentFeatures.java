@@ -12,7 +12,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.WordNetFeatureClass;
-import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagConstituentFeature;
+import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagFeature;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.POSContextWindowTwo;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordContextWindowTwo;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -27,7 +27,7 @@ import java.util.Set;
  * nominalizationMarker, and dateMarker; {@link ListFeatureFactory} daysOfTheWeek and months;
  * {@link WordNetConstituentFeatureExtractor} synsetsFirstSense and hypernymsFirstSense;
  * {@link ParseHeadWordConstituentFeatureExtractor}; {@link CurrencyIndicator}; {@link LinearPosition};
- * {@link HyphenTagConstituentFeature}; {@link ParsePhraseType}; {@link ParsePath}; {@link ChunkEmbedding}
+ * {@link HyphenTagFeature}; {@link ParsePhraseType}; {@link ParsePath}; {@link ChunkEmbedding}
  * shallow parse and NER; {@link ChunkPathPattern}; {@link ParseSiblings};
  * {@link WordContextWindowTwo}; {@link POSContextWindowTwo}
  *
@@ -35,15 +35,15 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class SrlNomArgumentFeatures implements FeatureExtractor<Constituent> {
-    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
+    private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlNomArgumentFeatures() throws EdisonException {
-        ArrayList<ConstituentFeatureCollection> tmp = new ArrayList<ConstituentFeatureCollection>();
+        ArrayList<FeatureCollection> tmp = new ArrayList<FeatureCollection>();
 
-        tmp.add(new ConstituentFeatureCollection("", FeatureInputTransformer.constituentParent,
+        tmp.add(new FeatureCollection("", FeatureInputTransformer.constituentParent,
                 new SrlNomClassifierPredicateFeatures("")));
 
-        tmp.add(new ConstituentFeatureCollection(""));
+        tmp.add(new FeatureCollection(""));
         tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.word);
         tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.pos);
         tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.numberNormalizer);
@@ -70,7 +70,7 @@ public class SrlNomArgumentFeatures implements FeatureExtractor<Constituent> {
         this.base.addFeatureExtractor(CurrencyIndicator.instance);
         this.base.addFeatureExtractor(LinearPosition.instance);
 
-        this.base.addFeatureExtractor(new HyphenTagConstituentFeature());
+        this.base.addFeatureExtractor(new HyphenTagFeature());
 
         this.base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
 

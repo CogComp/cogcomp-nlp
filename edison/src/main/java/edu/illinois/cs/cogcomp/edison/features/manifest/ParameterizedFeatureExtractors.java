@@ -40,11 +40,11 @@ class ParameterizedFeatureExtractors {
 
                     switch (parse) {
                         case ViewNames.PARSE_CHARNIAK:
-                            return ClauseConstituentFeatureExtractor.CHARNIAK;
+                            return ClauseFeatureExtractor.CHARNIAK;
                         case ViewNames.PARSE_BERKELEY:
-                            return ClauseConstituentFeatureExtractor.BERKELEY;
+                            return ClauseFeatureExtractor.BERKELEY;
                         case ViewNames.PARSE_STANFORD:
-                            return ClauseConstituentFeatureExtractor.STANFORD;
+                            return ClauseFeatureExtractor.STANFORD;
                         default:
                             throw new EdisonException("Cannot generate clause view for using "
                                     + parse);
@@ -58,7 +58,7 @@ class ParameterizedFeatureExtractors {
                 @Override
                 public FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
                                                             Tree<String> tree, FeatureExtractor fex) throws EdisonException {
-                    return new AttributeConstituentFeature(attributes.get(":name"));
+                    return new AttributeFeature(attributes.get(":name"));
                 }
             };
     private static final ParameterizedFeatureGenerator subcatGenerator =
@@ -142,7 +142,7 @@ class ParameterizedFeatureExtractors {
                                     + tree);
                     }
 
-                    return new ConstituentFeatureCollection("", transformer, fex);
+                    return new FeatureCollection("", transformer, fex);
 
                 }
             };
@@ -181,7 +181,7 @@ class ParameterizedFeatureExtractors {
                                     + tree);
                     }
 
-                    return new ConstituentFeatureCollection("", transformer, fex);
+                    return new FeatureCollection("", transformer, fex);
 
                 }
             };
@@ -212,7 +212,7 @@ class ParameterizedFeatureExtractors {
                     else
                         throw new EdisonException("Invalid parse view: " + parseView + "\n" + tree);
 
-                    return new ConstituentFeatureCollection("", transformer, fex);
+                    return new FeatureCollection("", transformer, fex);
 
                 }
             };
@@ -240,8 +240,8 @@ class ParameterizedFeatureExtractors {
             boolean specifyIndex = Boolean.parseBoolean(attributes.get(":include-index"));
             boolean ignoreConstituent = Boolean.parseBoolean(attributes.get(":ignore-center"));
 
-            ContextConstituentFeatureExtractor f =
-                    new ContextConstituentFeatureExtractor(size, specifyIndex, ignoreConstituent);
+            ContextFeatureExtractor f =
+                    new ContextFeatureExtractor(size, specifyIndex, ignoreConstituent);
 
             f.addFeatureExtractor(fex);
             return f;
@@ -279,7 +279,7 @@ class ParameterizedFeatureExtractors {
                 @Override
                 FeatureExtractor getFeatureExtractor(Map<String, String> attributes,
                                                      Tree<String> tree, FeatureExtractor fex) throws EdisonException {
-                    return new RegexConstituentFeatureExtractor(attributes.get(":regex"));
+                    return new RegexFeatureExtractor(attributes.get(":regex"));
                 }
             };
 

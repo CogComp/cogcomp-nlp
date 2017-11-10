@@ -42,8 +42,8 @@ public class TestPOSMikheevFeatureExtractor {
     @Test
     public final void test() throws Exception {
 
-        POSMikheevConstituentFeatureExtractor posMikheev =
-                new POSMikheevConstituentFeatureExtractor("posMikheev", "test_corpus", TestPosHelper.corpus);
+        POSMikheevFeatureExtractor posMikheev =
+                new POSMikheevFeatureExtractor("posMikheev", "test_corpus", TestPosHelper.corpus);
 
         logger.info("POSMikheev Feature Extractor");
         logger.info("Only print the features with known tags");

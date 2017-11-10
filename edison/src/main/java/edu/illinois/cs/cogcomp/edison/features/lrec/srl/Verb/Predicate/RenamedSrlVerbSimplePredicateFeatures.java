@@ -9,7 +9,7 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Predicate;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
@@ -23,7 +23,7 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class RenamedSrlVerbSimplePredicateFeatures implements FeatureExtractor<Constituent> {
-    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
+    private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public RenamedSrlVerbSimplePredicateFeatures() {
         this.base.addFeatureExtractor(new SrlVerbSimplePredicateFeatures(""));

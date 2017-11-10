@@ -47,7 +47,7 @@ public class TestClauseFeatureExtractor {
 
     @Test
     public final void testClauseView() throws Exception {
-        testFex(ClauseConstituentFeatureExtractor.CHARNIAK);
+        testFex(ClauseFeatureExtractor.CHARNIAK);
     }
 
     private void testFex(FeatureExtractor fex) throws Exception {

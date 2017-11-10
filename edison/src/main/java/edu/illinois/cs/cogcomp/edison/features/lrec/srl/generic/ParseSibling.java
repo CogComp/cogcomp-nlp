@@ -25,7 +25,7 @@ import java.util.Set;
  */
 public class ParseSibling implements FeatureExtractor<Constituent> {
     private final String name;
-    private final ConstituentFeatureCollection base;
+    private final FeatureCollection base;
 
     public ParseSibling() {
         this("#parseSibling#");
@@ -33,7 +33,7 @@ public class ParseSibling implements FeatureExtractor<Constituent> {
 
     public ParseSibling(String name) {
         this.name = name;
-        this.base = new ConstituentFeatureCollection(this.getName());
+        this.base = new FeatureCollection(this.getName());
 
         this.base.addFeatureExtractor(new FeatureExtractor<Constituent>() {
 

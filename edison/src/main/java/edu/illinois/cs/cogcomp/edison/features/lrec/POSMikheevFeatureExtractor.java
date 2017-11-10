@@ -24,7 +24,7 @@ import java.util.*;
  * 
  */
 
-public class POSMikheevConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
+public class POSMikheevFeatureExtractor implements FeatureExtractor<Constituent> {
     private final String viewName;
     protected POSMikheevCounter counter;
 
@@ -34,7 +34,7 @@ public class POSMikheevConstituentFeatureExtractor implements FeatureExtractor<C
      * @param viewName Name of view
      * @param counter trained POS Mikheev counter
      */
-    public POSMikheevConstituentFeatureExtractor(String viewName, POSMikheevCounter counter) {
+    public POSMikheevFeatureExtractor(String viewName, POSMikheevCounter counter) {
         this.viewName = viewName;
         this.counter = counter;
     }
@@ -47,7 +47,7 @@ public class POSMikheevConstituentFeatureExtractor implements FeatureExtractor<C
      * @param home file name or directory name of the source corpus
      * @throws Exception
      */
-    public POSMikheevConstituentFeatureExtractor(String viewName, String corpusName, String home)
+    public POSMikheevFeatureExtractor(String viewName, String corpusName, String home)
             throws Exception {
         this.viewName = viewName;
         this.counter = new POSMikheevCounter(corpusName);
@@ -61,7 +61,7 @@ public class POSMikheevConstituentFeatureExtractor implements FeatureExtractor<C
      * @param viewName Name of view
      * @param json JSON format of trained counter
      */
-    public POSMikheevConstituentFeatureExtractor(String viewName, String json) {
+    public POSMikheevFeatureExtractor(String viewName, String json) {
         this.viewName = viewName;
         this.counter = POSMikheevCounter.read(json);
     }

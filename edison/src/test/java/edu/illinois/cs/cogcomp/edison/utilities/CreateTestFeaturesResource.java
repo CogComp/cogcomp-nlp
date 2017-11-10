@@ -11,7 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
@@ -202,7 +202,7 @@ public class CreateTestFeaturesResource {
 
     private void addFeatCollection() throws EdisonException, IOException {
         Map<Integer, String> map = new HashMap<>();
-        ConstituentFeatureCollection featureCollection = new ConstituentFeatureCollection("features");
+        FeatureCollection featureCollection = new FeatureCollection("features");
         featureCollection.addFeatureExtractor(WordFeatureExtractorFactory.conflatedPOS);
         featureCollection.addFeatureExtractor(WordFeatureExtractorFactory.gerundMarker);
         featureCollection.addFeatureExtractor(WordFeatureExtractorFactory.nominalizationMarker);

@@ -8,7 +8,7 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Identifier;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -22,7 +22,7 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class SrlVerbIdentifierArgumentFeaturesConjunction implements FeatureExtractor<Constituent> {
-    private final ConstituentFeatureCollection base = new ConstituentFeatureCollection(this.getName());
+    private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlVerbIdentifierArgumentFeaturesConjunction() {
         this.base.addFeatureExtractor(new SrlVerbIdentifierArgumentFeatures());

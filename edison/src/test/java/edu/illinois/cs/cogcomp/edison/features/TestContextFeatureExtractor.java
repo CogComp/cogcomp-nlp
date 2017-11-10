@@ -27,7 +27,7 @@ public class TestContextFeatureExtractor {
 
     @Test
     public void testGetFeaturesIndexWithoutConstituent() throws EdisonException {
-        ContextConstituentFeatureExtractor fex = new ContextConstituentFeatureExtractor(2, true, true);
+        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, true);
 
         fex.addFeatureExtractor(new WordConstituentFeatureExtractor() {
 
@@ -72,7 +72,7 @@ public class TestContextFeatureExtractor {
 
     @Test
     public void testGetFeaturesIndexWithConstituent() throws EdisonException {
-        ContextConstituentFeatureExtractor fex = new ContextConstituentFeatureExtractor(2, true, false);
+        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, false);
 
         fex.addFeatureExtractor(new WordConstituentFeatureExtractor() {
 
@@ -119,7 +119,7 @@ public class TestContextFeatureExtractor {
 
     @Test
     public void testGetFeaturesNoIndexWithoutConstituent() throws EdisonException {
-        ContextConstituentFeatureExtractor fex = new ContextConstituentFeatureExtractor(2, false, true);
+        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, true);
 
         fex.addFeatureExtractor(new WordConstituentFeatureExtractor() {
 
@@ -163,7 +163,7 @@ public class TestContextFeatureExtractor {
 
     @Test
     public void testGetFeaturesNoIndexWithConstituent() throws EdisonException {
-        ContextConstituentFeatureExtractor fex = new ContextConstituentFeatureExtractor(2, false, false);
+        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, false);
 
         fex.addFeatureExtractor(new WordConstituentFeatureExtractor() {
 

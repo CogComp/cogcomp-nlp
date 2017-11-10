@@ -12,24 +12,24 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
 
-public class CachedConstituentFeatureCollection extends ConstituentFeatureCollection {
+public class CachedFeatureCollection extends FeatureCollection {
     private ThreadLocal<Constituent> currentConstituent = new ThreadLocal<>();
     private ThreadLocal<Set<Feature>> currentFeatures = new ThreadLocal<>();
 
-    public CachedConstituentFeatureCollection(String name) {
+    public CachedFeatureCollection(String name) {
         super(name);
     }
 
-    public CachedConstituentFeatureCollection(String name, FeatureExtractor... feats) {
+    public CachedFeatureCollection(String name, FeatureExtractor... feats) {
         super(name, feats);
     }
 
-    public CachedConstituentFeatureCollection(String name, FeatureInputTransformer inputTransformer,
-                                              FeatureExtractor... feats) {
+    public CachedFeatureCollection(String name, FeatureInputTransformer inputTransformer,
+                                   FeatureExtractor... feats) {
         super(name, inputTransformer, feats);
     }
 
-    public CachedConstituentFeatureCollection(String name, FeatureInputTransformer inputTransformer) {
+    public CachedFeatureCollection(String name, FeatureInputTransformer inputTransformer) {
         super(name, inputTransformer);
     }
 

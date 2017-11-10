@@ -34,11 +34,11 @@ import java.util.*;
  * Buitelaar, Paul. "CORELEX: An ontology of systematic polysemous classes." (1998): 221-235.
  */
 
-public class CorelexConstituentFeatureExtractor extends WordConstituentFeatureExtractor {
-    private static Logger logger = LoggerFactory.getLogger(CorelexConstituentFeatureExtractor.class);
+public class CorelexFeatureExtractor extends WordConstituentFeatureExtractor {
+    private static Logger logger = LoggerFactory.getLogger(CorelexFeatureExtractor.class);
 
-    public static final CorelexConstituentFeatureExtractor instance = new CorelexConstituentFeatureExtractor(true);
-    private final static Logger log = LoggerFactory.getLogger(CorelexConstituentFeatureExtractor.class);
+    public static final CorelexFeatureExtractor instance = new CorelexFeatureExtractor(true);
+    private final static Logger log = LoggerFactory.getLogger(CorelexFeatureExtractor.class);
     private static String CORLEX_FILE;
     static {
         try {
@@ -58,11 +58,11 @@ public class CorelexConstituentFeatureExtractor extends WordConstituentFeatureEx
 
     private final static Map<String, String> data = new HashMap<>();
 
-    public CorelexConstituentFeatureExtractor(boolean useLastWordOfMultiwordConstituents) {
+    public CorelexFeatureExtractor(boolean useLastWordOfMultiwordConstituents) {
         super(useLastWordOfMultiwordConstituents);
     }
 
-    public CorelexConstituentFeatureExtractor() {
+    public CorelexFeatureExtractor() {
         super();
     }
 

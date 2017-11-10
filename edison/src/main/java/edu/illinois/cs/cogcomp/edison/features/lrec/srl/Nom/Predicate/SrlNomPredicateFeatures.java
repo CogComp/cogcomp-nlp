@@ -8,10 +8,10 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Predicate;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.AttributeConstituentFeature;
+import edu.illinois.cs.cogcomp.edison.features.AttributeFeature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.ConstituentFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
 import edu.illinois.cs.cogcomp.edison.features.factory.SubcategorizationFrame;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
@@ -21,10 +21,9 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
 
-
 /**
  * Extracts features for identifying Nominal SRL predicates. Combines {@link WordContextWindowTwo};
- * {@link POSContextWindowTwo}; {@link AttributeConstituentFeature}; {@link WordFeatureExtractorFactory} word,
+ * {@link POSContextWindowTwo}; {@link AttributeFeature}; {@link WordFeatureExtractorFactory} word,
  * lemma, pos, capitalization, and numberNormalizer; {@link SubcategorizationFrame},
  * {@link ChunkEmbedding} Shallow Parse and NER.
  *
@@ -33,7 +32,7 @@ import java.util.Set;
  */
 public class SrlNomPredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
-    private final ConstituentFeatureCollection base;
+    private final FeatureCollection base;
 
     public SrlNomPredicateFeatures() {
         this("#predicateFeatures#");
@@ -41,7 +40,7 @@ public class SrlNomPredicateFeatures implements FeatureExtractor<Constituent> {
 
     public SrlNomPredicateFeatures(String name) {
         this.name = name;
-        this.base = new ConstituentFeatureCollection(this.getName());
+        this.base = new FeatureCollection(this.getName());
 
         this.base.addFeatureExtractor(new WordContextWindowTwo(""));
         this.base.addFeatureExtractor(new POSContextWindowTwo(""));
@@ -49,7 +48,7 @@ public class SrlNomPredicateFeatures implements FeatureExtractor<Constituent> {
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.lemma);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.capitalization);
-        this.base.addFeatureExtractor(new AttributeConstituentFeature("predicate"));
+        this.base.addFeatureExtractor(new AttributeFeature("predicate"));
         this.base.addFeatureExtractor(SubcategorizationFrame.STANFORD);
         this.base.addFeatureExtractor(WordFeatureExtractorFactory.numberNormalizer);
         this.base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);

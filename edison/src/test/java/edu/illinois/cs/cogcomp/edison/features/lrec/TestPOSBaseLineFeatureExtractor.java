@@ -61,8 +61,8 @@ public class TestPOSBaseLineFeatureExtractor {
         // logger.info(TestPOSBaseLineFeatureExtractor.class.getProtectionDomain().getCodeSource().getLocation());
         // logger.info(System.getProperty("user.dir"));
 
-        POSBaseLineConstituentFeatureExtractor posBaseLine =
-                new POSBaseLineConstituentFeatureExtractor("posBaseLine", "test_corpus", TestPosHelper.corpus);
+        POSBaseLineFeatureExtractor posBaseLine =
+                new POSBaseLineFeatureExtractor("posBaseLine", "test_corpus", TestPosHelper.corpus);
 
         ArrayList<Set<Feature>> featslist = new ArrayList<>();
 

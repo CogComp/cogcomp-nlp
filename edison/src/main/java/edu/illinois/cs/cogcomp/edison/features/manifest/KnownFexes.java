@@ -84,15 +84,15 @@ class KnownFexes {
         fexes.put("linear-position", LinearPosition.instance);
         fexes.put("linear-distance", LinearDistance.instance);
 
-        fexes.put("nom-lex-class", NomLexClassConstituentFeature.instance);
+        fexes.put("nom-lex-class", NomLexClassFeature.instance);
         fexes.put("is-negated", ChunkPropertyFeatureFactory.isNegated);
         fexes.put("has-modal-verb", ChunkPropertyFeatureFactory.hasModalVerb);
 
         fexes.put("levin-verb-class", LevinVerbClassConstituentFeature.instance);
 
-        // fexes.put("clauses-charniak", ClauseConstituentFeatureExtractor.CHARNIAK);
-        // fexes.put("clauses-stanford", ClauseConstituentFeatureExtractor.STANFORD);
-        // fexes.put("clauses-berkeley", ClauseConstituentFeatureExtractor.BERKELEY);
+        // fexes.put("clauses-charniak", ClauseFeatureExtractor.CHARNIAK);
+        // fexes.put("clauses-stanford", ClauseFeatureExtractor.STANFORD);
+        // fexes.put("clauses-berkeley", ClauseFeatureExtractor.BERKELEY);
 
         fexes.put("currency", CurrencyIndicator.instance);
 
@@ -107,7 +107,7 @@ class KnownFexes {
 //        fexes.put("cbc", WordFeatureExtractorFactory.getGazetteerFeatureExtractor("cbc",
 //                GazetteerViewGenerator.gazetteersInstance));
 
-        fexes.put("CORLEX", CorelexConstituentFeatureExtractor.instance);
+        fexes.put("CORLEX", CorelexFeatureExtractor.instance);
         fexes.put("roget-thesaurus", RogetThesaurusFeatures.INSTANCE);
 
     }
