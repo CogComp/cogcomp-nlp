@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordLists;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -39,7 +39,7 @@ import java.util.Vector;
  *
  * @author Vivek Srikumar, Gourab Kundu
  */
-public class VerbVoiceIndicator extends WordConstituentFeatureExtractor {
+public class VerbVoiceIndicator extends WordFeatureExtractor {
 
     private static final String ACTIVE = "A";
     private static final String PASSIVE = "P";

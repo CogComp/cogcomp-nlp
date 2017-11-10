@@ -96,10 +96,10 @@ class KnownFexes {
 
         fexes.put("currency", CurrencyIndicator.instance);
 
-        fexes.put("brown-clusters-100", BrownClusterConstituentFeatureExtractor.instance100);
-        fexes.put("brown-clusters-320", BrownClusterConstituentFeatureExtractor.instance320);
-        fexes.put("brown-clusters-1000", BrownClusterConstituentFeatureExtractor.instance1000);
-        fexes.put("brown-clusters-3200", BrownClusterConstituentFeatureExtractor.instance3200);
+        fexes.put("brown-clusters-100", BrownClusterFeatureExtractor.instance100);
+        fexes.put("brown-clusters-320", BrownClusterFeatureExtractor.instance320);
+        fexes.put("brown-clusters-1000", BrownClusterFeatureExtractor.instance1000);
+        fexes.put("brown-clusters-3200", BrownClusterFeatureExtractor.instance3200);
 
 //        fexes.put("gazetteers", WordFeatureExtractorFactory.getGazetteerFeatureExtractor(
 //                "gazetteers", GazetteerViewGenerator.gazetteersInstance));

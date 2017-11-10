@@ -21,12 +21,12 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class DependencyModifierConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
+public class DependencyModifierFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final FeatureExtractor baseFex;
     private final FeatureInputTransformer dependencyHeadIdentifier;
 
-    public DependencyModifierConstituentFeatureExtractor(String dependencyViewName, FeatureExtractor baseFex)
+    public DependencyModifierFeatureExtractor(String dependencyViewName, FeatureExtractor baseFex)
             throws EdisonException {
         switch (dependencyViewName) {
             case ViewNames.DEPENDENCY:

@@ -12,7 +12,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import io.minio.errors.InvalidEndpointException;
@@ -34,7 +34,7 @@ import java.util.*;
  * Buitelaar, Paul. "CORELEX: An ontology of systematic polysemous classes." (1998): 221-235.
  */
 
-public class CorelexFeatureExtractor extends WordConstituentFeatureExtractor {
+public class CorelexFeatureExtractor extends WordFeatureExtractor {
     private static Logger logger = LoggerFactory.getLogger(CorelexFeatureExtractor.class);
 
     public static final CorelexFeatureExtractor instance = new CorelexFeatureExtractor(true);

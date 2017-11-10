@@ -13,9 +13,9 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -160,7 +160,7 @@ public class CreateTestFeaturesResource {
 
     private void addBrownFeatures() throws EdisonException {
         logger.info("\tadding Brown cluster features");
-        WordConstituentFeatureExtractor brownFeatureGenerator =
+        WordFeatureExtractor brownFeatureGenerator =
                 WordFeatureExtractorFactory.getBrownFeatureGenerator("", "brownBllipClusters",
                         new int[] {4, 5});
         for (TextAnnotation ta : tas) {
@@ -173,15 +173,15 @@ public class CreateTestFeaturesResource {
         WordNetManager.loadConfigAsClasspathResource(true);
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.getWordNetFeatureExtractor(
-                    WordNetConstituentFeatureExtractor.WordNetFeatureClass.existsEntry,
-                    WordNetConstituentFeatureExtractor.WordNetFeatureClass.synsetsFirstSense,
-                    WordNetConstituentFeatureExtractor.WordNetFeatureClass.lexicographerFileNamesAllSenses));
+                    WordNetFeatureExtractor.WordNetFeatureClass.existsEntry,
+                    WordNetFeatureExtractor.WordNetFeatureClass.synsetsFirstSense,
+                    WordNetFeatureExtractor.WordNetFeatureClass.lexicographerFileNamesAllSenses));
         }
     }
 
     private void addGazetteerFeatures() throws Exception {
         logger.info("\tadding gazetteer features");
-        WordConstituentFeatureExtractor fex =
+        WordFeatureExtractor fex =
                 WordFeatureExtractorFactory.getGazetteerFeatureExtractor("gazetteer",
                         new SimpleGazetteerAnnotator());
 
@@ -190,7 +190,7 @@ public class CreateTestFeaturesResource {
         }
     }
 
-    private void addFeatures(TextAnnotation ta, WordConstituentFeatureExtractor fex) throws EdisonException {
+    private void addFeatures(TextAnnotation ta, WordFeatureExtractor fex) throws EdisonException {
         for (int tokenId = 0; tokenId < ta.size(); tokenId++) {
             Set<Feature> features = fex.getWordFeatures(ta, tokenId);
             if (features.size() > 0) {

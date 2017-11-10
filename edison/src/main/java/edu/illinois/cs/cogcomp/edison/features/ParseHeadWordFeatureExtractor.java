@@ -22,12 +22,12 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ParseHeadWordConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
+public class ParseHeadWordFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final String parseViewName;
     private FeatureExtractor fex;
 
-    public ParseHeadWordConstituentFeatureExtractor(String parseViewName, FeatureExtractor constituentFeatureExtractor) {
+    public ParseHeadWordFeatureExtractor(String parseViewName, FeatureExtractor constituentFeatureExtractor) {
         this.parseViewName = parseViewName;
         this.fex = constituentFeatureExtractor;
     }

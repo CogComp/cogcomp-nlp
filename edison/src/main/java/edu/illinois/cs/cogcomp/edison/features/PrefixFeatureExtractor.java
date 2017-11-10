@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class PrefixFeatureExtractor extends WordConstituentFeatureExtractor {
+public class PrefixFeatureExtractor extends WordFeatureExtractor {
     private final Feature featureName;
     protected List<String> prefixes;
 

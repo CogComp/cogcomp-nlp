@@ -29,7 +29,7 @@ import java.util.Set;
  * {@link LinearPosition}; {@link ParsePath}; {@link WordAndPos } in a context window of size 2;
  * parse siblings; {@link PPFeatures}; {@link ProjectedPath}; {@link ChunkPathPattern} for shallow
  * parse; {@link ChunkEmbedding} for NER and shallow parse; {@link ClauseFeatureExtractor};
- * {@link SpanLengthConstituentFeature}; {@link SyntacticFrame}; and {@link ParseHeadWordConstituentFeatureExtractor}.
+ * {@link SpanLengthConstituentFeature}; {@link SyntacticFrame}; and {@link ParseHeadWordFeatureExtractor}.
  *
  * @keywords SRL, verb, arguments, mixed
  * @author Xinbo Wu
@@ -69,7 +69,7 @@ public class SrlVerbArgumentFeatures implements FeatureExtractor<Constituent> {
         base.addFeatureExtractor(ClauseFeatureExtractor.STANFORD);
         base.addFeatureExtractor(SyntacticFrame.STANFORD);
 
-        base.addFeatureExtractor(new ParseHeadWordConstituentFeatureExtractor(ViewNames.PARSE_STANFORD,
+        base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD,
                 new WordAndPos("")));
     }
 

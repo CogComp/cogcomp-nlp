@@ -22,20 +22,20 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ListConstituentFeatureExtractor implements FeatureExtractor<Constituent> {
+public class ListFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final Feature listName;
     private final Set<String> list;
     private final boolean caseSensitive;
 
     /**
-     * Creates a new ListConstituentFeatureExtractor
+     * Creates a new ListFeatureExtractor
      *
      * @param name The name of the list, which is emitted as the feature
      * @param list The list of items against which the constituent should be checked.
      * @param caseSensitive Should the checking be case sensitive?
      */
-    public ListConstituentFeatureExtractor(String name, Collection<String> list, boolean caseSensitive) {
+    public ListFeatureExtractor(String name, Collection<String> list, boolean caseSensitive) {
         this.listName = DiscreteFeature.create(name);
         this.list = new LinkedHashSet<>();
 
@@ -49,14 +49,14 @@ public class ListConstituentFeatureExtractor implements FeatureExtractor<Constit
     }
 
     /**
-     * Creates a new ListConstituentFeatureExtractor
+     * Creates a new ListFeatureExtractor
      *
      * @param listName The name of the list, which is emitted as the feature
      * @param listFile A file containing the elements of the list
      * @param caseSensitive Should the checking be case sensitive?
      * @throws java.io.FileNotFoundException
      */
-    public ListConstituentFeatureExtractor(String listName, String listFile, boolean caseSensitive)
+    public ListFeatureExtractor(String listName, String listFile, boolean caseSensitive)
             throws FileNotFoundException {
         this(listName, LineIO.read(listFile), caseSensitive);
     }

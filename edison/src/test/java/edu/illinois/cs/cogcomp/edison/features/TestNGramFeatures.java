@@ -59,7 +59,7 @@ public class TestNGramFeatures {
     }
 
 
-    private void testBigrams(WordConstituentFeatureExtractor f) throws EdisonException {
+    private void testBigrams(WordFeatureExtractor f) throws EdisonException {
         final NgramFeatureExtractor bigrams = NgramFeatureExtractor.bigrams(f);
 
         for (final TextAnnotation ta : tas) {
@@ -82,7 +82,7 @@ public class TestNGramFeatures {
         }
     }
 
-    private void testTrigrams(WordConstituentFeatureExtractor f) throws EdisonException {
+    private void testTrigrams(WordFeatureExtractor f) throws EdisonException {
         NgramFeatureExtractor trigrams = NgramFeatureExtractor.trigrams(f);
 
         for (TextAnnotation ta : tas) {

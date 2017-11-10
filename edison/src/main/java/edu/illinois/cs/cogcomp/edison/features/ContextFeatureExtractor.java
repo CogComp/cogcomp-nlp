@@ -51,13 +51,13 @@ public class ContextFeatureExtractor extends FeatureCollection {
     }
 
     public ContextFeatureExtractor(int contextSize, boolean specifyIndex,
-                                   boolean ignoreConstituent, WordConstituentFeatureExtractor... fex) {
+                                   boolean ignoreConstituent, WordFeatureExtractor... fex) {
         super("");
         this.contextSize = contextSize;
         this.specifyIndex = specifyIndex;
         this.ignoreConstituent = ignoreConstituent;
 
-        for (WordConstituentFeatureExtractor f : fex)
+        for (WordFeatureExtractor f : fex)
             addFeatureExtractor(f);
     }
 

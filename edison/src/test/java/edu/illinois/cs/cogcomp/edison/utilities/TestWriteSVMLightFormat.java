@@ -9,7 +9,7 @@ package edu.illinois.cs.cogcomp.edison.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.BeforeClass;
@@ -49,7 +49,7 @@ public class TestWriteSVMLightFormat {
                     "20:1 20:1 21:1 22:1 23:1 24:1 33:1 33:1 34:1 36:1 37:1 38:1 38:1 39:1 40:1 41:1 42:1 43:1 44:1 45:1 46:1";
 
 
-    static private BrownClusterConstituentFeatureExtractor bcfex;
+    static private BrownClusterFeatureExtractor bcfex;
     static private TokenizerTextAnnotationBuilder taBldr;
     static private TextAnnotation ta;
     // khashab2: changed from Set to List to ensure that it will not mess up on different OS
@@ -59,7 +59,7 @@ public class TestWriteSVMLightFormat {
 
     @BeforeClass
     public static void runBeforeAllTests() {
-        bcfex = BrownClusterConstituentFeatureExtractor.instance1000; // "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt"
+        bcfex = BrownClusterFeatureExtractor.instance1000; // "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt"
         taBldr = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
         ta =
                 taBldr.createTextAnnotation(

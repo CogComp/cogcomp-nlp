@@ -12,7 +12,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Test BrownClusterConstituentFeatureExtractor functionality.
+ * Test BrownClusterFeatureExtractor functionality.
  *
  * @author mssammon
  */
@@ -57,20 +57,20 @@ public class TestBrownClusterFeatureExtractor {
     @Test
     public final void test() {
         int[] prefixLengths = new int[] {4, 6, 10, 20};
-        BrownClusterConstituentFeatureExtractor bcfex1 = BrownClusterConstituentFeatureExtractor.instance1000;
-        BrownClusterConstituentFeatureExtractor bcfex2 = null;
+        BrownClusterFeatureExtractor bcfex1 = BrownClusterFeatureExtractor.instance1000;
+        BrownClusterFeatureExtractor bcfex2 = null;
         try {
             bcfex2 =
-                    new BrownClusterConstituentFeatureExtractor("bllip", "brownBllipClusters",
+                    new BrownClusterFeatureExtractor("bllip", "brownBllipClusters",
                             prefixLengths);
         } catch (EdisonException e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
-        BrownClusterConstituentFeatureExtractor bcfex3 = null;
+        BrownClusterFeatureExtractor bcfex3 = null;
         try {
             bcfex3 =
-                    new BrownClusterConstituentFeatureExtractor(
+                    new BrownClusterFeatureExtractor(
                             "wiki",
                             "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt",
                             prefixLengths);

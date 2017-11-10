@@ -11,7 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.WordNetFeatureClass;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
 import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagFeature;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.POSContextWindowTwo;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordContextWindowTwo;
@@ -25,8 +25,8 @@ import java.util.Set;
  * Extracts a collection of features used to classify SRL Nominal frame arguments:
  * {@link WordFeatureExtractorFactory} word, pos, numberNormalizer, gerundMarker,
  * nominalizationMarker, and dateMarker; {@link ListFeatureFactory} daysOfTheWeek and months;
- * {@link WordNetConstituentFeatureExtractor} synsetsFirstSense and hypernymsFirstSense;
- * {@link ParseHeadWordConstituentFeatureExtractor}; {@link CurrencyIndicator}; {@link LinearPosition};
+ * {@link WordNetFeatureExtractor} synsetsFirstSense and hypernymsFirstSense;
+ * {@link ParseHeadWordFeatureExtractor}; {@link CurrencyIndicator}; {@link LinearPosition};
  * {@link HyphenTagFeature}; {@link ParsePhraseType}; {@link ParsePath}; {@link ChunkEmbedding}
  * shallow parse and NER; {@link ChunkPathPattern}; {@link ParseSiblings};
  * {@link WordContextWindowTwo}; {@link POSContextWindowTwo}
@@ -54,7 +54,7 @@ public class SrlNomArgumentFeatures implements FeatureExtractor<Constituent> {
         tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.dateMarker);
 
         try {
-            WordNetConstituentFeatureExtractor wn = new WordNetConstituentFeatureExtractor();
+            WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
             wn.addFeatureType(WordNetFeatureClass.synsetsFirstSense);
             wn.addFeatureType(WordNetFeatureClass.hypernymsFirstSense);
 
@@ -64,7 +64,7 @@ public class SrlNomArgumentFeatures implements FeatureExtractor<Constituent> {
         }
 
         this.base.addFeatureExtractor(tmp.get(0));
-        this.base.addFeatureExtractor(new ParseHeadWordConstituentFeatureExtractor(ViewNames.PARSE_STANFORD,
+        this.base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD,
                 tmp.get(1)));
 
         this.base.addFeatureExtractor(CurrencyIndicator.instance);

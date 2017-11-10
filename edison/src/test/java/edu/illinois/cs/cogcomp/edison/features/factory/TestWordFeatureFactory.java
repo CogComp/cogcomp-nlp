@@ -12,8 +12,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.WordNetFeatureClass;
+import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
@@ -156,7 +156,7 @@ public class TestWordFeatureFactory {
     @Test
     public final void testBrownFeatures() throws EdisonException {
         logger.info("\tTesting Brown cluster features");
-        WordConstituentFeatureExtractor brownFeatureGenerator =
+        WordFeatureExtractor brownFeatureGenerator =
                 WordFeatureExtractorFactory.getBrownFeatureGenerator("", "brownBllipClusters",
                         new int[] {4, 5});
         for (TextAnnotation ta : tas) {
@@ -203,7 +203,7 @@ public class TestWordFeatureFactory {
 // Not needed anymore, as test of SimpleGazetteerAnnotator in SimpleGazetteerAnnotatorTest.java suffice.
 //    public final void testGazetteerFeatures() throws Exception {
 //        System.out.println("\tTesting gazetteer features");
-//        WordConstituentFeatureExtractor fex =
+//        WordFeatureExtractor fex =
 //                WordFeatureExtractorFactory.getGazetteerFeatureExtractor("gazetteer",
 //                        new GazetteerViewGenerator("gazetteers", ViewNames.GAZETTEER));
 //
@@ -212,7 +212,7 @@ public class TestWordFeatureFactory {
 //        }
 //    }
 
-    private void runTest(TextAnnotation ta, WordConstituentFeatureExtractor fex) throws EdisonException {
+    private void runTest(TextAnnotation ta, WordFeatureExtractor fex) throws EdisonException {
 
         for (int tokenId = 0; tokenId < ta.size(); tokenId++) {
             Set<Feature> features = fex.getWordFeatures(ta, tokenId);

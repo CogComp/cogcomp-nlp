@@ -15,24 +15,24 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.annotators.BrownClusterViewGenerator;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.WordConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * A {@code WordConstituentFeatureExtractor} that generates prefixes of brown cluster Ids for each word. Using
+ * A {@code WordFeatureExtractor} that generates prefixes of brown cluster Ids for each word. Using
  * BrownClusterViewGenerator, which now supports multiple Brown cluster sources to be used
  * simultaneously.
  *
  * @keywords named entity recognizer, ner, brown, embeddings
  * @author Vivek Srikumar
- * @see WordConstituentFeatureExtractor
+ * @see WordFeatureExtractor
  */
-public class BrownClusterConstituentFeatureExtractor extends WordConstituentFeatureExtractor {
+public class BrownClusterFeatureExtractor extends WordFeatureExtractor {
 
-    public static final BrownClusterConstituentFeatureExtractor instance100, instance320, instance1000,
+    public static final BrownClusterFeatureExtractor instance100, instance320, instance1000,
             instance3200;
 
     public final static int[] prefixes = new int[] {4, 6, 10, 20};
@@ -40,16 +40,16 @@ public class BrownClusterConstituentFeatureExtractor extends WordConstituentFeat
     static {
         try {
             instance100 =
-                    new BrownClusterConstituentFeatureExtractor("100", BrownClusterViewGenerator.file100,
+                    new BrownClusterFeatureExtractor("100", BrownClusterViewGenerator.file100,
                             prefixes);
             instance320 =
-                    new BrownClusterConstituentFeatureExtractor("320", BrownClusterViewGenerator.file320,
+                    new BrownClusterFeatureExtractor("320", BrownClusterViewGenerator.file320,
                             prefixes);
             instance1000 =
-                    new BrownClusterConstituentFeatureExtractor("1000", BrownClusterViewGenerator.file1000,
+                    new BrownClusterFeatureExtractor("1000", BrownClusterViewGenerator.file1000,
                             prefixes);
             instance3200 =
-                    new BrownClusterConstituentFeatureExtractor("3200", BrownClusterViewGenerator.file3200,
+                    new BrownClusterFeatureExtractor("3200", BrownClusterViewGenerator.file3200,
                             prefixes);
         } catch (EdisonException e) {
             throw new RuntimeException(e);
@@ -61,16 +61,16 @@ public class BrownClusterConstituentFeatureExtractor extends WordConstituentFeat
     private String brownClustersFile;
     private String name;
 
-    public BrownClusterConstituentFeatureExtractor(String name, String brownClustersFile, int[] prefixLengths)
+    public BrownClusterFeatureExtractor(String name, String brownClustersFile, int[] prefixLengths)
             throws EdisonException {
         this(name, brownClustersFile, prefixLengths, true);
     }
 
     /**
-     * @see WordConstituentFeatureExtractor#WordConstituentFeatureExtractor(boolean)
+     * @see WordFeatureExtractor#WordFeatureExtractor(boolean)
      */
-    public BrownClusterConstituentFeatureExtractor(String name, String brownClustersFile, int[] prefixLengths,
-                                                   boolean useLastWord) throws EdisonException {
+    public BrownClusterFeatureExtractor(String name, String brownClustersFile, int[] prefixLengths,
+                                        boolean useLastWord) throws EdisonException {
         super(useLastWord);
         this.name = name;
         this.brownClustersFile = brownClustersFile;
@@ -81,7 +81,7 @@ public class BrownClusterConstituentFeatureExtractor extends WordConstituentFeat
     private void lazyLoadClusters(String brownClustersFile) throws EdisonException {
         if (viewGenerator == null) {
 
-            synchronized (BrownClusterConstituentFeatureExtractor.class) {
+            synchronized (BrownClusterFeatureExtractor.class) {
                 if (viewGenerator == null) {
                     try {
 
@@ -104,7 +104,7 @@ public class BrownClusterConstituentFeatureExtractor extends WordConstituentFeat
         lazyLoadClusters(brownClustersFile);
 
         if (!ta.hasView(viewGenerator.getViewName())) {
-            synchronized (BrownClusterConstituentFeatureExtractor.class) {
+            synchronized (BrownClusterFeatureExtractor.class) {
                 View view = null;
                 try {
                     view = viewGenerator.getView(ta);

@@ -72,7 +72,7 @@ public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor<Const
 
         base.addFeatureExtractor(SyntacticFrame.STANFORD);
 
-        base.addFeatureExtractor(new ParseHeadWordConstituentFeatureExtractor(ViewNames.PARSE_STANFORD,
+        base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD,
                 new WordAndPos("")));
     }
 

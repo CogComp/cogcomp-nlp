@@ -16,22 +16,22 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class NgramFeatureExtractor extends WordConstituentFeatureExtractor {
+public class NgramFeatureExtractor extends WordFeatureExtractor {
 
-    private final WordConstituentFeatureExtractor base;
+    private final WordFeatureExtractor base;
     private final int n;
 
-    public NgramFeatureExtractor(WordConstituentFeatureExtractor base, int n) {
+    public NgramFeatureExtractor(WordFeatureExtractor base, int n) {
         this.base = base;
         this.n = n;
 
     }
 
-    public static NgramFeatureExtractor bigrams(WordConstituentFeatureExtractor base) {
+    public static NgramFeatureExtractor bigrams(WordFeatureExtractor base) {
         return new NgramFeatureExtractor(base, 2);
     }
 
-    public static NgramFeatureExtractor trigrams(WordConstituentFeatureExtractor base) {
+    public static NgramFeatureExtractor trigrams(WordFeatureExtractor base) {
         return new NgramFeatureExtractor(base, 3);
     }
 

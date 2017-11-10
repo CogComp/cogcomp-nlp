@@ -121,7 +121,7 @@ class ParameterizedFeatureExtractors {
                     String parseView = attributes.get(PARSE_VIEW);
                     if (parseView.equals(ViewNames.PARSE_GOLD)
                             || parseView.equals(ViewNames.PARSE_STANFORD))
-                        return new ParseHeadWordConstituentFeatureExtractor(parseView, fex);
+                        return new ParseHeadWordFeatureExtractor(parseView, fex);
 
                     FeatureInputTransformer transformer;
                     switch (parseView) {
@@ -257,7 +257,7 @@ class ParameterizedFeatureExtractors {
                                                      Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     String viewName = attributes.get(PARSE_VIEW);
 
-                    return new DependencyModifierConstituentFeatureExtractor(viewName, fex);
+                    return new DependencyModifierFeatureExtractor(viewName, fex);
                 }
             };
 

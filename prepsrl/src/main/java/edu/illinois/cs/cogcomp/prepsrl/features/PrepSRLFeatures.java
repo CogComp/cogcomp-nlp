@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.RogetThesaurusFeatures;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Set;
 
 import static edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory.*;
-import static edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor.*;
+import static edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.*;
 
 public class PrepSRLFeatures extends LBJavaFeatureExtractor {
     private final FeatureExtractor fex;
-    private static WordNetConstituentFeatureExtractor firstSense, wordNetFexes;
+    private static WordNetFeatureExtractor firstSense, wordNetFexes;
     static {
         try {
             firstSense = getWordNetFeatureExtractor(WordNetFeatureClass.synsetsFirstSense);

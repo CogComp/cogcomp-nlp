@@ -18,7 +18,7 @@ import java.util.Set;
 
 
 /**
- * Applies {@link ParseHeadWordConstituentFeatureExtractor} parameterized with {@link WordAndPos}.
+ * Applies {@link ParseHeadWordFeatureExtractor} parameterized with {@link WordAndPos}.
  *
  * @keywords SRL, parse, head
  * @author Xinbo Wu
@@ -49,7 +49,7 @@ public class ParseSibling implements FeatureExtractor<Constituent> {
             }
         });
 
-        this.base.addFeatureExtractor(new ParseHeadWordConstituentFeatureExtractor(ViewNames.PARSE_STANFORD,
+        this.base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD,
                 new WordAndPos("")));
     }
 

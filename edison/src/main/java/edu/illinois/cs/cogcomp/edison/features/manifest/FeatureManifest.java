@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetConstituentFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -314,8 +314,8 @@ public class FeatureManifest {
         return cfx;
     }
 
-    private WordConstituentFeatureExtractor getWordFex(final FeatureExtractor fex) {
-        return new WordConstituentFeatureExtractor() {
+    private WordFeatureExtractor getWordFex(final FeatureExtractor fex) {
+        return new WordFeatureExtractor() {
 
             @Override
             public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
@@ -503,7 +503,7 @@ public class FeatureManifest {
             return cf.get(uniqueLabel);
 
         try {
-            WordNetConstituentFeatureExtractor wn = new WordNetConstituentFeatureExtractor();
+            WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
 
             for (String label : wnLabels) {
                 if (!WordNetClasses.wnClasses.containsKey(label))
