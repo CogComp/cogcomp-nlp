@@ -2,12 +2,12 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.36</version>
+        <version>4.0.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>illinois-ner</artifactId>
 
@@ -23,12 +23,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.1.36</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.36</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.cogcomp</groupId>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
-            <version>3.1.36</version>
+            <version>4.0.0</version>
         </dependency>
 
 
@@ -83,11 +83,11 @@
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-surefire-plugin</artifactId>
                <version>2.20.1</version>
-			    <configuration>
-			        <forkCount>1</forkCount>
-			        <reuseForks>false</reuseForks>
-			        <argLine>-Xmx9g</argLine>
-			    </configuration>
+               <configuration>
+                   <forkCount>1</forkCount>
+                   <reuseForks>false</reuseForks>
+                   <argLine>-Xmx9g</argLine>
+               </configuration>
             </plugin>
 
             <plugin>

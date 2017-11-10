@@ -34,7 +34,9 @@ public class Timex3PipelineTest {
         timex3Processor = PipelineFactory.buildPipeline(ViewNames.POS, ViewNames.TIMEX3);
     }
 
-    @Test @Ignore
+    /** this test seems to be unreliable, ignore until fixed. */
+    @Ignore
+    @Test
     public void testSentencePipeline() {
         TextAnnotation ta = null;
         try {
@@ -62,6 +64,9 @@ public class Timex3PipelineTest {
         int curYear = now.year().get();
         int curMonth = now.monthOfYear().get();
         assertEquals("<TIMEX3 mod=\"START\" type=\"DATE\" value=\"" + Integer.toString(curYear - 1) + "-12\">", constituents.get(0).getLabel());
-        assertEquals("<TIMEX3 type=\"DATE\" value=\"" + Integer.toString(curYear) + "-" + Integer.toString(curMonth - 1) + "\">", constituents.get(1).getLabel());
+        String ccy = String.format("%02d", (curMonth - 2));
+        String tx1 = "<TIMEX3 type=\"DATE\" value=\"" + Integer.toString(curYear) + "-" + ccy + "\">";
+        String tx2 = constituents.get(1).getLabel();
+        assertEquals(tx1, tx2);
     }
 }
