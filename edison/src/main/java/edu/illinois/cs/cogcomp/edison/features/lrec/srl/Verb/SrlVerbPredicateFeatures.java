@@ -22,7 +22,7 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 
-public class SrlVerbPredicateFeatures implements FeatureExtractor {
+public class SrlVerbPredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
     private final FeatureCollection base;
 
@@ -51,7 +51,7 @@ public class SrlVerbPredicateFeatures implements FeatureExtractor {
         context.addFeatureExtractor(tmp);
         this.base.addFeatureExtractor(context);
 
-        this.base.addFeatureExtractor(LevinVerbClassFeature.instance);
+        this.base.addFeatureExtractor(LevinVerbClassConstituentFeature.instance);
     }
 
 

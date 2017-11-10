@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class AttributeFeature implements FeatureExtractor {
+public class AttributeFeature implements FeatureExtractor<Constituent> {
 
     private String attributeName;
 

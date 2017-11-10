@@ -11,8 +11,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
 import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -24,7 +24,7 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class SpanFeaturesUnordered implements FeatureExtractor {
+public class SpanFeaturesUnordered implements FeatureExtractor<Constituent> {
     public static SpanFeaturesUnordered POS_UNIGRAMS = new SpanFeaturesUnordered(ViewNames.POS, 1);
     public static SpanFeaturesUnordered POS_BIGRAMS = new SpanFeaturesUnordered(ViewNames.POS, 2);
     public static SpanFeaturesUnordered POS_TRIGRAMS = new SpanFeaturesUnordered(ViewNames.POS, 3);

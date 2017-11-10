@@ -10,14 +10,10 @@ package edu.illinois.cs.cogcomp.edison.features.lrec;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.RealFeature;
-import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +25,7 @@ import java.util.*;
  * @author Paul Vijayakumar, Mazin Bokhari
  *
  */
-public class ChunkWindowThreeBefore implements FeatureExtractor {
+public class ChunkWindowThreeBefore implements FeatureExtractor<Constituent> {
     private static Logger logger = LoggerFactory.getLogger(ChunkWindowThreeBefore.class);
 
     public static View SHALLOW_PARSE, TOKENS;

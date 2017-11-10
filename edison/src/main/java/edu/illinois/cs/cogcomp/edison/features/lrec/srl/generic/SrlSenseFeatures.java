@@ -11,7 +11,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkPropertyFeatureFactory;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.SrlWordFeatures;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ import java.util.Set;
  *           governor, object
  * @author Xinbo Wu
  */
-public class SrlSenseFeatures implements FeatureExtractor {
+public class SrlSenseFeatures implements FeatureExtractor<Constituent> {
     private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlSenseFeatures() throws Exception {

@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class ClauseFeatureExtractor implements FeatureExtractor {
+public class ClauseFeatureExtractor implements FeatureExtractor<Constituent> {
 
     public static ClauseFeatureExtractor CHARNIAK = new ClauseFeatureExtractor(
             ViewNames.PSEUDO_PARSE_CHARNIAK, ViewNames.CLAUSES_CHARNIAK);

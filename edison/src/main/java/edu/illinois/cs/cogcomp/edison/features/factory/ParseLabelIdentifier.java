@@ -24,7 +24,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public abstract class ParseLabelIdentifier implements FeatureExtractor {
+public abstract class ParseLabelIdentifier implements FeatureExtractor<Constituent> {
 
     private String label;
     private String parseViewName;

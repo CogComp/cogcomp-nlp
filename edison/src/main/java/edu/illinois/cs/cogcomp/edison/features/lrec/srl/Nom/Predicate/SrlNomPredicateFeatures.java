@@ -9,9 +9,9 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Predicate;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.AttributeFeature;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
 import edu.illinois.cs.cogcomp.edison.features.factory.SubcategorizationFrame;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
@@ -20,7 +20,6 @@ import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordContextWindo
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
-
 
 /**
  * Extracts features for identifying Nominal SRL predicates. Combines {@link WordContextWindowTwo};
@@ -31,7 +30,7 @@ import java.util.Set;
  * @keywords SRL, Nominalization, predicate, nominal, nom
  * @author Xinbo Wu
  */
-public class SrlNomPredicateFeatures implements FeatureExtractor {
+public class SrlNomPredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
     private final FeatureCollection base;
 

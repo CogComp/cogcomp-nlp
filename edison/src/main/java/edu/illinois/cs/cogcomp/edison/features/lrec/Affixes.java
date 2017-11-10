@@ -10,14 +10,10 @@ package edu.illinois.cs.cogcomp.edison.features.lrec;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.RealFeature;
-import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.*;
@@ -32,7 +28,7 @@ import java.util.*;
  * @author Paul Vijayakumar, Mazin Bokhari
  *
  */
-public class Affixes implements FeatureExtractor {
+public class Affixes implements FeatureExtractor<Constituent> {
 
     public static View TOKENS;
 

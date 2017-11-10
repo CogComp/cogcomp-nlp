@@ -12,9 +12,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
@@ -32,7 +32,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ParseSiblings implements FeatureExtractor {
+public class ParseSiblings implements FeatureExtractor<Constituent> {
 
     public static ParseSiblings CHARNIAK = new ParseSiblings(ViewNames.PARSE_CHARNIAK);
     public static ParseSiblings STANFORD = new ParseSiblings(ViewNames.PARSE_STANFORD);

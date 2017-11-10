@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is the FeatureExtractor Class for the lbj file
+ * This is the ConstituentFeatureExtractor Class for the lbj file
  * We define most of the features here
  * Each static function performs an extraction on a given target
  */

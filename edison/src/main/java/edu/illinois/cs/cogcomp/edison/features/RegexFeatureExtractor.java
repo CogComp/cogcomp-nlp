@@ -13,7 +13,7 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class RegexFeatureExtractor implements FeatureExtractor {
+public class RegexFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final static DiscreteFeature matches = DiscreteFeature.create("Y");
     private final String regex;

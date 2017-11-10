@@ -10,7 +10,6 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordAndPos;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Collections;
@@ -24,7 +23,7 @@ import java.util.Set;
  * @keywords SRL, parse, head
  * @author Xinbo Wu
  */
-public class ParseSibling implements FeatureExtractor {
+public class ParseSibling implements FeatureExtractor<Constituent> {
     private final String name;
     private final FeatureCollection base;
 
@@ -36,7 +35,7 @@ public class ParseSibling implements FeatureExtractor {
         this.name = name;
         this.base = new FeatureCollection(this.getName());
 
-        this.base.addFeatureExtractor(new FeatureExtractor() {
+        this.base.addFeatureExtractor(new FeatureExtractor<Constituent>() {
 
             @Override
             public String getName() {

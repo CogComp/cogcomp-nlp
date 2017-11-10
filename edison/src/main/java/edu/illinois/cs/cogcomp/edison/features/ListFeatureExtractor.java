@@ -22,7 +22,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ListFeatureExtractor implements FeatureExtractor {
+public class ListFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final Feature listName;
     private final Set<String> list;

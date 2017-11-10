@@ -9,9 +9,9 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Classifier;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.AttributeFeature;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.NomLexClassFeature;
 import edu.illinois.cs.cogcomp.edison.features.factory.SubcategorizationFrame;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
@@ -31,7 +31,7 @@ import java.util.Set;
  * @keywords SRL, Nom, nominal, predicate, classifier
  * @author Xinbo Wu
  */
-public class SrlNomClassifierPredicateFeatures implements FeatureExtractor {
+public class SrlNomClassifierPredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
     private final FeatureCollection base;
 

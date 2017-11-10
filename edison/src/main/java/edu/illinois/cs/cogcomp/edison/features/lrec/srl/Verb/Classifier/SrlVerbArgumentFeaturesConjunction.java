@@ -23,7 +23,7 @@ import java.util.Set;
  * @keywords SRL, Verb, conjunction, argument, classifier
  * @author Xinbo Wu
  */
-public class SrlVerbArgumentFeaturesConjunction implements FeatureExtractor {
+public class SrlVerbArgumentFeaturesConjunction implements FeatureExtractor<Constituent> {
     private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlVerbArgumentFeaturesConjunction() {

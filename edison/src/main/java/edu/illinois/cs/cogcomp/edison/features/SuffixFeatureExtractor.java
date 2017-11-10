@@ -23,7 +23,7 @@ public class SuffixFeatureExtractor extends WordFeatureExtractor {
     protected List<String> suffixes;
 
     public SuffixFeatureExtractor(List<String> deAdjSuffixes, String featureName,
-            boolean useLastWordOfMultiwordConstituents) {
+                                  boolean useLastWordOfMultiwordConstituents) {
         super(useLastWordOfMultiwordConstituents);
         this.suffixes = deAdjSuffixes;
         this.featureName = DiscreteFeature.create(featureName);

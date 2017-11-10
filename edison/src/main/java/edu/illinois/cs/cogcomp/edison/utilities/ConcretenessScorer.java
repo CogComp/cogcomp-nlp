@@ -10,9 +10,8 @@ package edu.illinois.cs.cogcomp.edison.utilities;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.edison.features.factory.LevinVerbClassFeature;
+import edu.illinois.cs.cogcomp.edison.features.factory.LevinVerbClassConstituentFeature;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -35,7 +34,7 @@ public class ConcretenessScorer {
     private static void readRatingsFile() throws IOException, URISyntaxException {
         ratingMap = new HashMap<>();
         InputStream resource =
-                IOUtils.lsResources(LevinVerbClassFeature.class, FILE).get(0).openStream();
+                IOUtils.lsResources(LevinVerbClassConstituentFeature.class, FILE).get(0).openStream();
         List<String> lines =
                 LineIO.read(resource, Charset.defaultCharset().name(),
                         new ITransformer<String, String>() {

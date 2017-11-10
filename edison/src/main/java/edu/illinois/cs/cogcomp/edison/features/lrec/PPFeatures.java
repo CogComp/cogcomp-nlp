@@ -28,7 +28,7 @@ import java.util.Set;
  * 
  * @author Xinbo Wu
  */
-public class PPFeatures implements FeatureExtractor {
+public class PPFeatures implements FeatureExtractor<Constituent> {
     private final String parseViewName;
 
     public PPFeatures(String parseViewName) {

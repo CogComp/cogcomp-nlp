@@ -70,7 +70,7 @@ public class BrownClusterFeatureExtractor extends WordFeatureExtractor {
      * @see WordFeatureExtractor#WordFeatureExtractor(boolean)
      */
     public BrownClusterFeatureExtractor(String name, String brownClustersFile, int[] prefixLengths,
-            boolean useLastWord) throws EdisonException {
+                                        boolean useLastWord) throws EdisonException {
         super(useLastWord);
         this.name = name;
         this.brownClustersFile = brownClustersFile;

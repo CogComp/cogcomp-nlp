@@ -8,10 +8,10 @@
 package edu.illinois.cs.cogcomp.edison.features.manifest;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.CurrencyIndicator;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.*;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
@@ -25,7 +25,7 @@ class KnownFexes {
     private static final Set<Feature> bias = Collections
             .unmodifiableSet(new LinkedHashSet<Feature>(Collections.singletonList(DiscreteFeature
                     .create("bias"))));
-    private final static FeatureExtractor biasFeature = new FeatureExtractor() {
+    private final static FeatureExtractor biasFeature = new FeatureExtractor<Constituent>() {
 
         @Override
         public String getName() {
@@ -55,7 +55,7 @@ class KnownFexes {
         fexes.put("word", word);
         fexes.put("word-case", wordCase);
 
-        fexes.put("label", new FeatureExtractor() {
+        fexes.put("label", new FeatureExtractor<Constituent>() {
 
             @Override
             public String getName() {
@@ -74,7 +74,7 @@ class KnownFexes {
         fexes.put("months", ListFeatureFactory.months);
         fexes.put("possessive-pronouns", ListFeatureFactory.possessivePronouns);
 
-        fexes.put("length", SpanLengthFeature.instance);
+        fexes.put("length", SpanLengthConstituentFeature.instance);
 
         fexes.put("chunk-embedding", ChunkEmbedding.SHALLOW_PARSE);
         fexes.put("ne-embedding", ChunkEmbedding.NER);
@@ -88,7 +88,7 @@ class KnownFexes {
         fexes.put("is-negated", ChunkPropertyFeatureFactory.isNegated);
         fexes.put("has-modal-verb", ChunkPropertyFeatureFactory.hasModalVerb);
 
-        fexes.put("levin-verb-class", LevinVerbClassFeature.instance);
+        fexes.put("levin-verb-class", LevinVerbClassConstituentFeature.instance);
 
         // fexes.put("clauses-charniak", ClauseFeatureExtractor.CHARNIAK);
         // fexes.put("clauses-stanford", ClauseFeatureExtractor.STANFORD);

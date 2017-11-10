@@ -34,7 +34,7 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Vivek Srikumar
  */
-public class CurrencyIndicator implements FeatureExtractor {
+public class CurrencyIndicator implements FeatureExtractor<Constituent> {
 
     public static final CurrencyIndicator instance;
     private static final String VIEW_NAME = "CURRENCY_INDICATOR";

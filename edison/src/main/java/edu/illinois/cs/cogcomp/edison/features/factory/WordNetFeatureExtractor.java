@@ -68,7 +68,7 @@ public class WordNetFeatureExtractor extends WordFeatureExtractor {
      *
      * @throws JWNLException
      * @throws java.io.FileNotFoundException
-     * @see edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor#WordNetFeatureExtractor(boolean)
+     * @see WordNetFeatureExtractor#WordNetFeatureExtractor(boolean)
      */
     public WordNetFeatureExtractor() throws FileNotFoundException, JWNLException {
         this(true);

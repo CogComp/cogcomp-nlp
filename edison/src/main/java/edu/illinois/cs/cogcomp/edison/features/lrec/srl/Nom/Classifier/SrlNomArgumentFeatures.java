@@ -34,7 +34,7 @@ import java.util.Set;
  * @keywords SRL, Nom, Nominal, classifier, arguments
  * @author Xinbo Wu
  */
-public class SrlNomArgumentFeatures implements FeatureExtractor {
+public class SrlNomArgumentFeatures implements FeatureExtractor<Constituent> {
     private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlNomArgumentFeatures() throws EdisonException {

@@ -28,7 +28,7 @@ import java.util.Set;
  * @keywords semantic role labeling, srl, verbal, verb, identifier, argument
  * @author Xinbo Wu
  */
-public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor {
+public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor<Constituent> {
     private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlVerbIdentifierArgumentFeatures() {
@@ -65,7 +65,7 @@ public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor {
 
         base.addFeatureExtractor(FeatureUtilities.conjoin(new SrlVerbPredicateFeatures(""), tmp));
 
-        base.addFeatureExtractor(SpanLengthFeature.instance);
+        base.addFeatureExtractor(SpanLengthConstituentFeature.instance);
         base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);
         base.addFeatureExtractor(ChunkPathPattern.SHALLOW_PARSE);
         base.addFeatureExtractor(ClauseFeatureExtractor.STANFORD);

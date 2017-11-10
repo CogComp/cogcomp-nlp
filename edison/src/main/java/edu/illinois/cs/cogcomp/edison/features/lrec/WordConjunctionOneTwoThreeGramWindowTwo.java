@@ -26,7 +26,7 @@ import java.util.Set;
  * @keywords chunker, shallow-parser, pos-tagger, words, tokens, window, trigram
  * @author Paul Vijayakumar, Mazin Bokhari, Christos Christodoulopoulos
  */
-public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor {
+public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor<Constituent> {
 
     // Views required for feature extractor
     public static View TOKENS;

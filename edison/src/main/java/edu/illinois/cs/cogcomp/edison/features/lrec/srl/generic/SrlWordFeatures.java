@@ -8,8 +8,8 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
@@ -33,7 +33,7 @@ import java.util.Set;
  * @keywords lexical, word, WordNet, SRL, Nominalization, nom, nominal, predicate
  * @author Xinbo Wu
  */
-public class SrlWordFeatures implements FeatureExtractor {
+public class SrlWordFeatures implements FeatureExtractor<Constituent> {
     private final String name;
     private final FeatureCollection base;
 

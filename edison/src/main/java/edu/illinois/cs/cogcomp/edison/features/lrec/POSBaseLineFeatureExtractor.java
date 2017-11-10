@@ -22,7 +22,7 @@ import java.util.*;
  * 
  * @author Xinbo Wu
  */
-public class POSBaseLineFeatureExtractor implements FeatureExtractor {
+public class POSBaseLineFeatureExtractor implements FeatureExtractor<Constituent> {
     private final String viewName;
     protected POSBaseLineCounter counter;
 

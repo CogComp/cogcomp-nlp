@@ -47,22 +47,17 @@ public abstract class Feature {
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
-
         } else {
             this.name = name;
             this.bytes = null;
         }
 
         this.nameHashCode = name.hashCode() * 31 + 41;
-
     }
 
     protected Feature(byte[] bytes) {
-
         try {
-
             if (ascii) {
-
                 if (keepString) {
                     this.name = new String(bytes, US_ASCII);
                 } else {

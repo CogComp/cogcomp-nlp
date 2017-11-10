@@ -30,7 +30,7 @@ import java.util.Set;
  * @keywords SRL, Nominalization, Nom, Nominal, argument, identification
  * @author Xinbo Wu
  */
-public class SrlNomIdentifier implements FeatureExtractor {
+public class SrlNomIdentifier implements FeatureExtractor<Constituent> {
     private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public SrlNomIdentifier() {

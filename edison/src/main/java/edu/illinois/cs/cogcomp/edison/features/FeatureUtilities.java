@@ -120,10 +120,9 @@ public class FeatureUtilities {
     /**
      * Create a feature map using the specified feature extractor on the input constituent.
      */
-    public static Map<String, Float> getFeatureMap(final FeatureExtractor fex, Constituent c)
+    public static Map<String, Float> getFeatureMap(final FeatureExtractor<Constituent> fex, Constituent c)
             throws EdisonException {
         Map<String, Float> map = new HashMap<>();
-
         for (Feature f : fex.getFeatures(c)) {
             map.put(f.getName(), f.getValue());
         }
@@ -135,7 +134,7 @@ public class FeatureUtilities {
      * Create a feature set using the specified feature extractor on the input constituent.
      * <b>Note</b>: If there are any real valued features, they will be ignored.
      */
-    public static Set<String> getFeatureSet(final FeatureExtractor fex, Constituent c)
+    public static Set<String> getFeatureSet(final FeatureExtractor<Constituent> fex, Constituent c)
             throws EdisonException {
         Set<String> set = new LinkedHashSet<>();
 
@@ -242,7 +241,7 @@ public class FeatureUtilities {
      * @return A new feature extractor that produces feature conjunctions
      */
     public static FeatureExtractor conjoin(final FeatureExtractor f1, final FeatureExtractor f2) {
-        return new FeatureExtractor() {
+        return new FeatureExtractor<Constituent>() {
 
             @Override
             public String getName() {

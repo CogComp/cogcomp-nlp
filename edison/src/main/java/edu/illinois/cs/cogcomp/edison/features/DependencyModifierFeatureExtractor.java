@@ -21,7 +21,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class DependencyModifierFeatureExtractor implements FeatureExtractor {
+public class DependencyModifierFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final FeatureExtractor baseFex;
     private final FeatureInputTransformer dependencyHeadIdentifier;

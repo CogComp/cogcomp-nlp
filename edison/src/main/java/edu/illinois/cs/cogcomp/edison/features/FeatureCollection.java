@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class FeatureCollection implements FeatureExtractor {
+public class FeatureCollection implements FeatureExtractor<Constituent> {
     private static final DiscreteFeature NULL_INPUT = DiscreteFeature.create("NULL");
 
     protected final List<FeatureExtractor> generators;
@@ -30,7 +30,7 @@ public class FeatureCollection implements FeatureExtractor {
 
     /**
      * Create a new feature extractor. By itself, it does not generate any features. Use
-     * {@code FeatureExtractor#addFeatureGenerator(IFeatureExtractor))} to add feature generators.
+     * {@code ConstituentFeatureExtractor#addFeatureGenerator(IFeatureExtractor))} to add feature generators.
      */
     public FeatureCollection(String name) {
         this(name, FeatureInputTransformer.identity);
@@ -41,7 +41,7 @@ public class FeatureCollection implements FeatureExtractor {
     }
 
     public FeatureCollection(String name, FeatureInputTransformer inputTransformer,
-            FeatureExtractor... feats) {
+                             FeatureExtractor... feats) {
         this.name = name;
         this.generators = new ArrayList<>();
 

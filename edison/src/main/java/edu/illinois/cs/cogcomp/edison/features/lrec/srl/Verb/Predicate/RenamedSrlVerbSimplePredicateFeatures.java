@@ -22,7 +22,7 @@ import java.util.Set;
  *
  * @author Xinbo Wu
  */
-public class RenamedSrlVerbSimplePredicateFeatures implements FeatureExtractor {
+public class RenamedSrlVerbSimplePredicateFeatures implements FeatureExtractor<Constituent> {
     private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public RenamedSrlVerbSimplePredicateFeatures() {

@@ -9,9 +9,9 @@ package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 
@@ -24,7 +24,7 @@ import java.util.*;
  * 
  */
 
-public class POSMikheevFeatureExtractor implements FeatureExtractor {
+public class POSMikheevFeatureExtractor implements FeatureExtractor<Constituent> {
     private final String viewName;
     protected POSMikheevCounter counter;
 

@@ -275,7 +275,7 @@ public class FeatureManifest {
     }
 
     private FeatureExtractor getNonAttributeFeatureExtractors(Tree<String> tree,
-            Map<String, FeatureExtractor> cf) throws EdisonException {
+                                                              Map<String, FeatureExtractor> cf) throws EdisonException {
 
         FeatureCollection f = new FeatureCollection("");
         int childId = 0;
@@ -366,7 +366,7 @@ public class FeatureManifest {
     }
 
     private FeatureExtractor processIncludeWithPrefix(Tree<String> tree,
-            Map<String, FeatureExtractor> cf) throws EdisonException {
+                                                      Map<String, FeatureExtractor> cf) throws EdisonException {
         String uniqueLabel = uniquify(tree);
         if (cf.containsKey(uniqueLabel))
             return cf.get(uniqueLabel);
@@ -452,12 +452,12 @@ public class FeatureManifest {
     }
 
     /**
-     * Given a leaf name, find the corresponding FeatureExtractor, as defined in
+     * Given a leaf name, find the corresponding ConstituentFeatureExtractor, as defined in
      * {@link KnownFexes#fexes}
      * 
      * @param label string, needs to be in {@link KnownFexes#fexes}
-     * @param cf used for memoization, maps label to FeatureExtractor
-     * @return the corresponding FeatureExtractor
+     * @param cf used for memoization, maps label to ConstituentFeatureExtractor
+     * @return the corresponding ConstituentFeatureExtractor
      * @throws EdisonException
      */
     private FeatureExtractor getLeafFeature(String label, Map<String, FeatureExtractor> cf)
@@ -470,10 +470,10 @@ public class FeatureManifest {
         if (!KnownFexes.fexes.containsKey(label))
             throw new EdisonException("Unknown feature extractor '" + label
                     + "', expecting one of " + KnownFexes.fexes.keySet());
-        FeatureExtractor featureExtractor = KnownFexes.fexes.get(label);
+        FeatureExtractor constituentFeatureExtractor = KnownFexes.fexes.get(label);
 
-        cf.put(uniqueLabel, featureExtractor);
-        return featureExtractor;
+        cf.put(uniqueLabel, constituentFeatureExtractor);
+        return constituentFeatureExtractor;
 
     }
 
@@ -496,7 +496,7 @@ public class FeatureManifest {
     }
 
     private FeatureExtractor getWordNetFeatureExtractor(List<String> wnLabels,
-            Map<String, FeatureExtractor> cf) throws EdisonException {
+                                                        Map<String, FeatureExtractor> cf) throws EdisonException {
 
         String uniqueLabel = uniquify(wnLabels);
         if (cf.containsKey(uniqueLabel))
@@ -543,7 +543,7 @@ public class FeatureManifest {
     }
 
     /**
-     * This adds a FeatureExtractor to the input FeatureCollection. Typically the FeatureCollection
+     * This adds a ConstituentFeatureExtractor to the input FeatureCollection. Typically the FeatureCollection
      * is empty, having only a name.
      * 
      * @param fex

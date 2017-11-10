@@ -9,10 +9,9 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Identifier;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.ParseHeadWordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ListFeatureFactory;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -30,7 +29,7 @@ import java.util.Set;
  * @keywords SRL, Nom, nominalization, nominal, identifier, argument
  * @author Xinbo Wu
  */
-public class SrlNomHeadWordFeatures implements FeatureExtractor {
+public class SrlNomHeadWordFeatures implements FeatureExtractor<Constituent> {
     private final String name;
     private final FeatureCollection base;
 

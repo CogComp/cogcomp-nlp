@@ -25,7 +25,7 @@ public class CachedFeatureCollection extends FeatureCollection {
     }
 
     public CachedFeatureCollection(String name, FeatureInputTransformer inputTransformer,
-            FeatureExtractor... feats) {
+                                   FeatureExtractor... feats) {
         super(name, inputTransformer, feats);
     }
 

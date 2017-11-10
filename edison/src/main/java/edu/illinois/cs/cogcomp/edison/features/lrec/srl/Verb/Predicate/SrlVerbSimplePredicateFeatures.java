@@ -8,8 +8,7 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Predicate;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.AttributeFeature;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
@@ -31,7 +30,7 @@ import java.util.Set;
  *
  * @author Xinbo Wu
  */
-public class SrlVerbSimplePredicateFeatures implements FeatureExtractor {
+public class SrlVerbSimplePredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
     private final FeatureCollection base;
 

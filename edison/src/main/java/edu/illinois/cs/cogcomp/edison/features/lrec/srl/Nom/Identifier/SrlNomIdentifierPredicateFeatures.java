@@ -23,7 +23,7 @@ import java.util.Set;
  * @keywords semantic role labeling, srl, nominal, nom, identifier, predicate
  * @author Xinbo Wu
  */
-public class SrlNomIdentifierPredicateFeatures implements FeatureExtractor {
+public class SrlNomIdentifierPredicateFeatures implements FeatureExtractor<Constituent> {
     private final String name;
     private final FeatureCollection base;
 

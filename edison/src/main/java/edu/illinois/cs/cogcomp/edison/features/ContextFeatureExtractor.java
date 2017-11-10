@@ -19,7 +19,7 @@ import java.util.Set;
  * specified constituent. The constructor specifies the context size.
  * <p>
  * To use this class, after creating the object, add other feature extractors using the
- * {@link edu.illinois.cs.cogcomp.edison.features.ContextFeatureExtractor#addFeatureExtractor(FeatureExtractor)}
+ * {@link ContextFeatureExtractor#addFeatureExtractor(FeatureExtractor)}
  * method. Then, for each neighboring word, the feature extractor will generate features using all
  * the extractors that have been added.
  * <p>
@@ -51,7 +51,7 @@ public class ContextFeatureExtractor extends FeatureCollection {
     }
 
     public ContextFeatureExtractor(int contextSize, boolean specifyIndex,
-            boolean ignoreConstituent, WordFeatureExtractor... fex) {
+                                   boolean ignoreConstituent, WordFeatureExtractor... fex) {
         super("");
         this.contextSize = contextSize;
         this.specifyIndex = specifyIndex;

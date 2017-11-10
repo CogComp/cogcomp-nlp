@@ -8,9 +8,9 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Predicate;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.features.factory.NomLexClassFeature;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -25,7 +25,7 @@ import java.util.Set;
  * @keywords NomLex, SRL, Nominalization, nominal, nom
  * @author Xinbo Wu
  */
-public class NomLexClassAndSrlNomPredicateFeatures implements FeatureExtractor {
+public class NomLexClassAndSrlNomPredicateFeatures implements FeatureExtractor<Constituent> {
     private final FeatureCollection base = new FeatureCollection(this.getName());
 
     public NomLexClassAndSrlNomPredicateFeatures() {

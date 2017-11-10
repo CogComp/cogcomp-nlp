@@ -22,7 +22,7 @@ public class PrefixFeatureExtractor extends WordFeatureExtractor {
     protected List<String> prefixes;
 
     public PrefixFeatureExtractor(List<String> prefixes, String featureName,
-            boolean useLastWordOfMultiwordConstituents) {
+                                  boolean useLastWordOfMultiwordConstituents) {
         super(useLastWordOfMultiwordConstituents);
         this.prefixes = prefixes;
         this.featureName = DiscreteFeature.create(featureName);

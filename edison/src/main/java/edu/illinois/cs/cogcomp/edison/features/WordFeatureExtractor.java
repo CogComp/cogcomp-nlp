@@ -22,7 +22,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public abstract class WordFeatureExtractor implements FeatureExtractor {
+public abstract class WordFeatureExtractor implements FeatureExtractor<Constituent> {
 
     private final boolean useLastWordOfMultiwordConstituents;
 
@@ -40,10 +40,10 @@ public abstract class WordFeatureExtractor implements FeatureExtractor {
     }
 
     /**
-     * Creates a new {@link edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor}. This
+     * Creates a new {@link WordFeatureExtractor}. This
      * constructor is equivalent to calling {@code new WordFeatureExtractor(true)}.
      *
-     * @see edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor#WordFeatureExtractor(boolean)
+     * @see WordFeatureExtractor#WordFeatureExtractor(boolean)
      */
     public WordFeatureExtractor() {
         this(true);

@@ -8,8 +8,7 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.ContextFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
@@ -24,7 +23,7 @@ import java.util.Set;
  * @keywords POS, Part of Speech, SRL, generic
  * @author Xinbo Wu
  */
-public class POSContextWindowTwo implements FeatureExtractor {
+public class POSContextWindowTwo implements FeatureExtractor<Constituent> {
     private final FeatureCollection base;
     private final String name;
 

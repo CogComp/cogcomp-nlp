@@ -382,7 +382,7 @@ public class WordFeatureExtractorFactory {
     private static WordNetFeatureExtractor wnFeatureGenerator;
 
     public static WordFeatureExtractor getBrownFeatureGenerator(String name,
-            String brownClustersFileName, int[] brownClusterLengths) throws EdisonException {
+                                                                String brownClustersFileName, int[] brownClusterLengths) throws EdisonException {
 
         if (brownFeatureGenerator == null) {
             synchronized (WordFeatureExtractorFactory.class) {
@@ -409,7 +409,7 @@ public class WordFeatureExtractorFactory {
     }
 
     public static WordFeatureExtractor getGazetteerFeatureExtractor(final String name,
-            final SimpleGazetteerAnnotator gazetteerViewGenerator) {
+                                                                    final SimpleGazetteerAnnotator gazetteerViewGenerator) {
 
         if (!gazetteerFeatureExtractors.containsKey(name)) {
 

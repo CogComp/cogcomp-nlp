@@ -19,7 +19,6 @@ import edu.illinois.cs.cogcomp.verbsense.utilities.WeightVectorUtils;
 import io.minio.errors.InvalidEndpointException;
 import io.minio.errors.InvalidPortException;
 import org.cogcomp.Datastore;
-import org.cogcomp.DatastoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

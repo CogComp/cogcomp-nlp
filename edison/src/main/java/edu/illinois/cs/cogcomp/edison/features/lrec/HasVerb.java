@@ -24,7 +24,7 @@ import java.util.Set;
  * 
  * @author Xinbo Wu
  */
-public class HasVerb implements FeatureExtractor {
+public class HasVerb implements FeatureExtractor<Constituent> {
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
