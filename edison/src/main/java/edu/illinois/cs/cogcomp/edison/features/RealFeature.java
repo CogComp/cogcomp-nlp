@@ -9,7 +9,6 @@ package edu.illinois.cs.cogcomp.edison.features;
 
 /**
  * A feature that takes a real value
- *
  * @author Vivek Srikumar
  */
 public class RealFeature extends Feature {
@@ -24,7 +23,6 @@ public class RealFeature extends Feature {
     protected RealFeature(byte[] bytes, float value) {
         super(bytes);
         this.value = value;
-
     }
 
     /**

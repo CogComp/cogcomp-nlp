@@ -65,7 +65,7 @@ public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor<Const
 
         base.addFeatureExtractor(FeatureUtilities.conjoin(new SrlVerbPredicateFeatures(""), tmp));
 
-        base.addFeatureExtractor(SpanLengthConstituentFeature.instance);
+        base.addFeatureExtractor(SpanLengthFeature.instance);
         base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);
         base.addFeatureExtractor(ChunkPathPattern.SHALLOW_PARSE);
         base.addFeatureExtractor(ClauseFeatureExtractor.STANFORD);

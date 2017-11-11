@@ -74,7 +74,7 @@ class KnownFexes {
         fexes.put("months", ListFeatureFactory.months);
         fexes.put("possessive-pronouns", ListFeatureFactory.possessivePronouns);
 
-        fexes.put("length", SpanLengthConstituentFeature.instance);
+        fexes.put("length", SpanLengthFeature.instance);
 
         fexes.put("chunk-embedding", ChunkEmbedding.SHALLOW_PARSE);
         fexes.put("ne-embedding", ChunkEmbedding.NER);
@@ -88,7 +88,7 @@ class KnownFexes {
         fexes.put("is-negated", ChunkPropertyFeatureFactory.isNegated);
         fexes.put("has-modal-verb", ChunkPropertyFeatureFactory.hasModalVerb);
 
-        fexes.put("levin-verb-class", LevinVerbClassConstituentFeature.instance);
+        fexes.put("levin-verb-class", LevinVerbClassFeature.instance);
 
         // fexes.put("clauses-charniak", ClauseFeatureExtractor.CHARNIAK);
         // fexes.put("clauses-stanford", ClauseFeatureExtractor.STANFORD);

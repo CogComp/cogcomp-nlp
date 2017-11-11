@@ -51,7 +51,7 @@ public class SrlVerbPredicateFeatures implements FeatureExtractor<Constituent> {
         context.addFeatureExtractor(tmp);
         this.base.addFeatureExtractor(context);
 
-        this.base.addFeatureExtractor(LevinVerbClassConstituentFeature.instance);
+        this.base.addFeatureExtractor(LevinVerbClassFeature.instance);
     }
 
 

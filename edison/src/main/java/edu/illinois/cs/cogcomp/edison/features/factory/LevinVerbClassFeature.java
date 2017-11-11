@@ -34,10 +34,10 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class LevinVerbClassConstituentFeature implements FeatureExtractor<Constituent> {
+public class LevinVerbClassFeature implements FeatureExtractor<Constituent> {
 
     private static final DiscreteFeature UNKNOWN = DiscreteFeature.create("*");
-    public static LevinVerbClassConstituentFeature instance = new LevinVerbClassConstituentFeature();
+    public static LevinVerbClassFeature instance = new LevinVerbClassFeature();
 
     VerbClassDictionary dictionary = VerbClassDictionary.getDictionaryFromDatastore();
 

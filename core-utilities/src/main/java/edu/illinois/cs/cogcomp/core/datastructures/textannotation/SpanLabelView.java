@@ -61,7 +61,6 @@ public class SpanLabelView extends View {
     @Override
     public void addConstituent(Constituent constituent) {
         super.addConstituent(constituent);
-
         Collections.sort(this.constituents, TextAnnotationUtilities.constituentStartComparator);
     }
 

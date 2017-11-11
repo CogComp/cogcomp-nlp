@@ -23,10 +23,10 @@ import java.util.Set;
  * @keywords SRL, Nom, nominalization, nominal, classifier, argument
  * @author Xinbo Wu
  */
-public class SrlNomArgumentConstituentFeatureConjunction implements FeatureExtractor<Constituent> {
+public class SrlNomArgumentFeatureConjunction implements FeatureExtractor<Constituent> {
     private final FeatureCollection base = new FeatureCollection(this.getName());
 
-    public SrlNomArgumentConstituentFeatureConjunction() throws Exception {
+    public SrlNomArgumentFeatureConjunction() throws Exception {
         this.base.addFeatureExtractor(FeatureUtilities.conjoin(new SrlNomArgumentFeatures(),
                 new SrlNomArgumentFeatures()));
     }

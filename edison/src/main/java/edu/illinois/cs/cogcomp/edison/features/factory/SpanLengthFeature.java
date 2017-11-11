@@ -17,9 +17,9 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class SpanLengthConstituentFeature implements FeatureExtractor<Constituent> {
+public class SpanLengthFeature implements FeatureExtractor<Constituent> {
 
-    public static SpanLengthConstituentFeature instance = new SpanLengthConstituentFeature();
+    public static SpanLengthFeature instance = new SpanLengthFeature();
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {

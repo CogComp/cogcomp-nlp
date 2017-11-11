@@ -64,7 +64,7 @@ public class TestVerbClassFeatures {
         PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
         for (Constituent predicate : pav.getPredicates()) {
             Constituent p = predicate.cloneForNewView("dummy");
-            String response = p + "\t" + LevinVerbClassConstituentFeature.instance.getFeatures(p);
+            String response = p + "\t" + LevinVerbClassFeature.instance.getFeatures(p);
             assertTrue(correctResponses.contains(response));
         }
     }

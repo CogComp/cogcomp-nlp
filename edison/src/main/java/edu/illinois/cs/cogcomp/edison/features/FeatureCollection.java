@@ -30,7 +30,7 @@ public class FeatureCollection implements FeatureExtractor<Constituent> {
 
     /**
      * Create a new feature extractor. By itself, it does not generate any features. Use
-     * {@code ConstituentFeatureExtractor#addFeatureGenerator(IFeatureExtractor))} to add feature generators.
+     * {@code FeatureExtractor#addFeatureGenerator(IFeatureExtractor))} to add feature generators.
      */
     public FeatureCollection(String name) {
         this(name, FeatureInputTransformer.identity);
