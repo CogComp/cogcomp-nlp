@@ -98,7 +98,7 @@ public class SemanticGraphCut {
 		for (int i = 0; i < vectorList.size(); i++) {
 			// if the i-th instance is already accepted by one cluster, then
 			// skip it
-			if (flgList.get(i) == false)
+			if (!flgList.get(i))
 				continue;
 
 			// build a new cluster
@@ -111,7 +111,7 @@ public class SemanticGraphCut {
 				for (int j = 0; j < vectorList.size(); j++) {
 					// skip if the j-th instance is already accepted by one
 					// cluster
-					if (flgList.get(j) == false)
+					if (!flgList.get(j))
 						continue;
 					// add the j-th instance to idxList
 					if (edgeWeight[k][j] > ClassifierConstant.cutOff) {
@@ -145,7 +145,7 @@ public class SemanticGraphCut {
 		double dot = 0;
 		if (v1.size() < v2.size()) {
 			for (Integer key : v1.keySet()) {
-				if (v2.containsKey(key) == true) {
+				if (v2.containsKey(key)) {
 					double value1 = v1.get(key);
 					double value2 = v2.get(key);
 					dot += value1 * value2;
@@ -153,7 +153,7 @@ public class SemanticGraphCut {
 			}
 		} else {
 			for (Integer key : v2.keySet()) {
-				if (v1.containsKey(key) == true) {
+				if (v1.containsKey(key)) {
 					double value1 = v1.get(key);
 					double value2 = v2.get(key);
 					dot += value1 * value2;

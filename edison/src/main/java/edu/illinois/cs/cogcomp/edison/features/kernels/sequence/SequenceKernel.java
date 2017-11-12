@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.kernels;
+package edu.illinois.cs.cogcomp.edison.features.kernels.sequence;
 
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;

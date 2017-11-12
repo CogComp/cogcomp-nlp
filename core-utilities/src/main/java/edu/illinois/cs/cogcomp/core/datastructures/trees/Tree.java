@@ -33,6 +33,8 @@ public class Tree<T> implements Serializable {
     private List<Tree<T>> children;
     Tree<T> parent;
 
+    Integer branchingFactor;
+
     /**
      * Default constructor for a tree.
      * <p>
@@ -371,6 +373,14 @@ public class Tree<T> implements Serializable {
             }
         }
         this.height = max + 1;
+    }
+
+    /**
+     * @return The branching factor of the tree
+     */
+    public int getBranchingFactor() {
+        if(this.branchingFactor == null) this.branchingFactor = children.size();
+        return this.branchingFactor;
     }
 
 }
