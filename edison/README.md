@@ -22,7 +22,7 @@ To use Edison as a Maven dependency please add the following lines to your `pom.
     <repository>
         <id>CogcompSoftware</id>
         <name>CogcompSoftware</name>
-        <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        <url>http://cogcomp.org/m2repo/</url>
     </repository>
 </repositories>
 

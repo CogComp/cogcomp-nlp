@@ -31,6 +31,7 @@ public class ViewNames {
     public static final String POS = "POS";
 
     public static final String MENTION = "MENTION";
+    public static final String RELATION = "RELATION";
 
     /** the tree gazetteer produced by the SimpleGazetteerAnnotator. */
     public static final String TREE_GAZETTEER = "TREE_GAZETTEER";
@@ -131,6 +132,7 @@ public class ViewNames {
     public static final String POST_ERE = "POST_ERE";
     public static final String EVENT_ERE = "EVENT_ERE";
 
+    public static final String TRANSLITERATION = "TRANSLITERATION";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -142,6 +144,7 @@ public class ViewNames {
             case SENTENCE:
             case PARAGRAPH:
             case MENTION:
+            case RELATION:
             case MENTION_ACE:
             case MENTION_ERE:
             case NER_CONLL:

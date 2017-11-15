@@ -7,9 +7,6 @@
  */
 package org.cogcomp.md;
 
-import edu.illinois.cs.cogcomp.pos.POSAnnotator;
-import org.cogcomp.md.LbjGen.*;
-
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -26,6 +23,10 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import org.cogcomp.Datastore;
+import org.cogcomp.md.LbjGen.bio_classifier_nam;
+import org.cogcomp.md.LbjGen.bio_classifier_nom;
+import org.cogcomp.md.LbjGen.bio_classifier_pro;
+import org.cogcomp.md.LbjGen.extent_classifier;
 
 import java.io.File;
 import java.util.Vector;
@@ -40,9 +41,13 @@ import java.util.Vector;
  */
 public class MentionAnnotator extends Annotator{
 
-    private bio_classifier_nam classifier_nam;
-    private bio_classifier_nom classifier_nom;
-    private bio_classifier_pro classifier_pro;
+    private bio_classifier_nam classifier_nam = null;
+    private bio_classifier_nom classifier_nom = null;
+    private bio_classifier_pro classifier_pro = null;
+    String fileName_NAM = "";
+    String fileName_NOM = "";
+    String fileName_PRO = "";
+    String fileName_EXTENT = "";
     private extent_classifier classifier_extent;
     private Learner[] candidates;
     private FlatGazetteers gazetteers;
@@ -74,16 +79,34 @@ public class MentionAnnotator extends Annotator{
         _mode = mode;
     }
 
+    /**
+     *
+     * @param nam_model_path NAM model file path (excluding the extension)
+     * @param nom_model_path NOM model file path (excluding the extension)
+     * @param pro_model_path PRO model file path (excluding the extension)
+     * @param extent_model_path EXTENT model file path (excluding the extension)
+     * @param mode Useless in this case
+     */
+    public MentionAnnotator(String nam_model_path, String nom_model_path, String pro_model_path, String extent_model_path, String mode){
+        super(ViewNames.MENTION, new String[]{ViewNames.POS}, true);
+        _mode = mode;
+        if (fileName_NAM != null) {
+            fileName_NAM = nam_model_path;
+        }
+        if (fileName_NOM != null) {
+            fileName_NOM = nom_model_path;
+        }
+        if (fileName_PRO != null) {
+            fileName_PRO = pro_model_path;
+        }
+    }
+
     public void initialize(ResourceManager rm){
-        String fileName_NAM = "";
-        String fileName_NOM = "";
-        String fileName_PRO = "";
-        String fileName_EXTENT = "";
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             if (_mode.contains("ACE")) {
-                File extentFlie = ds.getDirectory("org.cogcomp.mention", "ACE_EXTENT", 1.0, false);
-                fileName_EXTENT = extentFlie.getPath() + File.separator + "ACE_EXTENT" + File.separator + "EXTENT_ACE";
+                File extentFile = ds.getDirectory("org.cogcomp.mention", "ACE_EXTENT", 1.0, false);
+                fileName_EXTENT = extentFile.getPath() + File.separator + "ACE_EXTENT" + File.separator + "EXTENT_ACE";
                 if (_mode.contains("NON")){
                     File headFile = ds.getDirectory("org.cogcomp.mention", "ACE_HEAD_NONTYPE", 1.0, false);
                     fileName_NAM = headFile.getPath() + File.separator + "ACE_HEAD_NONTYPE" + File.separator + "ACE_NAM";
@@ -98,8 +121,8 @@ public class MentionAnnotator extends Annotator{
                 }
             }
             else if (_mode.contains("ERE")){
-                File extentFlie = ds.getDirectory("org.cogcomp.mention", "ERE_EXTENT", 1.0, false);
-                fileName_EXTENT = extentFlie.getPath() + File.separator + "ERE_EXTENT" + File.separator + "EXTENT_ERE";
+                File extentFile = ds.getDirectory("org.cogcomp.mention", "ERE_EXTENT", 1.0, false);
+                fileName_EXTENT = extentFile.getPath() + File.separator + "ERE_EXTENT" + File.separator + "EXTENT_ERE";
                 if (_mode.contains("NON")){
                     File headFile = ds.getDirectory("org.cogcomp.mention", "ERE_HEAD_NONTYPE", 1.0, false);
                     fileName_NAM = headFile.getPath() + File.separator + "ERE_HEAD_NONTYPE" + File.separator + "ERE_NAM";
@@ -117,11 +140,29 @@ public class MentionAnnotator extends Annotator{
         catch (Exception e){
             e.printStackTrace();
         }
-
-        classifier_nam = new bio_classifier_nam(fileName_NAM + ".lc", fileName_NAM + ".lex");
-        classifier_nom = new bio_classifier_nom(fileName_NOM+".lc", fileName_NOM + ".lex");
-        classifier_pro = new bio_classifier_pro(fileName_PRO + ".lc", fileName_PRO + ".lex");
-        classifier_extent = new extent_classifier(fileName_EXTENT + ".lc", fileName_EXTENT + ".lex");
+        if (!fileName_NAM.equals("")) {
+            classifier_nam = new bio_classifier_nam(fileName_NAM + ".lc", fileName_NAM + ".lex");
+        }
+        if (!fileName_NOM.equals("")) {
+            classifier_nom = new bio_classifier_nom(fileName_NOM + ".lc", fileName_NOM + ".lex");
+        }
+        if (!fileName_PRO.equals("")) {
+            classifier_pro = new bio_classifier_pro(fileName_PRO + ".lc", fileName_PRO + ".lex");
+        }
+        if (!fileName_EXTENT.equals("")) {
+            classifier_extent = new extent_classifier(fileName_EXTENT + ".lc", fileName_EXTENT + ".lex");
+        }
+        else {
+            try {
+                Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+                File extentFile = ds.getDirectory("org.cogcomp.mention", "ACE_EXTENT", 1.0, false);
+                fileName_EXTENT = extentFile.getPath() + File.separator + "ACE_EXTENT" + File.separator + "EXTENT_ACE";
+                classifier_extent = new extent_classifier(fileName_EXTENT + ".lc", fileName_EXTENT + ".lex");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
@@ -140,7 +181,7 @@ public class MentionAnnotator extends Annotator{
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl);
+            BrownClusters.init(bcs, bcst, bcsl, false);
             brownClusters = BrownClusters.get();
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();

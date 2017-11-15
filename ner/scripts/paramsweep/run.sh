@@ -1,7 +1,8 @@
 #!/bin/sh
 #
-# This is a simple test script. It takes two arguments, the first specifies the directory
-# containing the testing data, the second specifies the configuration file.
+# This is a simple test script. It takes one integer argument, the number of
+# processes to run simultaneously. If this argument is not provided, it will 
+# assume one process for each core.
 #
 
 # Classpath

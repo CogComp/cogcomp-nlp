@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
 
@@ -168,6 +169,27 @@ public abstract class Annotator {
     }
 
     /**
+     * Add the view named by getViewName() to the TextAnnotation argument, and return the View
+     *
+     * @param ta
+     * @return the newly created View.
+     * @throws AnnotatorException
+     */
+    public final View getView(TextAnnotation ta, ResourceManager runtimeAttributes) throws AnnotatorException {
+        lazyAddView(ta, runtimeAttributes);
+        return ta.getView(viewName);
+    }
+
+    /**
+     Add the content of the annotators to a given TextAnnotation object.
+     @param runtimeAttributes the parameters that might change the behavior of the annotator while after initialization and while running.
+     */
+    protected void addView(TextAnnotation ta, ResourceManager runtimeAttributes) throws AnnotatorException {
+        logger.warn("This annotator does not accept run-time attributes. You have to run `addView() function without the attributes parameter. `");
+        addView(ta);
+    }
+
+    /**
      * First, checks whether model is initialized, and calls initialize() if not. Then, calls
      * addView(). IMPORTANT: clients should always call getView().
      * 
@@ -181,6 +203,17 @@ public abstract class Annotator {
         addView(ta);
     }
 
+    /**
+     * Same lazy view function, but with resource parameters
+     * First, checks whether model is initialized, and calls initialize() if not. Then, calls
+     * addView(). IMPORTANT: clients should always call getView().
+     */
+    private void lazyAddView(TextAnnotation ta, ResourceManager runtimeAttributes) throws AnnotatorException {
+        if (!isInitialized()) {
+            doInitialize();
+        }
+        addView(ta, runtimeAttributes);
+    }
 
     /**
      * Can be used internally by {@link BasicAnnotatorService} to check for pre-requisites before

@@ -7,10 +7,8 @@
  */
 package org.cogcomp.md;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
@@ -18,6 +16,9 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReaderWithTrueCaseFixer;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import org.cogcomp.Datastore;
 
@@ -75,10 +76,10 @@ public class ExtentReader implements Parser
     public List<TextAnnotation> getTextAnnotations(){
         List<TextAnnotation> ret = new ArrayList<>();
         if (_corpus.equals("ACE")) {
-            ACEReader aceReader = null;
+            ACEReaderWithTrueCaseFixer aceReader = null;
             POSAnnotator posAnnotator = new POSAnnotator();
             try {
-                aceReader = new ACEReader(_path, false);
+                aceReader = new ACEReaderWithTrueCaseFixer(_path, false);
                 for (TextAnnotation ta : aceReader) {
                     ta.addView(posAnnotator);
                     ret.add(ta);
@@ -134,7 +135,7 @@ public class ExtentReader implements Parser
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl);
+            BrownClusters.init(bcs, bcst, bcsl, false);
 
         }
         catch (Exception e){

@@ -29,8 +29,6 @@ if [ ! -e $LIB ]; then
     mvn dependency:copy-dependencies
 fi
 
-
-
 # Classpath
 cpath=".:target/classes"
 

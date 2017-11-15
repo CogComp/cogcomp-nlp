@@ -2,12 +2,12 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.32</version>
+        <version>4.0.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>illinois-ner</artifactId>
 
@@ -20,53 +20,31 @@
     </pluginRepositories>
 
     <dependencies>
-         
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.cogcomp</groupId>
             <artifactId>cogcomp-datastore</artifactId>
-            <version>1.9.9</version>
+            <version>1.9.10</version>
         </dependency>
 
-        <!--Daniel: the resources commented out because we load them programmatically now. -->
-        <!-- Contains the gazetteers and Brown clusters -->
-	    <!--<dependency>-->
-	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
-	        <!--<artifactId>brown-clusters</artifactId>-->
-	        <!--<version>1.5</version>-->
-	        <!--<scope>runtime</scope>-->
-	    <!--</dependency>-->
-	    <!--<dependency>-->
-	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
-	        <!--<artifactId>gazetteers</artifactId>-->
-	        <!--<version>1.5</version>-->
-	        <!--<scope>runtime</scope>-->
-	    <!--</dependency>-->
-	    <!--<dependency>-->
-	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
-	        <!--<artifactId>wordEmbedding</artifactId>-->
-	        <!--<version>1.5</version>-->
-	        <!--<scope>runtime</scope>-->
-	    <!--</dependency>-->
-        <!--  LBJava stuff.  -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
-            <version>1.2.26</version>
+            <version>1.3.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
 
 
@@ -104,18 +82,18 @@
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-surefire-plugin</artifactId>
-               <version>2.19.1</version>
-			    <configuration>
-			        <forkCount>1</forkCount>
-			        <reuseForks>false</reuseForks>
-			        <argLine>-Xmx10g</argLine>
-			    </configuration>
+               <version>2.20.1</version>
+               <configuration>
+                   <forkCount>1</forkCount>
+                   <reuseForks>false</reuseForks>
+                   <argLine>-Xmx9g</argLine>
+               </configuration>
             </plugin>
 
             <plugin>
                 <groupId>edu.illinois.cs.cogcomp</groupId>
                 <artifactId>lbjava-maven-plugin</artifactId>
-                <version>1.2.26</version>
+                <version>1.3.0</version>
                 <configuration>
                     <lbjavaInputFileList>
                         <param>${project.basedir}/src/main/lbj/LbjTagger.lbj</param>

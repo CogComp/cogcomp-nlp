@@ -72,7 +72,7 @@ public class BrownClusters {
      * @param isLowercaseBrownClusters
      */
     public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
-            Vector<Boolean> isLowercaseBrownClusters) {
+            Vector<Boolean> isLowercaseBrownClusters, boolean useLocalBrownCluster) {
 
         try {
         Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
@@ -88,7 +88,12 @@ public class BrownClusters {
                 THashMap<String, String> h = new THashMap<>();
                 // We used to access the files as resources. Now we are accessing them programmatically.
                 // InFile in = new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
-                InputStream is = new FileInputStream(bcDirectory.getPath() + File.separator + pathsToClusterFiles.elementAt(i));
+                // Here we check if local resource is specified.
+                String bcFilePath = bcDirectory.getPath() + File.separator + pathsToClusterFiles.elementAt(i);
+                if (useLocalBrownCluster){
+                    bcFilePath = pathsToClusterFiles.elementAt(i);
+                }
+                InputStream is = new FileInputStream(bcFilePath);
                 InFile in = new InFile(is);
                 String line = in.readLine();
                 int wordsAdded = 0;
@@ -131,24 +136,23 @@ public class BrownClusters {
     }
 
     final public String[] getPrefixes(String word) {
-        Vector<String> v = new Vector<>();
+        ArrayList<String> v = new ArrayList<>(wordToPathByResource.size());
         for (int j = 0; j < wordToPathByResource.size(); j++) {
             if (isLowercaseBrownClustersByResource[j])
                 word = word.toLowerCase();
             THashMap<String, String> wordToPath = wordToPathByResource.get(j);
+            final String prefix = "resource" + j + ":";
             if (wordToPath != null && wordToPath.containsKey(word)) {
                 String path = wordToPath.get(word);
-                v.addElement("resource" + j + ":"
-                        + path.substring(0, Math.min(path.length(), prefixLengths[0])));
+                int pathlength = path.length();
+                v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[0])));
                 for (int i = 1; i < prefixLengths.length; i++)
-                    if (prefixLengths[i - 1] < path.length())
-                        v.addElement("resource" + j + ":"
-                                + path.substring(0, Math.min(path.length(), prefixLengths[i])));
+                    if (prefixLengths[i - 1] < pathlength)
+                        v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[i])));
             }
         }
         String[] res = new String[v.size()];
-        for (int i = 0; i < v.size(); i++)
-            res[i] = v.elementAt(i);
+        res = v.toArray(res);
         return res;
     }
 

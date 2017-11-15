@@ -79,6 +79,8 @@ public class TreeViewTest {
         Constituent prepPhrase = constituentTree.getChild(0).getChild(1).getChild(1).getLabel();
         assertEquals("on time", prepPhrase.getSurfaceForm());
         assertEquals("IN", ta.getView(ViewNames.POS).getLabelsCovering(prepPhrase).get(0));
+        
+        constituentTree = ((TreeView) ta.getView(ViewNames.PARSE_STANFORD)).getConstituentTree(1);
     }
 
     @Test

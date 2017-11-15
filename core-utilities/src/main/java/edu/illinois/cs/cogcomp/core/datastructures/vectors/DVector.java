@@ -12,23 +12,26 @@ import java.util.Arrays;
 
 /**
  * This class implements an expandable array of <code>double</code>s that should be faster than
- * java's <code>Vector</code>.
+ * java's <code>Vector</code>. Vector was changed to <code>floats</code> for efficiency.
  *
  * @author Nick Rizzolo
- **/
+ */
 public class DVector implements Cloneable, java.io.Serializable {
+    /** generated */
+    private static final long serialVersionUID = 2318393173918599422L;
+
     /** The default capacity of a vector upon first construction. */
     protected static final int defaultCapacity = 8;
 
     /** The elements of the vector. */
-    protected double[] vector;
+    protected float[] vector;
     /** The number of elements in the vector. */
     protected int size;
 
 
     /**
      * Constructs a new vector with capacity equal to {@link #defaultCapacity}.
-     **/
+     */
     public DVector() {
         this(defaultCapacity);
     }
@@ -37,38 +40,26 @@ public class DVector implements Cloneable, java.io.Serializable {
      * Constructs a new vector with the specified capacity.
      *
      * @param c The initial capacity for the new vector.
-     **/
+     */
     public DVector(int c) {
-        vector = new double[Math.max(defaultCapacity, c)];
+        vector = new float[Math.max(defaultCapacity, c)];
     }
 
     /**
      * Constructs a new vector using the specified array as a starting point.
      *
      * @param v The initial array.
-     **/
+     */
     public DVector(double[] v) {
         if (v.length == 0)
-            vector = new double[defaultCapacity];
+            vector = new float[defaultCapacity];
         else {
-            vector = v;
+            vector = new float[v.length];
+            for (int i = 0; i < v.length; i++)
+            	vector[i] = (float)v[i];
             size = vector.length;
         }
     }
-
-
-    /**
-     * Throws an exception when the specified index is negative.
-     *
-     * @param i The index.
-     * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
-    protected void boundsCheck(int i) {
-        if (i < 0)
-            throw new ArrayIndexOutOfBoundsException(
-                    "Attempted to access negative index of DVector.");
-    }
-
 
     /**
      * Retrieves the value stored at the specified index of the vector, or 0 if the vector isn't
@@ -77,7 +68,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param i The index of the value to retrieve.
      * @return The retrieved value.
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
+     */
     public double get(int i) {
         return get(i, 0);
     }
@@ -90,9 +81,8 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param d The default value.
      * @return The retrieved value.
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
+     */
     public double get(int i, double d) {
-        boundsCheck(i);
         return i < size ? vector[i] : d;
     }
 
@@ -104,7 +94,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param v The new value at that index.
      * @return The value that used to be at index <code>i</code>.
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
+     */
     public double set(int i, double v) {
         return set(i, v, 0);
     }
@@ -118,12 +108,11 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param d The default value for other new indexes that might get created.
      * @return The value that used to be at index <code>i</code>.
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
+     */
     public double set(int i, double v, double d) {
-        boundsCheck(i);
         expandFor(i, d);
         double result = vector[i];
-        vector[i] = v;
+        vector[i] = (float)v;
         return result;
     }
 
@@ -132,10 +121,10 @@ public class DVector implements Cloneable, java.io.Serializable {
      * Adds the specified value on to the end of the vector, expanding its capacity as necessary.
      *
      * @param v The new value to appear last in the vector.
-     **/
+     */
     public void add(double v) {
         expandFor(size, 0);
-        vector[size - 1] = v;
+        vector[size - 1] = (float)v;
     }
 
 
@@ -144,7 +133,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * necessary.
      *
      * @param v The new vector of values to appear at the end of this vector.
-     **/
+     */
     public void addAll(DVector v) {
         expandFor(size + v.size - 1, 0);
         System.arraycopy(v.vector, 0, vector, size - v.size, v.size);
@@ -156,9 +145,8 @@ public class DVector implements Cloneable, java.io.Serializable {
      *
      * @param i The index of the element to remove.
      * @return The removed element.
-     **/
+     */
     public double remove(int i) {
-        boundsCheck(i);
         if (i >= size)
             throw new ArrayIndexOutOfBoundsException("LBJ: DVector: Can't remove element at index "
                     + i + " as it is larger than the size (" + size + ")");
@@ -170,15 +158,15 @@ public class DVector implements Cloneable, java.io.Serializable {
     }
 
 
-    /** Returns the value of {@link #size}. */
+    /** @return the value of {@link #size}. */
     public int size() {
         return size;
     }
 
 
-    /** Returns the value of the maximum element in the vector. */
+    /** @return the value of the maximum element in the vector. */
     public double max() {
-        double result = -Double.MAX_VALUE;
+    	double result = -Double.MAX_VALUE;
         for (int i = 0; i < size; ++i)
             if (vector[i] > result)
                 result = vector[i];
@@ -205,7 +193,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      *         the first element greater than <code>v</code>, or the size of the vector if all
      *         elements in the list are less than <code>v</code>. Note that this guarantees that the
      *         return value will be &gt;= 0 if and only if <code>v</code> is found.
-     **/
+     */
     public int binarySearch(double v) {
         int a = 0, b = size;
 
@@ -229,7 +217,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      *
      * @param index The index where a new value will be stored.
      * @param d The default value for other new indexes that might get created.
-     **/
+     */
     protected void expandFor(int index, double d) {
         if (index < size)
             return;
@@ -239,17 +227,17 @@ public class DVector implements Cloneable, java.io.Serializable {
             return;
         while (capacity < size)
             capacity *= 2;
-        double[] t = new double[capacity];
+        float[] t = new float[capacity];
         System.arraycopy(vector, 0, t, 0, oldSize);
         if (d != 0)
-            Arrays.fill(t, oldSize, size, d);
+            Arrays.fill(t, oldSize, size, (float)d);
         vector = t;
     }
 
 
     /**
-     * Returns a new array of <code>double</code>s containing the same data as this vector.
-     **/
+     * @return a new array of <code>double</code>s containing the same data as this vector.
+     */
     public double[] toArray() {
         double[] result = new double[size];
         System.arraycopy(vector, 0, result, 0, size);
@@ -260,7 +248,7 @@ public class DVector implements Cloneable, java.io.Serializable {
     /**
      * Two <code>DVector</code>s are considered equal if they contain the same elements and have the
      * same size.
-     **/
+     */
     public boolean equals(Object o) {
         if (!(o instanceof DVector))
             return false;
@@ -287,7 +275,7 @@ public class DVector implements Cloneable, java.io.Serializable {
             System.exit(1);
         }
 
-        clone.vector = (double[]) vector.clone();
+        clone.vector = (float[]) vector.clone();
         return clone;
     }
 
@@ -307,31 +295,41 @@ public class DVector implements Cloneable, java.io.Serializable {
 
 
     /**
-     * Writes a binary representation of the vector.
+     * Writes a binary representation of the vector. We will always write the data as single
+     * precision(indicated by the negative size), in this was, as people rebuild their models, 
+     * the disk footprint is reduced, yet, as seen in the read method, they can still read the
+     * old models.
      *
      * @param out The output stream.
-     **/
+     */
     public void write(ExceptionlessOutputStream out) {
-        out.writeInt(size);
+        out.writeInt(-size);
         for (int i = 0; i < size; ++i)
-            out.writeDouble(vector[i]);
+            out.writeFloat(vector[i]);
     }
 
 
     /**
      * Reads the binary representation of a vector from the specified stream, overwriting the data
-     * in this object.
+     * in this object. The data is either double on disk, or single precision. If the size read
+     * from the first int is negative, it is single precision data, if it is positive it is double
+     * precision data.
      *
      * @param in The input stream.
-     **/
+     */
     public void read(ExceptionlessInputStream in) {
         size = in.readInt();
         if (size == 0)
-            vector = new double[defaultCapacity];
-        else {
-            vector = new double[size];
+            vector = new float[defaultCapacity];
+        else if (size < 0) {
+            size = -size;
+            vector = new float[size];
             for (int i = 0; i < size; ++i)
-                vector[i] = in.readDouble();
+                vector[i] = in.readFloat();
+        } else {
+            vector = new float[size];
+            for (int i = 0; i < size; ++i)
+                vector[i] = (float)in.readDouble();
         }
     }
 }

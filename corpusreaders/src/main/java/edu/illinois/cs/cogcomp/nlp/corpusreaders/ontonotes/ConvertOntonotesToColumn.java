@@ -35,15 +35,16 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 /**
  * convert the Ontonotes 5.0 format to CoNLL 2003 column format. Input arguments are
- * required, the database url, the account name, the password, and the language, and
- * finally the output file name.
+ * required, the data directory, language, file kind and so on.
  * @author redman
  */
 public class ConvertOntonotesToColumn {
+    /** the tags. */
     static final private Set<String> tagsWithText = new HashSet<>();
+    /** tags to ignore. */
     static final private Set<String> dropTags = new HashSet<>();
 
-    // define the attributes we want to keep for the tags we have.
+    /** define the attributes we want to keep for the tags we have. */
     static final private Map<String, Set<String>> tagsWithAtts = new HashMap<>();
     static {
         Set<String> docAttrs = new HashSet<>();
@@ -56,6 +57,7 @@ public class ConvertOntonotesToColumn {
 
     /**
      * read the file indicated by the argument which is the file name, and path.
+     * @param file the file to read.
      * @param document the data read from the file.
      * @return the XmlTextAnnotation containing the text annotation, and xml markup offset data.
      * @throws IOException 

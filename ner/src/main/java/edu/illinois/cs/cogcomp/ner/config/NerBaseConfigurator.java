@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.ner.config;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -63,8 +64,10 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     public final static String AGGREGATE_GAZETTEER = "AggregateGazetteerMatches";
     public final static String PREV_TAGS_FOR_CONTEXT = "PrevTagsForContext";
     public final static String PREDICTIONS_1 = "PredictionsLevel1";
+    public final static String FEATUREPRUNINGTHRESHOLD = "FeaturePruningThreshold";
 
     public final static String BROWN_CLUSTER_PATHS = "BrownClusterPaths";
+    public final static String USE_LOCAL_BROWN_CLUSTER = "UseLocalBrownCluster";
     public final static String IS_LOWERCASE_BROWN_CLUSTERS = "isLowercaseBrownClusters";
     public final static String PATHS_TO_BROWN_CLUSTERS = "pathsToBrownClusters";
     public final static String MIN_WORD_APP_THRESHOLDS_FOR_BROWN_CLUSTERS =
@@ -80,6 +83,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_1 = "0.0";
     public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_2 = "0.0";
     private final static String DEFAULT_BROWN_CLUSTER_PATHS = "1";
+    private final static String DEFAULT_USE_LOCAL_BROWN_CLUSTER = "false";
     private final static String DEFAULT_IS_LOWERCASE_BROWN_CLUSTERS = "false false false";
     private final static String DEFAULT_PATHS_TO_BROWN_CLUSTERS =
             "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt    brown-clusters/brownBllipClusters    brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt";
@@ -101,6 +105,8 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     private final static String DEFAULT_AGGREGATE_GAZETTEER = "0";
     private final static String DEFAULT_PREV_TAGS_FOR_CONTEXT = "1";
     private final static String DEFAULT_PREDICTIONS_1 = "1";
+    private final static String DEFAULT_FEATUREPRUNINGTHRESHOLD = "0.000001";
+    
     // private final static String DEFAULT_BEAM_SIZE = "5";
     private final static String DEFAULT_FORCE_LINE_BREAKS = TRUE;
     private final static String DEFAULT_LABELS = "PER ORG LOC MISC";
@@ -113,7 +119,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
     private final static String DEFAULT_MODEL_NAME = "CoNLL_enron";
-    private final static String DEFAULT_LANGUAGE = "en";
+    private final static String DEFAULT_LANGUAGE = Language.English.getCode();
 
     private static final String DEFAULT_RANDOM_NOISE_LEVEL = "0.1";
     private static final String DEFAULT_OMISSION_RATE = "0.2";
@@ -132,6 +138,8 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(AGGREGATE_GAZETTEER, DEFAULT_AGGREGATE_GAZETTEER);
         props.setProperty(DEBUG, DEFAULT_DEBUG);
         props.setProperty(BROWN_CLUSTER_PATHS, DEFAULT_BROWN_CLUSTER_PATHS);
+        props.setProperty(USE_LOCAL_BROWN_CLUSTER, DEFAULT_USE_LOCAL_BROWN_CLUSTER);
+
         props.setProperty(CAPITALIZATION, DEFAULT_CAPITALIZATION);
         props.setProperty(FORCE_NEW_SENTENCE_ON_LINE_BREAKS, DEFAULT_FORCE_LINE_BREAKS);
         props.setProperty(FORMS, DEFAULT_FORMS);
@@ -155,6 +163,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(PREV_TAGS_FOR_CONTEXT, DEFAULT_PREV_TAGS_FOR_CONTEXT);
         props.setProperty(WORD_TYPE_INFORMATION, DEFAULT_WORD_TYPE_INFORMATION);
         props.setProperty(PREDICTIONS_1, DEFAULT_PREDICTIONS_1);
+        props.setProperty(FEATUREPRUNINGTHRESHOLD, DEFAULT_FEATUREPRUNINGTHRESHOLD);
         props.setProperty(PATHS_TO_BROWN_CLUSTERS, DEFAULT_PATHS_TO_BROWN_CLUSTERS);
         props.setProperty(WORD_EMBEDDINGS, DEFAULT_WORD_EMBEDDINGS);
         props.setProperty(PATH_TO_GAZETTEERS, DEFAULT_PATHS_TO_GAZETTEERS);

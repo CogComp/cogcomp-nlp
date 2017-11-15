@@ -7,10 +7,11 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.32</version>
+    <version>4.0.0</version>
     <modules>
         <module>core-utilities</module>
         <module>tokenizer</module>
+        <module>transliteration</module>
         <module>lemmatizer</module>
         <module>edison</module>
         <module>curator</module>
@@ -18,6 +19,7 @@
         <module>chunker</module>
         <module>md</module>
         <module>ner</module>
+        <module>relation-extraction</module>
         <module>corpusreaders</module>
         <module>lbjava-nlp-tools</module>
         <module>big-data-utils</module>
@@ -49,7 +51,7 @@
         <repository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+            <url>http://cogcomp.org/m2repo/</url>
         </repository>
     </repositories>
 
@@ -206,6 +208,9 @@
                         <exclude>**/prevTagsForContextLevel2.java</exclude>
                         <exclude>**/WikifierFeatures.java</exclude>
                         <exclude>**/AffixesZH.java</exclude>
+
+                        <exclude>**/LbjGen/*</exclude>
+                        <exclude>**/data/*</exclude>
 
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>

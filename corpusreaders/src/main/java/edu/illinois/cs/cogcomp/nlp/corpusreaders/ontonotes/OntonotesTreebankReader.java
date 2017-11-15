@@ -8,7 +8,6 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -19,10 +18,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.AnnotationReader;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes.utils.DocumentIterator;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSFromParse;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
@@ -34,25 +30,10 @@ import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
  * TextAnnotation for each file.
  * @author redman
  */
-public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
+public class OntonotesTreebankReader extends AbstractOntonotesReader {
 
     /** the view name we will employ. */
     public static final String PENN_TREEBANK_ONTONOTES = "PennTreebank-Ontonotes";
-
-    /** the home directory to traverse. */
-    protected final String homeDirectory;
-    
-    /** the name of the resulting view. */
-    protected String parseViewName = "PARSETREE";
-    
-    /** the list of files, compiled during initialization, used to iterate over the parse trees. */
-    protected ArrayList<File> filelist = new ArrayList<File> ();
-    
-    /** the index of the current file we are looking at. */
-    protected int fileindex = 0;
-    
-    /** the current file ready to be read. */
-    protected String currentfile = null;
     
     /** the number of trees produced. */
     protected int treesProduced = 0;
@@ -67,58 +48,17 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
      */
     public OntonotesTreebankReader(String treebankHome, String language) 
                     throws IllegalArgumentException, IOException {
-        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_ONTONOTES, treebankHome, treebankHome, ".parse", ".parse"));
-        homeDirectory = treebankHome;
-        
-        // compile the list of all treebank annotation files
-        DocumentIterator di = new DocumentIterator(homeDirectory, DocumentIterator.Language.valueOf(language), 
-            DocumentIterator.FileKind.parse);
-        while (di.hasNext()) {
-            filelist.add(di.next());
-        }
+        super(PENN_TREEBANK_ONTONOTES, treebankHome, language, DocumentIterator.FileKind.parse);
     }
 
     /**
-     * we assume all files found are correct, hence if we have another file, we will produce
-     * another text annotation.
+     * This is used if we require a certain order of files, or want to exclude files or something like that.
+     * @param dir the directory to look in.
+     * @param language the language.
+     * @param treefilelist the list of files.
      */
-    @Override
-    public boolean hasNext() {
-        if (fileindex == filelist.size())
-            return false;
-        else {
-            this.currentfile = filelist.get(fileindex).getAbsolutePath();
-            fileindex++;
-            return true;
-        }
-    }
-    
-    /** the annotation exception, or null if none. */
-    private Exception error = null;
-    
-    /**
-     * return the next annotation object. Don't forget to increment currentAnnotationId.
-     *
-     * @return an annotation object.
-     */
-    @Override
-    public TextAnnotation next() {
-        ArrayList<String> lines;
-        try {
-            lines = LineIO.read(currentfile);
-        } catch (FileNotFoundException e1) {
-            error = e1;
-            e1.printStackTrace();
-            return null;
-        }
-        try {
-            TextAnnotation ta = parseTreebankData(lines);
-            return ta;
-        } catch (AnnotatorException e) {
-            error = e;
-            e.printStackTrace();
-            return null;
-        }
+    public OntonotesTreebankReader(String dir, String language, ArrayList<File> treefilelist) {
+        super(PENN_TREEBANK_ONTONOTES, dir, language, DocumentIterator.FileKind.parse, treefilelist);
     }
 
     /**
@@ -127,7 +67,7 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
      * @return the text annotation.
      * @throws AnnotatorException
      */
-    private TextAnnotation parseTreebankData(ArrayList<String> lines) throws AnnotatorException {
+    protected TextAnnotation parseLines(ArrayList<String> lines) throws AnnotatorException {
         StringBuilder sb = new StringBuilder();
         int numParen = 0;
         int currentLineId = 0;
@@ -151,22 +91,27 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
                     sentences.add(text);
                     trees.add(tree);
                     treesProduced++;
-                } else 
-                    System.err.println("Y "+tree);
+                } else {
+                    System.err.println("This tree produced no sentence text:\n"+tree);
+                    System.err.println("from file:\n"+this.currentfile);
+                    System.err.flush();
+                    return null;
+                }
                 sb = new StringBuilder();
             }
         }
 
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
             PENN_TREEBANK_ONTONOTES, currentfile, sentences);
-        TreeView parse = new TreeView(parseViewName, "PTB-GOLD", ta, 1.0);
+        TreeView parse = new TreeView(PENN_TREEBANK_ONTONOTES, "Ontonotes5-GOLD", ta, 1.0);
         
         // add each parse tree
         int treecount = 0;
-        for (Tree<String> tree : trees)
+        for (Tree<String> tree : trees) {
             parse.setParseTree(treecount++, tree);
-        ta.addView(parseViewName, parse);
-        POSFromParse pos = new POSFromParse(parseViewName);
+        }
+        ta.addView(PENN_TREEBANK_ONTONOTES, parse);
+        POSFromParse pos = new POSFromParse(PENN_TREEBANK_ONTONOTES);
         ta.addView(pos);
         return ta;
     }
@@ -187,7 +132,7 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
     }
 
     /**
-     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * generate a human-readable report of annotations read from the source file (plus whatever
      * other relevant statistics the user should know about).
      */
     public String generateReport() {
@@ -199,10 +144,6 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
         }
     }
 
-    @Override
-    protected void initializeReader() {
-    }
-    
     /**
      * This class will read the ontonotes data from the provided directory, and write the resulting
      * serialized json form of the penn bank data to the specified output directory. It will retain
@@ -221,18 +162,20 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
         int count = 0;
         while (otr.hasNext()) {
             TextAnnotation ta = otr.next();
-            String json = SerializationHelper.serializeToJson(ta);
-            
-            String outfile = otr.currentfile.replace(topdir, args[2]);
-            File outputfile = new File(outfile);
-            outputfile.getParentFile().mkdirs();
-            try (PrintWriter out = new PrintWriter(outputfile)) {
-                out.print(json);
+            if (ta != null) {
+                String json = SerializationHelper.serializeToJson(ta);
+                
+                String outfile = otr.currentfile.replace(topdir, args[2]);
+                File outputfile = new File(outfile);
+                outputfile.getParentFile().mkdirs();
+                try (PrintWriter out = new PrintWriter(outputfile)) {
+                    out.print(json);
+                }
+                
+                count++;
+                if ((count % 100) == 0)
+                    System.out.println("Completed "+count+" of "+otr.filelist.size());
             }
-            
-            count++;
-            if ((count % 100) == 0)
-                System.out.println("Completed "+count+" of "+otr.filelist.size());
         }
         System.out.println(otr.generateReport());
     }

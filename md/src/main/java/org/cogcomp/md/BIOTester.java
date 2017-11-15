@@ -7,12 +7,12 @@
  */
 package org.cogcomp.md;
 
-import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.Score;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
@@ -21,9 +21,19 @@ import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReaderWithTrueCaseFixer;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
+import org.cogcomp.md.LbjGen.bio_classifier_nam;
+import org.cogcomp.md.LbjGen.bio_classifier_nom;
+import org.cogcomp.md.LbjGen.bio_classifier_pro;
+import org.cogcomp.md.LbjGen.bio_label;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -257,6 +267,9 @@ public class BIOTester {
         int chosen = -1;
 
         for (int i = 0; i < candidates.length; i++){
+            if (candidates[i] == null){
+                continue;
+            }
             String prediction = candidates[i].discreteValue(t);
             preBIOLevel1[i] = prediction;
             if (prediction.startsWith("B") || prediction.startsWith("U")){
@@ -334,20 +347,18 @@ public class BIOTester {
                 endIdx ++;
             }
         }
-
-        Constituent wholeMention = new Constituent(curToken.getLabel(), 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
-        if (isGold){
-            wholeMention.addAttribute("EntityType", goldType);
-            wholeMention.addAttribute("EntityMentionType", curToken.getAttribute("EntityMentionType"));
-        }
-        else{
-            wholeMention.addAttribute("EntityType", mostCommon(predictedTypes));
+        String entityType = goldType;
+        String entityMentionType = curToken.getAttribute("EntityMentionType");
+        if (!isGold){
+            entityType = mostCommon(predictedTypes);
             String className = classifier.getClass().toString();
             //The className variable is in form "...bio_classifier_[TYPE]"
             //Take the last three characters which stands for the mention level.
-            String emt = className.substring(className.length() - 3).toUpperCase();
-            wholeMention.addAttribute("EntityMentionType", emt);
+            entityMentionType = className.substring(className.length() - 3).toUpperCase();
         }
+        Constituent wholeMention = new Constituent(entityMentionType + "-" + entityType, 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
+        wholeMention.addAttribute("EntityType", entityType);
+        wholeMention.addAttribute("EntityMentionType", entityMentionType);
         return wholeMention;
     }
 
@@ -873,6 +884,71 @@ public class BIOTester {
         System.out.println("Recall: " + r);
         System.out.println("F1: " + f);
 
+    }
+
+    public static void statistics(){
+        int ace_nam = 0;
+        int ace_nom = 0;
+        int ace_pro = 0;
+        int ere_nam = 0;
+        int ere_nom = 0;
+        int ere_pro = 0;
+        int tac_nam = 0;
+        int tac_nom = 0;
+        try {
+            ACEReaderWithTrueCaseFixer aceReader = new ACEReaderWithTrueCaseFixer("data/all", false);
+            for (TextAnnotation ta : aceReader){
+                for (Constituent c : ta.getView(ViewNames.MENTION_ACE)){
+                    if (c.getAttribute("EntityMentionType").equals("NAM")){
+                        ace_nam ++;
+                    }
+                    if (c.getAttribute("EntityMentionType").equals("NOM")){
+                        ace_nom ++;
+                    }
+                    if (c.getAttribute("EntityMentionType").equals("PRO")){
+                        ace_pro ++;
+                    }
+                }
+            }
+            EREMentionRelationReader ereReader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR3, "data/ere/data", false);
+            for (XmlTextAnnotation xta : ereReader){
+                TextAnnotation ta = xta.getTextAnnotation();
+                for (Constituent c : ta.getView(ViewNames.MENTION_ERE)){
+                    if (c.getAttribute("EntityMentionType").equals("NAM")){
+                        ere_nam ++;
+                    }
+                    if (c.getAttribute("EntityMentionType").equals("NOM")){
+                        ere_nom ++;
+                    }
+                    if (c.getAttribute("EntityMentionType").equals("PRO")){
+                        ere_pro ++;
+                    }
+                }
+            }
+            ColumnFormatReader columnFormatReader = new ColumnFormatReader("data/tac/2016.nam");
+            for (TextAnnotation ta : columnFormatReader){
+                for (Constituent c : ta.getView("MENTIONS")){
+                    tac_nam ++;
+                }
+            }
+            columnFormatReader = new ColumnFormatReader("data/tac/2016.nom");
+            for (TextAnnotation ta : columnFormatReader){
+                for (Constituent c : ta.getView("MENTIONS")){
+                    tac_nom ++;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("ACE_NAM: " + ace_nam);
+        System.out.println("ACE_NOM: " + ace_nom);
+        System.out.println("ACE_PRO: " + ace_pro);
+        System.out.println("ERE_NAM: " + ere_nam);
+        System.out.println("ERE_NOM: " + ere_nom);
+        System.out.println("ERE_PRO: " + ere_pro);
+        System.out.println("TAC_NAM: " + tac_nam);
+        System.out.println("TAC_NOM: " + tac_nom);
     }
 
     public static void TrainModel(String corpus){

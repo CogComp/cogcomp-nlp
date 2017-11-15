@@ -8,7 +8,6 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,11 @@ public abstract class AnnotationReader<T> implements Iterable<T>,
     protected final ResourceManager resourceManager;
     protected int currentAnnotationId;
 
+    public AnnotationReader(){
+        this.resourceManager = null;
+        this.corpusName = null;
+        log.error("Cannot use default constructor in AnnotationReader() class. Exiting...");
+    }
 
     /**
      * ResourceManager must provide a value for {@link CorpusReaderConfigurator}.CORPUS_NAME, plus

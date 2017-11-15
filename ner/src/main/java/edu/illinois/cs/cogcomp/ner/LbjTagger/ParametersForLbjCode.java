@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
+import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 
 import java.util.HashMap;
 import java.util.Vector;
@@ -78,6 +79,7 @@ public class ParametersForLbjCode {
     // this will not normalize the text in any way
     public boolean keepOriginalFileTokenizationAndSentenceSplitting = false;
 
+    public double featurePruningThreshold = 0.000001;
     public double randomNoiseLevel = 0;
     public double omissionRate = 0;
     public RandomLabelGenerator patternLabelRandomGenerator = null;

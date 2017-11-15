@@ -57,6 +57,27 @@ public class PredicateArgumentView extends View {
         }
     }
 
+    public void addPredicateArguments(Constituent predicate, List<Constituent> args,
+        String[] relations, double[] scores, List<HashMap<String, String>> attributes) {
+        if (args.size() != relations.length) {
+            throw new IllegalArgumentException("Number of arguments != number of relations");
+        }
+    
+        if (args.size() != scores.length) {
+            throw new IllegalArgumentException("Number of arguments != number of scores");
+        }
+    
+        this.addConstituent(predicate);
+        this.predicates.add(predicate);
+    
+        for (int i = 0; i < args.size(); i++) {
+            if(!this.containsConstituent(args.get(i))) this.addConstituent(args.get(i));
+            Relation relation = new Relation(relations[i], predicate, args.get(i), scores[i]);
+            relation.attributes = attributes.get(i);
+            this.addRelation(relation);
+        }
+    }
+
     /**
      * force update of 'predicates' field.
      */

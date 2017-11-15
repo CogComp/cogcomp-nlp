@@ -3,7 +3,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.32</version>
+        <version>4.0.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -25,32 +25,32 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>stanford_3.3.1</artifactId>
-            <version>3.1.32</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -70,7 +70,7 @@
             <plugin>
                 <groupId>edu.illinois.cs.cogcomp</groupId>
                 <artifactId>lbjava-maven-plugin</artifactId>
-                <version>1.2.26</version>
+                <version>1.3.0</version>
                 <configuration>
                     <lbjavaInputFileList>
                         <param>${project.basedir}/src/lbj/md.lbj</param>
