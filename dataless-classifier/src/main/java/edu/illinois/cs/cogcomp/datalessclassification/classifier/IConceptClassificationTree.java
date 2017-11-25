@@ -13,36 +13,38 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.illinois.cs.cogcomp.datalessclassification.util.LabelScorePair;
-import edu.illinois.cs.cogcomp.datalessclassification.util.LabelResultML;
 import edu.illinois.cs.cogcomp.datalessclassification.util.SparseVector;
 
 /**
+ * An Inference Interface, to be implemented by all variants of Dataless Classifier
+ *
  * @author yqsong@illinois.edu
  * @author shashank
  */
 
 public interface IConceptClassificationTree<T extends Serializable> {
 
-	/**
-	 * TODO: Why is {@link LabelResultML} not returned here?  
-	 */
-	public Map<Integer, List<LabelScorePair>> getFullPredictions (SparseVector<T> vector);
-	
-	public Map<Integer, Set<String>> getDepthPredictions (SparseVector<T> docVector, int topK);
-	
-	public Set<String> getFlatPredictions (SparseVector<T> docVector, int topK);
-	
-//	@Deprecated
-//	/**
-//	 * TODO: Why is {@link LabelResultML} not returned here?  
-//	 */
-//	/**
-//	 * Ultimately this function needs to go -- Hierarchical Classification should be agnostic to similarity functions, embeddings and datasets
-//	 */
-//	public Map<Integer, List<LabelKeyValuePair>> labelDocumentW2V (String docContent);
+    /**
+     * Returns a Map, where key is the depth, and value is a list of selected labelIDs at that depth with their absolute similarity scores
+     *
+     * If a particular implementation wants the end-user to be able to select a particular inference algorithm, this function
+     *  should internally redirect to the relevant functions
+     */
+    Map<Integer, List<LabelScorePair>> getFullDepthPredictions(SparseVector<T> vector);
 
-//	/**
-//	 * TODO: Why is {@link LabelResultML} not returned here?  
-//	 */
-//	public HashMap<Integer, List<LabelKeyValuePair>> labelDocumentDense (SparseSimilarityCondensation vectorCondensation,String docContent);
+
+    /**
+     * Return a Map, where key is the Depth, and the value is the Set of selected topK labelIDs at that depth
+     *
+     * Should ideally call getFullDepthPredictions internally and select the topK labels at each depth.
+     *
+     * Use this function when you want the depth information associated with the selected labelIDs as well, and want to
+     *   limit the number of labels selected at each depth
+     */
+    Map<Integer, Set<String>> getPrunedDepthPredictions(SparseVector<T> docVector, int topK);
+
+    /**
+     * Returns just a flat-bag of selected labelIDs (independent of their depth in the tree)
+     */
+    Set<String> getFlatPredictions(SparseVector<T> docVector, int topK);
 }

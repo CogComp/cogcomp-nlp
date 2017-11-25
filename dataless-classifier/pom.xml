@@ -3,7 +3,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.32</version>
+        <version>4.0.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -13,21 +13,27 @@
     <description>Classifies Text into the given label hierarchy from just the textual label descriptions</description>
 
     <dependencies>
+		<dependency>
+			<groupId>org.cogcomp</groupId>
+			<artifactId>cogcomp-datastore</artifactId>
+			<version>1.9.10</version>
+		</dependency>
     	<dependency>
       		<groupId>edu.illinois.cs.cogcomp</groupId>
       		<artifactId>illinois-core-utilities</artifactId>
-      		<version>3.1.32</version>
+      		<version>4.0.0</version>
       	</dependency>
       	<dependency>
       		<groupId>edu.illinois.cs.cogcomp</groupId>
       		<artifactId>illinois-tokenizer</artifactId>
-      		<version>3.1.32</version>
+      		<version>4.0.0</version>
       	</dependency>
-      	<dependency>
-      		<groupId>log4j</groupId>
-      		<artifactId>log4j</artifactId>
-      		<version>1.2.17</version>
-      	</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.12</version>
+			<optional>true</optional>
+		</dependency>
       	<dependency>
       		<groupId>net.sf.jung</groupId>
       		<artifactId>jung-api</artifactId>
@@ -51,10 +57,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.19.1</version>
+                    <version>2.20.1</version>
                     <configuration>
                         <!--increase the memory requirements if you need more space-->
-                        <argLine>-Xmx12g</argLine>
+                        <argLine>-Xmx15g</argLine>
                     </configuration>
                 </plugin>
             </plugins>

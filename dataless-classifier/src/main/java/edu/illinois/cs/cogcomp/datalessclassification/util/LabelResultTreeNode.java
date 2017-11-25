@@ -11,52 +11,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * The Node class used by {@link LabelResultTree}
+ *
  * @author yqsong@illinois.edu
  * @author shashank
  */
 
-//TODO: Transition it to a setting wherein it extends TreeNode
 public class LabelResultTreeNode {
-	private LabelScorePair labelScorePair;
-	private boolean isLeaf;
-	private int depth;
-	
-	private List<LabelResultTreeNode> children;
-	
-	public LabelResultTreeNode () {
-		isLeaf = false;
-		children = new ArrayList<LabelResultTreeNode>();
-	}
+    private LabelScorePair labelScorePair;
+    private boolean isLeaf;
+    private int depth;
 
-	public LabelScorePair getLabelScorePair () {
-		return labelScorePair;
-	}
+    private List<LabelResultTreeNode> children;
 
-	public void setLabelScorePair (LabelScorePair labelScorePair) {
-		this.labelScorePair = labelScorePair;
-	}
+    public LabelResultTreeNode() {
+        isLeaf = false;
+        children = new ArrayList<>();
+    }
 
-	public boolean isLeaf () {
-		return isLeaf;
-	}
+    public LabelScorePair getLabelScorePair() {
+        return labelScorePair;
+    }
 
-	public void setIsLeaf (boolean isLeaf) {
-		this.isLeaf = isLeaf;
-	}
+    public void setLabelScorePair(LabelScorePair labelScorePair) {
+        this.labelScorePair = labelScorePair;
+    }
 
-	public int getDepth () {
-		return depth;
-	}
+    public boolean isLeaf() {
+        return isLeaf;
+    }
 
-	public void setDepth (int depth) {
-		this.depth = depth;
-	}
+    public void setIsLeaf(boolean isLeaf) {
+        this.isLeaf = isLeaf;
+    }
 
-	public List<LabelResultTreeNode> getChildren () {
-		return children;
-	}
+    public int getDepth() {
+        return depth;
+    }
 
-	public void setChildren (List<LabelResultTreeNode> children) {
-		this.children = children;
-	}
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
+    public List<LabelResultTreeNode> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<LabelResultTreeNode> children) {
+        this.children = children;
+    }
 }

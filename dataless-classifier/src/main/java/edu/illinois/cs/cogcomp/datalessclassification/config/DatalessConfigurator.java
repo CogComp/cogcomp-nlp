@@ -9,40 +9,26 @@ package edu.illinois.cs.cogcomp.datalessclassification.config;
 
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
+ * The basic Configurator used by various variants of the Dataless Annotator
+ *
  * @author shashank
  */
-public class DatalessConfigurator extends Configurator {
+public abstract class DatalessConfigurator extends Configurator {
     public static final Property BottomUp_Inference = new Property("inferenceBottomUp", "True");
-    
-    public static final Property LabelHierarchy_Path = new Property("labelHierarchyPath", "hierarchies/20newsgroups/parentChildIdMap.txt");
-    public static final Property LabelName_Path = new Property("labelNamePath", "hierarchies/20newsgroups/idToLabelNameMap.txt");
-    public static final Property LabelDesc_Path = new Property("labelDescPath", "hierarchies/20newsgroups/labelDesc_Kws_simple.txt");
-//  public static final Property LabelDesc_Path = new Property("labelDescPath", "hierarchies/20newsgroups/labelDesc_Kws_embellished.txt");
-    
+
+    public static final Property JSON_Hierarchy_Path = new Property("jsonHierarchyPath", "");
+
+    public static final Property LabelHierarchy_Path = new Property("labelHierarchyPath",
+            "hierarchies/20newsgroups/parentChildIdMap.txt");
+    public static final Property LabelName_Path = new Property("labelNamePath",
+            "hierarchies/20newsgroups/idToLabelNameMap.txt");
+    public static final Property LabelDesc_Path = new Property("labelDescPath",
+            "hierarchies/20newsgroups/labelDesc_Kws_embellished.txt");
+
+    public static final Property topK = new Property("topK", "1");
     public static final Property classifierThreshold = new Property("classifierThreshold", "0.99");
-	public static final Property classifierLeastK = new Property("classifierLeastK", "1");
-	public static final Property classifierMaxK = new Property("classifierMaxK", "3");
-
-    /**
-     * get a ResourceManager object with the default key/value pairs for this configurator
-     *
-     * @return a non-null ResourceManager with appropriate values set.
-     */
-    @Override
-    public ResourceManager getDefaultConfig () {
-        Property[] props = {
-        					BottomUp_Inference,
-        					LabelHierarchy_Path,
-        					LabelName_Path,
-        					LabelDesc_Path,
-        					classifierThreshold,
-        					classifierLeastK,
-        					classifierMaxK
-        					};
-
-        return new ResourceManager(generateProperties(props));
-    }
+    public static final Property classifierLeastK = new Property("classifierLeastK", "1");
+    public static final Property classifierMaxK = new Property("classifierMaxK", "3");
 }

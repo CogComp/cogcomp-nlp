@@ -10,54 +10,70 @@ package edu.illinois.cs.cogcomp.datalessclassification.hierarchy;
 import java.io.Serializable;
 
 /**
+ * The most basic Node class; contains just the ID of the label
+ *
  * @author yqsong@illinois.edu
  * @author shashank
  */
 
 public class TreeNode implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
-	protected String label;
-	
-	public static TreeNode makeBasicNode (String label) {
-		TreeNode node = new TreeNode(label);
-		return node;
-	}
-	
-	//Copy Constructor
-	public TreeNode (TreeNode thatNode) {
-		this(thatNode.getLabel());
-	}
-	
-	public TreeNode (String label) {
-		this.label = label;
-	}
-	
-	public String getLabel () {
-		return this.label;
-	}
-	
-	public void setLabel (String str) {
-		this.label = str;
-	}
-	
-	@Override
-	public String toString () {
-		return label;
-	}
 
-	@Override
-	public boolean equals (Object o) {
-		if ((o instanceof TreeNode) == false)
-			return false;
-		
-		TreeNode other = (TreeNode) o;
-		return this.label.equals(other.label);
-	}
-	
-	@Override
-	public int hashCode () {
-		return label.hashCode();
-	}
+    private static final long serialVersionUID = 1L;
+
+    protected String labelID;
+
+    /**
+     * A convenience factory function to create a basic TreeNode
+     */
+    public static TreeNode makeBasicNode(String labelID) {
+        TreeNode node = new TreeNode(labelID);
+        return node;
+    }
+
+    /**
+     * Copy Constructor
+     */
+    public TreeNode(TreeNode thatNode) {
+        this(thatNode.getLabelID());
+    }
+
+    /**
+     * Initializes the TreeNode with the provided labelID
+     */
+    public TreeNode(String labelID) {
+        this.labelID = labelID;
+    }
+
+    /**
+     * Gets the LabelID for the node
+     */
+    public String getLabelID() {
+        return this.labelID;
+    }
+
+    /**
+     * Sets the LabelID for the node
+     */
+    public void setLabelID(String labelID) {
+        this.labelID = labelID;
+    }
+
+    @Override
+    public String toString() {
+        return labelID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof TreeNode))
+            return false;
+
+        TreeNode other = (TreeNode) o;
+        return this.labelID.equals(other.labelID);
+    }
+
+    @Override
+    public int hashCode() {
+        return labelID.hashCode();
+    }
 }

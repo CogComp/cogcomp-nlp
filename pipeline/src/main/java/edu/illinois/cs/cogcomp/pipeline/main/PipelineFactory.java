@@ -140,6 +140,12 @@ public class PipelineFactory {
                     case ViewNames.RELATION:
                         nonDefaultValues.put(PipelineConfigurator.USE_RELATION.key,
                                 Configurator.TRUE);
+                    case ViewNames.DATALESS_ESA:
+                        nonDefaultValues.put(PipelineConfigurator.USE_DATALESS_ESA.key,
+                                Configurator.TRUE);
+                    case ViewNames.DATALESS_W2V:
+                        nonDefaultValues.put(PipelineConfigurator.USE_DATALESS_W2V.key,
+                                Configurator.TRUE);
                         break;
                     default:
                         logger.warn("View name "
@@ -391,16 +397,16 @@ public class PipelineFactory {
             TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
             viewGenerators.put(ViewNames.TIMEX3, tca);
         }
-//        if (rm.getBoolean(PipelineConfigurator.USE_ESA_DATALESS)){
-//        	Properties rmProps = new ESADatalessConfigurator().getDefaultConfig().getProperties();
-//        	ESADatalessAnnotator esaDataless = new ESADatalessAnnotator(new ResourceManager(rmProps));        	
-//            viewGenerators.put(ViewNames.ESA_DATALESS, esaDataless);
-//        }
-//        if (rm.getBoolean(PipelineConfigurator.USE_W2V_DATALESS)){
-//        	Properties rmProps = new W2VDatalessConfigurator().getDefaultConfig().getProperties();
-//        	W2VDatalessAnnotator w2vDataless = new W2VDatalessAnnotator(new ResourceManager(rmProps));        	
-//            viewGenerators.put(ViewNames.W2V_DATALESS, w2vDataless);
-//        }
+        if (rm.getBoolean(PipelineConfigurator.USE_DATALESS_ESA)){
+        	rm = new ESADatalessConfigurator().getConfig(nonDefaultRm);
+        	ESADatalessAnnotator esaDataless = new ESADatalessAnnotator(rm);
+            viewGenerators.put(ViewNames.DATALESS_ESA, esaDataless);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_DATALESS_W2V)){
+        	rm = new W2VDatalessConfigurator().getConfig(nonDefaultRm);
+        	W2VDatalessAnnotator w2vDataless = new W2VDatalessAnnotator(rm);
+            viewGenerators.put(ViewNames.DATALESS_W2V, w2vDataless);
+        }
         return viewGenerators;
     }
 

@@ -16,19 +16,22 @@ import java.util.TreeMap;
  */
 
 public class HashSort {
-	//the map is sorted from the highest value to the lowest.
-	public static <K, V extends Comparable<V>> TreeMap<K, V> sortByValues(final Map<K, V> map) {
-	    Comparator<K> valueComparator =  new Comparator<K>() {
-	        public int compare(K k1, K k2) {
-	            int compare = map.get(k2).compareTo(map.get(k1));
-	            if (compare == 0) return 1;
-	            else return compare;
-	        }
-	    };
-	    TreeMap<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
-	    sortedByValues.putAll(map);
-	    return sortedByValues;
-	}
+    // the map is sorted from the highest value to the lowest.
+    public static <K, V extends Comparable<V>> TreeMap<K, V> sortByValues(final Map<K, V> map) {
+        Comparator<K> valueComparator = new Comparator<K>() {
+            public int compare(K k1, K k2) {
+                int compare = map.get(k2).compareTo(map.get(k1));
+                if (compare == 0)
+                    return 1;
+                else
+                    return compare;
+            }
+        };
+
+        TreeMap<K, V> sortedByValues = new TreeMap<>(valueComparator);
+        sortedByValues.putAll(map);
+        return sortedByValues;
+    }
 
 
 }

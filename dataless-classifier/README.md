@@ -1,10 +1,14 @@
 # CogComp-DatalessClassifier
+Given a label ontology, and textual descriptions of those labels, Dataless-Classifier is capable of classifying arbitrary text into that ontology.
+
+It is particularly useful in those scenarios where it is difficult/expensive to gather enough training data to train a supervised text classifier. Dataless-Classifier utilizes the semantic meaning of the labels to bypass the need for explicit supervision. For more information, please visit our main project [page](http://cogcomp.org/page/project_view/6).    
+
 
 Some key points:
 - The Main classes for the Dataless Annotators are:
   * **ESADatalessAnnotator** for the ESA-based Dataless Annotator
   * **W2VDatalessAnnotator** for the Word2Vec-based Dataless Annotator
-- Dataless Annotators add the **ESA_DATALESS** and **W2V_DATALESS** views to the input `TextAnnotation` respectively, and it requires the presence of a **TOKENS** view with the end-user's desired Tokenization.
+- Dataless Annotators add the **DATALESS_ESA** and **DATALESS_W2V** views to the input `TextAnnotation` respectively, and it requires the presence of a **TOKENS** view with the end-user's desired Tokenization.
 - Since Labels/Topics are inferred at the Document-Level, all topic annotations span the entire document.
 - Sample invocation has been provided in the main functions of each annotator.
 - Both annotators load up embeddings in memory, and thus can easily consume upto **10GB RAM**.
@@ -25,34 +29,16 @@ We provide a sample 20newsgroups hierarchy with label descriptions inside data/h
 We also provide improved 20newsgroups label descriptions in *labelDesc\_Kws\_embellished.txt* which corresponds to the label descriptions used in [2], whereas the *labelDesc\_Kws\_simple.txt* corresponds to the label descriptions used in [1].
 
 ## Embeddings
-Dataless Annotators also require the corresponding embeddings, i.e. ESA embeddings for the ESADatalessAnnotator, and Word2Vec embeddings for the W2VDatalessAnnotator. If you are using the project as a dependency, you'll have to add the following dependencies too:
+ESA and Word2Vec Embeddings are fetched from the DataStore on demand.
 
-	<dependency>
-		<groupId>edu.illinois.cs.cogcomp</groupId>
-		<artifactId>esaEmbedding</artifactId>
-		<version>1.0</version>
-	</dependency>
-	<dependency>
-		<groupId>edu.illinois.cs.cogcomp</groupId>
-		<artifactId>w2vEmbedding-100</artifactId>
-		<version>1.0</version>
-	</dependency>
-
-Then, you can use the default annotator configs, which have been initialized to make everything work with the aforementioned dependencies.
-
-Alternatively, you can just download the aforementioned dependencies, unzip and put the corresponding resources in your desired path, and specify the path in the project config:
-* **esaPath**: path to the esa embeddings file *(esaEmbedding/esa_vectors.txt)*
-* **esaMapPath**: path to the esa conceptID to conceptName file *(esaEmbedding/idToConceptMap.txt)*
-* **w2vPath**: path to the word2vec embeddings file *(w2vEmbedding-100/w2v\_vectors.txt)*
-
+## Config
 A sample config file with the default values has been provided in the config folder .. *config/project.properties*
 
 To check whether you are properly set to use the project or not, run:
-* `mvn -Dtest=ESADatalessTest#test test` to test the ESADatalessAnnotator.
-* `mvn -Dtest=W2VDatalessTest#test test` to test the W2VDatalessAnnotator.
+* `mvn -Dtest=ESADatalessTest#testPredictions test` to test the ESADatalessAnnotator.
+* `mvn -Dtest=W2VDatalessTest#testPredictions test` to test the W2VDatalessAnnotator.
 
-
-References:
+If you use this software for research, please cite the following papers:
 
 [1] Chang, Ming-Wei, et al. "Importance of Semantic Representation: Dataless Classification." AAAI. Vol. 2. 2008.
 

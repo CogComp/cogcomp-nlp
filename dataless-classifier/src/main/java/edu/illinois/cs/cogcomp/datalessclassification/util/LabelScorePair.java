@@ -8,43 +8,39 @@
 package edu.illinois.cs.cogcomp.datalessclassification.util;
 
 /**
+ * A small utility class to wrap a pair of labelID and its score
+ *
  * @author yqsong@illinois.edu
  * @author shashank
  */
 
 public class LabelScorePair implements Comparable<LabelScorePair> {
-	public String labelName;
-	double labelScore;
-	
-	public LabelScorePair (String name, double score) {
-		labelName = name;
-		labelScore = score;
-	}
-	
-	public String getLabel(){
-		return labelName;
-	}
-	
-	public double getScore() {
-		return labelScore;
-	}
-	
-	public void setLabel (String label) {
-		labelName = label;
-	}
-	
-	public void setScore (double score) {
-		labelScore = score;
-	}
-	
-	@Override
-	public int compareTo(LabelScorePair kvp) {
-		if (this.labelScore > kvp.labelScore) {
-			return 1;
-		} else if (this.labelScore < kvp.labelScore) {
-			return -1;
-		} else {
-			return 0;
-		}
-	}
+    public String labelID;
+    double labelScore;
+
+    public LabelScorePair(String labelID, double score) {
+        this.labelID = labelID;
+        labelScore = score;
+    }
+
+    public String getLabelID() {
+        return labelID;
+    }
+
+    public double getScore() {
+        return labelScore;
+    }
+
+    public void setLabelID(String labelID) {
+        this.labelID = labelID;
+    }
+
+    public void setScore(double score) {
+        labelScore = score;
+    }
+
+    @Override
+    public int compareTo(LabelScorePair kvp) {
+        return Double.compare(this.labelScore, kvp.labelScore);
+    }
 }
