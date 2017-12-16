@@ -48,6 +48,8 @@ public class PipelineConfigurator extends AnnotatorServiceConfigurator {
     public static final Property USE_SRL_INTERNAL_PREPROCESSOR = new Property(
             SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, FALSE);
     public static final Property USE_TIMEX3 = new Property("useTimex3", FALSE);
+    public static final Property USE_DATALESS_ESA = new Property("useDatalessESA", FALSE);
+    public static final Property USE_DATALESS_W2V = new Property("useDatalessW2V", FALSE);
 
     /**
      * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable
@@ -79,7 +81,9 @@ public class PipelineConfigurator extends AnnotatorServiceConfigurator {
                         USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM, USE_SRL_PREP, USE_SRL_COMMA,
                         USE_QUANTIFIER, USE_VERB_SENSE, USE_JSON, USE_RELATION,
                         USE_LAZY_INITIALIZATION, USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH,
-                        USE_SENTENCE_PIPELINE, USE_TIMEX3, USE_MENTION, USE_TRANSLITERATION};
+						USE_SENTENCE_PIPELINE, USE_TIMEX3, USE_MENTION, USE_TRANSLITERATION,
+                        USE_DATALESS_ESA, USE_DATALESS_W2V};
+        
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(
                 generateProperties(properties))));
     }

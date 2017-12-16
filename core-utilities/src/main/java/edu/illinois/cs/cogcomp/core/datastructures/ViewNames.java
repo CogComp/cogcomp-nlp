@@ -88,6 +88,9 @@ public class ViewNames {
 
     public static final String WIKIFIER = "WIKIFIER";
 
+    public static final String DATALESS_ESA = "DATALESS_ESA";
+    public static final String DATALESS_W2V = "DATALESS_W2V";
+
     /**
      * @deprecated Replaced by {@link #CLAUSES_CHARNIAK}, {@link #CLAUSES_BERKELEY},
      *             {@link #CLAUSES_STANFORD}
@@ -150,6 +153,8 @@ public class ViewNames {
             case SHALLOW_PARSE:
             case QUANTITIES:
             case WIKIFIER:
+            case DATALESS_ESA:
+            case DATALESS_W2V:
             case CLAUSES_CHARNIAK:
             case CLAUSES_STANFORD:
             case CLAUSES_BERKELEY:
