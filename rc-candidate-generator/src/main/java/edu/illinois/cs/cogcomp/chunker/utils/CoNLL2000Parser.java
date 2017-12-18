@@ -45,7 +45,6 @@ public class CoNLL2000Parser extends ColumnFormat {
      * to be a <code>LinkedVector</code> populated by <code>Token</code>s representing a sentence.
      **/
     public Object next() {
-        System.out.println("next . . . ");
         String[] line = (String[]) super.next();
         while (line != null && line.length == 0)
             line = (String[]) super.next();
@@ -66,7 +65,6 @@ public class CoNLL2000Parser extends ColumnFormat {
             t = (Token) t.next;
         }
 
-        System.out.println("returning next . . . ");
         return new LinkedVector(t);
     }
 }
