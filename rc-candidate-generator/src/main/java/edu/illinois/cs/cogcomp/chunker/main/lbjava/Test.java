@@ -10,17 +10,19 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 public class Test {
 
     public static void trainWith(String filename) {
-        System.out.println("Starting to read the data . . . ");
+        System.out.println("Starting to read the data . . . " + filename);
         Parser parser = new CoNLL2000Parser("files/" + filename  + ".txt");
         System.out.println("Done reading the data . . . ");
-        ChunkerTrain ct = new ChunkerTrain(30);
+        ChunkerTrain ct = new ChunkerTrain(1);
         //ct.trainModelsWithParser(parser);
         ct.trainModelsWithParser(parser, "model", filename, 0.2);
         System.out.println("Done training . . . ");
         ct.writeModelsToDisk("model", filename);
+        System.out.println("Writing on disk . . .");
     }
 
     public static void main(String[] args) {
+        //trainWith("paragraphs-conllformat-tiny");
         trainWith("paragraphs-conllformat-train-window-1");
         trainWith("paragraphs-conllformat-train-full");
     }

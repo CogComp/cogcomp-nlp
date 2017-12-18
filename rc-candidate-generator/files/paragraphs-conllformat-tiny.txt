@@ -4,4 +4,3 @@ the DT O
 school NN O
 has VBZ O
 a DT O
-Catholic JJ O
