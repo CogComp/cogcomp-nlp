@@ -32,6 +32,7 @@ public class ContextFeatureExtractor extends FeatureCollection {
 
     private final boolean specifyIndex;
     private final int contextSize;
+    private final int contextShift;
     private final boolean ignoreConstituent;
 
     /**
@@ -39,21 +40,29 @@ public class ContextFeatureExtractor extends FeatureCollection {
      *
      * @param contextSize The number of tokens to the left and right of the constituent from which
      *        the features should be extracted.
+     * @param contextShift how much the context should be shifted to the right of the given constituent.
+     *                     A negative shift value means shift to the left.
      * @param specifyIndex Should the feature mention the index (relative to the constituent)
      * @param ignoreConstituent Should the tokens in the constituent itself be ignored while
      *        generating the features.
      */
-    public ContextFeatureExtractor(int contextSize, boolean specifyIndex, boolean ignoreConstituent) {
+    public ContextFeatureExtractor(int contextSize, int contextShift, boolean specifyIndex, boolean ignoreConstituent) {
         super("");
         this.contextSize = contextSize;
         this.specifyIndex = specifyIndex;
+        this.contextShift = contextShift;
         this.ignoreConstituent = ignoreConstituent;
     }
 
-    public ContextFeatureExtractor(int contextSize, boolean specifyIndex,
+    public ContextFeatureExtractor(int contextSize, boolean specifyIndex, boolean ignoreConstituent) {
+        this(contextSize, 0, specifyIndex, ignoreConstituent);
+    }
+
+    public ContextFeatureExtractor(int contextSize, int contextShift, boolean specifyIndex,
                                    boolean ignoreConstituent, WordFeatureExtractor... fex) {
         super("");
         this.contextSize = contextSize;
+        this.contextShift = contextShift;
         this.specifyIndex = specifyIndex;
         this.ignoreConstituent = ignoreConstituent;
 
@@ -66,8 +75,8 @@ public class ContextFeatureExtractor extends FeatureCollection {
 
         TextAnnotation ta = c.getTextAnnotation();
 
-        int start = c.getStartSpan() - contextSize;
-        int end = c.getEndSpan() + contextSize;
+        int start = c.getStartSpan() - contextSize + contextShift;
+        int end = c.getEndSpan() + contextSize + contextShift;
 
         if (start < 0)
             start = 0;
@@ -89,7 +98,7 @@ public class ContextFeatureExtractor extends FeatureCollection {
                 Set<Feature> feats = f.getFeatures(neighbor);
 
                 for (Feature feat : feats) {
-                    String preamble = "context";
+                    String preamble = "";
                     if (specifyIndex) {
                         String index = "*";
                         if (i < c.getStartSpan())
@@ -97,19 +106,17 @@ public class ContextFeatureExtractor extends FeatureCollection {
                         else if (i >= c.getEndSpan())
                             index = (i - c.getEndSpan() + 1) + "";
                         preamble += index;
+                        preamble += "#";
                     }
-                    preamble += ":";
-
-                    features.add(feat.prefixWith(preamble + f.getName()));
+                    features.add(feat.prefixWith(this.getName() + f.getName() + preamble));
                 }
             }
         }
         return features;
-
     }
 
     @Override
     public String getName() {
-        return "#ctxt#";
+        return "#ctxt" + String.valueOf(contextSize) + "-" + String.valueOf(contextShift) + "#";
     }
 }

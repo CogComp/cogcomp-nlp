@@ -5,7 +5,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.36</version>
+        <version>3.1.39</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,12 +20,12 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.36</version>
+            <version>3.1.39</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>3.1.36</version>
+            <version>3.1.39</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

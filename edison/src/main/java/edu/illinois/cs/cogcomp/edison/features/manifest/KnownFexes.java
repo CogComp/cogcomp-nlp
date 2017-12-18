@@ -9,7 +9,7 @@ package edu.illinois.cs.cogcomp.edison.features.manifest;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.CurrencyIndicator;
+import edu.illinois.cs.cogcomp.edison.features.factory.CurrencyIndicator;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.factory.*;

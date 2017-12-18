@@ -19,7 +19,7 @@ import java.util.Set;
 
 @SuppressWarnings("serial")
 public class FeatureGenerators {
-    public static FeatureExtractor hyphenTagFeature = new FeatureExtractor() {
+    public static FeatureExtractor hyphenTagFeature = new FeatureExtractor<Constituent>() {
 
         @Override
         public String getName() {

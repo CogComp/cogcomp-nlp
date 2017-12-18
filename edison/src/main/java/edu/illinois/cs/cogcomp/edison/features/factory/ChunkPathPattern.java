@@ -13,7 +13,6 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.RealFeature;
-import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.*;
@@ -64,12 +63,11 @@ public class ChunkPathPattern implements FeatureExtractor<Constituent> {
             boolean afterPredicate = Queries.after(pred).transform(c);
             if (beforePredicate)
                 constituents =
-                        SpanLabelsHelper.getConstituentsInBetween(shallowParse, c.getEndSpan(),
+                        shallowParse.getConstituentsInBetween(c.getEndSpan(),
                                 pred.getStartSpan());
             else if (afterPredicate)
                 constituents =
-                        SpanLabelsHelper.getConstituentsInBetween(shallowParse, pred.getEndSpan(),
-                                c.getStartSpan());
+                        shallowParse.getConstituentsInBetween(pred.getEndSpan(), c.getStartSpan());
 
             Collections.sort(constituents, new Comparator<Constituent>() {
                 public int compare(Constituent o1, Constituent o2) {

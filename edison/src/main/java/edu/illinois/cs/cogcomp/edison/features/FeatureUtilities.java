@@ -70,9 +70,22 @@ public class FeatureUtilities {
      */
     public static Set<Feature> prefix(String prefix, Set<Feature> features) {
         Set<Feature> feats = new LinkedHashSet<>();
-
         for (Feature s : features)
             feats.add(s.prefixWith(prefix));
+        return feats;
+    }
+
+    public static String getNameWithoutPrefix(Feature feature) {
+        //System.out.printf("-------- \n input: " + feature.getName());
+        String[] split = feature.getName().split("(:|#)");
+        //System.out.println("output: " + split[split.length - 1].trim() + "\n-------------");
+        return split[split.length - 1].trim();
+    }
+
+    public static Set<String> getNamesWithoutPrefix(Set<Feature> features) {
+        Set<String> feats = new LinkedHashSet<>();
+        for (Feature s : features)
+            feats.add(getNameWithoutPrefix(s));
         return feats;
     }
 
@@ -158,7 +171,7 @@ public class FeatureUtilities {
      * @return a pair of int[] and double[], representing the feature ids and values.
      */
     public static Pair<int[], double[]> convert(Set<Feature> features, Lexicon lexicon,
-            boolean trainingMode) {
+                                                boolean trainingMode) {
 
         TIntDoubleHashMap fMap = new TIntDoubleHashMap(features.size());
 
@@ -263,7 +276,6 @@ public class FeatureUtilities {
                     return conjoin(feats1, feats1);
                 } else {
                     Set<Feature> feats2 = f2.getFeatures(c);
-
                     return conjoin(feats1, feats2);
                 }
             }

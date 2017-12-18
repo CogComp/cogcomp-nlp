@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures;
 
+import gnu.trove.list.TIntList;
+import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntFloatHashMap;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.procedure.TIntIntProcedure;
@@ -22,7 +24,7 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * A lexicon manager that manages features. Stores a hash value for string features and maps to an
- * integer id. Optionally stores the string values too. Method previewFeature( String ) gets the
+ * integer id. Optionally stores the string values too.
  *
  * @author Vivek Srikumar
  */
@@ -70,6 +72,10 @@ public class Lexicon {
      */
     public Lexicon(InputStream in) throws IOException {
         this(in, false);
+    }
+
+    public Lexicon(File f, boolean loadStrings) throws IOException {
+        this(new FileInputStream(f), loadStrings);
     }
 
     public Lexicon(InputStream in, boolean loadStrings) throws IOException {
@@ -142,6 +148,10 @@ public class Lexicon {
         return featureNames.get(id);
     }
 
+    public List<String> getFeatureNames() {
+        return this.featureNames;
+    }
+
     /**
      * Increment the count for featureId.
      */
@@ -175,15 +185,13 @@ public class Lexicon {
 
         // If there is a hash collision, print a warning
         if (feature2Id.containsKey(featureHash)) {
-            logger.warn("Possible hash collision in lexicon " + "for feature name = {}, hash = {}", f,
+            logger.warn("Possible hash collision in lexicon for feature name = {}, hash = {}", f,
                     featureHash);
         } else {
-
             feature2Id.put(featureHash, nextFeatureId++);
-        }
-
-        if (featureNames != null) {
-            featureNames.add(f);
+            if (featureNames != null) {
+                featureNames.add(f);
+            }
         }
     }
 
@@ -247,6 +255,23 @@ public class Lexicon {
         }
 
         return new Pair<>(ids, vals);
+    }
+
+    /**
+     * generate a feature id representation given a set of features given as input
+     * @param features set of active features
+     * @return a feature sparse representation of the features
+     */
+    public int[] getFeatureVector(List<String> features) {
+        TIntList feats = new TIntArrayList();
+        for (String f : features) {
+            if (!contains(f))
+                continue;
+            int id = lookupId(f);
+            if (!feats.contains(id))
+                feats.add(id);
+        }
+        return feats.toArray();
     }
 
     public Pair<int[], float[]> pruneFeaturesByCount(int[] idx, float[] fs, int threshold) {

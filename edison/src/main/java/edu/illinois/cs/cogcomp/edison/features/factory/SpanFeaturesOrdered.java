@@ -14,7 +14,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
-import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Collections;
@@ -49,7 +48,7 @@ public class SpanFeaturesOrdered implements FeatureExtractor<Constituent> {
         SpanLabelView chunks = (SpanLabelView) c.getTextAnnotation().getView(viewName);
 
         List<Constituent> list =
-                SpanLabelsHelper.getConstituentsInBetween(chunks, c.getStartSpan(), c.getEndSpan());
+                chunks.getConstituentsInBetween(c.getStartSpan(), c.getEndSpan());
 
         Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
 

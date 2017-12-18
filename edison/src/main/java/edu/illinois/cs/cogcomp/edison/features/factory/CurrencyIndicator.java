@@ -5,8 +5,11 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features;
+package edu.illinois.cs.cogcomp.edison.features.factory;
 
+import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import org.cogcomp.Datastore;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -15,7 +18,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordLists;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 

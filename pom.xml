@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.36</version>
+    <version>3.1.39</version>
     <modules>
         <module>core-utilities</module>
         <module>tokenizer</module>
@@ -38,6 +38,7 @@
         <module>external/path-lstm</module>
         <module>external/stanford_3.3.1</module>
         <module>external/stanford_3.8.0</module>
+        <module>rc-candidate-generator</module>
     </modules>
 
     <properties>

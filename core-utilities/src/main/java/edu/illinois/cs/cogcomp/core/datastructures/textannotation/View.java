@@ -169,7 +169,6 @@ public class View implements Serializable, IQueryable<Constituent> {
             removeRelation(rel);
     }
 
-
     private void addRelatedConstituents(View restriction, Queue<Constituent> constituentsToConsider) {
         while (!constituentsToConsider.isEmpty()) {
             Constituent top = constituentsToConsider.remove();
@@ -396,6 +395,19 @@ public class View implements Serializable, IQueryable<Constituent> {
         List<Constituent> list = new ArrayList<>(output);
         Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
         return list;
+    }
+
+    public List<Constituent> getConstituentsInBetween(int start, int end) {
+
+        List<Constituent> output = getConstituentsCoveringSpan(start, end);
+        List<Constituent> restrictedOutput = new ArrayList<>();
+
+        for (Constituent c : output) {
+            if ((c.getStartSpan() >= start) && (c.getEndSpan() <= end))
+                restrictedOutput.add(c);
+        }
+
+        return restrictedOutput;
     }
 
     /**
