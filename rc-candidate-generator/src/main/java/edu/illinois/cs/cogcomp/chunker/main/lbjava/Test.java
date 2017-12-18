@@ -11,7 +11,7 @@ public class Test {
 
     public static void main(String[] args) {
         System.out.println("Starting to read the data . . . ");
-        Parser parser = new CoNLL2000Parser("files/paragraphs-conllformat-train-full.txt");
+        Parser parser = new CoNLL2000Parser("files/paragraphs-conllformat-train-window-1.txt");
         System.out.println("Done reading the data . . . ");
         ChunkerTrain ct = new ChunkerTrain();
         ct.trainModelsWithParser(parser);
