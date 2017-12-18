@@ -15,7 +15,8 @@ public class Test {
         System.out.println("Done reading the data . . . ");
         ChunkerTrain ct = new ChunkerTrain(1);
         //ct.trainModelsWithParser(parser);
-        ct.trainModelsWithParser(parser, "model", filename, 0.2);
+        //ct.trainModelsWithParser(parser, "model", filename, 0.2);
+        ct.trainModelsWithParser(parser);
         System.out.println("Done training . . . ");
         ct.writeModelsToDisk("model", filename);
         System.out.println("Writing on disk . . .");
