@@ -13,7 +13,7 @@ public class Test {
         System.out.println("Starting to read the data . . . " + filename);
         Parser parser = new CoNLL2000Parser("files/" + filename  + ".txt");
         System.out.println("Done reading the data . . . ");
-        ChunkerTrain ct = new ChunkerTrain(1);
+        ChunkerTrain ct = new ChunkerTrain(30);
         //ct.trainModelsWithParser(parser);
         //ct.trainModelsWithParser(parser, "model", filename, 0.2);
         ct.trainModelsWithParser(parser);
