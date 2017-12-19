@@ -128,11 +128,11 @@ public class Test {
 
 
     public static void main(String[] args) {
-        //trainWith("paragraphs-conllformat-tiny");
-        //trainWith("paragraphs-conllformat-train-window-1");
-        //trainWith("paragraphs-conllformat-train-full");
-        testWith("paragraphs-conllformat-dev-window-1", "paragraphs-conllformat-train-full");
-        testWith("paragraphs-conllformat-dev-full", "paragraphs-conllformat-train-full");
+        trainWith("paragraphs-conllformat-tiny");
+        trainWith("paragraphs-conllformat-train-window-1");
+        trainWith("paragraphs-conllformat-train-full");
+        //testWith("paragraphs-conllformat-dev-window-1", "paragraphs-conllformat-train-full");
+        //testWith("paragraphs-conllformat-dev-full", "paragraphs-conllformat-train-full");
         //testWithSingleInstance("paragraphs-conllformat-dev-window-1", "paragraphs-conllformat-train-window-1");
     }
 }
