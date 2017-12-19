@@ -39,8 +39,8 @@ public class ChunkerDemo {
         /*Add part-of-speech*/
         annotator.addView(ta, ViewNames.POS);
 
-        /*ChunkerAnnotator*/
-        ChunkerAnnotator ca = new ChunkerAnnotator(true);
+        /*ReadingComprehensionCandidateGeneratorAnnotator*/
+        ReadingComprehensionCandidateGeneratorAnnotator ca = new ReadingComprehensionCandidateGeneratorAnnotator(true);
         ca.initialize(new ChunkerConfigurator().getDefaultConfig());
         ca.addView(ta);
 

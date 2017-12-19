@@ -7,7 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.chunker.main;
 
-import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
+import edu.illinois.cs.cogcomp.chunker.main.lbjava.ReadingComprehensionCandidateGenerator;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This command line program takes a plain, unannotated text file as input and annotates the text
- * with chunk and part of speech tags. Both the Illinois POS tagger and the Illinois Chunker must be
+ * with chunk and part of speech tags. Both the Illinois POS tagger and the Illinois ReadingComprehensionCandidateGenerator must be
  * on the <code>CLASSPATH</code> for this command to execute.
  *
  * <h3>Usage</h3> <blockquote><code>
@@ -53,7 +53,7 @@ public class ChunksAndPOSTags {
             System.exit(1);
         }
 
-        Chunker chunker = new Chunker();
+        ReadingComprehensionCandidateGenerator chunker = new ReadingComprehensionCandidateGenerator();
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(filename)));
         String previous = "";
 

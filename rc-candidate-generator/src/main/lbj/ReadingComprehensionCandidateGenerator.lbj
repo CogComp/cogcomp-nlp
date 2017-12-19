@@ -11,7 +11,7 @@ import edu.illinois.cs.cogcomp.chunker.utils.Constants;
   * Feature generator that senses the chunk tags of the previous two words.
   * During training, labels are present, so the previous two chunk tags are
   * simply read from the data.  Otherwise, the prediction of the
-  * {@link Chunker} is used.
+  * {@link ReadingComprehensionCandidateGenerator} is used.
   *
   * @author Nick Rizzolo
  **/
@@ -23,8 +23,8 @@ discrete% PreviousTags(Token word) <-
 
   for (; w != word; w = (Token) w.next)
   {
-    if (Chunker.isTraining) sense i++ : w.label;
-    else sense i++ : Chunker(w);
+    if (ReadingComprehensionCandidateGenerator.isTraining) sense i++ : w.label;
+    else sense i++ : ReadingComprehensionCandidateGenerator(w);
   }
 }
 
@@ -39,10 +39,10 @@ discrete% SOPrevious(Token word) <-
   i = 0;
   for (; w != word; w = (Token) w.next) {
       tags[i] = POSTagger(w);
-      if (Chunker.isTraining) 
+      if (ReadingComprehensionCandidateGenerator.isTraining) 
           labels[i] = w.label;
       else
-          labels[i] = Chunker(w);
+          labels[i] = ReadingComprehensionCandidateGenerator(w);
       i++;
   }
   tags[i] = POSTagger(w);
@@ -165,7 +165,7 @@ discrete% Formpp(Token word) <-
   *
   * @author Nick Rizzolo
  **/
-discrete Chunker(Token word) cachedin word.type <-
+discrete ReadingComprehensionCandidateGenerator(Token word) cachedin word.type <-
 learn ChunkLabel
   using Forms, Capitalization, WordTypeInformation, Affixes, PreviousTags,
         POSWindow, Mixed, POSWindowpp, Formpp, SOPrevious
@@ -178,7 +178,7 @@ learn ChunkLabel
     baseLTU = new SparseAveragedPerceptron(p);
   }
 
-  testFrom new ChildrenFromVectors(new CoNLL2000Parser(Constants.testData))
+  // testFrom new ChildrenFromVectors(new CoNLL2000Parser(Constants.testData))
 
   progressOutput 300000
 end

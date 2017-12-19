@@ -27,7 +27,7 @@ public class ChunkerConfigurator extends Configurator {
                     "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.noPOS.txt");
 
     /*Change the following two properties if a retrained model is desired*/
-    public static final Property MODEL_NAME = new Property("modelName", "Chunker");
+    public static final Property MODEL_NAME = new Property("modelName", "ReadingComprehensionCandidateGenerator");
     public static final Property MODEL_DIR_PATH = new Property("modelDirPath",
             "ChunkerModel/");
 

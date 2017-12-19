@@ -115,8 +115,11 @@ public class BIOTester {
                 String p = "O", l = "O";
                 int pEnd = -1, lEnd = -1;
 
-                if (predictions[i].startsWith("B-")
-                        || predictions[i].startsWith("I-")
+                //System.out.println("prediction: " + predictions[i]);
+                //System.out.println("labels: " + labels[i]);
+
+                if (predictions[i].contains("-B")
+                        || predictions[i].contains("-I")
                         && (i == 0
                         || !predictions[i - 1]
                         .endsWith(predictions[i].substring(2)))) {
@@ -126,8 +129,8 @@ public class BIOTester {
                         ++pEnd;
                 }
 
-                if (labels[i].startsWith("B-")
-                        || labels[i].startsWith("I-")
+                if (labels[i].contains("-B")
+                        || labels[i].contains("-I")
                         && (i == 0 || !labels[i - 1].endsWith(labels[i].substring(2)))) {
                     l = labels[i].substring(2);
                     lEnd = i;

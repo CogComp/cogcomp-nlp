@@ -18,7 +18,7 @@ import java.util.Set;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
+import edu.illinois.cs.cogcomp.chunker.main.lbjava.ReadingComprehensionCandidateGenerator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -29,16 +29,16 @@ import org.slf4j.LoggerFactory;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
 /**
- * Wraps the Illinois Chunker (Shallow Parser) in an illinois-core-utilities Annotator
+ * Wraps the Illinois ReadingComprehensionCandidateGenerator (Shallow Parser) in an illinois-core-utilities Annotator
  * 
  * @author James Clarke, Mark Sammons, Nitish Gupta
  *
  */
 
-public class ChunkerAnnotator extends Annotator {
-    private static final String NAME = ChunkerAnnotator.class.getCanonicalName();
-    private final Logger logger = LoggerFactory.getLogger(ChunkerAnnotator.class);
-    private Chunker tagger;
+public class ReadingComprehensionCandidateGeneratorAnnotator extends Annotator {
+    private static final String NAME = ReadingComprehensionCandidateGeneratorAnnotator.class.getCanonicalName();
+    private final Logger logger = LoggerFactory.getLogger(ReadingComprehensionCandidateGeneratorAnnotator.class);
+    private ReadingComprehensionCandidateGenerator tagger;
     private String posfield = ViewNames.POS;
     private String tokensfield = ViewNames.TOKENS;
     private String sentencesfield = ViewNames.SENTENCE;
@@ -47,7 +47,7 @@ public class ChunkerAnnotator extends Annotator {
     /**
      * default: don't use lazy initialization
      */
-    public ChunkerAnnotator() {
+    public ReadingComprehensionCandidateGeneratorAnnotator() {
         this(false);
     }
 
@@ -55,19 +55,19 @@ public class ChunkerAnnotator extends Annotator {
      * Constructor parameter allows user to specify whether or not to lazily initialize.
      *
      * @param lazilyInitialize If set to 'true', models will not be loaded until first call
-     *        requiring Chunker annotation.
+     *        requiring ReadingComprehensionCandidateGenerator annotation.
      */
-    public ChunkerAnnotator(boolean lazilyInitialize) {
+    public ReadingComprehensionCandidateGeneratorAnnotator(boolean lazilyInitialize) {
         this(lazilyInitialize, new ChunkerConfigurator().getDefaultConfig());
     }
 
-    public ChunkerAnnotator(boolean lazilyInitialize, ResourceManager rm) {
+    public ReadingComprehensionCandidateGeneratorAnnotator(boolean lazilyInitialize, ResourceManager rm) {
         super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize, new ChunkerConfigurator().getConfig(rm));
     }
 
     @Override
     public void initialize(ResourceManager rm) {
-        tagger = new Chunker(rm.getString(ChunkerConfigurator.MODEL_PATH.key),rm.getString(ChunkerConfigurator.MODEL_LEX_PATH.key));
+        tagger = new ReadingComprehensionCandidateGenerator(rm.getString(ChunkerConfigurator.MODEL_PATH.key),rm.getString(ChunkerConfigurator.MODEL_LEX_PATH.key));
     }
 
 
@@ -100,7 +100,7 @@ public class ChunkerAnnotator extends Annotator {
             // what happens if we see an Inside tag -- even if it doesn't follow a Before tag
             if (null != lbjtoken.type && lbjtoken.type.charAt(0) == 'I') {
                 if (lbjtoken.type.length() < 3)
-                    throw new IllegalArgumentException("Chunker word label '" + lbjtoken.type
+                    throw new IllegalArgumentException("ReadingComprehensionCandidateGenerator word label '" + lbjtoken.type
                             + "' is too short!");
                 if (null == clabel) // we must have just seen an Outside tag and possibly completed
                                     // a chunk
@@ -163,7 +163,7 @@ public class ChunkerAnnotator extends Annotator {
     }
 
     /**
-     * Return possible tag values that the ChunkerAnnotator can produce.
+     * Return possible tag values that the ReadingComprehensionCandidateGeneratorAnnotator can produce.
      *
      * @return the set of string representing the tag values
      */

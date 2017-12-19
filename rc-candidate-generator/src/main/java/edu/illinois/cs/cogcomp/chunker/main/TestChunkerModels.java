@@ -7,7 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.chunker.main;
 
-import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
+import edu.illinois.cs.cogcomp.chunker.main.lbjava.ReadingComprehensionCandidateGenerator;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
@@ -25,7 +25,7 @@ public class TestChunkerModels {
     private String modelPath;
     private String labeledData;
 
-    private Chunker tagger;
+    private ReadingComprehensionCandidateGenerator tagger;
     private static final Logger logger = LoggerFactory.getLogger(TestChunkerModels.class);
 
     /**
@@ -38,7 +38,7 @@ public class TestChunkerModels {
      */
     public TestChunkerModels(String modelPath, String labeledData, String chunkerName) {
         this.labeledData = labeledData;
-        tagger = new Chunker();
+        tagger = new ReadingComprehensionCandidateGenerator();
     }
 
     public void testAccuracy() {

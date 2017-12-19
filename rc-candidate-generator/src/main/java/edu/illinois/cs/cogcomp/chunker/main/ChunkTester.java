@@ -8,7 +8,7 @@
 package edu.illinois.cs.cogcomp.chunker.main;
 
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.ChunkLabel;
-import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
+import edu.illinois.cs.cogcomp.chunker.main.lbjava.ReadingComprehensionCandidateGenerator;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
@@ -21,7 +21,7 @@ import java.io.File;
 
 /**
  * This class may be used to produce a detailed report of the <i>phrase by phrase</i> performance of
- * {@link Chunker} on given testing data. {@link Chunker} must exist before attempting to compile
+ * {@link ReadingComprehensionCandidateGenerator} on given testing data. {@link ReadingComprehensionCandidateGenerator} must exist before attempting to compile
  * this code.
  *
  * <h3>Usage</h3> <blockquote><code>
@@ -50,7 +50,7 @@ public class ChunkTester {
         Parser parser;
         parser = new CoNLL2000Parser(testFile);
         BIOTester tester =
-                new BIOTester(new Chunker(), new ChunkLabel(), new ChildrenFromVectors(parser));
+                new BIOTester(new ReadingComprehensionCandidateGenerator(), new ChunkLabel(), new ChildrenFromVectors(parser));
         tester.test().printPerformance(System.out);
     }
     public static void chunkTester(String testFile, String modeldir, String modelname){
@@ -59,7 +59,7 @@ public class ChunkTester {
         String lexpath = modeldir+File.separator+modelname+".lex";
         parser = new CoNLL2000Parser(testFile);
         BIOTester tester =
-                new BIOTester(new Chunker(lcpath,lexpath), new ChunkLabel(), new ChildrenFromVectors(parser));
+                new BIOTester(new ReadingComprehensionCandidateGenerator(lcpath,lexpath), new ChunkLabel(), new ChildrenFromVectors(parser));
         tester.test().printPerformance(System.out);
     }
     public static void main(String[] args){

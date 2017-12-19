@@ -1,7 +1,7 @@
 /**
  * This software is released under the University of Illinois/Research and Academic Use License. See
  * the LICENSE file in the root folder for details. Copyright (c) 2016
- * <p>
+ *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
@@ -9,10 +9,9 @@ package edu.illinois.cs.cogcomp.chunker.main;
 
 
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.ChunkLabel;
-import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
+import edu.illinois.cs.cogcomp.chunker.main.lbjava.ReadingComprehensionCandidateGenerator;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
@@ -32,7 +31,7 @@ import java.lang.Math;
  */
 public class ChunkerTrain {
     private int iter; // Number of iterations to be used when training the chunker
-    private Chunker chunker;
+    private ReadingComprehensionCandidateGenerator chunker;
     private ResourceManager rm;
     private static final Logger logger = LoggerFactory.getLogger(ChunkerTrain.class);
 
@@ -49,7 +48,7 @@ public class ChunkerTrain {
         rm = new ChunkerConfigurator().getDefaultConfig();
         String modelFile = rm.getString("modelPath");
         String modelLexFile = rm.getString("modelLexPath");
-        chunker = new Chunker(modelFile, modelLexFile);
+        chunker = new ReadingComprehensionCandidateGenerator(modelFile, modelLexFile);
     }
 
     /**
@@ -81,7 +80,7 @@ public class ChunkerTrain {
      * @param parser Parser for the training data. Initialized in trainModels(String trainingData)
      */
     public void trainModelsWithParser(Parser parser) {
-        Chunker.isTraining = true;
+        ReadingComprehensionCandidateGenerator.isTraining = true;
 
         // Run the learner
         for (int i = 1; i <= iter; i++) {
@@ -99,7 +98,7 @@ public class ChunkerTrain {
     }
 
     public void trainModelsWithParser(Parser parser, String modeldir, String modelname, double dev_ratio) {
-        Chunker.isTraining = true;
+        ReadingComprehensionCandidateGenerator.isTraining = true;
         double tmpF1 = 0;
         double bestF1 = 0;
         int bestIter = 0;
@@ -137,7 +136,7 @@ public class ChunkerTrain {
             writeModelsToDisk(modeldir, modelname);
             // Test on dev set
             BIOTester tester =
-                    new BIOTester(new Chunker(lcpath, lexpath), new ChunkLabel(), new ChildrenFromVectors(parser));
+                    new BIOTester(new ReadingComprehensionCandidateGenerator(lcpath, lexpath), new ChunkLabel(), new ChildrenFromVectors(parser));
             double[] result = tester.test().getOverallStats();
             tmpF1 = result[2];
 
@@ -172,7 +171,7 @@ public class ChunkerTrain {
 
     /**
      * Saves the ".lc" and ".lex" models to disk in the modelPath specified by the constructor The
-     * modelName ("Chunker", as specified in ChunkerConfigurator) is fixed
+     * modelName ("ReadingComprehensionCandidateGenerator", as specified in ChunkerConfigurator) is fixed
      */
     public void writeModelsToDisk() {
         IOUtils.mkdir(rm.getString("modelDirPath"));

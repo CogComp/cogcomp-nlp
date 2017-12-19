@@ -7,9 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.lbj.chunk.tests;
 
-import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
+import edu.illinois.cs.cogcomp.chunker.main.ReadingComprehensionCandidateGeneratorAnnotator;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
-import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
+import edu.illinois.cs.cogcomp.chunker.main.lbjava.ReadingComprehensionCandidateGenerator;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
@@ -61,7 +61,7 @@ public class TestDiff {
 
     @Test
     public void testDiff() {
-        Chunker tagger = new Chunker();
+        ReadingComprehensionCandidateGenerator tagger = new ReadingComprehensionCandidateGenerator();
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
         String previous = "";
         String sentence = "";
@@ -96,7 +96,7 @@ public class TestDiff {
 
     @Test
     public void testGetTagValues() {
-        ChunkerAnnotator annotator = new ChunkerAnnotator(true, new ChunkerConfigurator().getDefaultConfig());
+        ReadingComprehensionCandidateGeneratorAnnotator annotator = new ReadingComprehensionCandidateGeneratorAnnotator(true, new ChunkerConfigurator().getDefaultConfig());
         String elements[] = { "B-ADJP", "B-ADVP", "B-CONJP", "B-INTJ", "B-LST", "B-NP", "B-PP", "B-PRT", "B-SBAR",
                 "B-UCP", "B-VP", "I-ADJP", "I-ADVP", "I-CONJP", "I-INTJ", "I-NP", "I-PP", "I-PRT", "I-SBAR", "I-UCP",
                 "I-VP", "O"};

@@ -12,4 +12,4 @@ export MAVEN_OPTS="-Xmx35g"
 
 mkdir -p $MODELDIR
 
-mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.lbjava.Test
+mvn compile exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.lbjava.Test
