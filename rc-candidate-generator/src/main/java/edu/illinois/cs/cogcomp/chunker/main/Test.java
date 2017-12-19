@@ -19,7 +19,7 @@ public class Test {
 
     public static void trainWith(String filename) {
         System.out.println("Starting to read the data . . . " + filename);
-        Parser parser = new CoNLL2000Parser( modelFolder + filename  + ".txt");
+        Parser parser = new CoNLL2000Parser( dataFolder + filename  + ".txt");
         System.out.println("Done reading the data . . . ");
         ChunkerTrain ct = new ChunkerTrain(30);
         //ct.trainModelsWithParser(parser);
