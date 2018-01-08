@@ -1,7 +1,7 @@
 /**
  * This software is released under the University of Illinois/Research and Academic Use License. See
  * the LICENSE file in the root folder for details. Copyright (c) 2016
- *
+ * <p>
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
@@ -14,7 +14,10 @@ import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureCreatorUtil;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
 import org.apache.commons.lang.StringUtils;
+import org.cogcomp.DatastoreException;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -30,39 +33,38 @@ import static org.junit.Assert.fail;
  * @author mssammon
  */
 public class TestWordEmbeddingWindow {
-    // public final void test()
-    // {
-    // boolean withNoise = false;
-    // TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation( withNoise
-    // );
-    //
-    // int targetIndex = 6;
-    //
-    // Constituent c = ta.getView(ViewNames.TOKENS).getConstituents().get( targetIndex );
-    //
-    // boolean ignoreSentenceBoundaries = false;
-    // WordEmbeddingWindow wew = null;
-    // try {
-    // wew = new WordEmbeddingWindow( 2, ignoreSentenceBoundaries );
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // fail( e.getMessage() );
-    // }
-    //
-    // String expectedFeatures = "";
-    //
-    // String actualFeatStr = "";
-    //
-    // try {
-    // Set<Feature> actualFeatures = wew.getFeatures( c );
-    //
-    // actualFeatStr = StringUtils.join( actualFeatures, "," );
-    // } catch (EdisonException e) {
-    // e.printStackTrace();
-    // fail( e.getMessage() );
-    // }
-    //
-    // assertEquals( expectedFeatures, actualFeatStr );
-    // }
+    @Test
+    public final void test() throws InvalidPortException, DatastoreException, InvalidEndpointException {
+        boolean withNoise = false;
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(withNoise, 3);
+
+        int targetIndex = 6;
+
+        Constituent c = ta.getView(ViewNames.TOKENS).getConstituents().get(targetIndex);
+
+        boolean ignoreSentenceBoundaries = false;
+        WordEmbeddingWindow wew = null;
+        try {
+            wew = new WordEmbeddingWindow(2, ignoreSentenceBoundaries);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        String expectedFeatures = "";
+
+        String actualFeatStr = "";
+
+        try {
+            Set<Feature> actualFeatures = wew.getFeatures(c);
+
+            actualFeatStr = StringUtils.join(actualFeatures, ",");
+        } catch (EdisonException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        assertEquals(expectedFeatures, actualFeatStr);
+    }
 
 }

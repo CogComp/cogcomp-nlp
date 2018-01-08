@@ -16,6 +16,9 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureCreatorUtil;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import org.cogcomp.DatastoreException;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -35,7 +38,7 @@ public class WordEmbeddingWindow implements FeatureExtractor<Constituent> {
     private final int windowEnd;
     private final boolean ignoreSentenceBoundaries;
 
-    public WordEmbeddingWindow(int windowSize, boolean ignoreSentenceBoundaries) throws IOException {
+    public WordEmbeddingWindow(int windowSize, boolean ignoreSentenceBoundaries) throws IOException, InvalidPortException, DatastoreException, InvalidEndpointException {
         this.windowStart = 0 - windowSize;
         this.windowEnd = windowSize;
         this.ignoreSentenceBoundaries = ignoreSentenceBoundaries;

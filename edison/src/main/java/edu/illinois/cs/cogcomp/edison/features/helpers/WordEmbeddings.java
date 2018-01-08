@@ -9,11 +9,17 @@ package edu.illinois.cs.cogcomp.edison.features.helpers;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -33,7 +39,7 @@ public class WordEmbeddings {
         public static final Property fileNames =
                 new Property(
                         "pathsToWordEmbeddings",
-                        "WordEmbedding/model-2280000000.LEARNING_RATE=1e-08.EMBEDDING_LEARNING_RATE=1e-07.EMBEDDING_SIZE=50.gz");
+                        "model-2280000000.LEARNING_RATE=1e-08_EMBEDDING_LEARNING_RATE=1e-07_EMBEDDING_SIZE=50");
         public static final Property dimensionalities = new Property("embeddingDimensionalities",
                 "50");
         public static final Property wordNumThreshold = new Property(
@@ -66,11 +72,18 @@ public class WordEmbeddings {
     public static int dimensionalitiesSum = 0;
     public static List<HashMap<String, double[]>> embeddingByResource = null;
 
-    public static void initWithDefaults() throws IOException {
+    public static void initWithDefaults() throws IOException, InvalidPortException, InvalidEndpointException, DatastoreException {
         ResourceManager rm = (new WordEmbeddingsConfigurator()).getDefaultConfig();
 
         List<String> fileNames = new LinkedList<>();
-        fileNames.add(rm.getString(WordEmbeddingsConfigurator.fileNames.key));
+        // old way of loading the resource from jar file
+        //fileNames.add(rm.getString(WordEmbeddingsConfigurator.fileNames.key));
+        // modified way of loading the file: through datastore
+        Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+        //File f = dsNoCredentials.getFile("org.cogcomp.word-embeddings", "model-2280000000.LEARNING_RATE=1e-08_EMBEDDING_LEARNING_RATE=1e-07_EMBEDDING_SIZE=50.gz", 1.5);
+                //dsNoCredentials.getFile("org.cogcomp.word-embeddings", WordEmbeddingsConfigurator.fileNames.key, 1.5);
+        //fileNames.add(f.getAbsolutePath());
+        fileNames.add("/Users/daniel/Desktop/illinois-common-resources-1.5/WordEmbedding/model-2280000000.LEARNING_RATE=1e-08.EMBEDDING_LEARNING_RATE=1e-07.EMBEDDING_SIZE=50.gz");
 
         List<Integer> embeddingDimensionality = new LinkedList<>();
         embeddingDimensionality.add(rm.getInt(WordEmbeddingsConfigurator.dimensionalities.key));

@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
+import java.util.Arrays;
+
 
 /**
  * This parser is designed to extract an internal representation of the sentences and words that
@@ -59,6 +61,14 @@ public class CoNLL2000Parser extends ColumnFormat {
         for (line = (String[]) super.next(); line != null && line.length > 0; line =
                 (String[]) super.next()) {
             pos = line[1];
+            if(!line[2].contains("-") && !line[2].equals("O")) {
+                try {
+                    System.out.println("line: " + Arrays.toString(line));
+                    throw new Exception("the label is invalid" + line[2]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             if (pos.equals("-"))
                 pos = null;
             t.next = new Token(new Word(line[0], pos), t, line[2]);

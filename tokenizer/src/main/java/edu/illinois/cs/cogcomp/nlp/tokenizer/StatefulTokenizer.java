@@ -94,12 +94,11 @@ public class StatefulTokenizer implements Tokenizer {
         int sentenceIndex = 0;
         int wordIndex = 0;
         for (State s : tsm.completed) {
-            State ms = (State) s;
             if (s.stateIndex() == TokenizerState.IN_SENTENCE.ordinal())
                 sentenceEnds[sentenceIndex++] = wordIndex;
             else {
-                tokens[wordIndex] = new String(tsm.text, ms.start, ms.end - ms.start);
-                wordOffsets[wordIndex++] = new IntPair(ms.start, ms.end);
+                tokens[wordIndex] = new String(tsm.text, s.start, s.end - s.start);
+                wordOffsets[wordIndex++] = new IntPair(s.start, s.end);
             }
         }
 

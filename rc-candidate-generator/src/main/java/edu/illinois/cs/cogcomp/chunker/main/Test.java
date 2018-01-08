@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.chunker.main;
 
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.ChunkLabel;
@@ -128,8 +135,8 @@ public class Test {
 
 
     public static void main(String[] args) {
-        trainWith("paragraphs-conllformat-tiny");
-        trainWith("paragraphs-conllformat-train-window-1");
+        //trainWith("paragraphs-conllformat-tiny");
+//        trainWith("paragraphs-conllformat-train-window-1");
         trainWith("paragraphs-conllformat-train-full");
         //testWith("paragraphs-conllformat-dev-window-1", "paragraphs-conllformat-train-full");
         //testWith("paragraphs-conllformat-dev-full", "paragraphs-conllformat-train-full");

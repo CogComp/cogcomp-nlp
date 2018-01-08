@@ -191,6 +191,12 @@ public class TreeView extends View {
                 break;
             }
         }
+        if(root == null) {
+            logger.warn("Root not found in sentence \"" + s + "\"; Constituents are: ");
+            for (Constituent c : queryable) {
+                logger.warn(" ----> " + c);
+            }
+        }
         return root;
     }
 

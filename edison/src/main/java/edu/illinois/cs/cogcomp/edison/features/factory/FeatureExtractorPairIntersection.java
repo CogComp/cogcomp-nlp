@@ -39,7 +39,7 @@ public class FeatureExtractorPairIntersection<T1, T2> extends PairExtractor<T1, 
     /**
      * @throws EdisonException
      */
-    public Set<Feature> getCombinedFeatures(T1 c1, T2 c2) throws EdisonException {
+    protected Set<Feature> getCombinedFeaturesImplementation(T1 c1, T2 c2) throws EdisonException {
         Set<Feature> extractedFeatures1 = fe1.getFeatures(c1);
         Set<Feature> extractedFeatures2 = fe2.getFeatures(c2);
 

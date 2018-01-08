@@ -24,7 +24,7 @@ public class FeatureExtractorPairConjunction<T1, T2> extends PairExtractor<T1, T
     FeatureExtractor<T2> fe2 = null;
 
     public FeatureExtractorPairConjunction(FeatureExtractor<T1> fe1,
-                         FeatureExtractor<T2> fe2) {
+                                           FeatureExtractor<T2> fe2) {
         this.fe1 = fe1;
         this.fe2 = fe2;
     }
@@ -37,14 +37,14 @@ public class FeatureExtractorPairConjunction<T1, T2> extends PairExtractor<T1, T
     /**
      * @throws EdisonException
      */
-    public Set<Feature> getCombinedFeatures(T1 c1, T2 c2) throws EdisonException {
+    protected Set<Feature> getCombinedFeaturesImplementation(T1 c1, T2 c2) throws EdisonException {
         Set<Feature> conjunction = new HashSet<>();
 
         Set<Feature> extractedFeatures1 = fe1.getFeatures(c1);
         Set<Feature> extractedFeatures2 = fe2.getFeatures(c2);
 
-        for(Feature f1 : extractedFeatures1) {
-            for(Feature f2 : extractedFeatures2) {
+        for (Feature f1 : extractedFeatures1) {
+            for (Feature f2 : extractedFeatures2) {
                 conjunction.add(f1.conjoinWith(f2).prefixWith(this.getName()));
             }
         }
