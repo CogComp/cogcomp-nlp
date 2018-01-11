@@ -43,7 +43,7 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
     private OntonotesTreebankReader otr = null;
 
     /** turn on to debug. */
-    private boolean debug = false;
+    static final private boolean debug = false;
     /**
      * 
      * @param viewname
@@ -110,7 +110,8 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
             throw new AnnotatorException("Could not decode the text from the XML document.");
         }
         
-        // Get a list of coref mentions
+        // Get a list of coref mentions object wrappers, these contain all the info we need
+        // to construct the coref chains.
         ArrayList<CorefMention> hits = new ArrayList<>();
         try {
             traverse(tbta, 0, hits, doc.getDocumentElement(), "");
@@ -128,17 +129,17 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
             }
             chain.add(cm);
         }
-        if (debug)
-            System.out.println(this.currentfile+" produced "+chains.size()+" chains.");
         CoreferenceView corefView = new CoreferenceView(COREF_VIEW_NAME, COREF_VIEW_NAME, tbta, 0.0);
         for (Entry<String, ArrayList<CorefMention>> entry : chains.entrySet()) {
-            String id = entry.getKey();
             ArrayList<CorefMention> mentions = entry.getValue();
             CorefMention head = mentions.get(0);
             Constituent headconst = new Constituent(head.id, COREF_VIEW_NAME, tbta, head.location.getFirst(), 
                 head.location.getSecond());
             head.constituent = headconst;
+            
             // These are added by the addCorefEdges call. corefView.addConstituent(headconst);
+            if (debug)
+                System.out.println(head+" -> "+head.constituent.getSurfaceForm());
             ArrayList<Constituent> referants = new ArrayList<>();
             for (int i = 1; i < mentions.size(); i++) {
                 CorefMention cm = mentions.get(i);
@@ -147,6 +148,8 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                 cm.constituent = constituent;
                 // These are added by the addCorefEdges call. corefView.addConstituent(constituent);
                 referants.add(constituent);
+                if (debug)
+                    System.out.println("    "+cm+" -> "+cm.constituent.getSurfaceForm());
             }
             corefView.addCorefEdges(headconst, referants);
         }
@@ -155,7 +158,7 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
         // now we have the chains, we need to but construct a view.
         return tbta;
     }
-    
+    static String partno = null;
     /**
      * traverse the document model, collecting hits and their locations as we go along. We 
      * also validate, ensuring the tokens gotten from the coref data matches the tokens parsed
@@ -164,10 +167,13 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
      * @param tokenoffset the offset of the current word token.
      * @param hits CorefMentions are added to this list.
      * @param node the node we are looking at.
+     * @param ident the indent to pretty up the output.
+     * @param partno  the unique id of the text section.
      * @return the updated token offset.
+     * @throws AnnotatorException 
      */
-    public int traverse(TextAnnotation treeta, int tokenoffset, ArrayList<CorefMention> hits, Node node, String ident) 
-                    throws AnnotatorException {     
+    public int traverse(TextAnnotation treeta, int tokenoffset, ArrayList<CorefMention> hits, Node node, 
+            String ident)  throws AnnotatorException {     
         NodeList nodeList = node.getChildNodes();
         if (node.getNodeType() == Node.TEXT_NODE) {
             String text = node.getTextContent();
@@ -175,8 +181,6 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
             String [] tokens = trimmed.split("[\\s]+");
             if (tokens.length == 0 || (tokens.length == 1 && tokens[0].length() == 0))
                 return tokenoffset;
-            if (debug)
-                System.out.println(tokenoffset+":"+(tokenoffset + tokens.length)+" - "+text);
             int start = tokenoffset;
             int end = tokenoffset + tokens.length;
             int nontokens = 0;
@@ -185,14 +189,12 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                 String t1 = treeta.getToken(i-nontokens);
                 String t2 = tokens[i-tokenoffset];
                 if (!tokensEqual(t1, t2)) {
-                    if (debug)
-                        System.out.println("** "+t1+" != "+t2);
                     nontokens++; // These are tokens not in the text, inserted by linguists.
                     if (consecutive > 3) {
                         System.out.println("\nEncountered a problem that rendered the document useless.");
                         System.out.println("original test:");
                         System.out.println(trimmed);
-                        System.out.println("treebank ridiculousness");
+                        System.out.println("treebank data:");
                         StringBuffer sb = new StringBuffer();
                         for (String t : treeta.getTokensInSpan(start, end)) {
                             sb.append(t);
@@ -209,9 +211,14 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
         } else {
         
             // this is a content node.
-            if (debug)
-                System.out.println(ident+node.getNodeName());
             int intokenoffset = tokenoffset;
+            if (node.getNodeName().equals("TEXT")) {
+                NamedNodeMap nl = node.getAttributes();
+                Node fo = nl.getNamedItem("PARTNO");
+                partno = fo.getNodeValue();
+                if (partno == null)
+                    System.err.println("BADNESS");
+            }
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node currentNode = nodeList.item(i);
                 tokenoffset = traverse(treeta, tokenoffset, hits, currentNode, ident+"   ");
@@ -224,7 +231,7 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                     Node attr = attrs.item(i);
                     String nodename = attr.getNodeName().toLowerCase();
                     if (nodename.equals("id")) {
-                        id = attr.getNodeValue();
+                        id = partno+"-"+attr.getNodeValue();
                     } else if (nodename.equals("type")) {
                         type = attr.getNodeValue();
                     } else if (nodename.equals("speaker")) {
@@ -347,9 +354,10 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                 count++;
                 if ((count % 100) == 0)
                     System.out.println("Completed "+count+" of "+otr.filelist.size());
+                if (debug) 
+                    System.exit(0);
             }
         }
         System.out.println(otr.generateReport());
     }
-
 }
