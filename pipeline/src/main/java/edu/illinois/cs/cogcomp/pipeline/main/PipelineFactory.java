@@ -14,6 +14,10 @@ import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.datalessclassification.config.ESADatalessConfigurator;
+import edu.illinois.cs.cogcomp.datalessclassification.config.W2VDatalessConfigurator;
+import edu.illinois.cs.cogcomp.datalessclassification.ta.ESADatalessAnnotator;
+import edu.illinois.cs.cogcomp.datalessclassification.ta.W2VDatalessAnnotator;
 import edu.illinois.cs.cogcomp.depparse.DepAnnotator;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.ner.NerAnnotatorManager;
@@ -135,6 +139,12 @@ public class PipelineFactory {
                                 Configurator.TRUE);
                     case ViewNames.RELATION:
                         nonDefaultValues.put(PipelineConfigurator.USE_RELATION.key,
+                                Configurator.TRUE);
+                    case ViewNames.DATALESS_ESA:
+                        nonDefaultValues.put(PipelineConfigurator.USE_DATALESS_ESA.key,
+                                Configurator.TRUE);
+                    case ViewNames.DATALESS_W2V:
+                        nonDefaultValues.put(PipelineConfigurator.USE_DATALESS_W2V.key,
                                 Configurator.TRUE);
                         break;
                     default:
@@ -386,6 +396,16 @@ public class PipelineFactory {
             Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
             TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(new ResourceManager(rmProps));
             viewGenerators.put(ViewNames.TIMEX3, tca);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_DATALESS_ESA)){
+        	rm = new ESADatalessConfigurator().getConfig(nonDefaultRm);
+        	ESADatalessAnnotator esaDataless = new ESADatalessAnnotator(rm);
+            viewGenerators.put(ViewNames.DATALESS_ESA, esaDataless);
+        }
+        if (rm.getBoolean(PipelineConfigurator.USE_DATALESS_W2V)){
+        	rm = new W2VDatalessConfigurator().getConfig(nonDefaultRm);
+        	W2VDatalessAnnotator w2vDataless = new W2VDatalessAnnotator(rm);
+            viewGenerators.put(ViewNames.DATALESS_W2V, w2vDataless);
         }
         return viewGenerators;
     }

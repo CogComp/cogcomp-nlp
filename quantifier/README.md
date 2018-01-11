@@ -57,7 +57,7 @@ declarations in your project's `pom.xml` file:
     <repository>
         <id>CogCompSoftware</id>
         <name>CogCompSoftware</name>
-        <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        <url>http://cogcomp.org/m2repo/</url>
     </repository>
 </repositories>
 ```

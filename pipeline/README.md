@@ -136,7 +136,7 @@ If this package is used in maven, please add the following dependencies with pro
     <repository>
         <id>CogcompSoftware</id>
         <name>CogcompSoftware</name>
-        <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        <url>http://cogcomp.org/m2repo/</url>
     </repository>
 </repositories>
 ```

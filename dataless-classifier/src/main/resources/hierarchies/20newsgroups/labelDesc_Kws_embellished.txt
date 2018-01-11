@@ -1,0 +1,26 @@
+politics	politics gun fbi guns weapon compound israel arab jews jewish muslim gay homosexual sexual
+religion	religion atheist christian atheism god islamic christian god christ church bible jesus christian morality jesus god religion horus
+computer	computer bus pc motherboard bios board computer dos mac apple powerbook graphics image gif animation tiff window motif xterm sun windows windows dos microsoft ms driver drivers card printer
+autos.sports	autos.sports car ford auto toyota honda nissan bmw bike motorcycle yamaha baseball ball hitter hockey wings espn
+science	science circuit electronics radio signal battery encryption key crypto algorithm security doctor medical disease medicine patient space orbit moon earth sky solar
+sales	sales sale offer shipping forsale sell price brand obo
+talk.politics.guns	gun fbi guns weapon compound
+talk.politics.mideast	israel arab jews jewish muslim
+talk.politics.misc	gay homosexual sexual
+alt.atheism	atheist christian atheism god islamic
+soc.religion.christian	christian god christ church bible jesus
+talk.religion.misc	christian morality jesus god religion horus
+comp.sys.ibm.pc.hardware	bus pc motherboard bios board computer dos
+comp.sys.mac.hardware	mac apple powerbook
+comp.graphics	graphics image gif animation tiff
+comp.windows.x	window motif xterm sun windows
+comp.os.ms.windows.misc	windows dos microsoft ms driver drivers card printer
+rec.autos	car ford auto toyota honda nissan bmw
+rec.motorcycles	bike motorcycle yamaha
+rec.sport.baseball	baseball ball hitter
+rec.sport.hockey	hockey wings espn
+sci.electronics	circuit electronics radio signal battery
+sci.crypt	encryption key crypto algorithm security
+sci.med	doctor medical disease medicine patient
+sci.space	space orbit moon earth sky solar
+misc.forsale	sale offer shipping forsale sell price brand obo

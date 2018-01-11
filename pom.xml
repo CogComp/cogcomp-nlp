@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <modules>
         <module>core-utilities</module>
         <module>tokenizer</module>
@@ -32,6 +32,7 @@
         <module>prepsrl</module>
         <module>verbsense</module>
         <module>pipeline</module>
+        <module>dataless-classifier</module>
         <!--external tools -->
         <module>external/external-commons</module>
         <module>external/clausie</module>
@@ -50,7 +51,7 @@
         <repository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+            <url>http://cogcomp.org/m2repo/</url>
         </repository>
     </repositories>
 
