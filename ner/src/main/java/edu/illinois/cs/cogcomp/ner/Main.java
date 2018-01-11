@@ -353,10 +353,9 @@ public class Main extends AbstractMain {
                     }
                 }
                 this.getResultProcessor().done();
-                while ((i * ratio) > completed) {
+                while (completed < 50) {
                     System.out.print("•");
                     completed++;
-                    i++;
                 }
                 System.out.println("");
                 long time = System.currentTimeMillis() - start;

@@ -13,17 +13,14 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -55,13 +52,8 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
      */
     private OntonotesTreebankReader otr = null;
     
-    /** this is something we add to the predicate to make it unique, for cases where 
-     * traces to missing verbage exist. */
-    final private String DISAMBIGUATION_ATTR = "DISAMBIGUATION_ATTR";
-    
     /** holds the character that indicates if this is a continuation of a previous relation. */
     final private String CONTINUATION_ATTR = "CONTINUATION_ATTR";
-    
     
     /**
      * Reads the specified sections from propbank data. Creates an instance
@@ -210,10 +202,10 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
 
     /**
      * We want to reuse any constituent with the same label and token span and attributes. The 
-     * equals method checks all kinds of stuff, ingoing and outgoing relations, which are changing
+     * equals method checks all kinds of stuff, in going and out going relations, which are changing
      * as we construct the view.
      * @param c the constituent.
-     * @return
+     * @return the disambinguation key for constituents.
      */
     private String constituentDisambiguationKey(Constituent c) {
         StringBuffer sb = new StringBuffer();
@@ -304,10 +296,6 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
         String[] argLabels = tempArgLabels.toArray(new String[tempArgLabels.size()]);
         double[] scores = new double[tempArgLabels.size()];
         for (int i = 0; i < scores.length; i++) scores[i] = 1.0;
-        
-        //public void addPredicateArguments(Constituent predicate, List<Constituent> args,
-        //    String[] relations, double[] scores) {
- 
         srlView.addPredicateArguments(predicate, args, argLabels, scores, continuationArgs);
     }
     
@@ -356,8 +344,6 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
                     if (hashmap.containsKey(code)) {
                         Constituent dup = hashmap.get(code);
                         System.err.println(c+" == "+dup);
-                        int chash = c.hashCode();
-                        int dhash = dup.hashCode();
                         hashcollisions++;
                     } else {
                         hashmap.put(code, c);
