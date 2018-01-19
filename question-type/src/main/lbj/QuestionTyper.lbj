@@ -1,0 +1,145 @@
+package edu.illinois.cs.cogcomp.question_typer.lbjava;
+
+import edu.illinois.cs.cogcomp.question_typer.*;
+
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+
+import java.util.List;
+
+/**
+  * Simply returns the value of the sentence.
+ **/
+discrete QuestionFineLabel(TextAnnotation s) <- {
+    return QuestionTyperFeatureExtractorsUtils.getFineLabel(s);
+}
+
+discrete QuestionCoarseLabel(TextAnnotation s) <- {
+    return QuestionTyperFeatureExtractorsUtils.getCoarseLabel(s);
+}
+
+discrete% BagOfWords(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.TOKENS).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "bow" : c.getSurfaceForm();
+    }
+}
+
+discrete% BagOfLemmas(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.LEMMA).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "lemma" : c.getLabel();
+    }
+}
+
+discrete% BagOfNERConll(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.NER_CONLL).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "nerConll" : c.getLabel();
+    }
+}
+
+discrete% BagOfNEROnto(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.NER_ONTONOTES).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "nerOnto" : c.getLabel();
+    }
+}
+
+discrete% BagOfNERConllConjSurf(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.NER_CONLL).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "nerConllConjSurf" : c.getLabel() + c.getSurfaceForm();
+    }
+}
+
+discrete% BagOfNEROntoConjSurf(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.NER_ONTONOTES).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "nerOntoConjSurf" : c.getLabel() + c.getSurfaceForm();
+    }
+}
+
+discrete% BagOfPOSConjLemma(TextAnnotation s) <- {
+    List cons = QuestionTyperFeatureExtractorsUtils.getPosConjLemma(s);
+    for(int i = 0; i < cons.size(); i++) {
+        sense "posConjSurf" : (String)cons.get(i);
+    }
+}
+
+discrete% BagOfChunkConjSurf(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.SHALLOW_PARSE).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "chunkConjSurf" : c.getLabel() + "-" + c.getSurfaceForm();
+    }
+}
+
+discrete% FirstPhrases(TextAnnotation s) <- {
+    String firstNP = QuestionTyperFeatureExtractorsUtils.getFirstLabel(s, "NP");
+    String firstVP = QuestionTyperFeatureExtractorsUtils.getFirstLabel(s, "VP");
+    sense "firstNP": firstNP;
+    sense "firstVP": firstVP;
+    sense "firstPhrases": firstNP + firstVP;
+}
+
+discrete% FirstCons(TextAnnotation s) <- {
+    String first1Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 1, false);
+    String first2Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 2, false);
+    String first3Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 3, false);
+
+    String first1Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 1, true);
+    String first2Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 2, true);
+    String first3Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 3, true);
+
+    sense "first1Chunk": first1Chunk;
+    sense "first2Chunk": first2Chunk;
+    sense "first3Chunk": first3Chunk;
+
+    sense "first1Lemma": first1Lemma;
+    sense "first2Lemma": first2Lemma;
+    sense "first3Lemma": first3Lemma;
+}
+
+discrete QuestinCoarseTyper(TextAnnotation s) <-
+learn QuestionCoarseLabel
+  using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf,
+    BagOfPOSConjLemma, BagOfChunkConjSurf, FirstPhrases
+  from new QuestionTypeReader("question-type/data/train_all.label.txt") 30 rounds
+  with SparseNetworkLearner
+  {
+    SparseAveragedPerceptron.Parameters p =
+      new SparseAveragedPerceptron.Parameters();
+    p.learningRate = .1;
+    p.thickness = 2;
+    baseLTU = new SparseAveragedPerceptron(p);
+  }
+
+  testFrom new QuestionTypeReader("question-type/data/TREC_10.label.txt")
+
+end
+
+
+discrete QuestinFineTyper(TextAnnotation s) <-
+learn QuestionFineLabel
+  using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf, BagOfPOSConjLemma, BagOfChunkConjSurf, FirstPhrases, FirstCons
+  from new QuestionTypeReader("question-type/data/train_all.label.txt") 30 rounds
+  with SparseNetworkLearner
+  {
+    SparseAveragedPerceptron.Parameters p =
+      new SparseAveragedPerceptron.Parameters();
+    p.learningRate = .1;
+    p.thickness = 2;
+    baseLTU = new SparseAveragedPerceptron(p);
+  }
+
+  testFrom new QuestionTypeReader("question-type/data/TREC_10.label.txt")
+
+end

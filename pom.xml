@@ -31,8 +31,10 @@
         <module>commasrl</module>
         <module>prepsrl</module>
         <module>verbsense</module>
-        <module>pipeline</module>
+        <module>question-type</module>
         <module>dataless-classifier</module>
+        <module>pipeline-client</module>
+        <module>pipeline</module>
         <!--external tools -->
         <module>external/external-commons</module>
         <module>external/clausie</module>
