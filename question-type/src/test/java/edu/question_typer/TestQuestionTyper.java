@@ -8,16 +8,18 @@ import edu.illinois.cs.cogcomp.question_typer.QuestionTypeAnnotator;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertTrue;
 
 /**
  * Created by daniel on 1/24/18.
  */
-public class TestQuestionTyperAnnotator {
+public class TestQuestionTyper {
 
     @Ignore
     @Test
-    public static void main(String[] args) throws AnnotatorException {
+    public void testAnnotator() throws IOException, AnnotatorException {
         QuestionTypeAnnotator annotator = new QuestionTypeAnnotator();
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 1);
         annotator.getView(ta);
