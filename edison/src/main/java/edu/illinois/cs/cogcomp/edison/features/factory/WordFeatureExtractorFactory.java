@@ -493,7 +493,7 @@ public class WordFeatureExtractorFactory {
     }
 
     public static WordNetFeatureExtractor getWordNetFeatureExtractor(
-            WordNetFeatureClass... wordNetFeatureClasses) throws EdisonException {
+            WordNetFeatureClass... wordNetFeatureClasses) {
         if (wnFeatureGenerator == null) {
             synchronized (WordFeatureExtractorFactory.class) {
                 if (wnFeatureGenerator == null) {
@@ -504,7 +504,8 @@ public class WordFeatureExtractorFactory {
                             wnFeatureGenerator.addFeatureType(c);
 
                     } catch (Exception e) {
-                        throw new EdisonException("Error creating word feature extractor", e);
+                        System.out.println("Error creating word feature extractor");
+                        e.printStackTrace();
                     }
                 }
             }

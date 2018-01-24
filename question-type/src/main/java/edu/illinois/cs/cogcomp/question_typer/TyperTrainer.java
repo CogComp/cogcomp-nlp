@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.question_typer;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -18,8 +25,8 @@ public class TyperTrainer {
             System.out.println(s.getAvailableViews());
             System.out.println(QuestionTyperFeatureExtractorsUtils.getFineLabel(s));
             System.out.println(QuestionTyperFeatureExtractorsUtils.getCoarseLabel(s));
+            QuestionTyperFeatureExtractorsUtils.getNgrams(s);
         }
-        QuestionTyperFeatureExtractorsUtils.readLists();
         for(Object key : QuestionTyperFeatureExtractorsUtils.list.keySet()) {
             System.out.println("----> " + key);
             System.out.println(QuestionTyperFeatureExtractorsUtils.list.get(key));

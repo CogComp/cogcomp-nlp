@@ -5,12 +5,14 @@ import edu.illinois.cs.cogcomp.question_typer.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
+import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 
 import java.util.List;
+import java.util.Set;
 
-/**
-  * Simply returns the value of the sentence.
- **/
 discrete QuestionFineLabel(TextAnnotation s) <- {
     return QuestionTyperFeatureExtractorsUtils.getFineLabel(s);
 }
@@ -26,6 +28,12 @@ discrete% BagOfWords(TextAnnotation s) <- {
         sense "bow" : c.getSurfaceForm();
     }
 }
+
+discrete QuestionLength(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.TOKENS).getConstituents();
+    return Integer.toString(cons.size());
+}
+
 
 discrete% BagOfLemmas(TextAnnotation s) <- {
     List cons = s.getView(ViewNames.LEMMA).getConstituents();
@@ -94,10 +102,16 @@ discrete% FirstCons(TextAnnotation s) <- {
     String first1Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 1, false);
     String first2Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 2, false);
     String first3Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 3, false);
+    String first4Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 4, false);
 
     String first1Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 1, true);
     String first2Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 2, true);
     String first3Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 3, true);
+    String first4Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 4, true);
+
+    String first1POS = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.POS, 1, true);
+    String first2POS = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.POS, 2, true);
+    String first3POS = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.POS, 3, true);
 
     sense "first1Chunk": first1Chunk;
     sense "first2Chunk": first2Chunk;
@@ -108,10 +122,72 @@ discrete% FirstCons(TextAnnotation s) <- {
     sense "first3Lemma": first3Lemma;
 }
 
-discrete QuestinCoarseTyper(TextAnnotation s) <-
+discrete{false, true}% OverlapWithSets(TextAnnotation s) <- {
+    boolean[] overlaps = QuestionTyperFeatureExtractorsUtils.getOverlapWithSets(s);
+    sense "ovrlpMnt": overlaps[0];
+    sense "ovrlpPrf": overlaps[1];
+    sense "ovrlpFd": overlaps[2];
+}
+
+discrete% WordnetSynsetsFirstSense(TextAnnotation s) <- {
+    List features = FeatureUtilities.getFeaturesFromTextAnnotation(
+    WordFeatureExtractorFactory.getWordNetFeatureExtractor(WordNetFeatureExtractor.WordNetFeatureClass.synsetsFirstSense), s);
+    for(int i = 0; i < features.size(); i++) {
+        sense "wnsynsetfirst": (String)features.get(i);
+    }
+}
+
+discrete% WordnetSynsetsAllSenses(TextAnnotation s) <- {
+    List features = FeatureUtilities.getFeaturesFromTextAnnotation(
+    WordFeatureExtractorFactory.getWordNetFeatureExtractor(WordNetFeatureExtractor.WordNetFeatureClass.synsetsAllSenses), s);
+    for(int i = 0; i < features.size(); i++) {
+        sense "wnsynsetall": (String)features.get(i);
+    }
+}
+
+discrete% LexicographerFileNamesFirstSense(TextAnnotation s) <- {
+    List features = FeatureUtilities.getFeaturesFromTextAnnotation(
+    WordFeatureExtractorFactory.getWordNetFeatureExtractor(WordNetFeatureExtractor.WordNetFeatureClass.lexicographerFileNamesFirstSense), s);
+    for(int i = 0; i < features.size(); i++) {
+        sense "wnlexfirst": (String)features.get(i);
+    }
+}
+
+discrete% WordListFeatures(TextAnnotation s) <- {
+    List features = QuestionTyperFeatureExtractorsUtils.getWordGroupFeatures(s);
+    for(int i = 0; i < features.size(); i++) {
+        sense "wlist": (String)features.get(i);
+    }
+}
+
+discrete% LemmaNGramFeatures(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.LEMMA).getConstituents();
+    for(int i = 2; i <= 4; i++) {
+        List ngramOrdred = FeatureUtilities.getFeatureSet(FeatureNGramUtility.getLabelNgramsOrdered(cons, i));
+        String label = i + "gramTokensOrdered";
+        for(int ii = 0; ii < ngramOrdred.size(); ii++) {
+            sense label : (String) ngramOrdred.get(ii);
+        }
+    }
+}
+
+discrete{false, true}% PatternFeaturesBoolean(TextAnnotation s) <- {
+    boolean[] patterns = QuestionTyperFeatureExtractorsUtils.getStringPatternsBoolean(s);
+    sense "what-noun": patterns[0];
+    sense "whereOrWhenAndCapitapized": patterns[1];
+    sense "containsBodyOrPart": patterns[2];
+}
+
+discrete% PatternFeaturesDiscrete(TextAnnotation s) <- {
+    String[] patterns = QuestionTyperFeatureExtractorsUtils.getStringPatternsDiscrete(s);
+    sense "whatNounNoun": patterns[0];
+}
+
+discrete QuestionCoarseTyper(TextAnnotation s) <-
 learn QuestionCoarseLabel
   using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf,
-    BagOfPOSConjLemma, BagOfChunkConjSurf, FirstPhrases
+    BagOfPOSConjLemma, BagOfChunkConjSurf, FirstPhrases, OverlapWithSets, WordnetSynsetsFirstSense, WordListFeatures,
+    LemmaNGramFeatures, PatternFeaturesBoolean, PatternFeaturesDiscrete
   from new QuestionTypeReader("question-type/data/train_all.label.txt") 30 rounds
   with SparseNetworkLearner
   {
@@ -127,9 +203,11 @@ learn QuestionCoarseLabel
 end
 
 
-discrete QuestinFineTyper(TextAnnotation s) <-
+discrete QuestionFineTyper(TextAnnotation s) <-
 learn QuestionFineLabel
-  using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf, BagOfPOSConjLemma, BagOfChunkConjSurf, FirstPhrases, FirstCons
+  using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf, BagOfPOSConjLemma,
+  BagOfChunkConjSurf, FirstPhrases, FirstCons, OverlapWithSets, WordnetSynsetsFirstSense, WordListFeatures, QuestionLength,
+  LemmaNGramFeatures, PatternFeaturesBoolean, PatternFeaturesDiscrete
   from new QuestionTypeReader("question-type/data/train_all.label.txt") 30 rounds
   with SparseNetworkLearner
   {

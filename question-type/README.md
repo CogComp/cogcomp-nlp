@@ -1,4 +1,8 @@
-# CogComp Part-of-Speech Tagger
+# CogComp Question Type Classifer 
+
+```
+mvn exec:java -D"exec.mainClass"="edu.illinois.cs.cogcomp.question_typer.TyperTrainer" -pl question-type
+```
 
 Part-of-Speech Tagging is the identification of words as nouns, verbs, adjectives, adverbs, etc. 
 
