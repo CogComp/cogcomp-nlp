@@ -113,8 +113,6 @@ public class QuestionTyperFeatureExtractorsUtils {
         List<Constituent> posCons = s.getView(ViewNames.POS).getConstituents();
         List<Constituent> lemmaCons = s.getView(ViewNames.LEMMA).getConstituents();
         boolean what = lemmaCons.get(0).getSurfaceForm().toLowerCase().contains("what");
-        boolean where = lemmaCons.get(0).getSurfaceForm().toLowerCase().contains("where");
-        boolean when = lemmaCons.get(0).getSurfaceForm().toLowerCase().contains("when");
         String whatNounNoun = "";
         if(what && posCons.size() >= 2) {
             whatNounNoun = lemmaCons.get(1).getLabel() + "-" + lemmaCons.get(2).getLabel();

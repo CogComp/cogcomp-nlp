@@ -50,6 +50,7 @@ public class PipelineConfigurator extends AnnotatorServiceConfigurator {
     public static final Property USE_TIMEX3 = new Property("useTimex3", FALSE);
     public static final Property USE_DATALESS_ESA = new Property("useDatalessESA", FALSE);
     public static final Property USE_DATALESS_W2V = new Property("useDatalessW2V", FALSE);
+    public static final Property USE_QUESTION_TYPER = new Property("useQuestionTyper", FALSE);
 
     /**
      * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable

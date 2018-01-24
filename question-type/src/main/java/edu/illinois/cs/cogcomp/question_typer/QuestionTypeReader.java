@@ -29,7 +29,7 @@ public class QuestionTypeReader implements Parser {
     String line;
 
     // annotators
-    TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+    public static TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
 
     public QuestionTypeReader(String file) {
         // format "ISO-8859-1"
@@ -58,7 +58,7 @@ public class QuestionTypeReader implements Parser {
                 Constituent c = new Constituent(split[0], 1.0, QuestionTyperConfigurator.questionTypeViewName,
                         ta, 0, ta.getTokens().length);
                 c.addAttribute(QuestionTyperConfigurator.goldCoarseLabelAttributeName, splitLabel[0]);
-                c.addAttribute(QuestionTyperConfigurator.goldFineLabelAttributeName, splitLabel[1]);
+                c.addAttribute(QuestionTyperConfigurator.goldFineLabelAttributeName, split[0]);
                 view.addConstituent(c);
                 ta.addView(QuestionTyperConfigurator.questionTypeViewName, view);
                 try {

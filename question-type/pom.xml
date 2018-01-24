@@ -51,6 +51,7 @@
                     <dFlag>${project.basedir}/target/classes</dFlag>
                     <sourcepathFlag>${project.basedir}/src/main/java</sourcepathFlag>
                 </configuration>
+                <!--commented out because we don't want to regenerate these -->
                 <executions>
                     <execution>
                         <id>compiling</id>
