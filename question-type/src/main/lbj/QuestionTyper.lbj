@@ -188,7 +188,7 @@ learn QuestionCoarseLabel
   using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf,
     BagOfPOSConjLemma, BagOfChunkConjSurf, FirstPhrases, OverlapWithSets, WordnetSynsetsFirstSense, WordListFeatures,
     LemmaNGramFeatures, PatternFeaturesBoolean, PatternFeaturesDiscrete
-  from new QuestionTypeReader("question-type/data2/train_all.label.txt") 30 rounds
+  //from new QuestionTypeReader("question-type/data2/train_all.label.txt") 30 rounds
   with SparseNetworkLearner
   {
     SparseAveragedPerceptron.Parameters p =
@@ -198,7 +198,7 @@ learn QuestionCoarseLabel
     baseLTU = new SparseAveragedPerceptron(p);
   }
 
-  testFrom new QuestionTypeReader("question-type/data2/TREC_10.label.txt")
+  //testFrom new QuestionTypeReader("question-type/data2/TREC_10.label.txt")
 
 end
 
@@ -208,7 +208,7 @@ learn QuestionFineLabel
   using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf, BagOfPOSConjLemma,
   BagOfChunkConjSurf, FirstPhrases, FirstCons, OverlapWithSets, WordnetSynsetsFirstSense, WordListFeatures, QuestionLength,
   LemmaNGramFeatures, PatternFeaturesBoolean, PatternFeaturesDiscrete
-  from new QuestionTypeReader("question-type/data2/train_all.label.txt") 30 rounds
+  //from new QuestionTypeReader("question-type/data2/train_all.label.txt") 30 rounds
   with SparseNetworkLearner
   {
     SparseAveragedPerceptron.Parameters p =
@@ -218,6 +218,6 @@ learn QuestionFineLabel
     baseLTU = new SparseAveragedPerceptron(p);
   }
 
-  testFrom new QuestionTypeReader("question-type/data2/TREC_10.label.txt")
+  //testFrom new QuestionTypeReader("question-type/data2/TREC_10.label.txt")
 
 end
