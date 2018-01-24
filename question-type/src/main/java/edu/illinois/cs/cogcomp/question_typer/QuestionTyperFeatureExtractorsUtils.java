@@ -10,30 +10,42 @@ package edu.illinois.cs.cogcomp.question_typer;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.pipeline.server.ServerClientAnnotator;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
 import org.apache.commons.io.FileUtils;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by daniel on 1/18/18.
  */
 public class QuestionTyperFeatureExtractorsUtils {
 
-    public static String[] questonTerms = {"what", "when", "where", "which", "who", "whom", "whose", "why", "why don't", "how", "how far", "how long", "how many", "how much", "how old", "how come", "do", "did"};
-    public static Set<String> questionTermsSet = new HashSet<>(Arrays.asList(questonTerms));
+    static String resourcesFolder = null;
+
+    static {
+        Datastore dsNoCredentials = null;
+        try {
+            dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            File f = dsNoCredentials.getDirectory("org.cogcomp.question-typer", "question-typer-resources", 1.0, false);
+            resourcesFolder = f.getPath() + "/question-typer-resources/";
+        } catch (InvalidPortException | DatastoreException | InvalidEndpointException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String[] questionTerms = {"what", "when", "where", "which", "who", "whom", "whose", "why", "why don't", "how", "how far", "how long", "how many", "how much", "how old", "how come", "do", "did"};
+    public static Set<String> questionTermsSet = new HashSet<>(Arrays.asList(questionTerms));
 
     private static HashSet<String> readFileAsSet(String filePath) {
         String fileContents = null;
@@ -46,9 +58,9 @@ public class QuestionTyperFeatureExtractorsUtils {
         return new HashSet<>(Arrays.asList(strs));
     }
 
-    public static Set<String> occupations = readFileAsSet("question-type/data/prof.txt");
-    public static Set<String> food = readFileAsSet("question-type/data/food.txt");
-    public static Set<String> mountain = readFileAsSet("question-type/data/mount.txt");
+    public static Set<String> occupations = readFileAsSet(resourcesFolder + "prof.txt");
+    public static Set<String> food = readFileAsSet(resourcesFolder + "food.txt");
+    public static Set<String> mountain = readFileAsSet(resourcesFolder + "mount.txt");
 
     public static boolean[] getOverlapWithSets(TextAnnotation s) {
         boolean mountainOverlap = false;
@@ -161,7 +173,7 @@ public class QuestionTyperFeatureExtractorsUtils {
     public static HashMap list = new HashMap();
 
     static {
-        List<URL> files = IOUtils.getListOfFilesInDir("question-type/data/lists/");
+        List<URL> files = IOUtils.getListOfFilesInDir(resourcesFolder + "lists/");
         assert files.size() > 0 : "list of files not found";
         for (URL u : files) {
             File file = new File(u.getPath());

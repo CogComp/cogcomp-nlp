@@ -13,30 +13,49 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.question_typer.lbjava.QuestionCoarseTyper;
 import edu.illinois.cs.cogcomp.question_typer.lbjava.QuestionFineTyper;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
+
+import java.io.File;
 
 /**
  * Created by daniel on 1/24/18.
  */
 public class QuestionTypeAnnotator extends Annotator {
     QuestionFineTyper fine = null;
-    QuestionFineTyper coarse = new QuestionFineTyper();
+    QuestionCoarseTyper coarse = null;
+
+    String modelsFolder = null;
 
     public QuestionTypeAnnotator() {
-        super(ViewNames.QUESTION_TYPE, new String[]{ViewNames.LEMMA, ViewNames.POS, ViewNames.NER_ONTONOTES, ViewNames.NER_CONLL}, true);
+        super(ViewNames.QUESTION_TYPE, new String[]{ViewNames.LEMMA, ViewNames.POS, ViewNames.NER_ONTONOTES, ViewNames.NER_CONLL, ViewNames.SHALLOW_PARSE}, true);
     }
 
     @Override
     public void initialize(ResourceManager rm) {
-        fine = new QuestionFineTyper();
-        coarse = new QuestionFineTyper();
+        System.out.println("loading . . . ");
+        try {
+            Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            File f = dsNoCredentials.getDirectory("org.cogcomp.question-typer", "question-typer-models", 1.0, false);
+            this.modelsFolder = f.getPath() + "/question-typer-models/";
+            System.out.println(modelsFolder + "QuestionFineTyper.lc");
+        } catch (InvalidPortException | DatastoreException | InvalidEndpointException e) {
+            e.printStackTrace();
+        }
+        fine = new QuestionFineTyper(modelsFolder + "QuestionFineTyper.lc", modelsFolder + "QuestionFineTyper.lex");
+        coarse = new QuestionCoarseTyper(modelsFolder + "QuestionCoarseTyper.lc", modelsFolder + "QuestionCoarseTyper.lex");
     }
 
     @Override
     protected void addView(TextAnnotation ta) throws AnnotatorException {
         SpanLabelView view = new SpanLabelView(ViewNames.QUESTION_TYPE, ViewNames.QUESTION_TYPE, ta, 1.0);
-        assert ta.getAvailableViews().contains(ViewNames.LEMMA) && ta.getAvailableViews().contains(ViewNames.NER_CONLL) &&
+        assert ta.getAvailableViews().contains(ViewNames.SHALLOW_PARSE) && ta.getAvailableViews().contains(ViewNames.NER_CONLL) &&
                 ta.getAvailableViews().contains(ViewNames.NER_ONTONOTES): "the annotator does not have the required views ";
         String fineLabel = fine.discreteValue(ta);
         Double fineLabelScore = fine.scores(ta).getScore(fineLabel).score;
