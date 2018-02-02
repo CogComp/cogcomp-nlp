@@ -33,7 +33,7 @@ import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 public class OntonotesTreebankReader extends AbstractOntonotesReader {
 
     /** the view name we will employ. */
-    public static final String PENN_TREEBANK_ONTONOTES = "PennTreebank-Ontonotes";
+    public static final String VIEW_NAME = "ONTONOTES_5_GOLD_TREEBANK";
     
     /** the number of trees produced. */
     protected int treesProduced = 0;
@@ -48,7 +48,7 @@ public class OntonotesTreebankReader extends AbstractOntonotesReader {
      */
     public OntonotesTreebankReader(String treebankHome, String language) 
                     throws IllegalArgumentException, IOException {
-        super(PENN_TREEBANK_ONTONOTES, treebankHome, language, DocumentIterator.FileKind.parse);
+        super(VIEW_NAME, treebankHome, language, DocumentIterator.FileKind.parse);
     }
 
     /**
@@ -58,7 +58,7 @@ public class OntonotesTreebankReader extends AbstractOntonotesReader {
      * @param treefilelist the list of files.
      */
     public OntonotesTreebankReader(String dir, String language, ArrayList<File> treefilelist) {
-        super(PENN_TREEBANK_ONTONOTES, dir, language, DocumentIterator.FileKind.parse, treefilelist);
+        super(VIEW_NAME, dir, language, DocumentIterator.FileKind.parse, treefilelist);
     }
 
     /**
@@ -102,16 +102,16 @@ public class OntonotesTreebankReader extends AbstractOntonotesReader {
         }
 
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
-            PENN_TREEBANK_ONTONOTES, currentfile, sentences);
-        TreeView parse = new TreeView(PENN_TREEBANK_ONTONOTES, "Ontonotes5-GOLD", ta, 1.0);
+            VIEW_NAME, currentfile, sentences);
+        TreeView parse = new TreeView(VIEW_NAME, "Ontonotes-5-GOLD", ta, 1.0);
         
         // add each parse tree
         int treecount = 0;
         for (Tree<String> tree : trees) {
             parse.setParseTree(treecount++, tree);
         }
-        ta.addView(PENN_TREEBANK_ONTONOTES, parse);
-        POSFromParse pos = new POSFromParse(PENN_TREEBANK_ONTONOTES);
+        ta.addView(VIEW_NAME, parse);
+        POSFromParse pos = new POSFromParse(VIEW_NAME);
         ta.addView(pos);
         return ta;
     }

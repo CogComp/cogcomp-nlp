@@ -45,7 +45,7 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
     final boolean debug = false;
 
     /** the name of the resulting view. */
-    final protected static String parseViewName = "Ontonotes-Propbank";
+    final protected static String VIEW_NAME = "ONTONOTES_5_GOLD_PROPBANK";
     
     /** we will use this to generate the text annotation with the treebank parse, 
      * then we will add the propbank parse over that.
@@ -67,7 +67,7 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
      */
     public OntonotesPropbankReader(String dir, String language) 
                     throws IllegalArgumentException, IOException {
-        super(parseViewName, dir, language, DocumentIterator.FileKind.prop);
+        super(VIEW_NAME, dir, language, DocumentIterator.FileKind.prop);
         
         // Need to be able to iterate over the ".parse" files so we can vet the required 
         // treebank data. We have to make sure for each propbank file we have, we have the
@@ -134,7 +134,7 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
         TextAnnotation ta = this.otr.next();
         if (ta == null)
             return null;
-        TreeView tv = (TreeView)ta.getView(OntonotesTreebankReader.PENN_TREEBANK_ONTONOTES);
+        TreeView tv = (TreeView)ta.getView(OntonotesTreebankReader.VIEW_NAME);
         
         // now parse out the propbank data, we will compile the data into SRLNode container
         // class instances that capture all thee data form the file, we will then need to 

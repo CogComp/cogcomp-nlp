@@ -117,7 +117,7 @@ abstract public class AbstractOntonotesReader extends AnnotationReader<TextAnnot
             return ta;
         } catch (AnnotatorException e) {
             error = e;
-            e.printStackTrace();
+            System.err.println("Skipping "+this.currentfile+", message : "+e.getLocalizedMessage());
             return null;
         }
     }
