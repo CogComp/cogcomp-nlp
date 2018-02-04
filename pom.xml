@@ -33,6 +33,7 @@
         <module>verbsense</module>
         <module>pipeline</module>
         <module>dataless-classifier</module>
+        <module>finetyper</module>
         <!--external tools -->
         <module>external/external-commons</module>
         <module>external/clausie</module>
