@@ -132,6 +132,10 @@ public class ViewNames {
     public static final String POST_ERE = "POST_ERE";
     public static final String EVENT_ERE = "EVENT_ERE";
 
+    public static final String FINE_NER_TYPE = "FINE_NER_TYPE";
+    public static final String FINE_NER_TYPE_WSD = "FINE_NER_TYPE_WSD";
+    public static final String WEB_IS_A = "WEB_IS_A";
+
     public static final String TRANSLITERATION = "TRANSLITERATION";
 
     public static ViewTypes getViewType(String viewName) {
