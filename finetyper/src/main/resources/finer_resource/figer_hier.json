@@ -1,0 +1,428 @@
+{
+    "typeInfos": {
+        "art": {
+            "is_figer_type": true, 
+            "parent": "work"
+        }, 
+        "art.film": {
+            "is_figer_type": true, 
+            "parent": "work"
+        }, 
+        "astral_body": {
+            "is_figer_type": true, 
+            "parent": "geography"
+        }, 
+        "award": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "broadcast_program": {
+            "is_figer_type": true, 
+            "parent": "work"
+        },
+        "building": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "building.airport": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "building.dam": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "building.hospital": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "building.hotel": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "building.library": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "building.power_station": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "building.restaurant": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "building.sports_facility": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "building.theater": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "computer.programming_language": {
+            "is_figer_type": true, 
+            "parent": "norpl"
+        }, 
+        "education.department": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "education.educational_degree": {
+            "is_figer_type": true, 
+            "parent": "award"
+        }, 
+        "event": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "event.attack": {
+            "is_figer_type": true, 
+            "parent": "event"
+        }, 
+        "event.election": {
+            "is_figer_type": true, 
+            "parent": "event"
+        }, 
+        "event.military_conflict": {
+            "is_figer_type": true, 
+            "parent": "event"
+        }, 
+        "event.natural_disaster": {
+            "is_figer_type": true, 
+            "parent": "event"
+        }, 
+        "event.protest": {
+            "is_figer_type": true, 
+            "parent": "event"
+        }, 
+        "event.sports_event": {
+            "is_figer_type": true, 
+            "parent": "event"
+        }, 
+        "event.terrorist_attack": {
+            "is_figer_type": true, 
+            "parent": "event.attack"
+        }, 
+        "finance.currency": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "finance.stock_exchange": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "food": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "geography": {
+            "is_figer_type": true, 
+            "parent": "location"
+        }, 
+        "geography.glacier": {
+            "is_figer_type": true, 
+            "parent": "geography"
+        }, 
+        "geography.island": {
+            "is_figer_type": true, 
+            "parent": "geography"
+        }, 
+        "geography.mountain": {
+            "is_figer_type": true, 
+            "parent": "geography"
+        }, 
+        "government.government": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "government.political_party": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "government_agency": {
+            "is_figer_type": true, 
+            "parent": "government.government"
+        }, 
+        "language": {
+            "is_figer_type": true, 
+            "parent": "norpl"
+        }, 
+        "law": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "living_thing": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "livingthing.animal": {
+            "is_figer_type": true, 
+            "parent": "living_thing"
+        }, 
+        "location": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "location.body_of_water": {
+            "is_figer_type": true, 
+            "parent": "geography"
+        }, 
+        "location.bridge": {
+            "is_figer_type": true, 
+            "parent": "building"
+        }, 
+        "location.cemetery": {
+            "is_figer_type": true, 
+            "parent": "location"
+        }, 
+        "location.city": {
+            "is_figer_type": true, 
+            "parent": "location"
+        }, 
+        "location.country": {
+            "is_figer_type": true, 
+            "parent": "location"
+        }, 
+        "location.county": {
+            "is_figer_type": true, 
+            "parent": "location"
+        }, 
+        "location.province": {
+            "is_figer_type": true, 
+            "parent": "location"
+        }, 
+        "medicine": {
+            "is_figer_type": false, 
+            "parent": null
+        }, 
+        "medicine.drug": {
+            "is_figer_type": true, 
+            "parent": "medicine"
+        }, 
+        "medicine.medical_treatment": {
+            "is_figer_type": true, 
+            "parent": "medicine"
+        }, 
+        "medicine.symptom": {
+            "is_figer_type": true, 
+            "parent": "medicine"
+        }, 
+        "metropolitan_transit.transit_line": {
+            "is_figer_type": true, 
+            "parent": "organization.company"
+        }, 
+        "military": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "music": {
+            "is_figer_type": true, 
+            "parent": "work"
+        }, 
+        "news_agency": {
+            "is_figer_type": true, 
+            "parent": "organization.company"
+        }, 
+        "newspaper": {
+            "is_figer_type": true, 
+            "parent": "written_work"
+        }, 
+        "norpl": {
+            "is_figer_type": false, 
+            "parent": null
+        }, 
+        "organization": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "organization.airline": {
+            "is_figer_type": true, 
+            "parent": "organization.company"
+        }, 
+        "organization.company": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "organization.educational_institution": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "organization.fraternity_sorority": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "organization.sports_league": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "organization.sports_team": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "organization.terrorist_organization": {
+            "is_figer_type": true, 
+            "parent": "organization"
+        }, 
+        "park": {
+            "is_figer_type": true, 
+            "parent": "location"
+        }, 
+        "people.ethnicity": {
+            "is_figer_type": true, 
+            "parent": "norpl"
+        }, 
+        "person": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "person.actor": {
+            "is_figer_type": true, 
+            "parent": "person.artist"
+        }, 
+        "person.architect": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.artist": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.athlete": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.author": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.coach": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.director": {
+            "is_figer_type": true, 
+            "parent": "person.artist"
+        }, 
+        "person.doctor": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.engineer": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.monarch": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.musician": {
+            "is_figer_type": true, 
+            "parent": "person.artist"
+        }, 
+        "person.politician": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.religious_leader": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.soldier": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "person.terrorist": {
+            "is_figer_type": true, 
+            "parent": "person"
+        }, 
+        "play": {
+            "is_figer_type": true, 
+            "parent": "work"
+        }, 
+        "product": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "product.airplane": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.camera": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.car": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.computer": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.engine_device": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.instrument": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.mobile_phone": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.ship": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.spacecraft": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "product.weapon": {
+            "is_figer_type": true, 
+            "parent": "product.instrument"
+        }, 
+        "rail.railway": {
+            "is_figer_type": true, 
+            "parent": "organization.company"
+        }, 
+        "software": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "time": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "title": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "train": {
+            "is_figer_type": true, 
+            "parent": "product"
+        }, 
+        "transit": {
+            "is_figer_type": true, 
+            "parent": "organization.company"
+        }, 
+        "transportation.road": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "visual_art.color": {
+            "is_figer_type": true, 
+            "parent": null
+        }, 
+        "work": {
+            "is_figer_type": false, 
+            "parent": null
+        }, 
+        "written_work": {
+            "is_figer_type": true, 
+            "parent": "work"
+        }
+    }
+}

@@ -1,0 +1,931 @@
+2	Championships in	5	event.sports_event event
+1	Scotia Route	1	transportation.road
+0	Supreme Court	2	government_agency
+2	Open – Doubles	0	event.sports_event
+2	Senate election in	3	event.election
+2	National Cemetery	0	location.cemetery
+1	States House of	3	event.election
+2	futsal team	0	organization.sports_team
+2	rugby union team	0	organization.sports_team
+3	the line	0	product.ship
+2	Open - Singles	0	event.sports_event
+2	Pomeranian Voivodeship	0	location.city
+0	United States	5	event event.election
+1	men's national	3	organization.sports_team
+0	Governor of	1	title
+1	Ohio Infantry	0	military
+1	Wimbledon Championships	3	event.sports_event event
+2	AG	1	organization.company
+1	Premier League	1	event
+1	at the	3	event
+1	national rugby union team	0	organization.sports_team
+2	Volunteer Infantry Regiment	0	military
+1	University, main campus	0	organization.educational_institution organization organization.company
+1	West Pomeranian	1	location.city
+2	University of	1	organization.educational_institution
+0	Mexican Federal	2	transportation.road
+1	Virginia Infantry	0	military
+4	College, main campus	0	organization.educational_institution
+3	Ice Hockey	0	organization.sports_team
+2	and the	1	written_work art.film
+1	International Airport	0	building.airport
+0	Athletics at the	8	event event.sports_event
+0	Wisconsin Highway	1	transportation.road
+1	Wisconsin Volunteer Infantry Regiment	0	military
+2	Air Squadron	0	military
+2	National Football	1	organization.sports_team
+1	Independent School	1	organization
+0	Oklahoma State Highway	1	transportation.road
+0	Maine State	2	transportation.road
+3	- Doubles	0	event.sports_event
+0	California State Route	1	transportation.road
+0	Athletics at	8	event event.sports_event
+1	School of	3	organization.educational_institution
+1	Indiana Infantry	1	military
+2	Film Festival	0	event
+0	Count of	1	title
+0	Missouri Route	1	transportation.road
+0	Georgia State	2	transportation.road
+3	Water Aerodrome	0	building.airport
+4	GmbH	1	organization.company
+1	national cricket	1	organization.sports_team
+2	Silesian Voivodeship	0	location.city
+1	Football Association	0	organization.sports_league
+4	for the	4	government.government government_agency
+2	Championships in Athletics	5	event.sports_event
+1	County Sheriff's	1	military government_agency
+0	Province of	1	location.province
+2	Halifax Regional Municipality	0	location.body_of_water
+1	Institute of	3	organization.educational_institution
+1	of State	2	title
+0	GmbH	1	organization.company
+0	University of	4	organization.educational_institution organization.sports_team organization
+2	Corp.	1	organization.company
+0	Oregon Route	1	transportation.road
+3	Corp.	2	organization.company
+3	- Men's Singles	0	event event.sports_event
+3	election in	2	event.election event
+3	Open –	1	event.sports_event event
+0	Battle of	2	event event.military_conflict
+3	- Women's	1	event event.sports_event
+0	United States House	7	event.election
+0	Battle of the	1	event.military_conflict
+1	in the	1	music written_work broadcast_program art.film
+0	Order of	2	title
+5	Technology, main campus	0	organization.educational_institution
+1	Senior High School	0	organization.educational_institution
+2	District Court for	5	government.government government_agency
+0	United States Ambassador to	1	title
+2	High School,	2	organization.educational_institution
+1	legislative election,	1	event.election event
+2	Cup team	0	organization.sports_team
+2	High School	0	organization.educational_institution organization
+4	Summer Olympics -	4	event.sports_event
+2	Department of	1	government_agency
+2	Premier League	0	event
+2	House of Representatives elections,	1	event.election
+0	Texas State Highway	1	transportation.road
+2	House of Representatives	2	event.election
+0	United States House of	3	event.election
+1	State University	2	organization.sports_team
+2	national football	1	organization.sports_team
+3	Mens Football	0	organization.sports_team
+5	– Singles	0	event event.sports_event
+0	North Carolina Highway	1	transportation.road
+1	State Route	1	transportation.road location
+2	College, main campus	0	organization.educational_institution organization
+2	Inc.	2	organization.company
+3	Hockey League	0	organization.sports_league
+1	nucleolar RNA	1	biology chemistry
+1	Institute of Technology	0	organization.educational_institution
+1	States House of Representatives	4	event.election
+5	Olympics – Men's	1	event.sports_event
+1	Wimbledon Championships –	2	event.sports_event
+3	of Representatives	2	event.election
+1	Township, Minnesota	0	location.city
+1	Wisconsin Volunteer Infantry	1	military
+1	State Road	1	transportation.road
+1	Secondary School	0	organization.educational_institution
+1	GmbH	2	organization.company
+0	United States Senate election	3	event event.election
+2	Police Department	0	government_agency military
+1	at the	8	event.sports_event event
+1	Futebol Clube	0	organization.sports_team
+5	Olympics -	3	event.sports_event event
+1	Corp.	1	organization.company
+0	Embassy of	2	government_agency
+2	Co.	2	organization.company
+3	main campus	0	organization.educational_institution organization organization.company location
+2	Infantry Brigade	0	military
+4	of the	1	game
+1	World Championships in	5	event.sports_event event
+1	Naval Air Squadron	0	military
+0	Swimming at	10	event.sports_event event
+2	Volunteer Infantry	1	military
+1	women's national	2	organization.sports_team
+2	Council election,	1	event.election event
+0	Edmonton municipal	2	event.election
+1	New York	0	location.city
+0	Communist Party of	2	government.political_party
+1	Stock Exchange	0	finance.stock_exchange
+1	Socialist Party	0	government.political_party
+1	Air Force	0	military
+0	South African	3	train
+1	Premier League	0	organization.sports_league
+1	County High	1	organization.educational_institution
+1	Department of	1	government_agency
+1	Greater Poland Voivodeship	0	location.city
+1	Communist Party	0	government.political_party
+0	Small nucleolar	2	biology chemistry
+2	national rugby	2	organization.sports_team
+1	Illinois Volunteer Infantry Regiment	0	military
+0	Corp.	2	organization.company
+1	presidential election,	1	event.election event
+1	Lake Water	1	building.airport
+3	Act of	1	law
+3	of Representatives elections	3	event.election
+5	– Doubles	0	event event.sports_event
+0	Nova Scotia	2	transportation.road
+3	Co.	2	organization.company
+0	Lac de	1	location.body_of_water
+2	Prince of	1	person.monarch
+1	Water Aerodrome	0	building.airport
+2	High School, main campus	0	organization.educational_institution
+3	of the	1	game written_work
+4	Men's Singles	0	event event.sports_event
+2	Borough Council	2	event.election
+2	House of	6	event.election
+0	Utah State Route	1	transportation.road
+4	Inc.	0	organization.company
+4	GmbH	2	organization.company
+0	United States House	4	event.election
+0	Treaty of	2	law
+2	Party of	1	government.political_party
+1	women's national football team	0	organization.sports_team
+3	GmbH	1	organization.company
+4	Co.	0	organization.company
+1	Indian Infantry	1	military
+0	Kentucky Route	1	transportation.road
+1	Lower Silesian Voivodeship	0	location.city
+4	Summer Olympics -	3	event event.sports_event
+5	Olympics -	4	event event.sports_event
+4	Representatives elections	4	event.election
+0	Co.	2	organization.company
+1	City Airport	0	building.airport
+1	Air Force Base	0	building.airport
+4	Summer Olympics – Men's	1	event.sports_event
+0	Swimming at the	8	event.sports_event event
+1	Air Refueling Squadron	0	military
+2	election, 2006	0	event.election
+2	Open –	2	event.sports_event event
+1	Independent School District	0	organization
+1	Illinois Volunteer	2	military
+1	National Route	1	transportation.road
+2	College of	1	organization.educational_institution
+0	Battle of	1	event.military_conflict event
+0	Louisiana Highway	1	transportation.road
+0	Sony Ericsson	1	product.mobile_phone product
+1	West Pomeranian Voivodeship	0	location.city
+4	Corp.	2	organization.company
+1	in the	2	people.ethnicity
+0	Order of	3	title
+3	University, main campus	0	organization.educational_institution
+5	hockey team	0	organization.sports_team
+1	Jersey Route	1	transportation.road
+6	– Men's	1	event.sports_event event
+2	LLC	1	organization.company
+0	New South Wales	3	train
+2	Corp.	0	organization.company
+2	Open –	1	event event.sports_event
+2	Inc.	1	organization.company
+1	Bombardment Squadron	0	military
+4	Athletics -	3	event.sports_event
+0	Second Battle	2	event.military_conflict
+0	British Rail	2	train
+1	women's national football	1	organization.sports_team
+1	GmbH	0	organization.company
+0	Utah State	2	transportation.road
+2	Community College, main	1	organization.educational_institution
+0	Japanese cruiser	1	product.ship
+2	election, 2005	0	event.election
+1	Co.	1	organization.company
+0	Government of	1	government.government
+1	States District	7	government.government government_agency
+0	Communist Party of	1	government.political_party
+2	First Nation	0	people.ethnicity
+4	- Singles	0	event.sports_event event
+2	Water Aerodrome	0	building.airport
+0	Florida State	2	transportation.road
+3	Championships –	3	event.sports_event
+0	Illinois Route	1	transportation.road
+1	national basketball team	0	organization.sports_team
+2	Artillery Regiment	0	military
+2	national football team	0	organization.sports_team
+0	China National Highway	1	transportation.road
+4	Corp.	1	organization.company
+2	International Airport	0	building.airport
+1	Mens National Soccer	1	organization.sports_team
+1	States House	4	event.election
+4	Summer Olympics - Men's	2	event event.sports_event
+0	LLC	2	organization.company
+3	- Singles	0	event event.sports_event
+0	Alabama State	2	transportation.road
+2	Operations Squadron	0	military
+0	Saskatchewan Highway	1	transportation.road
+0	Ministry of	6	government_agency
+1	at the	9	event.sports_event event
+1	Air Division	0	military
+1	College of	4	organization.educational_institution
+5	elections in	2	event.election
+1	York State Route	1	transportation.road
+3	union team	0	organization.sports_team
+0	Embassy of	3	government_agency
+4	AG	0	organization.company
+1	of the	4	title
+2	Senate election	4	event.election
+0	AG	0	organization.company
+0	AG	1	organization.company
+1	national cricket team	0	organization.sports_team
+2	national volleyball team	0	organization.sports_team
+1	women's national	3	organization.sports_team
+1	Men's National Football Team	0	organization.sports_team
+0	President of	1	title
+0	Farm to	3	transportation.road
+1	Mens National Soccer Team	0	organization.sports_team
+1	Institute of	4	organization.educational_institution
+0	Supreme Court of	1	government_agency
+2	of Technology	0	organization.educational_institution
+1	railway station	0	building location
+2	Community College,	2	organization.educational_institution
+1	General Hospital	0	building.hospital
+3	Grand Prix	0	event
+1	National Cemetery	0	location.cemetery
+1	West Virginia	0	location.city
+7	main campus	0	organization.educational_institution
+2	football team	0	organization.sports_team
+2	Co.	0	organization.company
+0	Virginia State	2	transportation.road
+3	Regional Municipality	0	location.body_of_water
+1	Department of	4	government_agency
+1	of the	1	title event.military_conflict game written_work art broadcast_program art.film music
+3	Inc.	2	organization.company
+1	Mens Football Team	0	organization.sports_team
+1	Soccer Team	0	organization.sports_team
+1	University, main	1	organization.educational_institution organization organization.company
+2	Infantry Division	0	military
+0	Corp.	1	organization.company
+1	Naval Air	1	military
+2	gubernatorial election,	1	event.election
+3	County, Indiana	0	location.city
+2	Market Road	1	transportation.road
+0	Vermont Route	1	transportation.road
+2	presidential election,	1	event.election
+2	University, main campus	0	organization.educational_institution organization
+3	Inc.	1	organization.company
+4	Infantry Regiment	0	military
+2	Autonomous County	0	location.county
+6	main campus	0	organization.educational_institution organization
+1	Greater Poland	1	location.city
+1	Municipal Airport	0	building.airport
+1	Hampshire Route	1	transportation.road
+1	AG	0	organization.company
+2	of Technology,	2	organization.educational_institution
+4	College, main	1	organization.educational_institution
+3	in Athletics	4	event.sports_event event
+3	of Alexandria	0	person.religious_leader
+2	Championships in Athletics -	3	event.sports_event event
+4	Summer Olympics	5	event.sports_event event
+2	AG	0	organization.company
+1	de la	1	geography.mountain
+0	Co.	1	organization.company
+2	of the line	0	product.ship
+1	I of	1	person.monarch
+4	Summer Olympics – Men's	2	event event.sports_event
+0	Swimming at the	9	event.sports_event event
+0	United States Ambassador	2	title
+0	University of	6	organization.educational_institution organization.sports_team
+1	Men's National	2	organization.sports_team
+1	Street Bridge	0	location.bridge
+1	Buses route	1	metropolitan_transit.transit_line
+1	District, China	0	location.county
+1	national futsal team	0	organization.sports_team
+1	Inc.	2	organization.company
+0	Nevada State	2	transportation.road
+1	Men's National Soccer	1	organization.sports_team
+0	London Buses	2	metropolitan_transit.transit_line
+2	Power Station	0	building.power_station
+2	School of	3	organization.educational_institution
+2	of the	2	written_work
+4	AG	1	organization.company
+0	Prime Minister	2	title
+2	at the	3	event
+2	Act of	1	law
+3	Soccer Team	0	organization.sports_team
+0	Iowa Highway	1	transportation.road
+2	men's basketball	0	organization.sports_team
+1	Labour Party	0	government.political_party
+1	High School,	1	organization.educational_institution
+1	States Senate	5	event.election
+1	Battle of	2	event.military_conflict
+2	the 2010	7	event.sports_event
+0	New Hampshire Route	1	transportation.road
+2	National Football Team	0	organization.sports_team
+1	Infantry Division	0	military
+0	United States House of	5	event.election
+1	State University	0	organization.educational_institution
+1	US Open	3	event.sports_event
+1	at the 2010	7	event.sports_event
+1	County High School	0	organization.educational_institution
+2	District Court for the	4	government.government government_agency
+1	Senior High	1	organization.educational_institution
+2	School, main	1	organization.educational_institution
+1	Town F.C.	0	organization.sports_team
+1	Czech Republic	0	location.city
+0	University of	3	organization organization.sports_team organization.educational_institution
+0	First Battle of	1	event.military_conflict
+1	Nations Security Council	2	law
+3	Volunteer Infantry	1	military
+1	Łódź Voivodeship	0	location.city
+4	Corp.	0	organization.company
+0	Ohio State	2	transportation.road
+1	railway line	0	metropolitan_transit.transit_line
+1	Masovian Voivodeship	0	location.city
+0	GmbH	0	organization.company
+3	County, Illinois	0	location.city
+1	Corp.	2	organization.company
+4	union team	0	organization.sports_team
+1	at the	6	event event.sports_event
+0	Oklahoma State	2	transportation.road
+1	Air Refueling	1	military
+3	Medical Center	0	building.hospital
+2	Championships –	2	event event.sports_event
+1	Ministry of	4	government_agency
+1	Infantry Division	1	military
+0	Republic of	1	location.country
+2	Count of	1	person.monarch
+1	Football Team	0	organization.sports_team
+1	municipal election,	1	event.election
+0	AG	2	organization.company
+1	Field Artillery Regiment	0	military
+3	of Representatives elections in	3	event.election
+2	railway station	0	location building
+2	Inc.	0	organization.company
+0	United States	2	government_agency
+0	Ministry of	3	government_agency
+6	– Women's	3	event.sports_event event
+2	election, 2008	0	event.election
+4	LLC	1	organization.company
+3	railway station	0	building
+1	Warmian-Masurian Voivodeship	0	location.city
+1	Mens Football	1	organization.sports_team
+4	Summer Olympics – Women's	3	event.sports_event
+3	College, main campus	0	organization.educational_institution organization
+2	Medical Center	0	building.hospital
+2	Covered Bridge	0	location.bridge
+0	Kingdom of	1	location.country
+3	GmbH	2	organization.company
+1	States House	6	event.election
+4	Co.	1	organization.company
+1	College of	1	organization.educational_institution
+8	main campus	0	organization.educational_institution
+1	States House of	5	event.election
+2	House of Representatives elections	3	event.election
+1	Mens National Football Team	0	organization.sports_team
+2	election, 2007	0	event.election
+2	basketball team	0	organization.sports_team
+0	Corp.	0	organization.company
+0	South African Class	2	train
+3	LLC	1	organization.company
+1	Police Department	0	government_agency military
+1	Journal of	2	written_work
+3	Inc.	0	organization.company
+2	Infantry Regiment	0	military
+1	Island Airport	0	building.airport
+1	local elections,	1	event.election
+0	Communist Party	2	government.political_party
+4	LLC	0	organization.company
+0	Arkansas Highway	1	transportation.road
+1	AG	1	organization.company
+4	Co.	2	organization.company
+3	volleyball team	0	organization.sports_team
+1	Hydroelectric Power	1	building.power_station
+5	Olympics – Women's	2	event.sports_event
+1	Lake Water Aerodrome	0	building.airport
+1	National Soccer	1	organization.sports_team
+4	Summer Olympics	4	event event.sports_event
+1	United F.C.	0	organization.sports_team
+0	Co.	0	organization.company
+2	Poland Voivodeship	0	location.city
+0	Alabama State Route	1	transportation.road
+0	New York state	2	event.election
+4	Summer Olympics – Men's	3	event event.sports_event
+0	University of	1	organization.educational_institution organization
+2	Corp.	2	organization.company
+2	Wind Farm	0	building.power_station
+0	Minnesota State	2	transportation.road
+3	general election,	1	event.election
+1	Memorial Hospital	0	building.hospital
+2	College of	3	organization.educational_institution
+3	Men's Basketball	0	organization.sports_team
+1	District Council election,	1	event.election
+0	Inc.	0	organization.company
+1	War of	1	event.military_conflict
+2	School of	2	organization.educational_institution
+1	federal election,	1	event.election
+6	– Men's	3	event.sports_event event
+1	general election,	1	event.election event
+0	United States Senate	5	event.election
+0	National Highway	1	transportation.road
+0	United Nations Security Council	2	law
+1	eclipse of	3	event
+0	United Nations	4	law
+3	Technology, main	1	organization.educational_institution
+1	Nations Security Council Resolution	1	law
+1	High School,	2	organization.educational_institution
+0	High Sheriff of	1	title
+1	States House	7	event.election
+4	Summer Olympics –	4	event.sports_event event
+5	Ice Hockey	0	organization.sports_team
+1	Mare River	0	location.body_of_water
+1	College, main campus	0	organization organization.educational_institution organization.company
+0	Japan National	2	transportation.road
+0	New York	3	transportation.road event.election
+4	class locomotive	0	train
+5	- Singles	0	event.sports_event
+2	election, 2002	0	event.election
+0	Siege of	2	event.military_conflict
+0	Lago di	1	location.body_of_water
+0	China National	2	transportation.road
+1	of the	2	art.film written_work event.military_conflict title
+0	Parliament of	1	government.government
+1	national basketball	1	organization.sports_team
+0	Pennsylvania Route	1	transportation.road
+1	Mens Soccer	1	organization.sports_team
+3	AG	2	organization.company
+3	Football Club	0	organization.sports_team
+3	Volunteer Infantry	0	military
+1	ship of	2	product.ship
+1	Borough Council election,	1	event.election
+3	– Women's	1	event event.sports_event
+2	Secondary School	0	organization.educational_institution
+1	Museum of	1	building
+2	School District	0	organization
+3	School District	0	organization
+2	Community College	0	organization.educational_institution
+1	Fighter Squadron	0	military
+0	Ministry of	4	government_agency
+1	at the	7	event event.sports_event
+1	Nations Security	3	law
+1	City Council	0	government.government
+1	College of	2	organization.educational_institution
+2	of Technology, main campus	0	organization.educational_institution
+3	rugby union team	0	organization.sports_team
+0	Tennessee State	2	transportation.road
+1	Football Club	0	organization.sports_team
+1	River Bridge	0	location.bridge
+1	Lake Airport	0	building.airport
+3	University, main	1	organization.educational_institution
+2	Squadron RAF	0	military
+1	parliamentary election,	1	event event.election
+0	Swimming at	9	event.sports_event event
+0	Maine State Route	1	transportation.road
+0	Connecticut Route	1	transportation.road
+1	States Senate election in	3	event.election
+1	Inc.	1	organization.company
+6	– Women's	2	event.sports_event
+3	Council Resolution	1	law
+3	Co.	0	organization.company
+0	West Virginia Route	1	transportation.road
+2	Airlines Flight	1	event.natural_disaster
+0	Arizona State Route	1	transportation.road
+1	York state election,	1	event.election
+0	Nebraska Highway	1	transportation.road
+1	Battalion, CEF	0	military
+4	– Singles	0	event event.sports_event
+4	Women's Singles	0	event event.sports_event
+0	Party of	2	government.political_party
+1	Public Library	0	building.library
+1	Men's National Soccer Team	0	organization.sports_team
+1	Federal Highway	1	transportation.road
+3	Men's Football	0	organization.sports_team
+1	Fighter Wing	0	military
+1	State University,	2	organization.educational_institution
+1	to Market Road	1	transportation.road
+2	GmbH	2	organization.company
+0	U.S. Route	3	transportation.road
+0	High Sheriff	2	title
+0	London Buses route	1	metropolitan_transit.transit_line
+3	– Singles	0	event.sports_event event
+1	Community College, main	1	organization.educational_institution
+1	Carolina Highway	1	transportation.road
+2	College of	2	organization.educational_institution
+0	New York state election,	1	event.election
+3	LLC	0	organization.company
+1	Court of	1	government_agency
+0	German submarine	1	product.ship
+1	Australian Open	3	event.sports_event
+1	Minister of	1	title
+3	AG	0	organization.company
+1	Men's Football Team	0	organization.sports_team
+1	International School	0	organization.educational_institution
+5	Olympics - Men's	2	event.sports_event event
+0	Tropical Storm	1	event.natural_disaster
+2	National Soccer Team	0	organization.sports_team
+2	House of	5	event.election
+1	LLC	2	organization.company
+0	Massachusetts Route	1	transportation.road
+0	Treaty of	1	law
+5	Olympics – Women's	3	event.sports_event
+0	Inc.	1	organization.company
+5	Olympics –	3	event event.sports_event
+2	Power Plant	0	building.power_station
+1	Airlines Flight	1	event.attack event.natural_disaster
+1	Democratic Party	2	government.political_party
+3	rugby union	1	organization.sports_team
+3	Infantry Regiment	0	military
+1	Dakota Highway	1	transportation.road
+5	main campus	0	organization.educational_institution organization
+2	State Route	1	transportation.road
+1	World Championships	6	event.sports_event event
+0	Small nucleolar RNA	1	biology chemistry
+0	Roman Catholic	3	location
+3	in Athletics –	3	event.sports_event
+0	Action of	3	event.military_conflict
+2	Duke of	1	person.monarch
+1	Community College, main campus	0	organization.educational_institution
+3	College of	1	organization.educational_institution
+0	Minister of	4	title
+2	Championships -	2	event event.sports_event
+2	School of	1	organization.educational_institution
+4	LLC	2	organization.company
+3	election, 2006	0	event.election
+6	– Men's	2	event.sports_event event
+0	United States Senate	4	event event.election
+1	World Championships in Athletics	4	event.sports_event event
+1	County Sheriff's Office	0	government_agency military
+1	Metropolitan Borough	3	event.election
+1	gubernatorial election,	1	event event.election
+1	Valley Railway	0	rail.railway
+1	Inc.	0	organization.company
+0	Malaysia Federal Route	1	transportation.road
+0	French frigate	1	product.ship
+0	New York State Route	1	transportation.road
+2	Municipal Airport	0	building.airport
+0	New South	4	train
+1	Regiment of	1	military
+2	Championships in	6	event.sports_event
+2	Public Library	0	building.library
+1	Men's Football	1	organization.sports_team
+1	regional election,	1	event.election
+1	Football League	1	event
+1	Men's National Football	1	organization.sports_team
+0	Solar eclipse	4	event
+2	Open -	1	event event.sports_event
+1	of the	3	title
+1	Virginia Route	1	transportation.road
+2	rugby union	1	organization.sports_team
+1	Power Station	0	building.power_station
+3	Secondary School	0	organization.educational_institution
+4	High School	0	organization.educational_institution
+3	College, main	1	organization.educational_institution organization
+1	President of	1	title
+0	Malaysia Federal	2	transportation.road
+3	AG	1	organization.company
+1	Co.	0	organization.company
+0	United States	8	government_agency government.government event.election
+0	SS Empire	1	product.ship
+1	National Football Team	0	organization.sports_team
+1	Community College	0	organization.educational_institution
+6	- Men's	3	event.sports_event
+3	of Representatives elections,	1	event.election
+1	Borough Council	2	event.election
+3	Volunteer Cavalry	0	military
+0	LLC	0	organization.company
+1	States District Court	6	government.government government_agency
+1	Corp.	0	organization.company
+1	Men's Soccer	1	organization.sports_team
+0	Ministry of	5	government_agency
+1	at the	4	event
+1	national rugby union	1	organization.sports_team
+3	and Cemetery	0	location.cemetery
+1	Regiment Kentucky Volunteer	1	military
+3	County, Ohio	0	location.city
+3	Court for the	4	government.government government_agency
+0	County Route	1	transportation.road
+3	- Men's	1	event.sports_event event
+1	University of	4	organization.educational_institution
+0	Mississippi Highway	1	transportation.road
+1	States Ambassador to	1	title
+0	Athletics at the	7	event event.sports_event
+4	Act of	1	law
+2	Security Council Resolution	1	law
+3	Council election,	1	event.election
+3	Mens Basketball	0	organization.sports_team
+0	United States	3	event.election title
+4	Ice Hockey	0	organization.sports_team
+0	Nevada State Route	1	transportation.road
+1	States Senate election in	2	event event.election
+1	Football Federation	0	organization.sports_league
+2	Squadron RAAF	0	military
+2	main campus	0	organization.educational_institution location organization.company organization
+1	AG	2	organization.company
+5	Technology, main	1	organization.educational_institution
+1	University of	1	organization.educational_institution
+1	Community College,	2	organization.educational_institution
+0	Virginia State Route	1	transportation.road
+1	Esporte Clube	0	organization.sports_team
+2	Soccer Team	0	organization.sports_team
+0	Japanese destroyer	1	product.ship
+1	National Football	1	organization.sports_team
+4	Light Artillery	0	military
+0	University of	5	organization.educational_institution organization.sports_team
+1	Regional Airport	0	building.airport
+2	Democratic Party	0	government.political_party
+1	County, China	0	location.county
+2	School, main campus	0	organization.educational_institution
+0	PKP class	1	train
+0	Maryland Route	1	transportation.road
+1	State University, main campus	0	organization.educational_institution
+2	1st Baron	1	person.politician
+3	Earl of	1	person.politician
+3	Technology, main campus	0	organization.educational_institution
+0	Minnesota State Highway	1	transportation.road
+3	in Athletics	5	event.sports_event
+2	Hockey League	0	organization.sports_league
+1	Covered Bridge	0	location.bridge
+0	Battle of Fort	1	event.military_conflict
+4	Summer Olympics –	3	event.sports_event event
+1	Metropolitan Borough Council	2	event.election
+2	election, 2004	0	event.election
+5	Olympics - Men's	3	event.sports_event
+0	Washington State	2	transportation.road
+1	Davis Cup team	0	organization.sports_team
+1	Ministry of	2	government_agency
+1	College, main	1	organization.educational_institution organization organization.company
+1	Lower Silesian	1	location.city
+1	Infantry Brigade	0	military
+3	– Men's Singles	0	event.sports_event event
+2	in the	1	written_work
+1	Air Force	1	building.airport
+1	Party of	1	government.political_party
+3	– Men's	1	event.sports_event event
+2	House of Representatives elections	4	event.election
+1	Infantry Regiment	0	military
+2	House of Representatives	5	event.election
+2	Championships in Athletics –	3	event.sports_event
+1	Indian Infantry Brigade	0	military
+0	Ontario Highway	1	transportation.road
+4	Athletics –	3	event.sports_event
+1	Nuclear Power	1	building.power_station
+1	Airlift Squadron	0	military
+0	SNCF Class	2	train
+0	New York State	2	transportation.road
+0	Inc.	2	organization.company
+2	national volleyball	1	organization.sports_team
+1	States Senate election	3	event event.election
+2	Open – Singles	0	event.sports_event event
+1	Grammar School	0	organization.educational_institution
+2	Training Squadron	0	military
+2	Open -	2	event.sports_event event
+0	French ship	1	product.ship
+0	New Jersey Route	1	transportation.road
+5	Olympics – Men's	2	event event.sports_event
+1	LLC	1	organization.company
+1	Wind Farm	0	building.power_station
+1	High School	0	organization organization.educational_institution
+3	of Representatives	5	event.election
+0	Siege of	1	event.military_conflict event
+4	Representatives elections	3	event.election
+2	LLC	0	organization.company
+1	Battle of	1	event.military_conflict
+4	AG	2	organization.company
+0	United Nations Security	3	law
+1	GmbH	1	organization.company
+0	Nova Scotia Route	1	transportation.road
+0	United States House of	6	event.election
+3	– Doubles	0	event.sports_event event
+0	Mexican Federal Highway	1	transportation.road
+1	Ministry of	1	government_agency
+1	Football League	0	organization.sports_league
+1	First Nation	0	people.ethnicity
+2	Co.	1	organization.company
+1	South Wales	3	train
+2	National Soccer	1	organization.sports_team
+3	Co.	1	organization.company
+1	York State	2	transportation.road
+2	Ambassador to	1	title
+1	of Fort	1	event.military_conflict
+0	United States	7	event.election
+1	Mens Soccer Team	0	organization.sports_team
+0	Arizona State	2	transportation.road
+6	- Men's	2	event event.sports_event
+2	Football League	0	organization.sports_league
+0	LLC	1	organization.company
+1	Metropolitan Borough Council election,	1	event.election
+3	International Airport	0	building.airport
+1	Rail Class	1	train
+0	United States Senate election	4	event.election
+0	United States District Court	6	government.government government_agency
+3	Volunteer Infantry Regiment	0	military
+3	in Athletics -	3	event.sports_event
+0	West Virginia	2	transportation.road
+4	Men's Football	0	organization.sports_team
+5	Olympics –	2	event.sports_event event
+2	University of	3	organization.educational_institution
+1	Department of	2	government_agency
+7	District of	1	government_agency government.government
+2	general election,	1	event.election event
+3	1st Baronet	0	person.politician
+1	to Market	2	transportation.road
+4	Representatives elections in	2	event.election
+2	Security Council	2	law
+0	Colorado State Highway	1	transportation.road
+1	National Soccer Team	0	organization.sports_team
+2	AG	2	organization.company
+1	national football team	0	organization.sports_team
+0	Colorado State	2	transportation.road
+1	District Council	2	event.election
+1	York state	2	event.election
+1	Mens National Football	1	organization.sports_team
+0	Quebec Route	1	transportation.road
+1	University of	2	organization.educational_institution
+1	School of	1	organization.educational_institution
+3	Football Team	0	organization.sports_team
+2	Football Club	0	organization.sports_team
+2	House of	3	event.election
+1	Fed Cup team	0	organization.sports_team
+5	elections in	3	event.election
+0	Texas State	2	transportation.road
+2	Force Base	0	building.airport
+1	District, Hokkaido	0	location.county
+4	– Doubles	0	event event.sports_event
+2	Grand Prix	0	event event.sports_event
+3	football team	0	organization.sports_team
+2	GmbH	0	organization.company
+0	North Carolina	2	transportation.road
+1	States Ambassador	2	title
+1	Mens National	2	organization.sports_team
+0	Duke of	1	title
+3	Corp.	0	organization.company
+3	LLC	2	organization.company
+4	International Airport	0	building.airport
+4	Summer Olympics –	2	event event.sports_event
+1	Illinois Volunteer Infantry	1	military
+1	Medical Center	0	building.hospital
+1	Federal Route	1	transportation.road
+1	County /	3	location.city location
+3	of Representatives elections in	2	event.election
+1	Party of	2	government.political_party
+0	Farm to Market	2	transportation.road
+2	Open – Men's	1	event.sports_event
+4	Representatives elections in	3	event.election
+2	Football Team	0	organization.sports_team
+2	of the	1	music game broadcast_program art.film written_work product.ship
+3	School, main campus	0	organization.educational_institution
+1	Air Base	0	building.airport
+1	Democratic Party	0	government.political_party
+3	Court for	5	government.government government_agency
+0	United States District	7	government.government government_agency
+2	House of Representatives	4	event.election
+0	GmbH	2	organization.company
+0	University of	2	organization.sports_team organization.educational_institution
+1	State Highway	1	transportation.road
+0	Indiana State Road	1	transportation.road
+1	Co.	2	organization.company
+0	U.S. Route	1	transportation.road
+5	Olympics –	4	event.sports_event event
+9	metre freestyle	0	event.sports_event
+4	Inc.	1	organization.company
+3	College of	3	organization.educational_institution
+0	Solar eclipse of	3	event
+2	Open – Women's	1	event.sports_event
+3	– Women's Singles	0	event event.sports_event
+2	Kentucky Volunteer	1	military
+1	States House of	6	event.election
+0	Ohio State Route	1	transportation.road
+0	Second Battle of	1	event.military_conflict
+4	main campus	0	location organization.educational_institution organization.company organization
+0	Communist Party	3	government.political_party
+1	LLC	0	organization.company
+2	Mens Basketball	0	organization.sports_team
+3	of Representatives	4	event.election
+1	Act of	1	law
+1	County Airport	0	building.airport
+2	College, main	1	organization.educational_institution organization
+2	Community College, main campus	0	organization.educational_institution
+1	Sign Language	0	language
+2	election, 2010	0	event.election
+0	California State	2	transportation.road
+0	Alberta Highway	1	transportation.road
+0	Farm to Market Road	1	transportation.road
+2	Senate election in	2	event event.election
+0	Prime Minister of	1	title
+1	College of	3	organization.educational_institution
+2	Senate election	3	event event.election
+2	state election,	1	event.election
+1	III of	1	person.monarch
+1	Field Artillery	1	military
+1	State University, main	1	organization.educational_institution
+3	- Women's Singles	0	event.sports_event
+1	States House of Representatives	2	event.election
+1	Operations Group	0	military
+0	United States	6	event.election
+2	Refueling Squadron	0	military
+2	Regional Airport	0	building.airport
+3	Football League	0	organization.sports_league
+1	national rugby	2	organization.sports_team
+1	ship of the line	0	product.ship
+4	Mens Football	0	organization.sports_team
+1	II of	1	person.monarch
+1	state election,	1	event.election
+0	Washington State Route	1	transportation.road
+1	States Senate	4	event event.election
+2	Halifax Regional	1	location.body_of_water
+3	High School	0	organization.educational_institution organization
+1	Department of	3	government_agency
+1	High School, main campus	0	organization.educational_institution
+1	States House of Representatives	5	event.election
+0	Earl of	1	title
+2	cricket team	0	organization.sports_team
+3	of Representatives elections	4	event.election
+0	Indiana State	2	transportation.road
+1	Democratic Party of	1	government.political_party
+2	Mens Football	0	organization.sports_team
+1	University of	5	organization.educational_institution
+1	County Courthouse	0	building
+3	School of	1	organization.educational_institution
+2	of Technology, main	1	organization.educational_institution
+0	Athletics at	9	event event.sports_event
+1	University of	3	organization.educational_institution organization
+1	School of	2	organization.educational_institution
+0	New Hampshire	2	transportation.road
+1	Cricket Club	0	organization.sports_team
+0	Florida State Road	1	transportation.road
+0	Capture of	1	event.military_conflict
+0	First Battle	2	event.military_conflict
+1	Indiana Infantry Regiment	0	military
+4	GmbH	0	organization.company
+3	School, main	1	organization.educational_institution
+2	District Court	6	government.government government_agency
+0	United States House	6	event.election
+1	Davis Cup	1	organization.sports_team
+4	Summer Olympics	0	event
+2	Championships in Athletics	4	event.sports_event event
+2	GmbH	1	organization.company
+1	rail crash	0	event.natural_disaster
+1	States Senate election	4	event.election
+0	New Jersey	2	transportation.road
+0	Bishop of	1	title
+1	Institute of	2	organization.educational_institution
+0	Battle of	4	event.military_conflict
+4	Representatives elections,	1	event.election
+1	National Highway	1	transportation.road
+1	Men's Soccer Team	0	organization.sports_team
+5	Olympics – Men's	3	event.sports_event event
+3	Corp.	1	organization.company
+0	British Rail Class	1	train
+3	election in	3	event.election
+2	Borough Council election,	1	event.election
+0	Battle of	3	event.military_conflict
+1	Pomeranian Voivodeship	0	location.city
+0	Battle of the	2	event.military_conflict
+2	Sheriff's Office	0	military government_agency
+1	People's Party	0	government.political_party
+0	Order of	1	title
+1	County /	2	location location.city
+0	Georgia State Route	1	transportation.road
+3	GmbH	0	organization.company
+2	Men's Basketball	0	organization.sports_team
+4	Summer Olympics	3	event event.sports_event
+1	Mic River	0	location.body_of_water
+1	Institute of	1	organization.educational_institution
+1	Party of	3	government.political_party
+1	Wisconsin Volunteer	2	military
+0	Tennessee State Route	1	transportation.road
+1	States District Court for	5	government.government government_agency
+1	national futsal	1	organization.sports_team
+2	Men's Football	0	organization.sports_team
+1	Air Expeditionary	1	military
+0	European route	1	transportation.road
+2	High School, main	1	organization.educational_institution
+1	State University	3	organization.sports_team
+4	hockey team	0	organization.sports_team
+2	election, 2009	0	event.election
+1	national football	1	organization.sports_team
+4	Inc.	2	organization.company
+1	Puerto Rico	0	location.county
+1	ship of the	1	product.ship
+1	Sheriff of	1	title
+0	Journal of	2	written_work
+4	and Technology	0	organization.educational_institution
+2	LLC	2	organization.company
+2	at the	6	event.sports_event
+1	Regiment Kentucky	2	military
+1	African Class	2	train
+1	Fed Cup	1	organization.sports_team
+1	Air Defense	1	military
+2	University, main	1	organization.educational_institution organization
+1	High School, main	1	organization.educational_institution
+3	Film Festival	0	event
+0	Japan National Route	1	transportation.road
+3	School of	3	organization.educational_institution
