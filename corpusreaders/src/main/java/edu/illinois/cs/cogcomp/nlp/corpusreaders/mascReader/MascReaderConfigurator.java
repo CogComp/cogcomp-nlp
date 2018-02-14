@@ -35,8 +35,6 @@ public class MascReaderConfigurator extends CorpusReaderConfigurator{
                 ANNOTATIONS,
                 READ_PENN,
                 new Property(CorpusReaderConfigurator.CORPUS_NAME.key, "MASC"),
-                new Property(CorpusReaderConfigurator.CORPUS_DIRECTORY.key, "/home/mssammon/work/data/masc-3.0.0/written/"),
-                new Property(CorpusReaderConfigurator.SOURCE_DIRECTORY.key, "/home/mssammon/work/data/masc-3.0.0/written/"),
                 new Property(CorpusReaderConfigurator.SUPPRESS_FILE_ERRORS.key, TRUE),
         };
 

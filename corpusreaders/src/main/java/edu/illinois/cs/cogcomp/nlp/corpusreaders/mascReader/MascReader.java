@@ -23,12 +23,11 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import gnu.trove.map.hash.TIntIntHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -70,6 +69,8 @@ import java.util.*;
 public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> {
 
     private static final String NAME = MascReader.class.getCanonicalName();
+    private static final Logger logger = LoggerFactory.getLogger(MascReader.class);
+
 
     public enum FileType {TEXT, SENTENCE, TOKENS, POS, NE, NC, VC, PENN, LOGICAL};
     public static Map<FileType, String> fileTypeExtensions;
@@ -91,7 +92,8 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
     private PennStaxParser pennParser;
     private boolean readPenn;
 
-    private final boolean DEBUG = true;
+    /** if set to 'true', prints out a crude format marking sentence boundaries read from documents.*/
+    private final boolean DEBUG = false;
 
     /**
      * ResourceManager must specify the fields {@link CorpusReaderConfigurator}.CORPUS_NAME and
@@ -270,7 +272,7 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
         List<SentenceStaxParser.MascSentence> sentences = sentenceInfo.getFirst();
 
         if (DEBUG) {
-            printSentences(text, sentences);
+            printSentences(System.err, text, sentences);
         }
 
         removeOverlappingSentences(sentences);
@@ -306,13 +308,13 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
         return Collections.singletonList(ta);
     }
 
-    private void printSentences(String text, List<SentenceStaxParser.MascSentence> sentences) {
-        System.err.println("TEXT:\n" + text);
-        System.err.println("\n\nSENTENCES:\n");
+    private void printSentences(PrintStream out, String text, List<SentenceStaxParser.MascSentence> sentences) {
+        out.println("TEXT:\n" + text);
+        out.println("\n\nSENTENCES:\n");
         for (SentenceStaxParser.MascSentence sent : sentences) {
-            System.err.println("###" + text.substring(sent.start, sent.end) + "###");
+            out.println("###" + text.substring(sent.start, sent.end) + "###");
         }
-        System.err.println("____ENDOFDOC____");
+        out.println("____ENDOFDOC____");
     }
 
     /**
@@ -344,8 +346,9 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
                 }
             }
         }
-        System.err.println("## removing at least " + sentsToRemove.size() + ", and at most " +
-                (sentsToRemove.size() + offsetsToRemove.size()) + ", sentences...");
+        logger.debug("## removing at least {}, and at most {}, sentences...",sentsToRemove.size(),
+                (sentsToRemove.size() + offsetsToRemove.size()));
+
         for (SentenceStaxParser.MascSentence sent : sentsToRemove) {
             sentences.remove(sent);
         }
@@ -393,22 +396,30 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
 
     /**
      * Read sections of corpus into TextAnnotations, write out TextAnnotations in json format.
+     * Specify MASC root dir of written files, e.g. /home/mssammon/work/data/masc-ccg/written/
      * @param args
      */
     public static void main(String[] args) {
 
 
-        if (args.length != 1) {
-            System.err.println("Usage: " + NAME + " outDir (set corpus dir in config)");
+        if (args.length != 2) {
+            System.err.println("Usage: " + NAME + " mascCorpusDir outDir");
             System.exit(-1);
         }
-        String outDirGold = args[0];
+
+        String corpusDir = args[0];
+        String outDirGold = args[1];
         String outDirPred = outDirGold + "_PRED";
+
+        Properties props = new Properties();
+
+        props.setProperty(CorpusReaderConfigurator.CORPUS_DIRECTORY.key, args[0]);
+        props.setProperty(CorpusReaderConfigurator.SOURCE_DIRECTORY.key, args[0]);
 
         IOUtils.mkdir(outDirGold);
         IOUtils.mkdir(outDirPred);
 
-        ResourceManager rm = new ResourceManager(new Properties());
+        ResourceManager rm = new ResourceManager(props);
 
         MascReader reader = null;
         try {
@@ -441,26 +452,28 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
             numGoldSentCorrect += countCorrectSpans(predTa.getView(ViewNames.SENTENCE), goldSentCharOffsets);
 
 
-            String taJson = SerializationHelper.serializeToJson(goldTa);
+            String taJson = SerializationHelper.serializeToJson(goldTa, true);
 
             String outFile = outDirGold + "/" + goldTa.getId() + ".json";
 
             try {
+                logger.trace("Writing file out to '{}'...", outFile);
                 LineIO.write(outFile, Collections.singletonList(taJson));
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(-1);
             }
             outFile = outDirPred + "/" + predTa.getId() + ".json";
-            String predTaJson = SerializationHelper.serializeToJson(predTa);
+            String predTaJson = SerializationHelper.serializeToJson(predTa, true);
 
             try {
+                logger.debug("writing file '{}'...", outFile);
                 LineIO.write(outFile, Collections.singletonList(predTaJson));
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(-1);
             }
-            System.err.println("## finished processing file '" + goldTa.getId() + "'.");
+            logger.debug("## finished processing file '{}'.", goldTa.getId());
         }
 
         System.out.println(reader.generateReport());
