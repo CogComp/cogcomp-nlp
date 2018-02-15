@@ -16,7 +16,7 @@ ServerClientAnnotator annotator = new ServerClientAnnotator();
 annotator.setUrl("localhost", "8080"); // set the url and port name of your server here 
 annotator.setViews(ViewNames.POS, ViewNames.LEMMA); // specify the views that you want 
 TextAnnotation ta = annotator.annotate("This is the best sentence ever."); 
-System.out.println(ta.getAvailableViews()); // here you should see that the required views are added  
+System.out.println(ta.getAvailableViews()); // here you should see that the required views are added.   
 ```
 
 #### Python Client
