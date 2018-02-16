@@ -16,11 +16,9 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.util.FileUtils;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.AbstractIncrementalCorpusReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import gnu.trove.map.hash.TIntIntHashMap;
 import org.slf4j.Logger;
@@ -57,9 +55,9 @@ import java.util.*;
  *     <link targets="s-r2"/>
  *  </node>
  *
- * -- looks like 'a' element assigns an id with a label 'q' or 's' (quote vs stmt?) to a separate 'node' element
- * -- 'node' element links an 'a' id to a 'region' id
- * -- 'region' element specifies an id and a pair of char offsets.
+ * -- 'region' element is the lowest level: specifies an id and a pair of char offsets.
+ * -- 'node' element groups regions, may potentially assign attributes
+ * -- 'a' element assigns an id with a label 'q' or 's' (quote vs stmt?) to a separate 'node' element
  *
  * Specify desired annotations as a comma-separated list of values for Property "ANNOTATIONS" defined in
  *    {@link MascReaderConfigurator}.
@@ -126,10 +124,9 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
      *       id.txt (source text)
      *       id-s.xml (sentences)
      *       id-seg.xml (token boundaries)
+     *       id-penn.xml (pos and lemma)
      *
-     * first cut: assume that sources are selected independently of genre, so use cross product
-     *    to determine the list of directories needed.
-     * ADDITIONAL LIMITATION: expects every file name (independent of directory) to be unique.
+     * CURRENT LIMITATION: expects every file name (independent of directory) to be unique.
      *
      * @return a list of lists of paths: each member list is a set of files containing source and
      *         standoff annotations. Annotation files will have suffixes from the map defined
@@ -143,8 +140,6 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
 
         Set<String> genres = new HashSet<>(Arrays.asList(resourceManager.getCommaSeparatedValues(
                 MascReaderConfigurator.GENRES.key)));
-//        Set<String> sources = new HashSet<>(Arrays.asList(resourceManager.getCommaSeparatedValues(
-//                MascReaderConfigurator.SOURCES.key)));
         List<String> annotations = Arrays.asList(resourceManager.getCommaSeparatedValues(
                 MascReaderConfigurator.ANNOTATIONS.key));
         List<List<Path>> corpusPaths = new ArrayList<>();
@@ -186,7 +181,6 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
                     if (FileType.valueOf(annotation).equals(FileType.TEXT))
                         stemToSourcePath.put(stem, annotationPath);
 
-                    // TODO: check exists
                     corpusFilePaths.add(annotationPath);
                 }
             }
@@ -291,6 +285,7 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
             sentEndTokOffsets[sentences.size() -1] = tokens.length;
 
         // FIX case where trailing content not part of sentnce in MASC -- fake final sentence
+        // needed due to constraints imposed by TextAnnotation
         if (sentEndTokOffsets[sentences.size() -1] != tokens.length) {
             int[] modSentEndTokOffsets = new int[sentences.size() + 1];
             for (int i = 0; i < sentEndTokOffsets.length; ++i)
@@ -318,7 +313,7 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
     }
 
     /**
-     * TODO: check logic for finding overlaps and marking for removal
+     * This method may be redundant at this point
      * @param sentences
      */
     private void removeOverlappingSentences(List<SentenceStaxParser.MascSentence> sentences) {
@@ -357,7 +352,7 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
     }
 
     /**
-     * is a > b
+     * is A a larger span than B
      * @param a
      * @param b
      * @return
@@ -413,8 +408,8 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
 
         Properties props = new Properties();
 
-        props.setProperty(CorpusReaderConfigurator.CORPUS_DIRECTORY.key, args[0]);
-        props.setProperty(CorpusReaderConfigurator.SOURCE_DIRECTORY.key, args[0]);
+        props.setProperty(CorpusReaderConfigurator.CORPUS_DIRECTORY.key, corpusDir);
+        props.setProperty(CorpusReaderConfigurator.SOURCE_DIRECTORY.key, corpusDir);
 
         IOUtils.mkdir(outDirGold);
         IOUtils.mkdir(outDirPred);

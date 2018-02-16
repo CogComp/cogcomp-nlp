@@ -72,7 +72,6 @@ public class GenerateSimpleSegmentationFormat {
                 e.printStackTrace();
                 System.exit(-1);
             }
-
         }
     }
 
