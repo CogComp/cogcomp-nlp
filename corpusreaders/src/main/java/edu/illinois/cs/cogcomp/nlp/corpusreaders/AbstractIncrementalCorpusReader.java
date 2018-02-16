@@ -45,6 +45,10 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
     private int fileIndex;
     /** points to index of stack that will be returned by iterator next() */
     private int stackIndex;
+    /** if 'true', ignore exceptions thrown when reading files (getAnnotationsFromFile) */
+    protected boolean suppressFileErrors;
+    private int numFilesSucceeded;
+    private int numFilesFailed;
 
     /**
      * ResourceManager must specify the fields {@link CorpusReaderConfigurator}.CORPUS_NAME and
@@ -65,6 +69,7 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
      */
     protected void initializeReader() {
         this.sourceDirectory = resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY);
+        this.suppressFileErrors = resourceManager.getBoolean(CorpusReaderConfigurator.SUPPRESS_FILE_ERRORS.key);
         try {
             fileList = getFileListing();
         } catch (IOException e) {
@@ -107,12 +112,21 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
             stackIndex = 0;
 
             do {
+                boolean isFailed = false;
                 try {
                     stack = getAnnotationsFromFile(fileList.get(fileIndex++));
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new NoSuchElementException(e.getMessage());
+                    if (!suppressFileErrors) {
+                        e.printStackTrace();
+                        throw new NoSuchElementException(e.getMessage());
+                    } else {
+                        numFilesFailed++;
+                        isFailed = true;
+                    }
                 }
+                if (!isFailed)
+                    numFilesSucceeded++;
+
             } while (stack.isEmpty() && fileIndex < fileList.size());
             // at this point, either stack has one or more elements or it is emtpy
             // because we didn't find any new TextAnnotations
@@ -154,7 +168,11 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
      */
 
     public String generateReport() {
-        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+        StringBuilder bldr = new StringBuilder();
+        bldr.append("processed ").append(String.valueOf(numFilesSucceeded  + numFilesFailed));
+        bldr.append(" files, of which ").append(String.valueOf(numFilesFailed)).append(" could not be read.");
+        bldr.append(System.lineSeparator());
+        return bldr.toString();
     }
 
 }

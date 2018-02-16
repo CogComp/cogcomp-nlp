@@ -133,6 +133,8 @@ public class ViewNames {
     public static final String EVENT_ERE = "EVENT_ERE";
 
     public static final String TRANSLITERATION = "TRANSLITERATION";
+    public static final String TOKENS_GOLD = "TOKENS_GOLD";
+    public static final String SENTENCE_GOLD = "SENTENCE_GOLD";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -142,6 +144,9 @@ public class ViewNames {
             case VERB_SENSE: 
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
+            case SENTENCE_GOLD:
+                // gold tokens may not align with predicted tokens... and pred tokens are default use case
+            case TOKENS_GOLD:
             case PARAGRAPH:
             case MENTION:
             case RELATION:
