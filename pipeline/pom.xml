@@ -60,6 +60,11 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-question-typer</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>stanford_3.3.1</artifactId>
             <version>4.0.1</version>
         </dependency>
@@ -167,6 +172,12 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
 </project>

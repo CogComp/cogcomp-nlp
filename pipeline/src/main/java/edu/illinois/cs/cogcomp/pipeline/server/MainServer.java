@@ -28,6 +28,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import static spark.Spark.*;
 
@@ -161,6 +162,15 @@ public class MainServer {
         get("/viewNames", (req, res) -> finalViewsString);
 
         post("/viewNames", (req, res) -> finalViewsString);
+
+        get("/version", "application/json", (request, response) -> {
+            logger.info("GET request to retrieve version numbers . . . ");
+            final Properties properties = new Properties();
+            properties.load(pipeline.getClass().getClassLoader().getResourceAsStream("project.properties"));
+            System.out.println(properties.getProperty("version"));
+            System.out.println(properties.getProperty("artifactId"));
+            return properties.getProperty("version");
+        });
     }
 
     public static double getHour() {

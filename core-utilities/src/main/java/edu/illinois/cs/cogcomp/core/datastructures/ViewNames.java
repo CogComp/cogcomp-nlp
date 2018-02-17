@@ -91,6 +91,8 @@ public class ViewNames {
     public static final String DATALESS_ESA = "DATALESS_ESA";
     public static final String DATALESS_W2V = "DATALESS_W2V";
 
+    public static final String QUESTION_TYPE = "QUESTION_TYPE";
+
     /**
      * @deprecated Replaced by {@link #CLAUSES_CHARNIAK}, {@link #CLAUSES_BERKELEY},
      *             {@link #CLAUSES_STANFORD}

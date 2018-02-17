@@ -51,7 +51,7 @@ public class ESADatalessAnnotator extends ADatalessAnnotator {
     }
 
     public ESADatalessAnnotator(ResourceManager config) {
-        super(ViewNames.DATALESS_ESA, config);
+        super(ViewNames.DATALESS_ESA, config, true);
     }
 
     public ESADatalessAnnotator(ResourceManager config, JSONObject jsonHierarchy)
