@@ -2,6 +2,7 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.CreateTrainDevTestSplit;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.CreateTrainDevTestSplitSimple;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.LabelCountExtractor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.ListExampleLabelCounter;
 import org.apache.commons.math3.optim.InitialGuess;
@@ -25,19 +26,22 @@ public class CreateTrainDevTestSplitTest {
     private static final double TRAIN_FRAC = 0.7;
     private static final double DEV_FRAC = 0.1;
     private static final double TEST_FRAC = 0.2;
+    private static final int NUM_EX = 128;
+
     private String[] categories;
     private double[] proportions;
 
     @Before
     public void init() {
 
-        categories = new String[] {"Red", "Green", "Yellow", "Blue"};
+        categories = new String[] {"DUMMY", "Red", "Green", "Yellow", "Blue"};
         proportions = new double[categories.length];
+        proportions[0] = 0.0;
         double sum = 0.0;
 
 
         // set proportions to be 1/(2^n), except make last two proportions equal for convenient fractions
-        for (int i = 0; i < categories.length - 1; ++i) {
+        for (int i = 1; i < categories.length - 1; ++i) {
             double prop = 1.0/(double) Math.pow(2, i+1);
             proportions[i] = prop;
             sum += prop;
@@ -59,21 +63,30 @@ public class CreateTrainDevTestSplitTest {
     @Test
     public void testSmallDataset() {
 
-        Map<String, Map<String, Integer>> smallExampleList = generateListExamples(categories, 128);
+        Map<String, Map<String, Integer>> smallExampleList = generateListExamples(categories, NUM_EX);
         ListExampleLabelCounter listCounter = new ListExampleLabelCounter(smallExampleList);
-        CreateTrainDevTestSplit createTrainDevTestSplit = new CreateTrainDevTestSplit(listCounter);
-        Map<CreateTrainDevTestSplit.Split, Set<String>> splits =
+        CreateTrainDevTestSplitSimple createTrainDevTestSplit = new CreateTrainDevTestSplitSimple(listCounter);
+        Map<CreateTrainDevTestSplitSimple.Split, Set<String>> splits =
                 createTrainDevTestSplit.getSplits(TRAIN_FRAC, DEV_FRAC, TEST_FRAC);
 
-        // check that the dev, train and test splits have correct gross sizes
-        assertTrue(Math.abs(128 * TRAIN_FRAC - splits.get(CreateTrainDevTestSplit.Split.TRAIN).size()) < 4);
-        assertTrue(Math.abs(128 * DEV_FRAC - splits.get(CreateTrainDevTestSplit.Split.DEV).size()) < 4);
-        assertTrue(Math.abs(128 * TEST_FRAC - splits.get(CreateTrainDevTestSplit.Split.TEST).size()) < 4);
+        assertTrue(checkCount(NUM_EX, TRAIN_FRAC, splits.get(CreateTrainDevTestSplitSimple.Split.TRAIN)));
+        assertTrue(checkCount(NUM_EX, TEST_FRAC, splits.get(CreateTrainDevTestSplitSimple.Split.TEST)));
+        assertTrue(checkCount(NUM_EX, DEV_FRAC, splits.get(CreateTrainDevTestSplitSimple.Split.DEV)));
 
-        double[] featureCounts = getFeatureCounts(splits.get(CreateTrainDevTestSplit.Split.DEV), smallExampleList);
+        double[] featureCounts = getFeatureCounts(splits.get(CreateTrainDevTestSplitSimple.Split.DEV), smallExampleList);
 
         assertTrue(compareProportions(proportions, featureCounts));
     }
+
+    private boolean checkCount(int numEx, double frac, Set<String> ids) {
+        double targetSize = (double) NUM_EX * frac;
+        double sizeDiff = Math.abs(targetSize - (double)ids.size());
+        // for small fraction -- e.g. 10% -- of small dataset, relax the target difference
+        double targetDiff = Math.max(0.1 * (double) numEx, 0.2 * frac * (double) numEx);
+
+        return sizeDiff < targetDiff;
+    }
+
 
     private boolean compareProportions(double[] proportions, double[] featureCounts) {
 
@@ -88,10 +101,10 @@ public class CreateTrainDevTestSplitTest {
 
         for (int i = 0; i < featureCounts.length; ++i) {
             sampleProportions[i] = featureCounts[i] / total;
-            if (Math.abs(proportions[i] - sampleProportions[i]) > 0.02) {
+            if (Math.abs(proportions[i] - sampleProportions[i]) > proportions[i]*0.2) {
                 System.err.println("Split feature " + categories[i] + " has poor proportion: " +
-                "goal is " + String.format("%0.3f", proportions[i]) + "; actual proportion: " +
-                String.format("%0.3f", sampleProportions[i]));
+                "goal is " + String.format("%.3f", proportions[i]) + "; actual proportion: " +
+                String.format("%.3f", sampleProportions[i]));
                 areProportionsCorrect = false;
             }
         }
@@ -107,7 +120,8 @@ public class CreateTrainDevTestSplitTest {
         for (String id : ids) {
             Map<String, Integer> ex = exampleList.get(id);
             for (String feat : ex.keySet())
-                rawCounts.put(feat, rawCounts.get(feat) + ex.get(feat));
+                if (!"DUMMY".equals(feat))
+                    rawCounts.put(feat, rawCounts.get(feat) + ex.get(feat));
         }
 
         double[] featureCounts = new double[categories.length]; // allow for dummy feature

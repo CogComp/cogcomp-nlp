@@ -238,10 +238,10 @@ public class CreateTrainDevTestSplit {
 
         logger.info("Processing data in {} blocks of size {} (# of examples)...", numBlocks, BLOCK_SIZE);
 
-        Map<String, Double> targetCounts = labelCountExtractor.findTargetCounts(frac);
+        Counter<String> targetCounts = labelCountExtractor.findTargetCounts(frac);
 
         for (String label : targetCounts.keySet()) {
-            targetCounts.put(label, targetCounts.get(label)/(double) numBlocks);
+            targetCounts.incrementCount(label, targetCounts.getCount(label)/(double) numBlocks);
         }
 
         List<List<String>> idBlocks = generateIdBlocks(availIds, BLOCK_SIZE);
@@ -293,7 +293,7 @@ public class CreateTrainDevTestSplit {
      * @param targetCounts desired counts of example fields in the sampled data
      * @return the set of
      */
-    private Pair<Set<String>,Counter<String>> getBlockSplit(List<String> availIds, Map<String, Double> targetCounts) {
+    private Pair<Set<String>,Counter<String>> getBlockSplit(List<String> availIds, Counter<String> targetCounts) {
 
         double bestDiff = LARGE_DIFF;
 
@@ -426,11 +426,11 @@ public class CreateTrainDevTestSplit {
      * @param targetCounts desired counts based on proportion of data desired
      * @return value of difference
      */
-    private double computeCountDiff(Counter<String> stringCounter, Map<String, Double> targetCounts) {
+    private double computeCountDiff(Counter<String> stringCounter, Counter<String> targetCounts) {
         double accum = 0;
         for (String label : targetCounts.keySet()) {
             double count = 0;
-            double targetCount = targetCounts.get(label);
+            double targetCount = targetCounts.getCount(label);
             if ( stringCounter.contains(label) )
                 count = stringCounter.getCount(label);
 

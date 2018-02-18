@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * NOTE: this class is mid-refactor; see TODO
  *
- * TODO: change definition of getLabelCounts() to take a generic map of string to example data structure; this will
+ * TODO: change definition of getExampleLabelCounts() to take a generic map of string to example data structure; this will
  *       obviate the need to store the original data set.
  * TODO: assess possibility of moving counting logic from derived classes to this class.
  * @author mssammon
@@ -49,5 +49,5 @@ public abstract class LabelCountExtractor<K> {
 
     abstract public void populateLabelCounts(Map<String, K> examples);
 
-    abstract public Map<String, Double> findTargetCounts(double frac);
+    abstract public Counter<String> findTargetCounts(double frac);
 }

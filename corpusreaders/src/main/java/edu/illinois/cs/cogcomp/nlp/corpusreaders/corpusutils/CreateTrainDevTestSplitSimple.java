@@ -163,39 +163,38 @@ public class CreateTrainDevTestSplitSimple {
     /** keep this number of candidates for best split */
     private final int NUM_TRIALS;
 
-    private Random random;
-    /** for larger data sets, the size of blocks to use to speed up computation */
-    private int BLOCK_SIZE = 1000;
+//    private Random random;
     private final double LARGE_DIFF = 1000000000.0;
     private Logger logger = LoggerFactory.getLogger(CreateTrainDevTestSplitSimple.class);
     private Map<Split, Counter<String>> bestRelSplitCounts;
-    private boolean stopEarly;
+
+/** if 'true', randomize selection of examples at each step. set 'false' for debugging/testing. */
+    private boolean doRandomize;
 
     private LabelCountExtractor labelCountExtractor;
 
     /** a map from data example ID to the counts of target characteristics of that example */
-    private Map<String, Counter<String>> labelCounts;
+    private Map<String, Counter<String>> exampleLabelCounts;
 
 //    private EvictingQueue<QueueElement> bestCandidateSplits;
     /** total counts for each target characteristic of examples in data set */
     private Counter<String> labelTotals;
 
     public CreateTrainDevTestSplitSimple(LabelCountExtractor labelExtractor) {
-        this(labelExtractor, 10);
+        this(labelExtractor, 10, true);
     }
 
 
-    public CreateTrainDevTestSplitSimple(LabelCountExtractor labelExtractor, int numTrials) {
+    public CreateTrainDevTestSplitSimple(LabelCountExtractor labelExtractor, int numTrials, boolean doRandomize) {
         this.labelCountExtractor = labelExtractor;
         this.NUM_TRIALS = numTrials;
-        this.random = new Random();
+        this.doRandomize = doRandomize;
+//        this.random = new Random();
         labelTotals = new Counter<>();
-        labelCounts = new HashMap<>();
+        exampleLabelCounts = new HashMap<>();
         bestRelSplitCounts = new HashMap<>();
 
-        // allows stop as soon as split does not improve by increasing the number of documents considered for a split.
-        this.stopEarly = false;
-        labelCounts = labelExtractor.getLabelCounts();
+        exampleLabelCounts = labelExtractor.getLabelCounts();
         labelTotals = labelExtractor.getLabelTotals();
     }
 
@@ -208,8 +207,8 @@ public class CreateTrainDevTestSplitSimple {
         return bldr.toString();
     };
 
-    public Map<String,Counter<String>> getLabelCounts() {
-        return labelCounts;
+    public Map<String,Counter<String>> getExampleLabelCounts() {
+        return exampleLabelCounts;
     }
 
     public Counter<String> getLabelTotals() {
@@ -237,7 +236,7 @@ public class CreateTrainDevTestSplitSimple {
             throw new IllegalArgumentException("trainFrac, devFrac, and testFrac must sum to 1.0.");
 
         Set<String> availIds = new HashSet<>();
-        availIds.addAll(this.labelCounts.keySet());
+        availIds.addAll(this.exampleLabelCounts.keySet());
 
         Pair<Set<String>, Counter<String>> dev = getBestSplit(devFrac, availIds);
         splitDocIdSets.put(Split.DEV, dev.getFirst());
@@ -249,7 +248,7 @@ public class CreateTrainDevTestSplitSimple {
         bestRelSplitCounts.put(Split.TEST, test.getSecond());
         availIds.removeAll(test.getFirst());
 
-        Counter<String> trainCounts = computeRemainingCounts(availIds);
+        Counter<String> trainCounts = computeLabelCounts(availIds);
         splitDocIdSets.put(Split.TRAIN, availIds);
         bestRelSplitCounts.put(Split.TRAIN, trainCounts);
         return splitDocIdSets;
@@ -257,11 +256,11 @@ public class CreateTrainDevTestSplitSimple {
 
 
 
-    private Counter<String> computeRemainingCounts(Set<String> availIds) {
+    private Counter<String> computeLabelCounts(Set<String> availIds) {
         Counter<String> counts = new Counter<>();
 
         for (String docId : availIds) {
-            Counter<String> labelCount = labelCounts.get(docId);
+            Counter<String> labelCount = exampleLabelCounts.get(docId);
             for (String label : labelCount.keySet())
                 counts.incrementCount(label, labelCount.getCount(label));
         }
@@ -281,14 +280,13 @@ public class CreateTrainDevTestSplitSimple {
      */
     private Pair<Set<String>, Counter<String>> getBestSplit(double frac, Set<String> availIds) {
 
-        Set<String> split = new HashSet<>();
+        Set<String> bestSplit = new HashSet<>();
         Counter<String> splitCount = null;
 
         if (frac < 0.01)
-            return new Pair(split, splitCount);
+            return new Pair(bestSplit, splitCount);
 
-        Map<String, Double> targetCounts = labelCountExtractor.findTargetCounts(frac);
-
+        Counter<String> targetCounts = labelCountExtractor.findTargetCounts(frac);
 
         double bestDiff = LARGE_DIFF;
 
@@ -299,35 +297,113 @@ public class CreateTrainDevTestSplitSimple {
 
         // then try sampling randomly a few times, keeping the best split in terms of distance
         //   from target count for the highest priority target feature(s)
-        Set<String> splitIds = null;
 
         for (int i = 0; i < NUM_TRIALS; ++i) {
-            splitIds = getRandomSplit(availIds);
-//            bestDiff =
+
+            Pair<Set<String>, Counter<String>> splitAndCount = getRandomSplit(availIds, targetCounts, targetSplitOrder);
+            Set<String> splitIds = splitAndCount.getFirst();
+            Counter<String> labelCount = splitAndCount.getSecond(); //
+            double cost = computeCountDiff(labelCount, targetCounts);
+            logger.debug("best prior diff: {}; current diff: {}", bestDiff, cost);
+
+            //TODO: have cost weight infrequent labels more highly.
+            if (cost < bestDiff) {
+                bestSplit = splitIds;
+                splitCount = labelCount;
+                bestDiff = cost;
+            }
         }
 
-        // number of documents in the sets considered
-        for (int num = 1; num <= availIds.size(); ++num) {
-            logger.info("Round {} of maximum {}...", num, availIds.size());
-            double bestRoundDiff = LARGE_DIFF;
-            // store new combinations generated this round
-            boolean isBetterRound = false;
+        return new Pair(bestSplit, splitCount);
+    }
 
+    /**
+     * return a subset of availIds of size frac * availIds.size(), trying to balance the proportion of
+     *    labels in priority order indicated by targetSplitOrder. First cut: just the first entry in
+     *    targetSplitOrder.
+     *    Second cut: first, select examples that have only the current target active and split those.
+     *      the remaining examples can't affect these counts; so compute the counts of the next target in the first selected set,
+     *      and select examples to augment the first set based on adjusting the overall proportion and the second target simultaneously
+     *
+     * @param availIds a set of example IDs to be divided
+     * @param targetCounts desired counts for labels in focus of split (the set of ids returned)
+     * @param targetSplitOrder ordered list of target labels to balance in the split
+     * @return set of ids in proposed split, plus corresponding label counts
+     */
+    private Pair<Set<String>, Counter<String>> getRandomSplit(Set<String> availIds, Counter<String> targetCounts,
+                                                              List<String> targetSplitOrder) {
 
-            PriorityQueue<QueueElement> bestSplitsOfSizeK = new PriorityQueue<>();
+        String firstTarget = targetSplitOrder.get(0);
+
+        Set<String> splitIds = new HashSet<>();
+        List<String> relevantIdList = getRelevantExamples(availIds, firstTarget);
+
+        double targetCount = targetCounts.getCount(firstTarget);
+        double currentCount = 0;
+
+        for (int index = 0; index < relevantIdList.size(); ++index) {
+
+            String id = relevantIdList.get(index);
+            currentCount += this.exampleLabelCounts.get(id).getCount(firstTarget);
+            splitIds.add(id);
+
+            if (currentCount >= targetCount)
+                break;
         }
-        Counter<String> labelCounter = null;
-        return new Pair(splitIds, labelCounter);
+
+        Counter<String> splitCounts = computeLabelCounts(splitIds);
+        Pair<Set<String>, Counter<String>> splitInfo = new Pair(splitIds, splitCounts);
+
+        // recursive step:
+        if (targetSplitOrder.size() > 1) {
+            Set<String> newAvailIds = new HashSet<>(availIds);
+            // don't touch any examples that had relevant target
+            newAvailIds.removeAll(relevantIdList);
+
+            if (!newAvailIds.isEmpty()) {
+
+                List<String> newTargetSplitOrder = targetSplitOrder.subList(1, targetSplitOrder.size());
+                Counter<String> adjustedTargetCounts = targetCounts.copy();
+                decrementCounts(targetCounts, splitCounts);
+
+                Pair<Set<String>, Counter<String>> recurseSplitInfo =
+                        getRandomSplit(newAvailIds, adjustedTargetCounts, newTargetSplitOrder);
+
+                splitIds.addAll(recurseSplitInfo.getFirst());
+                incrementCounts(splitCounts, recurseSplitInfo.getSecond());
+            }
+            // else base case: all examples are covered by the set of labels we considered.
+        }
+        // base case: targetSplitOrder had only one entry and we split with it.
+        return splitInfo;
     }
 
-    private Set<String> getRandomSplit(Set<String> availIds) {
-        return null;
+    private void incrementCounts(Counter<String> origCounts, Counter<String> addCounts) {
+        updateCounter(origCounts, addCounts, true);
     }
 
-    private List<String> getTargetSplitOrder(Map<String, Double> targetCounts) {
+    private void decrementCounts(Counter<String> origCounts, Counter<String> subtractCounts) {
+        updateCounter(origCounts, subtractCounts, false);
+    }
+
+    private List<String> getRelevantExamples(Set<String> availIds, String targetLabel) {
+
+        List<String> relevantIdList = new ArrayList<>();
+
+        for (String availId: availIds)
+            if (this.exampleLabelCounts.get(availId).getCount(targetLabel) > 0)
+                relevantIdList.add(availId);
+
+        if (doRandomize)
+            Collections.shuffle(relevantIdList);
+
+        return relevantIdList;
+    }
+
+    private List<String> getTargetSplitOrder(Counter<String> targetCounts) {
         PriorityQueue<PairQueueElement> queue = new PriorityQueue();
         for (String label : targetCounts.keySet()) {
-            queue.add(new PairQueueElement(targetCounts.get(label), label));
+            queue.add(new PairQueueElement(targetCounts.getCount(label), label));
         }
         List<String> orderedTargets = new ArrayList<>(targetCounts.size());
         PairQueueElement pqe = null;
@@ -338,11 +414,14 @@ public class CreateTrainDevTestSplitSimple {
         return orderedTargets;
     }
 
-    private void updateCounter(Counter<String> splitCount, Counter<String> addCounts) {
-        for (String key : addCounts.keySet())
-            splitCount.incrementCount(key, addCounts.getCount(key));
+    private void updateCounter(Counter<String> origCount, Counter<String> changeCounts, boolean isIncrement) {
+        for (String key : changeCounts.keySet()) {
+            if (isIncrement)
+                origCount.incrementCount(key, changeCounts.getCount(key));
+            else
+                origCount.decrementCount(key, changeCounts.getCount(key));
+        }
     }
-
 
 //    private PriorityQueue<QueueElement> trimQueue(PriorityQueue<QueueElement> splits) {
 //        PriorityQueue<QueueElement> trimmedQueue = new PriorityQueue<>(new TargetComparator);
@@ -354,27 +433,6 @@ public class CreateTrainDevTestSplitSimple {
 //    }
 
 
-    private Map<Set<String>, Counter<String>> initializeCurrentRoundCounts(PriorityQueue<QueueElement> oldBestSplitsOfSizeK) {
-        if (oldBestSplitsOfSizeK.isEmpty())
-            return createEmptyComboAndCount();
-
-        Map<Set<String>, Counter<String>> initialCounts = new HashMap<>();
-        for (QueueElement el : oldBestSplitsOfSizeK) {
-            initialCounts.put(el.docIdSet, el.labelCounter);
-        }
-
-        return initialCounts;
-    }
-
-
-    private Map<Set<String>, Counter<String>> createEmptyComboAndCount() {
-        Set<String> ids = new HashSet<>();
-        Counter<String> counter = new Counter<>();
-        Map<Set<String>, Counter<String>> comboCount = new HashMap<>();
-        comboCount.put(ids, counter);
-
-        return comboCount;
-    }
 
     /**
      * compute sum of squared difference of counts
@@ -382,11 +440,11 @@ public class CreateTrainDevTestSplitSimple {
      * @param targetCounts desired counts based on proportion of data desired
      * @return value of difference
      */
-    private double computeCountDiff(Counter<String> stringCounter, Map<String, Double> targetCounts) {
+    private double computeCountDiff(Counter<String> stringCounter, Counter<String> targetCounts) {
         double accum = 0;
         for (String label : targetCounts.keySet()) {
             double count = 0;
-            double targetCount = targetCounts.get(label);
+            double targetCount = targetCounts.getCount(label);
             if ( stringCounter.contains(label) )
                 count = stringCounter.getCount(label);
 
@@ -400,6 +458,9 @@ public class CreateTrainDevTestSplitSimple {
 
 
     /**
+     * split an ERE corpus with 0.7/0.1/0.2 train/dev/test proportions, trying to balance
+     *    all (or at least, lowest frequency) type count.
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -461,7 +522,7 @@ public class CreateTrainDevTestSplitSimple {
         Map<Split, Set<String>> splits = creator.getSplits(trainFrac, devFrac, testFrac);
         Map<Split, Counter<String>> splitCounts = creator.getBestRelSplitCounts();
 
-        Map<String, Counter<String>> counts = creator.getLabelCounts();
+        Map<String, Counter<String>> counts = creator.getExampleLabelCounts();
 
         List<String> outLines = new ArrayList<>(splitCounts.size() + 2);
         for (String docId : counts.keySet()) {

@@ -76,11 +76,11 @@ public class TextAnnotationLabelCounter extends LabelCountExtractor<Set<View>> {
      * @return
      */
     @Override
-    public Map<String, Double> findTargetCounts(double frac) {
-        Map<String, Double> targetCounts = new HashMap<>();
+    public Counter<String> findTargetCounts(double frac) {
+        Counter<String> targetCounts = new Counter<>();
         for (String label : labelsToConsider) {
             double count = this.labelTotals.getCount(label);
-            targetCounts.put(label, Math.ceil(count * frac)); // round up to favor small fractions
+            targetCounts.incrementCount(label, Math.ceil(count * frac)); // round up to favor small fractions
         }
         return targetCounts;
     }

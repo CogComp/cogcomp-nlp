@@ -154,4 +154,15 @@ public class Counter<T extends Serializable> implements Serializable {
         Collections.sort(inverseSortedItems, Collections.reverseOrder(comparator));
         return inverseSortedItems;
     }
+
+    /**
+     * create a copy of this Counter
+     * @return
+     */
+    public Counter<T> copy() {
+        Counter<T> copy = new Counter<T>();
+        for (Object key : this.counts.keys())
+            copy.incrementCount((T) key, this.counts.get(key));
+        return copy;
+    }
 }
