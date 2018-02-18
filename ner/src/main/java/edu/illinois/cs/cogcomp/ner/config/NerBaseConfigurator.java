@@ -35,6 +35,10 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     public final static String PATH_TO_MODEL = "pathToModelFile";
     public final static String VIEW_NAME = "viewName";
 
+    public final static String TRAINED_ON = "all-data";
+    public final static String TRAINED_ON_ALL_DATA = "all-data";
+    public final static String TRAINED_ON_TRAINING_DATA = "training-data";
+
     public final static String MODEL_NAME = "modelName";
     public final static String TAG_SCHEME = "taggingEncodingScheme";
     // public final static String TOKENIZATION_SCHEME = "tokenizationScheme";
@@ -130,6 +134,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         Properties props = new Properties();
 
         props.setProperty(VIEW_NAME, ViewNames.NER_CONLL);
+        props.setProperty(TRAINED_ON, TRAINED_ON_ALL_DATA);
         props.setProperty(PHRASE_LENGTH, DEFAULT_PHRASE_LENGTH);
         props.setProperty(PATH_TO_MODEL, DEFAULT_MODEL_PATH);
         props.setProperty(MODEL_NAME, DEFAULT_MODEL_NAME);
@@ -148,7 +153,6 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(IS_LOWERCASE_BROWN_CLUSTERS, DEFAULT_IS_LOWERCASE_BROWN_CLUSTERS);
         props.setProperty(LABEL_TYPES, DEFAULT_LABELS);
         props.setProperty(NORMALIZE_TITLE_TEXT, DEFAULT_NORMALIZE_TITLE);
-        // props.setProperty(TOKENIZATION_SCHEME, DEFAULT_TOKENIZATION_SCHEME);
         props.setProperty(TAG_SCHEME, DEFAULT_TAG_SCHEME);
         props.setProperty(TREAT_ALL_FILES_AS_ONE, DEFAULT_TREAT_ALL_FILES_AS_ONE);
         props.setProperty(PATH_TO_TOKEN_NORM_DATA, DEFAULT_PATH_TO_TOKEN_NORM_DATA);
