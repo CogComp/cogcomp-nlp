@@ -117,7 +117,7 @@ public class NERAnnotator extends Annotator {
         String data_split = nerRm.getString(NerBaseConfigurator.TRAINED_ON);
 
         try {
-            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            Datastore ds = new Datastore(new ResourceConfigurator().getConfig(nerRm));
             String artifact_id = "ner-model-" + dataset + "-" + data_split;
             File modelDir = ds.getDirectory("edu.illinois.cs.cogcomp.ner", artifact_id, 4.0, false);
             String model = "";
