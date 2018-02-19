@@ -23,6 +23,7 @@ import java.util.*;
  * <p>
  *
  * @author Vivek Srikumar
+ * @author mssammon
  */
 public class Counter<T extends Serializable> implements Serializable {
 

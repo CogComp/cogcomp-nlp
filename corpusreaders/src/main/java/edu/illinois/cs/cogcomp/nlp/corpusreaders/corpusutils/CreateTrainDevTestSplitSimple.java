@@ -295,18 +295,20 @@ public class CreateTrainDevTestSplitSimple {
 
         List<String> targetSplitOrder = getTargetSplitOrder(targetCounts);
 
+        //TODO: have cost weight infrequent labels more highly.
+        Map<String, Double> weights = setTargetWeights(targetSplitOrder, targetCounts);
+
         // then try sampling randomly a few times, keeping the best split in terms of distance
         //   from target count for the highest priority target feature(s)
 
-        for (int i = 0; i < NUM_TRIALS; ++i) {
+        for (int i = 0; i < NUM_TRIALS && bestDiff > 0 ; ++i) {
 
             Pair<Set<String>, Counter<String>> splitAndCount = getRandomSplit(availIds, targetCounts, targetSplitOrder);
             Set<String> splitIds = splitAndCount.getFirst();
             Counter<String> labelCount = splitAndCount.getSecond(); //
-            double cost = computeCountDiff(labelCount, targetCounts);
+            double cost = computeCountDiff(labelCount, targetCounts, weights);
             logger.debug("best prior diff: {}; current diff: {}", bestDiff, cost);
 
-            //TODO: have cost weight infrequent labels more highly.
             if (cost < bestDiff) {
                 bestSplit = splitIds;
                 splitCount = labelCount;
@@ -315,6 +317,28 @@ public class CreateTrainDevTestSplitSimple {
         }
 
         return new Pair(bestSplit, splitCount);
+    }
+
+    private Map<String, Double> setTargetWeights(List<String> targetSplitOrder, Counter<String> targetCounts) {
+        double[] fractions = new double[targetSplitOrder.size()];
+        double total = targetCounts.getTotal();
+        double inverseTotal = 0;
+
+        for (int i = 0; i < fractions.length; ++i) {
+
+            double count = targetCounts.getCount(targetSplitOrder.get(i));
+            fractions[i] = total / ((0 == count) ? 1 : count);
+            inverseTotal += fractions[i];
+        }
+
+        Map<String, Double> weights = new HashMap<>();
+
+        for (int i = 0; i < fractions.length; ++i) {
+            fractions[i] /= inverseTotal;
+            weights.put(targetSplitOrder.get(i), fractions[i]);
+        }
+
+        return weights;
     }
 
     /**
@@ -364,7 +388,7 @@ public class CreateTrainDevTestSplitSimple {
 
                 List<String> newTargetSplitOrder = targetSplitOrder.subList(1, targetSplitOrder.size());
                 Counter<String> adjustedTargetCounts = targetCounts.copy();
-                decrementCounts(targetCounts, splitCounts);
+                decrementCounts(adjustedTargetCounts, splitCounts);
 
                 Pair<Set<String>, Counter<String>> recurseSplitInfo =
                         getRandomSplit(newAvailIds, adjustedTargetCounts, newTargetSplitOrder);
@@ -433,22 +457,25 @@ public class CreateTrainDevTestSplitSimple {
 //    }
 
 
-
     /**
-     * compute sum of squared difference of counts
+     * compute weighted sum of absolute difference of counts
+     *
      * @param stringCounter counts from some subset of documents
      * @param targetCounts desired counts based on proportion of data desired
+     * @param weights weights for targets for cost computation
      * @return value of difference
      */
-    private double computeCountDiff(Counter<String> stringCounter, Counter<String> targetCounts) {
+    private double computeCountDiff(Counter<String> stringCounter, Counter<String> targetCounts, Map<String, Double> weights) {
         double accum = 0;
         for (String label : targetCounts.keySet()) {
             double count = 0;
+            double weight = 0;
             double targetCount = targetCounts.getCount(label);
-            if ( stringCounter.contains(label) )
+            if ( stringCounter.contains(label) ) {
                 count = stringCounter.getCount(label);
-
-            accum += Math.pow((count - targetCount), 2);
+                weight = weights.get(label);
+            }
+            accum += weight * Math.abs(count - targetCount);
         }
         return accum;
     }

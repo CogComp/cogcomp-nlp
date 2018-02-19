@@ -114,6 +114,7 @@ public class CreateTrainDevTestSplit {
     private Logger logger = LoggerFactory.getLogger(CreateTrainDevTestSplit.class);
     private Map<Split, Counter<String>> bestRelSplitCounts;
     private boolean stopEarly;
+    private Map<String, Double> defaultWeights;
 
     private LabelCountExtractor labelCountExtractor;
 
@@ -126,13 +127,13 @@ public class CreateTrainDevTestSplit {
 
 
     public CreateTrainDevTestSplit(LabelCountExtractor labelExtractor) {
-        this(labelExtractor, 100, 1000);
+        this(labelExtractor, 100);
     }
         /**
          * given views identified by source document, and a list of labels to consider, and a train/dev/test ratio,
          *    determine the best division of the corpus according to those constraints.
          */
-    public CreateTrainDevTestSplit(LabelCountExtractor labelExtractor, int beamSize, int blockSize) {
+    public CreateTrainDevTestSplit(LabelCountExtractor labelExtractor, int beamSize) {
 
         this.BEAM_SIZE = beamSize;
         this.labelCountExtractor = labelExtractor;
@@ -145,6 +146,9 @@ public class CreateTrainDevTestSplit {
         labelCounts = labelExtractor.getLabelCounts();
         labelTotals = labelExtractor.getLabelTotals();
 
+        this.defaultWeights = new HashMap<>();
+        for (String label : labelTotals.items())
+            defaultWeights.put(label, 1.0);
     }
 
 
@@ -353,7 +357,7 @@ public class CreateTrainDevTestSplit {
             // all new combinations for this round have been generated
             // want explicit generation because we will use these as seeds in the next round
             for (Set<String> docidComb : docCombinationCounts.keySet()) {
-                double diff = computeCountDiff(docCombinationCounts.get(docidComb), targetCounts);
+                double diff = computeCountDiff(docCombinationCounts.get(docidComb), targetCounts, defaultWeights);
                 bestSplitsOfSizeK.add(new QueueElement(diff, docidComb, docCombinationCounts.get(docidComb)));
                 if (diff < bestRoundDiff) {
                     bestRoundDiff = diff;
@@ -421,20 +425,22 @@ public class CreateTrainDevTestSplit {
     }
 
     /**
-     * compute sum of squared difference of counts
+     * compute weighted sum of absolute difference of counts
      * @param stringCounter counts from some subset of documents
      * @param targetCounts desired counts based on proportion of data desired
      * @return value of difference
      */
-    private double computeCountDiff(Counter<String> stringCounter, Counter<String> targetCounts) {
+    private double computeCountDiff(Counter<String> stringCounter, Counter<String> targetCounts, Map<String, Double> weights) {
         double accum = 0;
         for (String label : targetCounts.keySet()) {
             double count = 0;
+            double weight = 0;
             double targetCount = targetCounts.getCount(label);
-            if ( stringCounter.contains(label) )
+            if ( stringCounter.contains(label) ) {
                 count = stringCounter.getCount(label);
-
-            accum += Math.pow((count - targetCount), 2);
+                weight = weights.get(label);
+            }
+            accum += weight * Math.abs(count - targetCount);
         }
         return accum;
     }
