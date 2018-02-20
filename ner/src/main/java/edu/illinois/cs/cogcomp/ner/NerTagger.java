@@ -33,21 +33,21 @@ public class NerTagger {
         ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
         try {
             boolean areWeTraining = args[0].equalsIgnoreCase("-train");
-            Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
+            NERParameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
 
             if (args[0].equalsIgnoreCase("-annotate")) {
                 NETagPlain.init();
                 NETagPlain.tagData(args[1], args[2]);
             }
             if (args[0].equalsIgnoreCase("-demo")) {
-                logger.info("Reading model file : " + cp.pathToModelFile + ".level1");
-                NETaggerLevel1 tagger1 =
-                        new NETaggerLevel1(cp.pathToModelFile + ".level1", cp.pathToModelFile
-                                + ".level1.lex");
-                logger.info("Reading model file : " + cp.pathToModelFile + ".level2");
-                NETaggerLevel2 tagger2 =
-                        new NETaggerLevel2(cp.pathToModelFile + ".level2", cp.pathToModelFile
-                                + ".level2.lex");
+//                logger.info("Reading model file : " + cp.pathToModelFile + ".level1");
+                NETaggerLevel1 tagger1 = null;
+//                        new NETaggerLevel1(cp.pathToModelFile + ".level1", cp.pathToModelFile
+//                                + ".level1.lex");
+//                logger.info("Reading model file : " + cp.pathToModelFile + ".level2");
+                NETaggerLevel2 tagger2 = null;
+//                        new NETaggerLevel2(cp.pathToModelFile + ".level2", cp.pathToModelFile
+//                                + ".level2.lex");
                 String input = "";
                 while (!input.equalsIgnoreCase("quit")) {
                     input = Keyboard.readLine();

@@ -180,7 +180,7 @@ public class NerBenchmark {
                     if (!skiptraining) {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
                             System.out.println("\n\n----- Training models for evaluation for "+confFile+" ------");
-                            Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
+                            NERParameters.readConfigAndLoadExternalData(confFile, !skiptraining);
 
                             // there is a training directory, with training enabled, so train. We use the same dataset
                             // for both training and evaluating.
@@ -199,21 +199,21 @@ public class NerBenchmark {
                         }
                     } else if (!release) {
                         System.out.println("\n\n----- Reporting results from existing models for "+confFile+" ------");
-                        Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
+                        NERParameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                         System.out.println("Benchmark against configuration : " + confFile);
-                        if (reportLabels)
-                            NEDisplayPredictions.test(testDirName, "-c", verbose);
-                        else if (reportFeatures)
-                            NETesterMultiDataset.dumpFeaturesLabeledData(testDirName, output);
-                        else
-                            NETesterMultiDataset.test(testDirName, verbose,
-                                            ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
-                                            ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+//                        if (reportLabels)
+//                            NEDisplayPredictions.test(testDirName, "-c", verbose);
+//                        else if (reportFeatures)
+//                            NETesterMultiDataset.dumpFeaturesLabeledData(testDirName, output);
+//                        else
+//                            NETesterMultiDataset.test(testDirName, verbose,
+//                                            ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
+//                                            ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
                     }
 
                     if (release) {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
-                            Parameters.readConfigAndLoadExternalData(confFile, true);
+                            NERParameters.readConfigAndLoadExternalData(confFile, true);
                             System.out.println("\n\n----- Building a final model for "+confFile+" ------");
 
                             // there is a training directory, with training enabled, so train. We use the same dataset

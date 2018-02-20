@@ -104,7 +104,8 @@ public class NERAnnotator extends Annotator {
             nerRm = new NerBaseConfigurator().getConfig(nerRm);
 
         ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
-        Parameters.readConfigAndLoadExternalData(nerRm);
+        System.out.println("nerRm: " + nerRm);
+        NERParameters.readConfigAndLoadExternalData(nerRm);
 
         String dataset;
         if(viewName.toLowerCase().contains("conll")) {
@@ -117,21 +118,26 @@ public class NERAnnotator extends Annotator {
         String data_split = nerRm.getString(NerBaseConfigurator.TRAINED_ON);
 
         try {
+            System.out.println("Starting to load the models . .. ");
             Datastore ds = new Datastore(new ResourceConfigurator().getConfig(nerRm));
             String artifact_id = "ner-model-" + dataset + "-" + data_split;
+            System.out.println("artifact_id: " + artifact_id);
             File modelDir = ds.getDirectory("edu.illinois.cs.cogcomp.ner", artifact_id, 4.0, false);
             String model = "";
+            System.out.println("modelDir: " + modelDir);
             if(modelDir.getPath().contains("conll")) {
                 model = modelDir.getPath() + "/model/EnronCoNLL.model";
             }
             else {
                 model = modelDir.getPath() + "/model/OntoNotes.model";
             }
+            System.out.println("model: " + model);
             NETaggerLevel1 tagger1 = new NETaggerLevel1(model + ".level1", model + ".level1.lex");
             NETaggerLevel2 tagger2 = null;
-            if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
+            //System.out.println(ParametersForLbjCode.currentParameters.featuresToUse);
+            //if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
                 tagger2 = new NETaggerLevel2(model + ".level2", model + ".level2.lex");
-            }
+            //}
             this.t1 = tagger1;
             this.t2 = tagger2;
         } catch (InvalidPortException | DatastoreException | InvalidEndpointException e) {

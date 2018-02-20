@@ -14,7 +14,6 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TitleTextNormalizer;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordEmbeddings;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordEmbeddings.NormalizationMethod;
-import edu.illinois.cs.cogcomp.ner.IO.OutFile;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
@@ -35,8 +34,8 @@ import java.util.*;
  * <p>
  * Rewritten by Stephen Mayhew, Jan 2013
  */
-public class Parameters {
-    private static Logger logger = LoggerFactory.getLogger(Parameters.class);
+public class NERParameters {
+    private static Logger logger = LoggerFactory.getLogger(NERParameters.class);
 
     /* What's the distinction? */
     private static String[] possibleFeatures = {"Forms", "Capitalization", "WordTypeInformation",
@@ -73,9 +72,8 @@ public class Parameters {
             throws IOException {
         ResourceManager rm = new ResourceManager(configFile);
         String modelName = rm.getString("modelName");
-        String modelDir = rm.getString("pathToModelFile");
+        //String modelDir = rm.getString("pathToModelFile");
         Map<String, String> nonDefaultProps = new HashMap<>();
-        nonDefaultProps.put(NerBaseConfigurator.PATH_TO_MODEL, modelDir);
         NerBaseConfigurator baseConfigurator = new NerBaseConfigurator();
         NerOntonotesConfigurator ontonotesConfigurator = new NerOntonotesConfigurator();
         // If this is a known model name just use the path property, otherwise load all non-default
@@ -157,29 +155,29 @@ public class Parameters {
                 param.labelsToIgnoreInEvaluation =
                         new Vector<>(Arrays.asList(labelsToIgnoreInEvaluation.split(" ")));
             }
-            if (rm.getString("pathToModelFile") == null) {
-                throw new IllegalArgumentException(
-                        "Config File Error: Expected value for non-optional 'pathToModelFile'");
-            }
-            param.pathToModelFile =
-                    rm.getString("pathToModelFile") + "/" + param.configFilename + ".model";
+            //if (rm.getString("pathToModelFile") == null) {
+                //throw new IllegalArgumentException(
+                //        "Config File Error: Expected value for non-optional 'pathToModelFile'");
+            //}
+//            param.pathToModelFile = "";
+//                    rm.getString("pathToModelFile") + "/" + param.configFilename + ".model";
 
-            String modelFile1 = param.pathToModelFile + ".level1";
+            String modelFile1 = ""; // param.pathToModelFile + ".level1";
             File fullModelFile1 = new File(modelFile1);
             boolean file1Exists =
                     fullModelFile1.exists()
                             || IOUtilities.existsInClasspath(NETaggerLevel1.class, modelFile1);
-            String modelFile1Lex = param.pathToModelFile + ".level1.lex";
+            String modelFile1Lex = ""; //param.pathToModelFile + ".level1.lex";
             File fullModelFile1Lex = new File(modelFile1Lex);
             boolean file1LexExists =
                     fullModelFile1Lex.exists()
                             || IOUtilities.existsInClasspath(NETaggerLevel1.class, modelFile1Lex);
-            String modelFile2 = param.pathToModelFile + ".level2";
+            String modelFile2 = ""; //param.pathToModelFile + ".level2";
             File fullModelFile2 = new File(modelFile2);
             boolean file2Exists =
                     fullModelFile2.exists()
                             || IOUtilities.existsInClasspath(NETaggerLevel2.class, modelFile2);
-            String modelFile2Lex = param.pathToModelFile + ".level2.lex";
+            String modelFile2Lex = "" ; //param.pathToModelFile + ".level2.lex";
             File fullModelFile2Lex = new File(modelFile2Lex);
             boolean file2LexExists =
                     fullModelFile2Lex.exists()
@@ -191,13 +189,13 @@ public class Parameters {
                             && rm.getString("PredictionsLevel1").equals("1") && (!file2Exists || !file2LexExists))) {
                 // if we are not training
                 if (!areWeTraining) {
-                    throw new IllegalArgumentException("Config File Error: one of "
-                            + param.pathToModelFile + ".level{1,2}[.lex] does not exist.");
+//                    throw new IllegalArgumentException("Config File Error: one of "
+//                            + param.pathToModelFile + ".level{1,2}[.lex] does not exist.");
                 } else {
                     // if we are training, we need to have the train directory
-                    File trainDir = new File(rm.getString("pathToModelFile"));
-                    if (!trainDir.isDirectory())
-                        trainDir.mkdirs();
+                    //File trainDir = new File(rm.getString("pathToModelFile"));
+                    //if (!trainDir.isDirectory())
+                    //    trainDir.mkdirs();
                 }
             }
 
@@ -221,7 +219,7 @@ public class Parameters {
                                                                                 // models, never
                                                                                 // training
                     aux.nameAsAuxFeature = auxModels[i + 1];
-                    loadClassifierModels(aux);
+//                    loadClassifierModels(aux);
                     param.auxiliaryModels.addElement(aux);
                 }
             }
@@ -431,21 +429,21 @@ public class Parameters {
 
 
 
-    public static void loadClassifierModels(ParametersForLbjCode config) {
-        if (ParametersForLbjCode.currentParameters.debug) {
-            logger.debug("Reading the model at: " + config.pathToModelFile + ".level1");
-        }
-        config.taggerLevel1 =
-                new NETaggerLevel1(config.pathToModelFile + ".level1", config.pathToModelFile
-                        + ".level1.lex");
-        if (ParametersForLbjCode.currentParameters.debug) {
-            logger.debug("Reading the model at: " + config.pathToModelFile + ".level2");
-        }
-        config.taggerLevel2 =
-                new NETaggerLevel2(config.pathToModelFile + ".level2", config.pathToModelFile
-                        + ".level2.lex");
-        logger.debug("## Parameters.loadClassifierModels(): set taggerLevel1 and taggerLevel2 in config passed as argument.");
-    }
+//    public static void loadClassifierModels(ParametersForLbjCode config) {
+//        if (ParametersForLbjCode.currentParameters.debug) {
+//            logger.debug("Reading the model at: " + config.pathToModelFile + ".level1");
+//        }
+//        config.taggerLevel1 =
+//                new NETaggerLevel1(config.pathToModelFile + ".level1", config.pathToModelFile
+//                        + ".level1.lex");
+//        if (ParametersForLbjCode.currentParameters.debug) {
+//            logger.debug("Reading the model at: " + config.pathToModelFile + ".level2");
+//        }
+//        config.taggerLevel2 =
+//                new NETaggerLevel2(config.pathToModelFile + ".level2", config.pathToModelFile
+//                        + ".level2.lex");
+//        logger.debug("## NERParameters.loadClassifierModels(): set taggerLevel1 and taggerLevel2 in config passed as argument.");
+//    }
 
 
     // ==================== Methods for converting ===================

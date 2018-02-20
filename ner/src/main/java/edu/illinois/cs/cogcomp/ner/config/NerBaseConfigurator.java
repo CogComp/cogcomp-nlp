@@ -32,7 +32,6 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
      */
     public final static Property IS_SENTENCE_LEVEL = new Property(AnnotatorConfigurator.IS_SENTENCE_LEVEL.key, FALSE);
 
-    public final static String PATH_TO_MODEL = "pathToModelFile";
     public final static String VIEW_NAME = "viewName";
 
     public final static String TRAINED_ON = "all-data";
@@ -95,7 +94,6 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     private final static String DEFAULT_GAZETTEER_FEATURES = "1";
     private final static String DEFAULT_PATHS_TO_GAZETTEERS = "gazetteers";
     private final static String DEFAULT_WORD_EMBEDDINGS = "0";
-    private final static String DEFAULT_MODEL_PATH = "ner/models";
     private final static String DEFAULT_FORMS = "1";
     private final static String DEFAULT_PHRASE_LENGTH = "5";
     private final static String DEFAULT_CAPITALIZATION = "1";
@@ -136,7 +134,6 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(VIEW_NAME, ViewNames.NER_CONLL);
         props.setProperty(TRAINED_ON, TRAINED_ON_ALL_DATA);
         props.setProperty(PHRASE_LENGTH, DEFAULT_PHRASE_LENGTH);
-        props.setProperty(PATH_TO_MODEL, DEFAULT_MODEL_PATH);
         props.setProperty(MODEL_NAME, DEFAULT_MODEL_NAME);
         props.setProperty(AFFIXES, DEFAULT_AFFIXES);
         props.setProperty(AGGREGATE_CONTEXT, DEFAULT_AGGREGATE_CONTENT);

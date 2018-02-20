@@ -35,29 +35,29 @@ public class NEDisplayPredictions {
      * @param verbose report more.
      * @throws Exception
      */
-    public static void test(String testDatapath, String dataFormat, boolean verbose)
-            throws Exception {
-        Data testData =
-                new Data(testDatapath, testDatapath, dataFormat, new String[] {}, new String[] {});
-        ExpressiveFeaturesAnnotator.annotate(testData);
-        Vector<Data> data = new Vector<>();
-        data.addElement(testData);
-
-        NETaggerLevel1 taggerLevel1 =
-                new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.lex");
-        NETaggerLevel2 taggerLevel2 = null;
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            taggerLevel2 =
-                    new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2.lex");
-        }
-        for (int i = 0; i < data.size(); i++)
-            Decoder.annotateDataBIO(data.elementAt(i), taggerLevel1, taggerLevel2);
-        reportPredictions(data.get(0));
-    }
+//    public static void test(String testDatapath, String dataFormat, boolean verbose)
+//            throws Exception {
+//        Data testData =
+//                new Data(testDatapath, testDatapath, dataFormat, new String[] {}, new String[] {});
+//        ExpressiveFeaturesAnnotator.annotate(testData);
+//        Vector<Data> data = new Vector<>();
+//        data.addElement(testData);
+//
+//        NETaggerLevel1 taggerLevel1 =
+//                new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
+//                        + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
+//                        + ".level1.lex");
+//        NETaggerLevel2 taggerLevel2 = null;
+//        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
+//            taggerLevel2 =
+//                    new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
+//                            + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
+//                            + ".level2.lex");
+//        }
+//        for (int i = 0; i < data.size(); i++)
+//            Decoder.annotateDataBIO(data.elementAt(i), taggerLevel1, taggerLevel2);
+//        reportPredictions(data.get(0));
+//    }
 
     /**
      * Report the results.

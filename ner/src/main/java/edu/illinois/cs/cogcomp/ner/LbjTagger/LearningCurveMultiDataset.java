@@ -90,8 +90,8 @@ public class LearningCurveMultiDataset {
             int fixedNumIterations) throws Exception {
         double bestF1Level1 = -1;
         int bestRoundLevel1 = 0;
-        // Get the directory name (<configname>.model is appended in LbjTagger/Parameters.java:139)
-        String modelPath = ParametersForLbjCode.currentParameters.pathToModelFile;
+        // Get the directory name (<configname>.model is appended in LbjTagger/NERParameters.java:139)
+        String modelPath = ""; // ParametersForLbjCode.currentParameters.pathToModelFile;
         String modelPathDir = modelPath.substring(0, modelPath.lastIndexOf("/"));
         if (IOUtils.exists(modelPathDir)) {
             if (!IOUtils.isDirectory(modelPathDir)) {
@@ -129,7 +129,7 @@ public class LearningCurveMultiDataset {
         }
 
         // preextract the L1 test and train data.
-        String path = ParametersForLbjCode.currentParameters.pathToModelFile;
+        String path = "";  // ParametersForLbjCode.currentParameters.pathToModelFile;
         String trainPathL1 = path + ".level1.prefetchedTrainData";
         File deleteme = new File(trainPathL1);
         if (deleteme.exists())
@@ -188,10 +188,10 @@ public class LearningCurveMultiDataset {
             ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2, 0, 
             ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
         paramLevel2.baseLTU.featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
-        NETaggerLevel2 tagger2 =
-                new NETaggerLevel2(paramLevel2, ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level2.lex");
+        NETaggerLevel2 tagger2 = null;
+//                new NETaggerLevel2(paramLevel2, ParametersForLbjCode.currentParameters.pathToModelFile
+//                        + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
+//                        + ".level2.lex");
         tagger2.forget();
         
         // Previously checked if PatternFeatures was in featuresToUse.

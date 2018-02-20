@@ -39,23 +39,23 @@ public class NerTest {
     @Before
     public void setUp() throws Exception {
         try {
-            Parameters.readConfigAndLoadExternalData(new NerBaseConfigurator().getDefaultConfig());
+            NERParameters.readConfigAndLoadExternalData(new NerBaseConfigurator().getDefaultConfig());
             ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
-            logger.info("Reading model file : "
-                    + ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
-            t1 =
-                    new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level1.lex");
-            if (ParametersForLbjCode.currentParameters.featuresToUse
-                    .containsKey("PredictionsLevel1")) {
-                logger.info("Reading model file : "
-                        + ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
-                t2 =
-                        new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
-                                + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
-                                + ".level2.lex");
-            }
+//            logger.info("Reading model file : "
+//                    + ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
+//            t1 =
+//                    new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
+//                            + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
+//                            + ".level1.lex");
+//            if (ParametersForLbjCode.currentParameters.featuresToUse
+//                    .containsKey("PredictionsLevel1")) {
+//                logger.info("Reading model file : "
+//                        + ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
+//                t2 =
+//                        new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
+//                                + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
+//                                + ".level2.lex");
+            //}
         } catch (Exception e) {
             System.err.println("Cannot initialise the test, the exception was: ");
             e.printStackTrace();
