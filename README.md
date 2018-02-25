@@ -65,3 +65,15 @@ To include one of the modules in your Maven project, add the following snippet w
         </repository>
     </repositories>
 ```
+
+### Citing 
+If you are using the framework, please cite our paper: 
+```
+@inproceedings{2018_lrec_cogcompnlp,
+    author = {Daniel Khashabi, Mark Sammons, Ben Zhou, Tom Redman, Christos Christodoulopoulos, Vivek Srikumar, Nicholas Rizzolo, Lev Ratinov, Guanheng Luo, Quang Do, Chen-Tse Tsai, Subhro Roy, Stephen Mayhew, Zhili Feng, John Wieting, Xiaodong Yu, Yangqiu Song, Shashank Gupta, Shyam Upadhyay, Naveen Arivazhagan, Qiang Ning, Shaoshi Ling, Dan Roth},
+    title = {CogCompNLP: Your Swiss Army Knife for NLP},
+    booktitle = {11th Language Resources and Evaluation Conference},
+    year = {2018},
+    url = "http://cogcomp.org/papers/2018_lrec_cogcompnlp.pdf",
+}
+```
