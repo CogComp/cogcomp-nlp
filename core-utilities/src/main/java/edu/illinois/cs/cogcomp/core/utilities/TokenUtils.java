@@ -37,6 +37,8 @@ public class TokenUtils {
                 && Character.isWhitespace(sentence.charAt(characterId)))
             characterId++;
 
+        tokenCharacterStart = characterId; // set first token start to end of leading whitespace
+
         while (characterId < sentence.length()) {
             if (tokenLength == tokens[tokenId].length()) {
                 offsets.add(new IntPair(tokenCharacterStart, characterId));
