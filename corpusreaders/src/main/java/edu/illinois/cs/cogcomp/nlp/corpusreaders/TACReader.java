@@ -19,12 +19,11 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * Created by cddunca2 on 2/7/18.
+ * @author Chase Duncan
+ *
+ * Reader for TAC KBP EDL 2016 data.
  */
 public class TACReader extends XmlDocumentReader {
-    /*
-     * languages
-     */
     private static final String CORPUS_NAME = "TAC";
     private static final String ANNOTATION_EXTENSION = ".tab";
     private static final String[] SOURCE_TYPES = {"nw","df"};
