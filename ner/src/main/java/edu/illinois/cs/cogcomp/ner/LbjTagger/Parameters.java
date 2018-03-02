@@ -14,7 +14,6 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TitleTextNormalizer;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordEmbeddings;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordEmbeddings.NormalizationMethod;
-import edu.illinois.cs.cogcomp.ner.IO.OutFile;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;

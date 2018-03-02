@@ -37,12 +37,16 @@ public class StanfordNERTest {
         AbstractSequenceClassifier<CoreLabel> classifier = CRFClassifier.getClassifier(serializedClassifier);
         File[] files = new File(args[0]).listFiles();
         List<List<CoreLabel>> result = new ArrayList<List<CoreLabel>>();
+        if (files == null || files.length == 0) {
+            System.err.println("Either the directory did not exist, or there were no files within.");
+            System.exit(-1);
+        }
         
         // apply stanford to each file in the directory. This will result in a data structure that stores
         // both the gold standard label, AND the prediction, which is handy.
         for (File file : files) {
             String fileContents = IOUtils.slurpFile(file.getAbsolutePath());
-            LaterCoNLLReaderAndWriter t = new LaterCoNLLReaderAndWriter(true);
+            CoNLLColumnReaderAndWriter t = new CoNLLColumnReaderAndWriter();
             SeqClassifierFlags flags = new SeqClassifierFlags();
             flags.deleteBlankLines = true;
             t.init(flags);
@@ -100,7 +104,6 @@ public class StanfordNERTest {
         td = TestDiscrete.testDiscrete(new AnswerClassifier(), new GoldClassifier(), new StanfordParser(result, true));
         td.addNull("O");
         td.printPerformance(System.out);
-
     }
 }
 
