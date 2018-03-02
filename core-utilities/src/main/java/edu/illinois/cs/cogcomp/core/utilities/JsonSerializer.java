@@ -467,6 +467,7 @@ public class JsonSerializer extends AbstractSerializer {
         return json;
     }
 
+    //TODO: if token offset info is written, read it
     TextAnnotation readTextAnnotation(String string) throws Exception {
         JsonObject json = (JsonObject) new JsonParser().parse(string);
 
@@ -477,7 +478,12 @@ public class JsonSerializer extends AbstractSerializer {
 
         Pair<Pair<String, Double>, int[]> sentences = readSentences(json);
 
-        IntPair[] offsets = TokenUtils.getTokenOffsets(text, tokens);
+        IntPair[] offsets = null;
+
+        if (json.has(TOKENOFFSETS))
+            offsets = readTokenOffsets(json.getAsJsonArray(TOKENOFFSETS), tokens);
+        else
+            offsets = TokenUtils.getTokenOffsets(text, tokens);
 
         TextAnnotation ta =
                 new TextAnnotation(corpusId, id, text, offsets, tokens, sentences.getSecond());
@@ -501,5 +507,40 @@ public class JsonSerializer extends AbstractSerializer {
         readAttributes(ta, json);
 
         return ta;
+    }
+
+    /**
+     *   "tokenOffsets": [
+     {
+     "form": "Facebook",
+     "startCharOffset": 4,
+     "endCharOffset": 12
+     },
+     {
+     "form": "Fans",
+     "startCharOffset": 13,
+     "endCharOffset": 17
+     },
+
+     * @param json array of tokenOffset objects
+     * @param tokens used to validate tokenOffset info
+     * @return
+     */
+    private IntPair[] readTokenOffsets(JsonArray json, String[] tokens) {
+        IntPair[] offsets = new IntPair[json.size()];
+        for (int i = 0; i < json.size(); ++i) {
+            JsonObject offsetInfo = (JsonObject) json.get(i);
+            int start = readInt(STARTCHAROFFSET, offsetInfo);
+            int end = readInt(ENDCHAROFFSET, offsetInfo);
+            String form = readString(FORM, offsetInfo);
+
+            if (!form.equals(tokens[i]))
+                throw new IllegalArgumentException("ERROR: form " + i + "(" + form +
+                        ") didn't match corresponding token (" + tokens[i] + "); char offsets are (" +
+                        start + "," + end + ").");
+
+            offsets[i] = new IntPair(start, end);
+        }
+        return offsets;
     }
 }

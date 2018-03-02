@@ -45,7 +45,7 @@ public class W2VDatalessAnnotator extends ADatalessAnnotator {
     }
 
     public W2VDatalessAnnotator(ResourceManager config) {
-        super(ViewNames.DATALESS_W2V, config);
+        super(ViewNames.DATALESS_W2V, config, true);
     }
 
     public W2VDatalessAnnotator(ResourceManager config, JSONObject jsonHierarchy)

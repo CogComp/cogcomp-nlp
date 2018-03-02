@@ -40,7 +40,7 @@ We test results on both Coarse Type and Fine Type, and on both gold mention data
 
 |                   | Coarse Type | Fine Type |
 |-------------------|-------------|-----------|
-| Gold Mention      | 58.35       | 62.54     |
+| Gold Mention      | 62.54       | 58.35     |
 | Predicted Mention | 44.07       | 41.90     |
 
 We also provides results tested on SemEval-2008 dataset. The task defined in this set is slightly different and the classifier is not feature engineered for this dataset.

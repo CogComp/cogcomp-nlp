@@ -24,6 +24,7 @@ public class CorpusReaderConfigurator extends Configurator {
     public static final Property ANNOTATION_DIRECTORY = new Property("annotationDirectory", "dummyAnnotationDir");
     public static final Property SOURCE_EXTENSION = new Property("sourceFileExtension", ".xml");
     public static final Property ANNOTATION_EXTENSION = new Property("annotationFileExtension", ".xml");
+    public static final Property SUPPRESS_FILE_ERRORS = new Property("suppressFileErrors", FALSE);
 
     public static ResourceManager buildResourceManager(String corpus) {
         Properties props = new Properties();
@@ -39,6 +40,8 @@ public class CorpusReaderConfigurator extends Configurator {
         props.setProperty(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key, annotationDir);
         props.setProperty(CorpusReaderConfigurator.SOURCE_EXTENSION.key, sourceFileExtension);
         props.setProperty(CorpusReaderConfigurator.ANNOTATION_EXTENSION.key, annotationFileExtension);
+        props.setProperty(SUPPRESS_FILE_ERRORS.key, SUPPRESS_FILE_ERRORS.value);
+
         return new ResourceManager(props);
     }
 

@@ -1,0 +1,223 @@
+package edu.illinois.cs.cogcomp.question_typer.lbjava;
+
+import edu.illinois.cs.cogcomp.question_typer.*;
+
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
+import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
+import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
+
+import java.util.List;
+import java.util.Set;
+
+discrete QuestionFineLabel(TextAnnotation s) <- {
+    return QuestionTyperFeatureExtractorsUtils.getFineLabel(s);
+}
+
+discrete QuestionCoarseLabel(TextAnnotation s) <- {
+    return QuestionTyperFeatureExtractorsUtils.getCoarseLabel(s);
+}
+
+discrete% BagOfWords(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.TOKENS).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "bow" : c.getSurfaceForm();
+    }
+}
+
+discrete QuestionLength(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.TOKENS).getConstituents();
+    return Integer.toString(cons.size());
+}
+
+
+discrete% BagOfLemmas(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.LEMMA).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "lemma" : c.getLabel();
+    }
+}
+
+discrete% BagOfNERConll(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.NER_CONLL).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "nerConll" : c.getLabel();
+    }
+}
+
+discrete% BagOfNEROnto(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.NER_ONTONOTES).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "nerOnto" : c.getLabel();
+    }
+}
+
+discrete% BagOfNERConllConjSurf(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.NER_CONLL).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "nerConllConjSurf" : c.getLabel() + c.getSurfaceForm();
+    }
+}
+
+discrete% BagOfNEROntoConjSurf(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.NER_ONTONOTES).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "nerOntoConjSurf" : c.getLabel() + c.getSurfaceForm();
+    }
+}
+
+discrete% BagOfPOSConjLemma(TextAnnotation s) <- {
+    List cons = QuestionTyperFeatureExtractorsUtils.getPosConjLemma(s);
+    for(int i = 0; i < cons.size(); i++) {
+        sense "posConjSurf" : (String)cons.get(i);
+    }
+}
+
+discrete% BagOfChunkConjSurf(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.SHALLOW_PARSE).getConstituents();
+    for(int i = 0; i < cons.size(); i++) {
+        Constituent c = (Constituent)cons.get(i);
+        sense "chunkConjSurf" : c.getLabel() + "-" + c.getSurfaceForm();
+    }
+}
+
+discrete% FirstPhrases(TextAnnotation s) <- {
+    String firstNP = QuestionTyperFeatureExtractorsUtils.getFirstLabel(s, "NP");
+    String firstVP = QuestionTyperFeatureExtractorsUtils.getFirstLabel(s, "VP");
+    sense "firstNP": firstNP;
+    sense "firstVP": firstVP;
+    sense "firstPhrases": firstNP + firstVP;
+}
+
+discrete% FirstCons(TextAnnotation s) <- {
+    String first1Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 1, false);
+    String first2Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 2, false);
+    String first3Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 3, false);
+    String first4Chunk = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.SHALLOW_PARSE, 4, false);
+
+    String first1Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 1, true);
+    String first2Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 2, true);
+    String first3Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 3, true);
+    String first4Lemma = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.LEMMA, 4, true);
+
+    String first1POS = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.POS, 1, true);
+    String first2POS = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.POS, 2, true);
+    String first3POS = QuestionTyperFeatureExtractorsUtils.getFirstConstituents(s, ViewNames.POS, 3, true);
+
+    sense "first1Chunk": first1Chunk;
+    sense "first2Chunk": first2Chunk;
+    sense "first3Chunk": first3Chunk;
+
+    sense "first1Lemma": first1Lemma;
+    sense "first2Lemma": first2Lemma;
+    sense "first3Lemma": first3Lemma;
+}
+
+discrete{false, true}% OverlapWithSets(TextAnnotation s) <- {
+    boolean[] overlaps = QuestionTyperFeatureExtractorsUtils.getOverlapWithSets(s);
+    sense "ovrlpMnt": overlaps[0];
+    sense "ovrlpPrf": overlaps[1];
+    sense "ovrlpFd": overlaps[2];
+}
+
+discrete% WordnetSynsetsFirstSense(TextAnnotation s) <- {
+    List features = FeatureUtilities.getFeaturesFromTextAnnotation(
+    WordFeatureExtractorFactory.getWordNetFeatureExtractor(WordNetFeatureExtractor.WordNetFeatureClass.synsetsFirstSense), s);
+    for(int i = 0; i < features.size(); i++) {
+        sense "wnsynsetfirst": (String)features.get(i);
+    }
+}
+
+discrete% WordnetSynsetsAllSenses(TextAnnotation s) <- {
+    List features = FeatureUtilities.getFeaturesFromTextAnnotation(
+    WordFeatureExtractorFactory.getWordNetFeatureExtractor(WordNetFeatureExtractor.WordNetFeatureClass.synsetsAllSenses), s);
+    for(int i = 0; i < features.size(); i++) {
+        sense "wnsynsetall": (String)features.get(i);
+    }
+}
+
+discrete% LexicographerFileNamesFirstSense(TextAnnotation s) <- {
+    List features = FeatureUtilities.getFeaturesFromTextAnnotation(
+    WordFeatureExtractorFactory.getWordNetFeatureExtractor(WordNetFeatureExtractor.WordNetFeatureClass.lexicographerFileNamesFirstSense), s);
+    for(int i = 0; i < features.size(); i++) {
+        sense "wnlexfirst": (String)features.get(i);
+    }
+}
+
+discrete% WordListFeatures(TextAnnotation s) <- {
+    List features = QuestionTyperFeatureExtractorsUtils.getWordGroupFeatures(s);
+    for(int i = 0; i < features.size(); i++) {
+        sense "wlist": (String)features.get(i);
+    }
+}
+
+discrete% LemmaNGramFeatures(TextAnnotation s) <- {
+    List cons = s.getView(ViewNames.LEMMA).getConstituents();
+    for(int i = 2; i <= 4; i++) {
+        List ngramOrdred = FeatureUtilities.getFeatureSet(FeatureNGramUtility.getLabelNgramsOrdered(cons, i));
+        String label = i + "gramTokensOrdered";
+        for(int ii = 0; ii < ngramOrdred.size(); ii++) {
+            sense label : (String) ngramOrdred.get(ii);
+        }
+    }
+}
+
+discrete{false, true}% PatternFeaturesBoolean(TextAnnotation s) <- {
+    boolean[] patterns = QuestionTyperFeatureExtractorsUtils.getStringPatternsBoolean(s);
+    sense "what-noun": patterns[0];
+    sense "whereOrWhenAndCapitapized": patterns[1];
+    sense "containsBodyOrPart": patterns[2];
+}
+
+discrete% PatternFeaturesDiscrete(TextAnnotation s) <- {
+    String[] patterns = QuestionTyperFeatureExtractorsUtils.getStringPatternsDiscrete(s);
+    sense "whatNounNoun": patterns[0];
+}
+
+discrete QuestionCoarseTyper(TextAnnotation s) <-
+learn QuestionCoarseLabel
+  using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf,
+    BagOfPOSConjLemma, BagOfChunkConjSurf, FirstPhrases, OverlapWithSets, WordnetSynsetsFirstSense, WordListFeatures,
+    LemmaNGramFeatures, PatternFeaturesBoolean, PatternFeaturesDiscrete
+  //from new QuestionTypeReader("question-type/data2/train_all.label.txt") 30 rounds
+  with SparseNetworkLearner
+  {
+    SparseAveragedPerceptron.Parameters p =
+      new SparseAveragedPerceptron.Parameters();
+    p.learningRate = .1;
+    p.thickness = 2;
+    baseLTU = new SparseAveragedPerceptron(p);
+  }
+
+  //testFrom new QuestionTypeReader("question-type/data2/TREC_10.label.txt")
+
+end
+
+
+discrete QuestionFineTyper(TextAnnotation s) <-
+learn QuestionFineLabel
+  using BagOfWords, BagOfLemmas, BagOfNERConll, BagOfNEROnto, BagOfNERConllConjSurf, BagOfNEROntoConjSurf, BagOfPOSConjLemma,
+  BagOfChunkConjSurf, FirstPhrases, FirstCons, OverlapWithSets, WordnetSynsetsFirstSense, WordListFeatures, QuestionLength,
+  LemmaNGramFeatures, PatternFeaturesBoolean, PatternFeaturesDiscrete
+  //from new QuestionTypeReader("question-type/data2/train_all.label.txt") 30 rounds
+  with SparseNetworkLearner
+  {
+    SparseAveragedPerceptron.Parameters p =
+      new SparseAveragedPerceptron.Parameters();
+    p.learningRate = .1;
+    p.thickness = 2;
+    baseLTU = new SparseAveragedPerceptron(p);
+  }
+
+  //testFrom new QuestionTypeReader("question-type/data2/TREC_10.label.txt")
+
+end
