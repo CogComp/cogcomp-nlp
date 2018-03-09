@@ -163,43 +163,6 @@ public class Parameters {
             param.pathToModelFile =
                     rm.getString("pathToModelFile") + "/" + param.configFilename + ".model";
 
-            String modelFile1 = param.pathToModelFile + ".level1";
-            File fullModelFile1 = new File(modelFile1);
-            boolean file1Exists =
-                    fullModelFile1.exists()
-                            || IOUtilities.existsInClasspath(NETaggerLevel1.class, modelFile1);
-            String modelFile1Lex = param.pathToModelFile + ".level1.lex";
-            File fullModelFile1Lex = new File(modelFile1Lex);
-            boolean file1LexExists =
-                    fullModelFile1Lex.exists()
-                            || IOUtilities.existsInClasspath(NETaggerLevel1.class, modelFile1Lex);
-            String modelFile2 = param.pathToModelFile + ".level2";
-            File fullModelFile2 = new File(modelFile2);
-            boolean file2Exists =
-                    fullModelFile2.exists()
-                            || IOUtilities.existsInClasspath(NETaggerLevel2.class, modelFile2);
-            String modelFile2Lex = param.pathToModelFile + ".level2.lex";
-            File fullModelFile2Lex = new File(modelFile2Lex);
-            boolean file2LexExists =
-                    fullModelFile2Lex.exists()
-                            || IOUtilities.existsInClasspath(NETaggerLevel2.class, modelFile2Lex);
-
-            if (!file1Exists
-                    || !file1LexExists
-                    || (rm.containsKey("PredictionsLevel1")
-                            && rm.getString("PredictionsLevel1").equals("1") && (!file2Exists || !file2LexExists))) {
-                // if we are not training
-                if (!areWeTraining) {
-                    throw new IllegalArgumentException("Config File Error: one of "
-                            + param.pathToModelFile + ".level{1,2}[.lex] does not exist.");
-                } else {
-                    // if we are training, we need to have the train directory
-                    File trainDir = new File(rm.getString("pathToModelFile"));
-                    if (!trainDir.isDirectory())
-                        trainDir.mkdirs();
-                }
-            }
-
             String taggingEncodingSchemeString = rm.getString("taggingEncodingScheme");
             if (taggingEncodingSchemeString == null) {
                 throw new IllegalArgumentException(

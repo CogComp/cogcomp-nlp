@@ -117,7 +117,7 @@ public class LearningCurveMultiDataset {
         NETaggerLevel1 tagger1 =
                 new NETaggerLevel1(paramLevel1, modelPath + ".level1", modelPath + ".level1.lex");
         tagger1.forget();
-
+        ParametersForLbjCode.currentParameters.taggerLevel1 = tagger1;
         for (int dataId = 0; dataId < trainDataSet.size(); dataId++) {
             Data trainData = trainDataSet.elementAt(dataId);
             if (ParametersForLbjCode.currentParameters.featuresToUse
@@ -193,7 +193,8 @@ public class LearningCurveMultiDataset {
                         + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2.lex");
         tagger2.forget();
-        
+        ParametersForLbjCode.currentParameters.taggerLevel2 = tagger2;
+ 
         // Previously checked if PatternFeatures was in featuresToUse.
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
             logger.info("Level 2 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2+

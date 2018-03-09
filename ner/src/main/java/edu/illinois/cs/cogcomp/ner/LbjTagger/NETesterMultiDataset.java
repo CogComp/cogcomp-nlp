@@ -43,19 +43,11 @@ public class NETesterMultiDataset {
             data.elementAt(0).setLabelsToIgnore(labelsToIgnoreInEvaluation);
         if (labelsToAnonymizeInEvaluation != null)
             data.elementAt(0).setLabelsToAnonymize(labelsToAnonymizeInEvaluation);
-
-        NETaggerLevel1 taggerLevel1 =
-                new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.lex");
+        NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
+        NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
         SparseAveragedPerceptron sap1 = (SparseAveragedPerceptron)taggerLevel1.getBaseLTU();
         System.out.println("L1 SparseAveragedPerceptron learning rate = "+sap1.getLearningRate()+", thickness = "+sap1.getPositiveThickness());
-        NETaggerLevel2 taggerLevel2 = null;
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            taggerLevel2 =
-                    new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2.lex");
             SparseAveragedPerceptron sap2 = (SparseAveragedPerceptron)taggerLevel2.getBaseLTU();
             System.out.println("L2 SparseAveragedPerceptron learning rate = "+sap2.getLearningRate()+", thickness = "+sap2.getPositiveThickness());
         }
@@ -69,14 +61,8 @@ public class NETesterMultiDataset {
             throws Exception {
         FeaturesLevel1SharedWithLevel2 features1 = new FeaturesLevel1SharedWithLevel2();
         FeaturesLevel2 features2 = new FeaturesLevel2();
-        NETaggerLevel1 taggerLevel1 =
-                new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.lex");
-        NETaggerLevel2 taggerLevel2 =
-                new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level2.lex");
+        NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
+        NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
         File f = new File(testDatapath);
         Vector<String> inFiles = new Vector<>();
         Vector<String> outFiles = new Vector<>();
