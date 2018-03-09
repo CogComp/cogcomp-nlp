@@ -56,11 +56,9 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
     int processed = 0;
     
     /**
-     * 
-     * @param viewname
-     * @param dir
-     * @param language
-     * @param fileKind
+     * INit the reader with a directory containing language subdirectories.
+     * @param dir the directory containing the data.
+     * @param language the language.
      * @throws IllegalArgumentException
      * @throws IOException
      */
