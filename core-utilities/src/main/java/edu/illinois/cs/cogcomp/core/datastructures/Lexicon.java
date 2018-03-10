@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -274,6 +275,10 @@ public class Lexicon {
         return feats.toArray();
     }
 
+    public TIntIntHashMap getFeatureMap() {
+        return feature2Id;
+    }
+
     public Pair<int[], float[]> pruneFeaturesByCount(int[] idx, float[] fs, int threshold) {
         int[] array = new int[idx.length];
         float[] vals = new float[array.length];
@@ -379,19 +384,28 @@ public class Lexicon {
 
     /***
      * prunes the lexicon by removing features with less than threshold many counts
+     * If true, it would include the feature counts in the new generated lexicon
+     * @param keepCounts whether to keep the feature counts in the pruned feature map or not.
+     * @param resetFeatureIds this would map features to another counting, starting from zero. This is usefull in
+     *                        the cases where pruning drops many of the features, and leaves many of the ids unused.
      */
-    public Lexicon getPrunedLexicon(final int threshold) {
+    public Lexicon getPrunedLexicon(final int threshold, boolean keepCounts, boolean resetFeatureIds) {
         final Lexicon lex = new Lexicon(false, false);
 
-        this.feature2Id.forEachEntry(new TIntIntProcedure() {
+        AtomicInteger nextId = new AtomicInteger(0);
 
-            @Override
-            public boolean execute(int hash, int id) {
-
-                if (featureCounts.get(id) > threshold)
-                    lex.feature2Id.put(hash, id);
-                return true;
+        this.feature2Id.forEachEntry((hash, id) -> {
+            int count = featureCounts.get(id);
+            if (count > threshold) {
+                int newId;
+                if(resetFeatureIds)
+                    newId = nextId.incrementAndGet();
+                else
+                    newId = id;
+                lex.feature2Id.put(hash, newId);
+                if(keepCounts) lex.featureCounts.put(newId, count);
             }
+            return true;
         });
         lex.nextFeatureId = this.nextFeatureId;
 
