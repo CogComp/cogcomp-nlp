@@ -396,10 +396,8 @@ public class Lexicon {
 
         this.feature2Id.forEachEntry((hash, id) -> {
             String featureName = "";
-            System.out.println("==>id: " + id);
             if(storeStrings && this.featureNames != null) {
                 featureName = this.featureNames.get(id);
-                System.out.println("featureName: " + featureName);
             }
             int count = featureCounts.get(id);
             if (count > threshold) {
@@ -414,10 +412,6 @@ public class Lexicon {
                     // expand the
                     for (int i = lex.featureNames.size(); i <= newId; i++)
                         lex.featureNames.add("");
-                    System.out.println("id: " + id);
-                    System.out.println("newid: " + newId);
-                    System.out.println("lex.feature2Id.size: " + lex.feature2Id.size());
-                    System.out.println("this.feature2Id.size: " + this.feature2Id.size());
                     lex.featureNames.set(newId, featureName);
                 }
             }
