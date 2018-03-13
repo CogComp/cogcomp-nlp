@@ -404,34 +404,22 @@ public class Lexicon {
                     newId = id;
                 lex.feature2Id.put(hash, newId);
                 if(keepCounts) lex.featureCounts.put(newId, count);
+
+                if(storeStrings && this.featureNames != null) {
+                    // expand the
+                    for (int i = lex.featureNames.size(); i <= newId; i++)
+                        lex.featureNames.add("");
+                    System.out.println("lex.feature2Id.size: " + lex.feature2Id.size());
+                    for (int key : lex.feature2Id.keys()) {
+                        System.out.println("key: " + key + " - newid: " + newId + " - oldid: " +
+                                id + " - featureNames.get(id): " + this.featureNames.get(id));
+                        lex.featureNames.set(newId, this.featureNames.get(id));
+                    }
+                }
             }
             return true;
         });
         lex.nextFeatureId = this.nextFeatureId;
-
-        int maxId = Integer.MIN_VALUE;
-        for(int i = 0; i < lex.feature2Id.values().length; i++) {
-            if(lex.feature2Id.values()[i] > maxId) {
-                maxId = lex.feature2Id.values()[i];
-            }
-        }
-
-        // copy the feature names
-        if(storeStrings && this.featureNames != null) {
-            // initialize with empty strings
-            for (int i = 0; i <= maxId; i++)
-                lex.featureNames.add("");
-
-            // copy the actual names
-            System.out.println("lex.feature2Id.size: " + lex.feature2Id.size());
-            for (int key : lex.feature2Id.keys()) {
-                int newId = lex.feature2Id.get(key);
-                int oldId = this.feature2Id.get(key);
-                System.out.println("key: " + key + " - newid: " + newId + " - oldid: " +
-                        oldId + " - featureNames.get(id): " + this.featureNames.get(oldId));
-                lex.featureNames.set(newId, this.featureNames.get(oldId));
-            }
-        }
 
         logger.info("Number of features after pruning: " + lex.size());
 
