@@ -404,7 +404,7 @@ public class Lexicon {
                     newId = id;
                 lex.feature2Id.put(hash, newId);
                 if(keepCounts) lex.featureCounts.put(newId, count);
-                if(storeStrings && this.featureNames != null) lex.featureNames.add(newId, lex.featureNames.get(id));
+                if(storeStrings && this.featureNames != null) lex.featureNames.add(newId, featureNames.get(id));
             }
             return true;
         });
