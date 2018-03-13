@@ -423,8 +423,8 @@ public class Lexicon {
                 lex.featureNames.add("");
 
             // copy the actual names
-            for (int i = 0; i < lex.feature2Id.size(); i++) {
-                int id = lex.feature2Id.values()[i];
+            for (int key : lex.feature2Id.keys()) {
+                int id = lex.feature2Id.get(key);
                 lex.featureNames.set(id, featureNames.get(id));
             }
         }
