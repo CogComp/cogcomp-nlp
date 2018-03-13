@@ -410,11 +410,10 @@ public class Lexicon {
                     for (int i = lex.featureNames.size(); i <= newId; i++)
                         lex.featureNames.add("");
                     System.out.println("lex.feature2Id.size: " + lex.feature2Id.size());
-                    for (int key : lex.feature2Id.keys()) {
-                        System.out.println("key: " + key + " - newid: " + newId + " - oldid: " +
-                                id + " - featureNames.get(id): " + this.featureNames.get(id));
-                        lex.featureNames.set(newId, this.featureNames.get(id));
-                    }
+                    System.out.println("this.feature2Id.size: " + this.feature2Id.size());
+                    System.out.println("newid: " + newId + " - oldid: " +
+                            id + " - featureNames.get(id): " + this.featureNames.get(id));
+                    lex.featureNames.set(newId, this.featureNames.get(id));
                 }
             }
             return true;
