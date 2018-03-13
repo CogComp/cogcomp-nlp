@@ -417,7 +417,7 @@ public class Lexicon {
         }
 
         // copy the feature names
-        if(storeStrings && featureNames != null) {
+        if(storeStrings && this.featureNames != null) {
             // initialize with empty strings
             for (int i = 0; i <= maxId; i++)
                 lex.featureNames.add("");
@@ -426,10 +426,10 @@ public class Lexicon {
             System.out.println("lex.feature2Id.size: " + lex.feature2Id.size());
             for (int key : lex.feature2Id.keys()) {
                 int newId = lex.feature2Id.get(key);
-                int oldId = feature2Id.get(key);
+                int oldId = this.feature2Id.get(key);
                 System.out.println("key: " + key + " - newid: " + newId + " - oldid: " +
-                        oldId + " - featureNames.get(id): " + featureNames.get(oldId));
-                lex.featureNames.set(newId, featureNames.get(oldId));
+                        oldId + " - featureNames.get(id): " + this.featureNames.get(oldId));
+                lex.featureNames.set(newId, this.featureNames.get(oldId));
             }
         }
 
