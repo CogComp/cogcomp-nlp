@@ -395,14 +395,14 @@ public class Lexicon {
         AtomicInteger nextId = new AtomicInteger(0);
 
         this.feature2Id.forEachEntry((hash, id) -> {
+            String featureName = "";
+            System.out.println("==>id: " + id);
+            if(storeStrings && this.featureNames != null) {
+                featureName = this.featureNames.get(id);
+                System.out.println("featureName: " + featureName);
+            }
             int count = featureCounts.get(id);
             if (count > threshold) {
-                String featureName = "";
-                System.out.println("==>id: " + id);
-                if(storeStrings && this.featureNames != null) {
-                    featureName = this.featureNames.get(id);
-                    System.out.println("featureName: " + featureName);
-                }
                 int newId;
                 if(resetFeatureIds)
                     newId = nextId.incrementAndGet();
