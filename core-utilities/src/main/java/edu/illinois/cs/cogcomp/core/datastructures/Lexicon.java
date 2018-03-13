@@ -425,7 +425,7 @@ public class Lexicon {
             // copy the actual names
             for (int i = 0; i < lex.feature2Id.size(); i++) {
                 int id = lex.feature2Id.values()[i];
-                if(featureNames.contains(id)) lex.featureNames.set(id, featureNames.get(id));
+                lex.featureNames.set(id, featureNames.get(id));
             }
         }
 
