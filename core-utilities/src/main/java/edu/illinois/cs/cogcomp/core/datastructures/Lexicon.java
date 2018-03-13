@@ -392,7 +392,7 @@ public class Lexicon {
     public Lexicon getPrunedLexicon(final int threshold, boolean keepCounts, boolean resetFeatureIds, boolean hasBias, boolean storeStrings) {
         final Lexicon lex = new Lexicon(hasBias, storeStrings);
 
-        AtomicInteger nextId = new AtomicInteger(0);
+        AtomicInteger nextId = new AtomicInteger(-1);
 
         this.feature2Id.forEachEntry((hash, id) -> {
             String featureName = "";

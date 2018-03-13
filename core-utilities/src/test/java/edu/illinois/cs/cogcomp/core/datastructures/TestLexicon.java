@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -23,20 +24,18 @@ public class TestLexicon {
     private final String alphabet =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 !@#$%^&*()";
 
-    int threshold = 1;
-    int maxLen = 4;
-    int N = 50000;
-
     @Test
     public void testLexicon() throws Exception {
-        Lexicon lexicon = new Lexicon(true, true);
+        Lexicon lexicon = new Lexicon(false, true);
 
         // populate lexicon with features.
-
+        int threshold = 1;
+        int maxLen = 4;
+        int N = 50000;
         List<String> set = populateLexicon(lexicon, maxLen, N);
         logger.info(set.size() + " unique features");
 
-        Lexicon prunedLexicon = lexicon.getPrunedLexicon(threshold);
+        Lexicon prunedLexicon = lexicon.getPrunedLexicon(threshold, true, false, false, true);
 
         // verify that all the pruned features in fact have a count that is more
         // than the threshold in the original lexicon
@@ -49,9 +48,7 @@ public class TestLexicon {
 
                 // the count should be more than the threshold in the original
                 // lexicon
-
                 assertEquals(true, lexicon.featureCounts.get(originalId) > threshold);
-
             }
         }
 
@@ -80,6 +77,62 @@ public class TestLexicon {
         assertEquals(true, Arrays.equals(f1, f2));
     }
 
+
+    // test the effect of pruning on keeping the names in the lexicon
+    @Test
+    public void testLexicon2() throws Exception {
+        Lexicon lexicon = new Lexicon(false, true);
+
+        // populate lexicon with features.
+        int threshold = 1;
+        int N = 50000;
+        for(int i = 0; i < N; i++) {
+            if (!lexicon.contains("a"))
+                lexicon.previewFeature("a");
+            else {
+                int id = lexicon.lookupId("a");
+                lexicon.countFeature(id);
+            }
+        }
+        System.out.println(lexicon.size());
+        System.out.println(lexicon.getFeatureNames());
+
+        Lexicon prunedLexicon = lexicon.getPrunedLexicon(threshold, true, true, false, true);
+
+        System.out.println(lexicon.getFeatureNames());
+        System.out.println(prunedLexicon.getFeatureNames());
+        assertEquals(prunedLexicon.getFeatureNames().size(), 1);
+        assertEquals(prunedLexicon.size(), 1);
+    }
+
+    // test whether you can save and read back your lexicon
+    @Test
+    public void testLexicon3() throws Exception {
+        Lexicon lexicon = new Lexicon(true, true);
+
+        // populate lexicon with features.
+        int threshold = 1;
+        int maxLen = 4;
+        int N = 50000;
+        List<String> set = populateLexicon(lexicon, maxLen, N);
+        logger.info(set.size() + " unique features");
+
+        lexicon.save("output.lex");
+
+        File lcFile = new File("output.lex");
+        Lexicon lexiconFromDisk = new Lexicon(lcFile, true);
+
+        assertEquals(lexicon.size(), lexiconFromDisk.size());
+        assertEquals(lexicon.getFeatureNames().size(), lexiconFromDisk.getFeatureNames().size());
+    }
+
+    /**
+     *
+     * @param lexicon
+     * @param maxLen max length of the randomly-generated feature names
+     * @param N the number of features
+     * @return feature names
+     */
     private List<String> populateLexicon(Lexicon lexicon, int maxLen, int N) {
         Set<String> set = new HashSet<>();
         for (int i = 0; i < N; i++) {
