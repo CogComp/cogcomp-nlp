@@ -389,8 +389,8 @@ public class Lexicon {
      * @param resetFeatureIds this would map features to another counting, starting from zero. This is usefull in
      *                        the cases where pruning drops many of the features, and leaves many of the ids unused.
      */
-    public Lexicon getPrunedLexicon(final int threshold, boolean keepCounts, boolean resetFeatureIds) {
-        final Lexicon lex = new Lexicon(false, false);
+    public Lexicon getPrunedLexicon(final int threshold, boolean keepCounts, boolean resetFeatureIds, boolean hasBias, boolean storeStrings) {
+        final Lexicon lex = new Lexicon(hasBias, storeStrings);
 
         AtomicInteger nextId = new AtomicInteger(0);
 
