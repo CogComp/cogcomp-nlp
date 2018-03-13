@@ -425,10 +425,11 @@ public class Lexicon {
             // copy the actual names
             System.out.println("lex.feature2Id.size: " + lex.feature2Id.size());
             for (int key : lex.feature2Id.keys()) {
-                int id = lex.feature2Id.get(key);
+                int newId = lex.feature2Id.get(key);
                 int oldId = feature2Id.get(key);
-                System.out.println("key: " + key + " - id: " + id + " - featureNames.get(id): " + featureNames.get(oldId));
-                lex.featureNames.set(id, featureNames.get(oldId));
+                System.out.println("key: " + key + " - newid: " + newId + " - oldid: " +
+                        oldId + " - featureNames.get(id): " + featureNames.get(oldId));
+                lex.featureNames.set(newId, featureNames.get(oldId));
             }
         }
 
