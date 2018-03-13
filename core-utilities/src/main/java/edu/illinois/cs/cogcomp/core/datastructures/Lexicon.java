@@ -395,9 +395,14 @@ public class Lexicon {
         AtomicInteger nextId = new AtomicInteger(0);
 
         this.feature2Id.forEachEntry((hash, id) -> {
-            System.out.println("==>id: " + id);
             int count = featureCounts.get(id);
             if (count > threshold) {
+                String featureName = "";
+                System.out.println("==>id: " + id);
+                if(storeStrings && this.featureNames != null) {
+                    featureName = this.featureNames.get(id);
+                    System.out.println("featureName: " + featureName);
+                }
                 int newId;
                 if(resetFeatureIds)
                     newId = nextId.incrementAndGet();
@@ -405,16 +410,15 @@ public class Lexicon {
                     newId = id;
                 lex.feature2Id.put(hash, newId);
                 if(keepCounts) lex.featureCounts.put(newId, count);
-
                 if(storeStrings && this.featureNames != null) {
                     // expand the
                     for (int i = lex.featureNames.size(); i <= newId; i++)
                         lex.featureNames.add("");
+                    System.out.println("id: " + id);
+                    System.out.println("newid: " + newId);
                     System.out.println("lex.feature2Id.size: " + lex.feature2Id.size());
                     System.out.println("this.feature2Id.size: " + this.feature2Id.size());
-                    System.out.println("newid: " + newId + " - oldid: " +
-                            id + " - featureNames.get(id): " + this.featureNames.get(id));
-                    lex.featureNames.set(newId, this.featureNames.get(id));
+                    lex.featureNames.set(newId, featureName);
                 }
             }
             return true;
