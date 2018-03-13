@@ -404,11 +404,30 @@ public class Lexicon {
                     newId = id;
                 lex.feature2Id.put(hash, newId);
                 if(keepCounts) lex.featureCounts.put(newId, count);
-                if(storeStrings && this.featureNames != null) lex.featureNames.add(newId, featureNames.get(id));
             }
             return true;
         });
         lex.nextFeatureId = this.nextFeatureId;
+
+        int maxId = Integer.MIN_VALUE;
+        for(int i = 0; i < lex.feature2Id.values().length; i++) {
+            if(lex.feature2Id.values()[i] > maxId) {
+                maxId = lex.feature2Id.values()[i];
+            }
+        }
+
+        // copy the feature names
+        if(storeStrings && this.featureNames != null) {
+            // initialize with empty strings
+            for (int i = 0; i <= maxId; i++)
+                lex.featureNames.add("");
+
+            // copy the actual names
+            for (int i = 0; i < lex.feature2Id.size(); i++) {
+                int id = lex.feature2Id.values()[i];
+                if(featureNames.contains(id)) lex.featureNames.set(id, featureNames.get(id));
+            }
+        }
 
         logger.info("Number of features after pruning: " + lex.size());
 
