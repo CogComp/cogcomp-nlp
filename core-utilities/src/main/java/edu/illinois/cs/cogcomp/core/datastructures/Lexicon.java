@@ -395,6 +395,7 @@ public class Lexicon {
         AtomicInteger nextId = new AtomicInteger(0);
 
         this.feature2Id.forEachEntry((hash, id) -> {
+            System.out.println("==>id: " + id);
             int count = featureCounts.get(id);
             if (count > threshold) {
                 int newId;
