@@ -426,7 +426,7 @@ public class Lexicon {
             System.out.println("lex.feature2Id.size: " + lex.feature2Id.size());
             for (int key : lex.feature2Id.keys()) {
                 int id = lex.feature2Id.get(key);
-                System.out.println("key: " + key + " - id: " + id);
+                System.out.println("key: " + key + " - id: " + id + " - featureNames.get(id): " + featureNames.get(id));
                 lex.featureNames.set(id, featureNames.get(id));
             }
         }
