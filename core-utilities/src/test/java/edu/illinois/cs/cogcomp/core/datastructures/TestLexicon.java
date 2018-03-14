@@ -94,13 +94,9 @@ public class TestLexicon {
                 lexicon.countFeature(id);
             }
         }
-        System.out.println(lexicon.size());
-        System.out.println(lexicon.getFeatureNames());
 
         Lexicon prunedLexicon = lexicon.getPrunedLexicon(threshold, true, true, false, true);
 
-        System.out.println(lexicon.getFeatureNames());
-        System.out.println(prunedLexicon.getFeatureNames());
         assertEquals(prunedLexicon.getFeatureNames().size(), 1);
         assertEquals(prunedLexicon.size(), 1);
     }
@@ -116,6 +112,36 @@ public class TestLexicon {
         int N = 50000;
         List<String> set = populateLexicon(lexicon, maxLen, N);
         logger.info(set.size() + " unique features");
+
+        lexicon.save("output.lex");
+
+        File lcFile = new File("output.lex");
+        Lexicon lexiconFromDisk = new Lexicon(lcFile, true);
+
+        assertEquals(lexicon.size(), lexiconFromDisk.size());
+        assertEquals(lexicon.getFeatureNames().size(), lexiconFromDisk.getFeatureNames().size());
+    }
+
+    @Test
+    public void testLexicon4() throws Exception {
+        Lexicon lexicon = new Lexicon(false, true);
+
+        // populate lexicon with features.
+        int threshold = 1;
+        int maxLen = 4;
+        int N = 50000;
+        List<String> set = populateLexicon(lexicon, maxLen, N);
+        logger.info(set.size() + " unique features");
+
+        for(int i = 0; i < 5; i++) {
+            int featureNamesSize = lexicon.getFeatureNames().size();
+            int featureCounts = lexicon.featureCounts.size();
+            int featureMapSize = lexicon.getFeatureMap().size();
+            assertEquals(featureNamesSize, featureCounts);
+            assertEquals(featureMapSize, featureCounts);
+            lexicon = lexicon.getPrunedLexicon(i, true, true, false, true);
+            populateLexicon(lexicon, maxLen, N);
+        }
 
         lexicon.save("output.lex");
 

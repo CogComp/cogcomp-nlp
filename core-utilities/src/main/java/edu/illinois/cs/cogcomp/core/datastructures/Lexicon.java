@@ -344,19 +344,15 @@ public class Lexicon {
 
         writeInt(writer, feature2Id.size());
 
-        feature2Id.forEachEntry(new TIntIntProcedure() {
+        feature2Id.forEachEntry((hash, id) -> {
+            try {
+                writeInt(writer, hash);
+                writeInt(writer, id);
 
-            @Override
-            public boolean execute(int a, int b) {
-                try {
-                    writeInt(writer, a);
-                    writeInt(writer, b);
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                return true;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+            return true;
         });
 
         if (featureNames != null) {
@@ -417,7 +413,10 @@ public class Lexicon {
             }
             return true;
         });
-        lex.nextFeatureId = this.nextFeatureId;
+        if(resetFeatureIds)
+            lex.nextFeatureId = nextId.incrementAndGet();
+        else
+            lex.nextFeatureId = this.nextFeatureId;
 
         logger.info("Number of features after pruning: " + lex.size());
 
