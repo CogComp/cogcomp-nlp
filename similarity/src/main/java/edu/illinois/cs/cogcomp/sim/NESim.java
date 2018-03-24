@@ -39,4 +39,11 @@ public class NESim implements Metric<String> {
 
 	}
 
+    public MetricResponse compare(String arg1, String arg2, String type1, String type2) {
+        entityComp.compare(arg1, arg2, type1, type2);
+        float score = entityComp.getScore();
+        String reason = entityComp.getReason();
+        return new MetricResponse(score, reason);
+    }
+
 }
