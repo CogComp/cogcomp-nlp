@@ -151,6 +151,23 @@ public abstract class IOUtils {
         return files.toArray(new String[files.size()]);
     }
 
+    /**
+     * Filters the files contained in a directory or in its subdirectory structure. Returns all
+     * files (not directories) that pass the filter.
+     */
+    public static String[] lsFilesRecursive(String directory, FileFilter filter)
+            throws IOException {
+        File dir = new File(directory);
+        ArrayList<String> files = new ArrayList<>();
+        for (File filepath : dir.listFiles(filter)) {
+            if (filepath.isFile())
+                files.add(filepath.getAbsolutePath());
+            else if (filepath.isDirectory())
+                files.addAll(Arrays.asList(lsFilesRecursive(filepath.getAbsolutePath(), filter)));
+        }
+        return files.toArray(new String[files.size()]);
+    }
+
 
     /**
      * List the directories contained within a directory.
