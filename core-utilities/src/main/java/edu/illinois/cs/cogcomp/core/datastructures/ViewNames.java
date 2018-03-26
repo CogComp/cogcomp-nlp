@@ -138,6 +138,9 @@ public class ViewNames {
     public static final String TOKENS_GOLD = "TOKENS_GOLD";
     public static final String SENTENCE_GOLD = "SENTENCE_GOLD";
 
+    public static final String QUOTE = "QUOTE";
+    public static final String ATTRIBUTION_RELATION = "ATTRIBUTION_RELATION";
+
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
             case TOKENS:
@@ -197,6 +200,10 @@ public class ViewNames {
             case COREF_EXTENT:
             case COREF_ERE:
                 return ViewTypes.COREF_VIEW;
+            case QUOTE:
+                return ViewTypes.SPAN_LABEL_VIEW;
+            case ATTRIBUTION_RELATION:
+                return ViewTypes.PREDICATE_ARGUMENT_VIEW;
         }
         return null;
     }
