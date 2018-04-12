@@ -36,11 +36,9 @@ public class ResourceUtilities {
             // If the file doesn't exist locally it must be in the classpath (in common-resources
             // jar)
             if (!new File(file).exists()) {
-                logger.debug("Loading {} from classpath", resourceFile);
                 List<URL> list = IOUtils.lsResources(ResourceUtilities.class, resourceFile);
                 if (list.isEmpty()) {
-                    logger.error("Could not load " + resourceFile);
-                    System.exit(-1);
+                    return null;
                 }
                 URL fileURL = list.get(0);
                 URLConnection connection = fileURL.openConnection();
