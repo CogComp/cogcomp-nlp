@@ -148,17 +148,11 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
 
         for (String genre : genres) {
 
-            String dir = sourceDir + "/" + genre;
+            String dir = Paths.get(sourceDir, genre).toString();
 
-            String[] sourceFiles = IOUtils.lsFilesRecursive(dir, new FilenameFilter() {
-                        @Override
-                        public boolean accept(File file, String s) {
-                            if (s.endsWith(fileTypeExtensions.get(FileType.TEXT)))
-                                return true;
-                            return false;
-                        }
-                    }
-            );
+            String[] sourceFiles = IOUtils.lsFilesRecursive(dir, file ->
+                    file.isDirectory() || file.getAbsolutePath().endsWith(fileTypeExtensions.get(FileType.TEXT)));
+            // A directory should always be accepted
 
             for (String sourceFile : sourceFiles) {
                 Path sourcePath = Paths.get(sourceFile);
@@ -176,7 +170,7 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
                 for (String annotation : annotations) {
 
                     String extension = MascReader.fileTypeExtensions.get(FileType.valueOf(annotation));
-                    Path annotationPath = Paths.get(path + "/" + stem + extension);
+                    Path annotationPath = Paths.get(path, stem + extension);
 
                     if (FileType.valueOf(annotation).equals(FileType.TEXT))
                         stemToSourcePath.put(stem, annotationPath);
@@ -449,7 +443,7 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
 
             String taJson = SerializationHelper.serializeToJson(goldTa, true);
 
-            String outFile = outDirGold + "/" + goldTa.getId() + ".json";
+            String outFile = Paths.get(outDirGold, goldTa.getId() + ".json").toString();
 
             try {
                 logger.trace("Writing file out to '{}'...", outFile);
@@ -458,7 +452,7 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
                 e.printStackTrace();
                 System.exit(-1);
             }
-            outFile = outDirPred + "/" + predTa.getId() + ".json";
+            outFile = Paths.get(outDirPred, predTa.getId() + ".json").toString();
             String predTaJson = SerializationHelper.serializeToJson(predTa, true);
 
             try {

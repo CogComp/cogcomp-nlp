@@ -105,7 +105,7 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
      */
     @Override
     public T next() {
-        if (stack.isEmpty() && fileIndex >= fileList.size())
+        if (!hasNext())
             throw new NoSuchElementException();
 
         if (stackIndex >= stack.size()) {
@@ -132,9 +132,10 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
             // because we didn't find any new TextAnnotations
         }
 
-        T returnTa = stack.get(stackIndex++);
+        if (stack.isEmpty())
+            throw new NoSuchElementException();
 
-        return returnTa;
+        return stack.get(stackIndex++);
     }
 
 
