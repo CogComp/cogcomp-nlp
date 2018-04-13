@@ -73,7 +73,7 @@ import java.util.stream.Stream;
 
  * The current implementation only takes tokenization, sentence split, POS, Lemma and Attribution Relation
 
- * from original annotation. The Attribution Relation Annotations for each document are stored in an instance of
+ * from original annotation. The Attribution Relation annotations for each document are stored in an instance of
 
  * PredicateArgumentView.
 
@@ -375,7 +375,6 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
         ta.addView(attrRelationView.getViewName(), attrRelationView);
     }
 
-
     private class AttributionRelation {
 
         public String groupId;
@@ -417,9 +416,9 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
     }
 
     /**
-     * Read sections of corpus into TextAnnotations, write out TextAnnotations in json format.
-     * Specify PARC train/dev/test dir of written files, and output directory
-     * @param args path to a java
+     * Read sections of corpus into TextAnnotations, serialize TextAnnotations into json, and save the json to output directory.
+     * Specify PARC train/dev/test dir, and output directory in args.
+     * @param args PARC source directory and output directory
      */
     public static void main(String[] args) {
         if (args.length != 2) {

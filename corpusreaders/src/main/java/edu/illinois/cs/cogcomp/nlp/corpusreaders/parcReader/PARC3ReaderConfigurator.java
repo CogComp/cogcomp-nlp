@@ -9,7 +9,7 @@ import java.util.Properties;
 
 /**
 
- * Configurations for PARC3 Reader
+ * Configurations for PARC3 Reader. Source directory must be set for this configurator.
 
  * @author Sihao Chen
 
@@ -23,8 +23,7 @@ public class PARC3ReaderConfigurator extends CorpusReaderConfigurator {
     public static final Property POPULATE_ATTRIBUTION = new Property("populateAttribution", TRUE);
 
     /**
-     * Dummy, never use this.
-     * @return a broken ResourceManager in the wind
+     * Dummy, avoid using this. Source directory must be set in order for the reader to work.
      */
     @AvoidUsing(reason="Please use getDefaultConfigWithSourceDir() to set source directory for corpus")
     @Override

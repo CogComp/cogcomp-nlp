@@ -16,6 +16,7 @@ provided by the `cogcomp-core-utilities` package.
   - Ontonotes 5.0 Named Entity Reader
   - Ontonotes 5.0 POS Reader
   - TAC KBP reader
+  - [PARC 3.0 Reader](doc/PARCReader.md)
 
 ## Citation
 
