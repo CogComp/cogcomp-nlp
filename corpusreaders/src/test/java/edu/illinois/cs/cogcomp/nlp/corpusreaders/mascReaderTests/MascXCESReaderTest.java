@@ -35,18 +35,18 @@ public class MascXCESReaderTest {
         TextAnnotation ta = cnr.next();
 
         List<Constituent> tokens = ta.getView(ViewNames.TOKENS).getConstituents();
-        Assert.assertEquals(tokens.size(), 13390);  // tok 13390
+        Assert.assertEquals(tokens.size(), 13389);  // tok 13390, clean tok 13389
         Assert.assertEquals(tokens.get(1).toString(), "setting");
 
         List<Constituent> lemma = ta.getView(ViewNames.LEMMA).getConstituents();
-        Assert.assertEquals(lemma.size(), 13376);  // base= 13376
+        Assert.assertEquals(lemma.size(), 13375);  // base= 13376, clean tok with base= 13375
         Assert.assertEquals(lemma.get(1).getLabel(), "set");
 
         List<Constituent> pos = ta.getView(ViewNames.POS).getConstituents();
-        Assert.assertEquals(pos.size(), 13390);  // msd= 13390
+        Assert.assertEquals(pos.size(), 13389);  // msd= 13390, clean tok with msd= 13389
         Assert.assertEquals(pos.get(1).getLabel(), "VBG");
 
-        List<Constituent> sentences = ta.getView(ViewNames.SENTENCE).getConstituents();
+        List<Constituent> sentences = ta.getView(ViewNames.SENTENCE_GOLD).getConstituents();
         Assert.assertEquals(sentences.size(), 1046);  // s 1046
         Assert.assertEquals(sentences.get(0).getStartSpan(), 0);
         Assert.assertEquals(sentences.get(0).getEndSpan(), 25);

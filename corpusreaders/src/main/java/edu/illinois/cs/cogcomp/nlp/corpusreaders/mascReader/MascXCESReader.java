@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -74,14 +75,39 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
     private static final List<SpanLabelProcessor> SPAN_LABEL_PROCESSORS;
 
     static {
-        TOKEN_VALUE_PROCESSOR = simpleAttrProcessor("string"); // the token itself is the "string" attribute of "tok" elements
+        TOKEN_VALUE_PROCESSOR = elem -> {
+            List<Node> parents = getAllParentNodes(elem);
+
+            // SPECIAL FIX
+            // some tok elements are nested, and the inner ones will be discarded
+            // see spoken/telephone/sw2025-ms98-a-trans.xml
+            if (parents.stream().anyMatch(isElementWithTag(TOKEN_ELEMENT))) {
+                return null;
+            }
+
+            String value = simpleAttrProcessor("string").apply(elem);  // the token itself is the "string" attribute of "tok" elements
+
+            // SPECIAL FIX
+            // some token doesn't have a "string" attribute
+            if (value == null) {
+                return Optional.ofNullable(elem.getFirstChild())  // or the text of the first child
+                        .map(Node::getNodeValue)
+                        .orElse("");  // or nothing
+            }
+
+            return value;
+        };
 
         TOKEN_LABEL_PROCESSORS = new ArrayList<>();
         TOKEN_LABEL_PROCESSORS.add(new TokenLabelProcessor(ViewNames.LEMMA, simpleAttrProcessor("base")));  // Lemma Processor: the token label is the "base" attribute of "tok" elements
         TOKEN_LABEL_PROCESSORS.add(new TokenLabelProcessor(ViewNames.POS, simpleAttrProcessor("msd")));  // POS Processor: the token label is the "msd" attribute of "tok" elements
 
         SPAN_LABEL_PROCESSORS = new ArrayList<>();
-        SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor(SENTENCE_ELEMENT, ViewNames.SENTENCE, elem -> ViewNames.SENTENCE));  // Sentence Processor: the span label is simply ViewNames.SENTENCE
+        // NOTE: some sentences are nested, and some tokens are not in a sentence,
+        // so the sentences annotation is placed into SENTENCE_GOLD instead
+        // see written/fiction/cable_spool_fort.xml
+        // see written/blog/Acephalous-Cant-believe.xml
+        SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor(SENTENCE_ELEMENT, ViewNames.SENTENCE_GOLD, elem -> ViewNames.SENTENCE));  // Sentence Processor: the span label is simply ViewNames.SENTENCE
         SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor("nchunk", ViewNames.SHALLOW_PARSE, elem -> "NP"));  // Noun Chunk Processor
         SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor("vchunk", ViewNames.SHALLOW_PARSE, elem -> "VP"));  // Verb Chunk Processor
         SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor("location", ViewNames.NER_CONLL, elem -> "LOC"));  // NER CoNLL Location Processor
@@ -246,6 +272,18 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
                 .ofNullable(elem.getAttributes().getNamedItem(attr))  // the label is the `attr` attribute of the element
                 .map(Node::getNodeValue)
                 .orElse(null);  // or don't create the label if the attribute doesn't exist
+    }
+
+    private static List<Node> getAllParentNodes(Node node) {
+        List<Node> parents = new ArrayList<>();
+        for (Node parent = node.getParentNode(); parent.getNodeType() != Node.DOCUMENT_NODE; parent = parent.getParentNode()) {
+            parents.add(parent);
+        }
+        return parents;
+    }
+
+    private static Predicate<Node> isElementWithTag(String tag) {
+        return parent -> parent.getNodeType() == Node.ELEMENT_NODE && ((Element)parent).getTagName().equals(tag);
     }
 
     /**
