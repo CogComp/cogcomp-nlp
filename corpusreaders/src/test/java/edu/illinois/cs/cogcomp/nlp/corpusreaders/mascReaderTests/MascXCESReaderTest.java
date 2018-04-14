@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -19,13 +20,17 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.mascReader.MascXCESReader;
 
+/**
+ * Please change CORPUS_DIRECTORY if your MASC XCES XML files are stored elsewhere
+ */
 public class MascXCESReaderTest {
+    private static final String CORPUS_DIRECTORY = "/shared/corpora/corporaWeb/written/eng/MASC-3.0.0/xces";
 
     @Test
     public void testCreateTextAnnotation() throws Exception {
         Logger.getLogger(MascXCESReader.class).setLevel(Level.INFO);
 
-        MascXCESReader cnr = new MascXCESReader("", "/shared/corpora/corporaWeb/written/eng/MASC-3.0.0/xces/written/twitter", ".xml");
+        MascXCESReader cnr = new MascXCESReader("", Paths.get(CORPUS_DIRECTORY, "written/twitter").toString(), ".xml");
 
         TextAnnotation ta = cnr.next();
 

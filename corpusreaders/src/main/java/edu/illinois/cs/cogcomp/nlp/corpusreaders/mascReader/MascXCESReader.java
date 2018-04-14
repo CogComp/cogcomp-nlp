@@ -14,11 +14,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -96,6 +95,7 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
 
     private static Logger logger = LoggerFactory.getLogger(MascXCESReader.class);
     private List<TextAnnotation> textAnnotations = new ArrayList<>();
+    private List<String> failureLogs = new ArrayList<>();
 
     /**
      * This expects a directory that contains XCES format files.
@@ -103,7 +103,8 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
      * @param corpusDirectory The folder of the source files
      * @param fileExtension Should be ".xml" for the XCES XML source files
      */
-    public MascXCESReader(String corpusName, String corpusDirectory, String fileExtension) {
+    public MascXCESReader(String corpusName, String corpusDirectory, String fileExtension)
+            throws ParserConfigurationException {
         super(CorpusReaderConfigurator.buildResourceManager(corpusName, corpusDirectory, corpusDirectory, fileExtension, fileExtension));
 
         this.currentAnnotationId = 0;
@@ -121,6 +122,8 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
         Path corpusAbsolutePath = Paths.get(corpusDirectory).toAbsolutePath();
         Arrays.sort(sourceFiles);
         for (String file : sourceFiles) {
+            String error = null;
+
             try {
                 textAnnotations.add(loadAnnotationFile(
                         corpusName,
@@ -129,21 +132,25 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
                 ));
             }
             catch (ParserConfigurationException e) {
-                logger.error("[" + IOUtils.shortenPath(file) + "] Error initializing XML parser.");
-                logger.error(e.getMessage());
+                throw e;
             }
             catch (IOException e) {
-                logger.error("[" + IOUtils.shortenPath(file) + "] Error reading file.");
-                logger.error(e.getMessage());
+                error = "[" + file + "] Error reading file: " + e.getMessage();
+            }
+            catch (SAXParseException e) {
+                error = "[" + file + ":" + e.getLineNumber() + ":" + e.getColumnNumber() + "] Error parsing XML file: " + e.getMessage();
             }
             catch (SAXException e) {
-                logger.error("[" + IOUtils.shortenPath(file) + "] Error parsing XML file.");
+                error = "[" + file + "] Error parsing XML file: " + e.getMessage();
             }
             catch (Exception e) {
-                logger.error("[" + IOUtils.shortenPath(file) + "] Error processing file.");
-                StringWriter sw = new StringWriter();
-                e.printStackTrace(new PrintWriter(sw));
-                logger.error(sw.toString());
+                error = "[" + file + "] Error creating TextAnnotation: " + e.getMessage();
+                e.printStackTrace();
+            }
+
+            if (error != null) {
+                logger.error(error);
+                failureLogs.add(error);
             }
         }
     }
@@ -286,12 +293,18 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
     public String generateReport() {
         StringBuilder builder = new StringBuilder();
         builder
-                .append("Number of TextAnnotations generated: ")
+                .append("Number of TextAnnotations generated:\t")
                 .append(textAnnotations.size())
                 .append(System.lineSeparator());
         builder
-                .append("Check INFO logs for further details.")
+                .append("Number of files unable to be processed:\t")
+                .append(failureLogs.size())
                 .append(System.lineSeparator());
+        for (String log : failureLogs) {
+            builder
+                    .append(log)
+                    .append(System.lineSeparator());
+        }
         return builder.toString();
     }
 
@@ -309,5 +322,7 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
             new File(outputFile).getParentFile().mkdirs();
             SerializationHelper.serializeTextAnnotationToFile(ta, outputFile + ".json", true, true);
         }
+
+        System.out.print(reader.generateReport());
     }
 }

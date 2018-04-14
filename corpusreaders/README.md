@@ -46,3 +46,6 @@ mascReader.MascXCESReader is a reader for the entire MASC dataset from Open Amer
 
 It processes Lemma, POS, Sentence, Shallow Parse, NER CoNLL (LOC, ORG, PER),
 and NER Ontonotes (DATE, LOCATION, ORGANIZATION, PERSON) annotations.
+
+The reader takes XCES XML format as input.
+Please check MascXCESReader.java for details on how to generate the input files.
