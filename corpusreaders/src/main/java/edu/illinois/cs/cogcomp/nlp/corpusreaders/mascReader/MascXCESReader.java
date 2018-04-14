@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -47,6 +45,7 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.AnnotationReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
 /**
  * A reader for the entire MASC Open American National Corpus (ANC).
@@ -65,6 +64,8 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
  *      Token Type: Penn POS tags
  *      Annotations: All
  *      Overlap mode: Nest
+ *
+ * @author Xiaotian Le
  */
 public class MascXCESReader extends AnnotationReader<TextAnnotation> {
 
@@ -85,17 +86,7 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
                 return null;
             }
 
-            String value = simpleAttrProcessor("string").apply(elem);  // the token itself is the "string" attribute of "tok" elements
-
-            // SPECIAL FIX
-            // some token doesn't have a "string" attribute
-            if (value == null) {
-                return Optional.ofNullable(elem.getFirstChild())  // or the text of the first child
-                        .map(Node::getNodeValue)
-                        .orElse("");  // or nothing
-            }
-
-            return value;
+            return elem.getTextContent();  // the token itself is the plain text inside the element
         };
 
         TOKEN_LABEL_PROCESSORS = new ArrayList<>();
@@ -250,8 +241,12 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
             }
         }
 
-        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
-                corpusName, textId, Collections.singletonList(tokens.toArray(new String[0])));
+        String rawText = doc.getDocumentElement().getTextContent();
+
+        OracleTokenizer tokenizer = new OracleTokenizer();
+        Tokenizer.Tokenization tokenization = tokenizer.tokenize(rawText, tokens);
+        TextAnnotation ta = new TextAnnotation(corpusName, textId, rawText,
+                tokenization.getCharacterOffsets(), tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
 
         for (TokenLabelProcessor processor : TOKEN_LABEL_PROCESSORS) {
             createTokenLabelView(tokenLabels.get(processor.getViewName()).stream(), ta, processor.getViewName());
