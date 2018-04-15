@@ -253,6 +253,9 @@ public class TemporalChunkerAnnotator extends Annotator{
                         label = new Constituent(normRes==null?"":normRes.toTIMEXTag(),
                                 ViewNames.TIMEX3, ta,
                                 currentChunkStart, currentChunkEnd);
+                        if(normRes!=null)
+                            for(String key:normRes.getAttributes().keySet())
+                                label.addAttribute(key, normRes.getAttribute(key));
                     }
                     chunkView.addConstituent(label);
                     clabel = null;

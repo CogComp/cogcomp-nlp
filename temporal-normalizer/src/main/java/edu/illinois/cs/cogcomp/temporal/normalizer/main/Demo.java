@@ -66,6 +66,9 @@ public class Demo {
         tca.addView(ta);
         View temporalViews = ta.getView(ViewNames.TIMEX3);
         List<Constituent> constituents = temporalViews.getConstituents();
-        System.out.println(temporalViews);
+        System.out.printf("There're %d time expressions (TIMEX) in total.\n",constituents.size());
+        for(Constituent c:constituents){
+            System.out.printf("TIMEX #%d: Type=%s, Value=%s\n",constituents.indexOf(c),c.getAttribute("type"),c.getAttribute("value"));
+        }
     }
 }
