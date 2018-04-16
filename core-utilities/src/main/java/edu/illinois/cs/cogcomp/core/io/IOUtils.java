@@ -485,4 +485,14 @@ public abstract class IOUtils {
         in.close();
         return obj;
     }
+
+    /**
+     * Changes "/a/b/c/d/e/f/g.h" into "/a/b/.../e/f/g.h",
+     * or "C:\d\e\f\g\h\i\j.k" into "C:\d\e\...\h\i\j.k"
+     * @param path The long path
+     * @return The shortened path
+     */
+    public static String shortenPath(String path) {
+        return path.replaceAll("^(\\w+:|)([\\\\|/][^\\\\|/]+[\\\\|/][^\\\\|/]+[\\\\|/]).*([\\\\|/][^\\\\|/]+[\\\\|/][^\\\\|/]+)$", "$1$2...$3");
+    }
 }

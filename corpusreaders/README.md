@@ -16,6 +16,7 @@ provided by the `cogcomp-core-utilities` package.
   - Ontonotes 5.0 Named Entity Reader
   - Ontonotes 5.0 POS Reader
   - TAC KBP reader
+  - MASC Lemma, POS, Shallow Parse, NER Reader
   - [PARC 3.0 Reader](doc/PARCReader.md)
 
 ## Citation
@@ -40,3 +41,12 @@ license here: http://nlp.cs.rpi.edu/kbp/2017/index.html
 This reader assumes that the data is structured like PATH-TO-DATA/LANG/TYPE where LANG is one of {cmn,eng,spa} and TYPE
 is either nw or df, for newswire and discussion forum data, respectively.
 
+## MASC Reader
+
+mascReader.MascXCESReader is a reader for the entire MASC dataset from Open American National Corpus.
+
+It processes Lemma, POS, Sentence, Shallow Parse, NER CoNLL (LOC, ORG, PER),
+and NER Ontonotes (DATE, LOCATION, ORGANIZATION, PERSON) annotations.
+
+The reader takes XCES XML format as input.
+Please check MascXCESReader.java for details on how to generate the input files.
