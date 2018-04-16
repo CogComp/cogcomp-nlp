@@ -8,11 +8,10 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 import java.util.Properties;
 
 /**
-
+ * 
  * Configurations for PARC3 Reader. Source directory must be set for this configurator.
-
+ * 
  * @author Sihao Chen
-
  */
 public class PARC3ReaderConfigurator extends CorpusReaderConfigurator {
 
@@ -25,26 +24,26 @@ public class PARC3ReaderConfigurator extends CorpusReaderConfigurator {
     /**
      * Dummy, avoid using this. Source directory must be set in order for the reader to work.
      */
-    @AvoidUsing(reason="Please use getDefaultConfigWithSourceDir() to set source directory for corpus")
+    @AvoidUsing(
+            reason = "Please use getDefaultConfigWithSourceDir() to set source directory for corpus")
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = new Property[] {
-                POPULATE_POS,
-                POPULATE_LEMMA,
-                POPULATE_ATTRIBUTION,
-                new Property(CorpusReaderConfigurator.CORPUS_NAME.key, DEFAULT_CORPUS_NAME),
-                SOURCE_DIRECTORY,
-                SOURCE_EXTENSION,
-                new Property(CorpusReaderConfigurator.SUPPRESS_FILE_ERRORS.key, TRUE),
-        };
+        Property[] props =
+                new Property[] {
+                        POPULATE_POS,
+                        POPULATE_LEMMA,
+                        POPULATE_ATTRIBUTION,
+                        new Property(CorpusReaderConfigurator.CORPUS_NAME.key, DEFAULT_CORPUS_NAME),
+                        SOURCE_DIRECTORY, SOURCE_EXTENSION,
+                        new Property(CorpusReaderConfigurator.SUPPRESS_FILE_ERRORS.key, TRUE),};
 
         return new ResourceManager(generateProperties(props));
     }
 
     /**
-     * Get default configuration with user specified source directory to PARC corpus
-     * By default, POS and lemma from original document are not populated into the new TextAnnotation.
-     * The generated TextAnnotation will only keep tokenization and sentence split from document.
+     * Get default configuration with user specified source directory to PARC corpus By default, POS
+     * and lemma from original document are not populated into the new TextAnnotation. The generated
+     * TextAnnotation will only keep tokenization and sentence split from document.
      *
      * @param sourceDir source directory of corpus
      * @return a default config for PARC reader

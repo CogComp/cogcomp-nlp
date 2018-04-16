@@ -30,55 +30,60 @@ import java.util.stream.Stream;
 
 /**
  * A Reader for Penn Attribution Relations Copurs 3.0 (PARC 3.0)
-
- * Documents in corpus are stored as a syntactic tree in XML. Annotations are stored as child nodes to "Word" nodes
-
+ * 
+ * Documents in corpus are stored as a syntactic tree in XML. Annotations are stored as child nodes
+ * to "Word" nodes
+ * 
  * A toy example document below:
-
+ * 
  * <root>
-
- *     <SENTENCE gorn="0">
-
- *          <NP-HLN gorn="0">
-
- *              <WORD ByteCount="9,16" gorn="0,0" lemma="two-way" pos="NNP" sentenceWord="0" text="Two-Way" word="0">
-
- *                  <attribution id="wsj_2401_PDTB_annotation_level.xml_set_0">
-
- *                      <attributionRole roleValue="content"/>
-
- *                  </attribution>
-
- *              </WORD>
-
- *              <WORD ByteCount="17,23" gorn="0,1" lemma="street" pos="NNP" sentenceWord="1" text="Street" word="1"/>
-
- *          </NP-HLN>
-
- *      </SENTENCE>
-
+ * 
+ * <SENTENCE gorn="0">
+ * 
+ * <NP-HLN gorn="0">
+ * 
+ * <WORD ByteCount="9,16" gorn="0,0" lemma="two-way" pos="NNP" sentenceWord="0" text="Two-Way"
+ * word="0">
+ * 
+ * <attribution id="wsj_2401_PDTB_annotation_level.xml_set_0">
+ * 
+ * <attributionRole roleValue="content"/>
+ * 
+ * </attribution>
+ * 
+ * </WORD>
+ * 
+ * <WORD ByteCount="17,23" gorn="0,1" lemma="street" pos="NNP" sentenceWord="1" text="Street"
+ * word="1"/>
+ * 
+ * </NP-HLN>
+ * 
+ * </SENTENCE>
+ * 
  * </root>
-
- * Given a input directory, this reader looks for files with .xml extension in all nested directories.
-
+ * 
+ * Given a input directory, this reader looks for files with .xml extension in all nested
+ * directories.
+ * 
  * Sample Directory Structure -
-
+ * 
  * \train
-
+ * 
  * - \00
-
- *   - wsj-0001.xml
-
- *   - ...
-
- * The current implementation only takes tokenization, sentence split, POS, Lemma and Attribution Relation
-
- * from original annotation. The Attribution Relation annotations for each document are stored in an instance of
-
- * PredicateArgumentView.
-
+ * 
+ * - wsj-0001.xml
+ * 
+ * - ...
+ * 
+ * The current implementation only takes tokenization, sentence split, POS, Lemma and Attribution
+ * Relation
+ * 
+ * from original annotation. The Attribution Relation annotations for each document are stored in an
+ * instance of
+ * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView
+ * PredicateArgumentView}.
+ * 
  * @author Sihao Chen
-
  */
 public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation> {
 
@@ -113,7 +118,8 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
     public static final String REL_SOURCE = "SOURCE";
     public static final String REL_CONTENT = "CONTENT";
 
-    // Names of constituent attributes, used to store additional information for each attribution relation
+    // Names of constituent attributes, used to store additional information for each attribution
+    // relation
     public static final String CON_ATTR_REL_ID = "relationID";
 
     // Others
@@ -125,19 +131,22 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
     private boolean bPopulateLemma;
 
     /**
-     * Creates a PARC reader that reads all documents in a (nested) directory
-     * Use default settings (keep tokenization and sentence split, discard POS and Lemma from original annotation)
+     * Creates a PARC reader that reads all documents in a given directory with default settings.
+     * (keep tokenization and sentence split, discard POS and Lemma from original annotation)
      *
-     * @param parcDir Directory to PARC corpus, note that all documents with extension .xml in nexted directory will be read
+     * @param parcDir Directory to PARC corpus, note that all documents with extension .xml in all
+     *        subdirectories will be read
      */
-    public PARC3Reader(String parcDir) throws Exception{
+    public PARC3Reader(String parcDir) throws Exception {
         super(PARC3ReaderConfigurator.getDefaultConfigWithSourceDir(parcDir));
     }
 
     /**
      * Creates a PARC reader with user specified settings
      *
-     * @param rm see {@link edu.illinois.cs.cogcomp.nlp.corpusreaders.parcReader.PARC3ReaderConfigurator} for config details
+     * @param rm see
+     *        {@link edu.illinois.cs.cogcomp.nlp.corpusreaders.parcReader.PARC3ReaderConfigurator}
+     *        for config details
      */
     public PARC3Reader(ResourceManager rm) throws Exception {
         super(rm);
@@ -164,7 +173,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
             }
         });
 
-        for (String doc: xmlDocs) {
+        for (String doc : xmlDocs) {
             List<Path> docFile = new ArrayList<>();
             Path docPath = Paths.get(doc);
             docFile.add(docPath);
@@ -175,11 +184,12 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
     }
 
     /**
-     * Parse a document into an Text Annotation. By default TOKEN and SENTENCE view will be populated.
-     * Other gold views will only be populated if set in configurations
+     * Parse a document into an Text Annotation. By default TOKEN and SENTENCE view will be
+     * populated. Other gold views will only be populated if set in configurations
      *
      * @param list a list of containing one path to a xml document
-     * @return a list containing one TextAnnotation file, corresponding to one source text file plus annotations
+     * @return a list containing one TextAnnotation file, corresponding to one source text file plus
+     *         annotations
      * @throws Exception if files can't be found, or if parser fails to read annotation format
      */
     @Override
@@ -286,7 +296,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
     }
 
     private void updateAttributionRelation(Map<String, AttributionRelation> relation,
-                                           String relationId, String role, int tokenId) {
+            String relationId, String role, int tokenId) {
         if (!relation.containsKey(relationId)) {
             relation.put(relationId, new AttributionRelation(relationId));
         }
@@ -294,7 +304,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
         AttributionRelation sourceCueContent = relation.get(relationId);
 
         switch (role) {
-            case ROLE_SOURCE :
+            case ROLE_SOURCE:
                 sourceCueContent.updateSourceSpan(tokenId);
                 break;
             case ROLE_CUE:
@@ -317,14 +327,14 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
     private void populateTokenLabelView(TextAnnotation ta, List<String> tags, String viewName) {
         TokenLabelView v = new TokenLabelView(viewName, ta);
         for (int tkid = 0; tkid < tags.size(); tkid++)
-            v.addTokenLabel(tkid, tags.get(tkid),1.0D);
+            v.addTokenLabel(tkid, tags.get(tkid), 1.0D);
         ta.addView(viewName, v);
     }
 
-    private void populateAttribution(TextAnnotation ta, Map<String, AttributionRelation> attrRealtions) {
+    private void populateAttribution(TextAnnotation ta, Map<String, AttributionRelation> attrRelations) {
         PredicateArgumentView attrRelationView = new PredicateArgumentView(VIEW_NAME, "Gold-PARC3", ta , 1.0D);
 
-        for (Map.Entry<String, AttributionRelation> ent : attrRealtions.entrySet()) {
+        for (Map.Entry<String, AttributionRelation> ent : attrRelations.entrySet()) {
             String relationId = ent.getKey();
             AttributionRelation rel = ent.getValue();
             List<IntPair> sourceSpans = rel.getSourceSpans();
@@ -388,41 +398,55 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
             content = new ArrayList<>();
         }
 
-        public void updateSourceSpan(int tkid) { updateSpan(source, tkid); }
+        public void updateSourceSpan(int tkid) {
+            updateSpan(source, tkid);
+        }
 
-        public void updateCueSpan(int tkid) { updateSpan(cue, tkid);}
+        public void updateCueSpan(int tkid) {
+            updateSpan(cue, tkid);
+        }
 
-        public void updateContentSpan(int tkid) { updateSpan(content, tkid); }
+        public void updateContentSpan(int tkid) {
+            updateSpan(content, tkid);
+        }
 
         private void updateSpan(List<IntPair> spans, int tokenId) {
             boolean updated = false;
-            for (IntPair span: spans) {
+            for (IntPair span : spans) {
                 int end = span.getSecond();
                 if (end == tokenId) {
                     span.setSecond(end + 1);
                     updated = true;
-                    break;      // Maybe this is wrong, but probably not
+                    break; // Maybe this is wrong, but probably not
                 }
             }
             if (!updated)
                 spans.add(new IntPair(tokenId, tokenId + 1));
         }
 
-        public List<IntPair> getSourceSpans() { return this.source; }
+        public List<IntPair> getSourceSpans() {
+            return this.source;
+        }
 
-        public List<IntPair> getCueSpans() { return this.cue; }
+        public List<IntPair> getCueSpans() {
+            return this.cue;
+        }
 
-        public List<IntPair> getContentSpans() { return this.content; }
+        public List<IntPair> getContentSpans() {
+            return this.content;
+        }
     }
 
     /**
-     * Read sections of corpus into TextAnnotations, serialize TextAnnotations into json, and save the json to output directory.
-     * Specify PARC train/dev/test dir, and output directory in args.
+     * Read sections of corpus into TextAnnotations, serialize TextAnnotations into json, and save
+     * the json to output directory. Specify PARC train/dev/test dir, and output directory in args.
+     * 
      * @param args PARC source directory and output directory
      */
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.println("Usage: java" + PARC3Reader.class.getCanonicalName() + " [source-parc-dir] [out-dir]");
+            System.out.println("Usage: java" + PARC3Reader.class.getCanonicalName()
+                    + " [source-parc-dir] [out-dir]");
             System.exit(1);
         }
 
@@ -452,7 +476,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
             try {
                 logger.trace("Writing file out to '{}'...", outFile);
                 LineIO.write(outFile, Collections.singletonList(jsonTa));
-            } catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
