@@ -1,6 +1,7 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.parcReader;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
@@ -89,7 +90,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
 
     private static Logger logger = LoggerFactory.getLogger(PARC3Reader.class);
 
-    /** Constants **/
+    // Constants
     // XML tag names
     private static final String NODE_SENTENCE = "SENTENCE";
     private static final String NODE_WORD = "WORD";
@@ -126,9 +127,12 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
     private static final String EXT_XML = ".xml";
     private static final String VIEW_NAME = ViewNames.ATTRIBUTION_RELATION;
 
-    /** Config Variables **/
+    // Config Variables
     private boolean bPopulatePOS;
     private boolean bPopulateLemma;
+
+    // List of AR relation ids and document name pairs, where dangling AR Constituents are found (aka AR without cues)
+    private Set<Pair<String, String>> warnList;
 
     /**
      * Creates a PARC reader that reads all documents in a given directory with default settings.
@@ -157,6 +161,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
         super.initializeReader();
         bPopulatePOS = resourceManager.getBoolean(PARC3ReaderConfigurator.POPULATE_POS.key);
         bPopulateLemma = resourceManager.getBoolean(PARC3ReaderConfigurator.POPULATE_LEMMA.key);
+        warnList = new HashSet<>();
     }
 
     /**
@@ -184,11 +189,12 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
     }
 
     /**
-     * Parse a document into an Text Annotation. By default TOKEN and SENTENCE view will be
-     * populated. Other gold views will only be populated if set in configurations
+     * Parse a document into an {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
+     * TextAnnotation}. By default TOKEN and SENTENCE view will be  populated. Other gold views will only be
+     * populated if set in configurations
      *
      * @param list a list of containing one path to a xml document
-     * @return a list containing one TextAnnotation file, corresponding to one source text file plus
+     * @return a list containing one TextAnnotation, corresponding to one source text file plus
      *         annotations
      * @throws Exception if files can't be found, or if parser fails to read annotation format
      */
@@ -209,7 +215,6 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
             List<String> lemmas = new ArrayList<>();
 
             // Attribution Relations - each entry in the map corresponds to one set of attribution relation
-
             Map<String, AttributionRelation> attrRelations = new HashMap<>();
 
             // Text
@@ -280,7 +285,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
                     fileStem,
                     text.toString(),
                     charOffsets.toArray(new IntPair[0]),
-                    tokens.toArray(new String[tokens.size()]),
+                    tokens.toArray(new String[0]),
                     sentTokOffset.stream().mapToInt(i->i).toArray());
 
             if (bPopulatePOS)
@@ -295,8 +300,28 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
         return result;
     }
 
+    @Override
+    public String generateReport() {
+        String processedNum = super.generateReport();
+        StringBuilder report = new StringBuilder();
+        report.append(processedNum)
+                .append("Dangling constituents found in ")
+                .append(warnList.size())
+                .append(" ARs (aka AR without a cue).")
+                .append(System.lineSeparator());
+
+        for (Pair<String, String> reldocid: warnList) {
+            report.append(reldocid.getFirst())
+                    .append(" in document ")
+                    .append(reldocid.getSecond())
+                    .append(System.lineSeparator());
+        }
+
+        return report.toString();
+    }
+
     private void updateAttributionRelation(Map<String, AttributionRelation> relation,
-            String relationId, String role, int tokenId) {
+                                           String relationId, String role, int tokenId) {
         if (!relation.containsKey(relationId)) {
             relation.put(relationId, new AttributionRelation(relationId));
         }
@@ -344,8 +369,11 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
             List<String> relations = new ArrayList<>();
 
             // Process cue first, if there are no cue for this attribution relation, skip (should never happen)
-            if (cueSpans.isEmpty())
+            if (cueSpans.isEmpty()) {
+                warnList.add(new Pair<>(rel.groupId, ta.getId()));
                 continue;
+            }
+
 
             IntPair cue = cueSpans.get(0); // There is one and only one cue in each AR
             Constituent cueC = new Constituent(LABEL_CUE, attrRelationView.getViewName(),
@@ -480,5 +508,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
                 e.printStackTrace();
             }
         }
+
+        System.out.println(reader.generateReport());
     }
 }
