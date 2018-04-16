@@ -279,7 +279,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
                     super.corpusName,
                     fileStem,
                     text.toString(),
-                    charOffsets.toArray(new IntPair[charOffsets.size()]),
+                    charOffsets.toArray(new IntPair[0]),
                     tokens.toArray(new String[tokens.size()]),
                     sentTokOffset.stream().mapToInt(i->i).toArray());
 
