@@ -103,7 +103,8 @@ ner directories containing results. Errors will be logged in errors.out in the g
 ner directories.
 
 5. Producing Results
+
 The produceresults.sh script will compile the results into a spreadsheet (CSV) format. Output is 
 produced to standard out, which can be catenated to a file. The first column of this output is 
-the name of the test directory, which also codifies the learning rates and thicknesses, the
-next column is the F1 value for the level one model, the last column is the F1 for both models.`
+the name of the test directory, followed by the learning rates and thicknesses, the
+next column is the F1 value for the level one model, the last column is the F1 for both models.
