@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.verbsense.caches;
 
+import edu.illinois.cs.cogcomp.core.io.caches.DBHelper;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
