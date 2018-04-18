@@ -18,6 +18,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.Triple;
  * It has an elementName to indicate the XML tag name for the span element (e.g. nchunk),
  * a viewName to indicate the target TextAnnotation view (e.g. ViewNames.SHALLOW_PARSE),
  * and a processor function on one such element that returns a span label String
+ *
+ * @author Xiaotian Le
  */
 class SpanLabelProcessor extends Triple<String, String, Function<Element, String>> {
     public SpanLabelProcessor(String elementName, String viewName, Function<Element, String> processor) {
