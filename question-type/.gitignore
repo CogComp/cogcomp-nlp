@@ -1,0 +1,16 @@
+### IntelliJ files
+.idea
+illinois-pos.iml
+
+### Eclipse files
+local.properties
+.settings/
+.loadpath
+.project
+.classpath
+
+### Trained model files
+models
+
+### Others
+*.swp

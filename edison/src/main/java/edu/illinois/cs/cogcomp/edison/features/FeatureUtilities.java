@@ -8,7 +8,9 @@
 package edu.illinois.cs.cogcomp.edison.features;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
@@ -144,6 +146,28 @@ public class FeatureUtilities {
                 set.add(f.getName());
         }
 
+        return set;
+    }
+
+    public static List<String> getFeaturesFromTextAnnotation(final FeatureExtractor fex, TextAnnotation s) {
+        List<Constituent> cons = s.getView(ViewNames.TOKENS).getConstituents();
+        List<String> features = new ArrayList<>();
+        for(Constituent c : cons) {
+            try {
+                features.addAll(getFeatureSet(fex, c));
+            } catch (EdisonException e) {
+                e.printStackTrace();
+            }
+        }
+        return features;
+    }
+
+    public static List<String> getFeatureSet(Set<Feature> features) {
+        List<String> set = new ArrayList<>();
+        for (Feature f : features) {
+            if (f instanceof DiscreteFeature)
+                set.add(f.getName());
+        }
         return set;
     }
 

@@ -43,8 +43,8 @@ import java.util.Vector;
  *            then parse the TextAnnotations into tokens.
  */
 
-public class BIOReader implements Parser
-{
+public class BIOReader implements Parser {
+
     private List<Constituent> tokenList;
     private int tokenIndex;
     private List<TextAnnotation> taList;
