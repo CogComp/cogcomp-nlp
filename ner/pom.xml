@@ -47,21 +47,21 @@
             <version>4.0.3</version>
         </dependency>
 
-
         <!-- models: you need to use/specify a new path to avoid using these -->
+        <!--in our current versions we don't use these anymore; they are loaded from datastore -->
         <!-- if you want to use CoNLL-only models, use version 3.2 -->
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-ner-model</artifactId>
-            <version>3.3</version>
-            <classifier>CoNLL_enron</classifier>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-ner-model</artifactId>
-            <version>3.3</version>
-            <classifier>OntoNotes</classifier>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
+            <!--<artifactId>illinois-ner-model</artifactId>-->
+            <!--<version>3.3</version>-->
+            <!--<classifier>CoNLL_enron</classifier>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
+            <!--<artifactId>illinois-ner-model</artifactId>-->
+            <!--<version>3.3</version>-->
+            <!--<classifier>OntoNotes</classifier>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
