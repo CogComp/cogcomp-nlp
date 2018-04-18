@@ -110,16 +110,16 @@ public class EntityComparison {
 		score = 0.0f;
 		reason = "";
 
-        if (type1 == null) {
-            type1 = NameInfo.GENERIC_TYPE;
-        }
-        if (type2 == null) {
-            type2 = NameInfo.GENERIC_TYPE;
-        }
+		if (type1 == null) {
+			type1 = NameInfo.GENERIC_TYPE;
+		}
+		if (type2 == null) {
+			type2 = NameInfo.GENERIC_TYPE;
+		}
 		NameInfo name1Info = new NameInfo(name1);
 		NameInfo name2Info = new NameInfo(name2);
-        name1Info.setType(type1);
-        name2Info.setType(type2);
+		name1Info.setType(type1);
+		name2Info.setType(type2);
 
 		type1 = name1Info.getType();
 		type2 = name2Info.getType();
@@ -171,9 +171,9 @@ public class EntityComparison {
 	 *            Second of the two names being compared
 	 */
     public void compare(String name1, String name2) {
-        String type1 = null;
-        String type2 = null;
-        compare(name1, name2, type1, type2);
+		String type1 = null;
+		String type2 = null;
+		compare(name1, name2, type1, type2);
     }
 
 	/**
