@@ -147,6 +147,7 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
                         file,
                         corpusAbsolutePath.relativize(Paths.get(file)).toString()
                 ));
+                logger.info("Created TextAnnotation from [" + file +"].");
             }
             catch (ParserConfigurationException e) {
                 throw e;
@@ -351,9 +352,10 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
 
         MascXCESReader reader = new MascXCESReader("MASC-3.0.0", corpusDirectory, ".xml");
         for (TextAnnotation ta : reader) {
-            String outputFile = Paths.get(outputDirectory, ta.getId()).toAbsolutePath().toString();
+            String outputFile = Paths.get(outputDirectory, ta.getId() + ".json").toAbsolutePath().toString();
             new File(outputFile).getParentFile().mkdirs();
-            SerializationHelper.serializeTextAnnotationToFile(ta, outputFile + ".json", true, true);
+            SerializationHelper.serializeTextAnnotationToFile(ta, outputFile, true, true);
+            logger.info("Serialized TextAnnotation to [" + outputFile + "]");
         }
 
         System.out.print(reader.generateReport());
