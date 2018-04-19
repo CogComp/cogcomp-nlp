@@ -43,7 +43,13 @@ public class OracleTokenizer {
         this.exceptionDisplayLength = exceptionDisplayLength;
     }
 
-    public Tokenizer.Tokenization tokenize(String rawText, List<String> tokens) {
+    /**
+     * Produces a Tokenization with character offsets based on
+     * 1. a raw text
+     * 2. a given set of tokens, which must be a sequence of substrings of the raw text in order
+     * 3. a given set of sentence spans, which will be normalized to cover all tokens
+    */
+    public Tokenizer.Tokenization tokenize(String rawText, List<String> tokens, List<IntPair> sentences) {
         List<IntPair> charOffsets = new ArrayList<>();
 
         for (int i = 0, rawTextOffset = 0; i < tokens.size(); ++i) {
@@ -60,7 +66,31 @@ public class OracleTokenizer {
             rawTextOffset = tokenEndOffset;
         }
 
-        int[] sentenceEndTokenIndexes = new int[]{tokens.size()};
+        int[] sentenceEndTokenIndexes = normalizeSentences(sentences, tokens.size());
         return new Tokenizer.Tokenization(tokens.toArray(new String[0]), charOffsets.toArray(new IntPair[0]), sentenceEndTokenIndexes);
+    }
+
+    /**
+     * Helper for normalizing a sentence span annotation by creating a sentence for each uncovered token span
+     * Input sentence spans must be in order and non-overlapping
+     */
+    public static int[] normalizeSentences(List<IntPair> sentences, int numberOfTokens) {
+        List<Integer> sentenceEndTokenIndexes = new ArrayList<>();
+
+        int lastTokenId = 0;
+        for (IntPair sentence : sentences) {
+            if (sentence.getFirst() > lastTokenId) {
+                sentenceEndTokenIndexes.add(sentence.getFirst());
+            }
+
+            lastTokenId = sentence.getSecond();
+            sentenceEndTokenIndexes.add(sentence.getSecond());
+        }
+
+        if (lastTokenId < numberOfTokens) {
+            sentenceEndTokenIndexes.add(numberOfTokens);
+        }
+
+        return sentenceEndTokenIndexes.stream().mapToInt(i -> i).toArray();
     }
 }
