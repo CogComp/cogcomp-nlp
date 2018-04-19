@@ -41,6 +41,9 @@ abstract public class AbstractOntonotesReader extends AnnotationReader<TextAnnot
     /** the current file ready to be read. */
     protected String currentfile = null;
     
+    /** list of files that did not parse because of errors. */
+    protected ArrayList<String> badFiles = new ArrayList<>();
+    
     /**
      * Reads the specified sections from penn treebank
      * @param viewname the name of the view, used to create resource manager.
@@ -117,7 +120,7 @@ abstract public class AbstractOntonotesReader extends AnnotationReader<TextAnnot
             return ta;
         } catch (AnnotatorException e) {
             error = e;
-            System.err.println("Skipping "+this.currentfile+", message : "+e.getLocalizedMessage());
+            this.badFiles.add(this.currentfile);
             return null;
         }
     }

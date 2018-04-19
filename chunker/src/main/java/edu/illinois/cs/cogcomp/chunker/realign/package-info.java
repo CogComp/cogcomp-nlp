@@ -6,8 +6,8 @@
  * http://cogcomp.cs.illinois.edu/
  */
 /**
- * The code is this pages is stand-alone, and aligns an older version of the training data with newer
- * tokenization and POS tagging produced by a newer POS tagger. A tree data structure is constructed
+ * The code in this package is stand-alone, and aligns an older version of the training data with newer
+ * tokenization and POS tagging produced by the POS tagger. A tree data structure is constructed
  * of the original data, as well as the new POS data, then the updated POS data is transposed onto the older
  * chunker training data repacing the previous construct there.
  * @author redman

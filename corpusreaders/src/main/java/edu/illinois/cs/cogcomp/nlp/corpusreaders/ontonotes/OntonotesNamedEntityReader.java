@@ -64,6 +64,8 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
         nameAttrs.add("type");
         tagsWithAtts.put("enamex", nameAttrs);
     }
+    /** list of files that did not parse because of errors. */
+    protected ArrayList<String> badFiles = new ArrayList<>();
 
     /** the home directory to traverse. */
     protected final String homeDirectory;
@@ -143,7 +145,7 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
         try {
             data = LineIO.slurp(currentfile);
         } catch (FileNotFoundException e1) {
-            System.err.println("The named entity file, \""+this.currentfile+"\", did not exist");
+            this.badFiles.add(this.currentfile);
             return null;
         } catch (Throwable e1) {
             e1.printStackTrace();
@@ -249,7 +251,7 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
         String outputdir = args[2];
         OntonotesNamedEntityReader otr = new OntonotesNamedEntityReader(topdir, args[1]);
         int count = 0;
-        final boolean producejson = false;
+        final boolean producejson = true;
         while (otr.hasNext()) {
             XmlTextAnnotation xta = otr.next();
             String path = otr.currentfile;
@@ -269,7 +271,6 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
                 TextAnnotation ta = xta.getTextAnnotation();
                 path = outputdir+path.substring(topdir.length());
                 path += ".conll";
-                System.out.println(count+":"+path);
                 CoNLL2002Writer.writeViewInCoNLL2003Format(ta.getView(VIEW_NAME), ta, path);
             }
             count++;

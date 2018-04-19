@@ -33,7 +33,7 @@ import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 public class OntonotesTreebankReader extends AbstractOntonotesReader {
 
     /** the view name we will employ. */
-    public static final String VIEW_NAME = "ONTONOTES_5_GOLD_TREEBANK";
+    public static final String VIEW_NAME = "TREEBANK_ONTONOTES_5_GOLD";
     
     /** the number of trees produced. */
     protected int treesProduced = 0;
@@ -103,7 +103,7 @@ public class OntonotesTreebankReader extends AbstractOntonotesReader {
 
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
             VIEW_NAME, currentfile, sentences);
-        TreeView parse = new TreeView(VIEW_NAME, "Ontonotes-5-GOLD", ta, 1.0);
+        TreeView parse = new TreeView(VIEW_NAME, this.getClass().getCanonicalName(), ta, 1.0);
         
         // add each parse tree
         int treecount = 0;
@@ -136,12 +136,19 @@ public class OntonotesTreebankReader extends AbstractOntonotesReader {
      * other relevant statistics the user should know about).
      */
     public String generateReport() {
+        StringBuffer sb = new StringBuffer();
         if (error != null) {
-            return "OntonotesTreebankReader produced "+treesProduced+" trees from "+fileindex+" of "+filelist.size()+" files.\n"
-                            +"Error encountered: "+error.getMessage();
+            sb.append("OntonotesTreebankReader produced "+treesProduced+" trees from "+fileindex+
+                " of "+filelist.size()+" files.\n" +"Error encountered: "+error.getMessage()+"\n");
         } else {
-            return "OntonotesTreebankReader produced "+treesProduced+" trees from "+fileindex+" of "+filelist.size()+" files.";
+            sb.append("OntonotesTreebankReader produced "+treesProduced+" trees from "+fileindex+
+                " of "+filelist.size()+" files.");
         }
+        sb.append("Of the documents, "+this.badFiles.size()+" files could not be parsed, they are as follows:\n");
+        for (String badfile : this.badFiles) {
+            sb.append("    "+badfile+"\n");
+        }
+        return sb.toString();
     }
 
     /**

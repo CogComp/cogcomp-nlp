@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -34,9 +36,12 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes.utils.DocumentIterato
  * @author redman
  */
 public class OntonotesCorefReader extends AbstractOntonotesReader {
+    
+    /** the logger for this class only. */
+    private static final Logger logger = LoggerFactory.getLogger(OntonotesCorefReader.class);
 
     /** the name of our view. */
-    static final public String VIEW_NAME = "ONTONOTES_5_GOLD_COREF";
+    static final public String VIEW_NAME = "COREF_ONTONOTES_5_GOLD";
     
     /** name of the attribute with teh mention type. */
     static final public String MENTION_TYPE_LABEL = "Mention Type";
@@ -122,12 +127,12 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
             if (xmlta != null) {
                 nerTA = xmlta.getTextAnnotation();
                 if (nerTA == null) {
-                    System.err.println("There was no NER text annotation in \""+this.oner.currentfile+"\"");
+                    logger.error("There was no NER text annotation in \""+this.oner.currentfile+"\"");
                     return null;
                 } else {
                     nerView = nerTA.getView(OntonotesNamedEntityReader.VIEW_NAME);
                     if (nerView == null) {
-                        System.err.println("There was no NER view in \""+this.oner.currentfile+"\"");
+                        logger.error("There was no NER view in \""+this.oner.currentfile+"\"");
                         return null;
                     }
                     nerTokens = nerTA.getTokens();
@@ -208,9 +213,7 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                 if (cm.speaker != null)
                     attribute.put("SPEAKER", cm.speaker);
                 attributes.add(attribute);
-                
-                if (debug)
-                    System.out.println("    "+cm+" -> "+cm.constituent.getSurfaceForm());
+                logger.debug("    "+cm+" -> "+cm.constituent.getSurfaceForm());
             }
             corefView.addCorefEdges(headconst, referants, attributes);
         }
@@ -256,19 +259,19 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                                 ntok += nerTokens[ni+niplus];
                             }
                         } else {
-                            System.out.flush();
-                            System.err.println("\nTokens were simply different in "+this.currentfile+" around "+ni+" and "+ci);
+                            StringBuffer stringbuffer = new StringBuffer("\nTokens were simply different in "+this.currentfile+
+                                " around "+ni+" and "+ci+"\n");
                             for (int cci = ci - 10, i = 0 ; i < 30; i++, cci++) {
-                                System.err.print(" "+coreftokens[cci]);
+                                stringbuffer.append(" "+coreftokens[cci]);
                             }
-                            System.err.println();
+                            stringbuffer.append('\n');
                             for (int nni = ni - 8, i = 0 ; i < 30; i++, nni++) {
-                                if (nni == ni) System.err.print(" *");
-                                else System.err.print(" ");
-                                System.err.print(nerTokens[nni]);
+                                if (nni == ni) stringbuffer.append(" *");
+                                else stringbuffer.append(" ");
+                                stringbuffer.append(nerTokens[nni]);
                             }
-                            System.err.println();
-                            System.err.flush();
+                            stringbuffer.append('\n');
+                            logger.error(stringbuffer.toString());
                             return null;
                         }
                     }
@@ -280,19 +283,19 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                     ni++;
                     ci++;
                 } else {
-                    System.out.flush();
-                    System.err.println("\nNo alignment in "+this.currentfile+" around "+ni+" and "+ci);
+                    StringBuffer stringbuffer = new StringBuffer("\nNo alignment in "+this.currentfile+
+                        " around "+ni+" and "+ci);
                     for (int cci = ci - 10, i = 0 ; i < 30; i++, cci++) {
-                        System.err.print(" "+coreftokens[cci]);
+                        stringbuffer.append(" "+coreftokens[cci]);
                     }
-                    System.err.println();
+                    stringbuffer.append('\n');
                     for (int nni = ni - 8, i = 0 ; i < 30; i++, nni++) {
-                        if (nni == ni) System.err.print(" *");
-                        else System.err.print(" ");
-                        System.err.print(nerTokens[nni]);
+                        if (nni == ni) stringbuffer.append(" *");
+                        else stringbuffer.append(" ");
+                        stringbuffer.append(nerTokens[nni]);
                     }
-                    System.err.println();
-                    System.err.flush();
+                    stringbuffer.append('\n');
+                    logger.error(stringbuffer.toString());
                     return null;
                 }
             }
@@ -318,10 +321,8 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
             View posView = (View)resultTA.getView(OntonotesTreebankReader.VIEW_NAME);
             
             // new identify mention types.
-            System.out.println("\n-------\nMention Types for "+this.currentfile);
             for (Constituent c : corefView.getConstituents()) {
                 this.setMentionType(c, tv, posView);
-                System.out.println(c.getSurfaceForm()+" -> "+c.getAttribute(MENTION_TYPE_LABEL));
             }
             processed++;
         }
@@ -402,16 +403,16 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                 if (!tokensEqual(t1, t2)) {
                     nontokens++; // These are tokens not in the text, inserted by linguists.
                     if (consecutive > 3) {
-                        System.err.println("\nEncountered a problem that rendered the document useless in "+this.currentfile);
-                        System.err.println("original text:");
-                        System.err.println(trimmed);
-                        System.err.println("treebank text:");
+                        logger.error("Encountered a problem that rendered the document useless in "+this.currentfile);
+                        logger.error("original text:");
+                        logger.error(trimmed);
+                        logger.error("treebank text:");
                         StringBuffer sb = new StringBuffer();
                         for (String t : treeta.getTokensInSpan(start, end)) {
                             sb.append(t);
                             sb.append(" ");
                         }
-                        System.err.println(sb.toString());
+                        logger.error(sb.toString());
                         throw new AnnotatorException("Tokens didn't align between treebank parse and tokens in "+this.currentfile);
                     }
                     consecutive++;
@@ -529,9 +530,18 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
         return plainToken.equals(ampless);
     }
     
+    /**
+     * Enumerate success, but also list the files that did not parse.
+     */
     @Override
     public String generateReport() {
-        return "Generated JSON representations of "+processed+" documents from a total of "+this.filelist.size()+" documents.";
+        StringBuffer sb = new StringBuffer("Generated JSON representations of "+processed+
+            " documents from a total of "+this.filelist.size()+" document\n");
+        sb.append("Of the documents, "+this.badFiles.size()+" files could not be parsed, they are as follows:\n");
+        for (String badfile : this.badFiles) {
+            sb.append("    "+badfile+"\n");
+        }
+        return sb.toString();
     }
     
     /**
