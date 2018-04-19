@@ -302,7 +302,8 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
         }
         
         // now transpose the NER view to the coref tokenization.
-        SpanLabelView tv = new SpanLabelView(OntonotesNamedEntityReader.VIEW_NAME, resultTA);
+        SpanLabelView tv = new SpanLabelView(OntonotesNamedEntityReader.VIEW_NAME,this.getClass().getCanonicalName(), 
+            resultTA, 1.0, true);
         for (Constituent c : nerView.getConstituents()) {
             int start = tokenAlignment[c.getStartSpan()];
             int end = c.getEndSpan() >= tokenAlignment.length ? tokenAlignment[tokenAlignment.length - 1] :
@@ -311,7 +312,7 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                 String lbl = c.getLabel();
                 tv.addSpanLabel(start, end, lbl, c.getConstituentScore());
             } catch (IllegalArgumentException iae) {
-                // overlapping constituent which span label view apparently does not support.
+                logger.error("Overlapping labels are not supported.", iae);
             }                   
         }
         
@@ -428,8 +429,6 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
                 NamedNodeMap nl = node.getAttributes();
                 Node fo = nl.getNamedItem("PARTNO");
                 partno = fo.getNodeValue();
-                if (partno == null)
-                    System.err.println("BADNESS");
             }
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node currentNode = nodeList.item(i);
@@ -485,8 +484,10 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
      * @return true if they are the same with escapes removed.
      */
     private boolean compareWithXMLEscapes(String plainToken, String xmlToken) {
+        
         // normalize, convert all -AMP- to & first.
         String ampless = xmlToken.replaceAll("-AMP-", "&");
+        
         // Now, -LRB- can be ( or [ or {, so we need to try them all.
         ampless = ampless.replaceAll("-LSB-", "[");
         ampless = ampless.replaceAll("-LRB-", "(");
@@ -496,10 +497,7 @@ public class OntonotesCorefReader extends AbstractOntonotesReader {
         ampless = ampless.replaceAll("-LAB-", "<");
         ampless = ampless.replaceAll("-LCB-", "{");
         ampless = ampless.replaceAll("-RCB-", "}");
-
-        // garbage in, take a best guess
         ampless = ampless.replaceAll("-RSB", "]");
-
         return plainToken.equals(ampless);
     }
 

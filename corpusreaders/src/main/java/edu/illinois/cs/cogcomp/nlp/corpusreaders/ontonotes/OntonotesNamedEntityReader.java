@@ -46,7 +46,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotation> {
     
     /** this is what we will name our view of this gold standard data. */
-    static final public String VIEW_NAME = "ONTONOTES_5_GOLD_NER";
+    static final public String VIEW_NAME = "NER_ONTONOTES_5_GOLD";
     
     /** tags containing text. */
     static final private Set<String> tagsWithText = new HashSet<>();
