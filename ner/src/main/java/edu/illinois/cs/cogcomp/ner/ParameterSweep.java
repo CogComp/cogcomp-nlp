@@ -66,7 +66,8 @@ public class ParameterSweep {
 				for (int i = 0; i < processCount; i++) {
 					Process process = processes[i];
 					if (process == null || !process.isAlive()) {
-						if (process != null) System.out.println("Completed : "+process.toString());
+						if (process != null) 
+						    System.out.println("Completed : "+directories[i].toString());
 						processes[i] = null;
 						next = i;
 					}
