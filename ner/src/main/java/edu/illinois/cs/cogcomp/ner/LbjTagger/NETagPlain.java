@@ -36,13 +36,8 @@ public class NETagPlain {
      */
     public static void init() {
         String modelFile = ParametersForLbjCode.currentParameters.pathToModelFile;
-        logger.info("Initializing tagger level 1...");
-        tagger1 = new NETaggerLevel1(modelFile + ".level1", modelFile + ".level1.lex");
-
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            logger.info("Initializing tagger level 2...");
-            tagger2 = new NETaggerLevel2(modelFile + ".level2", modelFile + ".level2.lex");
-        }
+        tagger1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
+        tagger2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
     }
 
     /**

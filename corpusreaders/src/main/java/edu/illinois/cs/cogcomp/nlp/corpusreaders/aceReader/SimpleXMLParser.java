@@ -17,12 +17,24 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Eric Bengtson
  *
  */
 public class SimpleXMLParser {
+    /**
+     * Parse from input data in a string.
+     * @param stream the input data stream.
+     * @return The {@code Document} XML tag -- the root of the document.
+     * @throws edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException
+     */
+    public static Document getDocument(InputStream stream) throws XMLException {
+        DocumentBuilder docBuilder = getDocumentBuilder();
+        return getDocument(stream, docBuilder);
+    }
+
     /**
      * @param filename The file to parse
      * @return The {@code Document} XML tag -- the root of the document.
@@ -106,6 +118,16 @@ public class SimpleXMLParser {
     private static Document getDocument(File file, DocumentBuilder docBuilder) throws XMLException {
         try {
             return docBuilder.parse(file);
+        } catch (SAXException e) {
+            throw new XMLException("Parse Error Occurred", e);
+        } catch (IOException e) {
+            throw new XMLException("IO Error While Reading XML Document", e);
+        }
+    }
+    
+    private static Document getDocument(InputStream stream, DocumentBuilder docBuilder) throws XMLException {
+        try {
+            return docBuilder.parse(stream);
         } catch (SAXException e) {
             throw new XMLException("Parse Error Occurred", e);
         } catch (IOException e) {
