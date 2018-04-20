@@ -62,6 +62,10 @@ public abstract class ADatalessAnnotator extends Annotator {
         this(viewName, new String[] {ViewNames.TOKENS}, config);
     }
 
+    protected ADatalessAnnotator(String viewName, ResourceManager config, boolean isLazilyInitialized) {
+        this(viewName, new String[] {ViewNames.TOKENS}, isLazilyInitialized, config);
+    }
+
     protected ADatalessAnnotator(String viewName, String[] requiredViews, ResourceManager config) {
         this(viewName, requiredViews, false, config);
     }

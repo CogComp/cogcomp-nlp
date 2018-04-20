@@ -483,7 +483,7 @@ public class JsonSerializer extends AbstractSerializer {
         if (json.has(TOKENOFFSETS))
             offsets = readTokenOffsets(json.getAsJsonArray(TOKENOFFSETS), tokens);
         else
-            TokenUtils.getTokenOffsets(text, tokens);
+            offsets = TokenUtils.getTokenOffsets(text, tokens);
 
         TextAnnotation ta =
                 new TextAnnotation(corpusId, id, text, offsets, tokens, sentences.getSecond());

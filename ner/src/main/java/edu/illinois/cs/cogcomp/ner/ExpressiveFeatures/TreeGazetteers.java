@@ -44,6 +44,7 @@ public class TreeGazetteers implements Gazetteers {
      * Making this private ensures singleton.
      *
      * @param phrase_length the max length of the phrases we will consider.
+     * @param pathToDictionaries the path to the gazetteers.
      * @throws IOException
      */
     TreeGazetteers(int phrase_length, String pathToDictionaries) throws IOException {
@@ -53,20 +54,27 @@ public class TreeGazetteers implements Gazetteers {
     /**
      * init all the gazetters, mangle each term in a variety of ways.
      *
-     * @param pathToDictionaries
+     * @param pathToDictionaries the path to the gazetteers.
      * @param phrase_length the max length of the phrases we will consider.
      * @throws IOException
      */
     private void init(int phrase_length, String pathToDictionaries) throws IOException {
         try {
-            ArrayList<String> filenames = new ArrayList<>();
-            Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            File gazDirectory = dsNoCredentials.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
-            // We are not loading the resources from classpath anymore. Instead we are calling them programmatically
-            // InputStream stream = ResourceUtilities.loadResource(pathToDictionaries + "/gazetteers-list.txt");
-            InputStream stream = new FileInputStream(gazDirectory.getPath() + File.separator + "gazetteers" + File.separator + "gazetteers-list.txt");
+                        
+            // check the local file system for it.
+            File gazDirectory = new File(pathToDictionaries);
+            String pathToLists = gazDirectory.getPath() + File.separator + "gazetteers" + File.separator + "gazetteers-list.txt";
+            InputStream stream = ResourceUtilities.loadResource(pathToLists);
+            if (stream == null) {
+                
+                // not in file system or classpath, try Minio.
+                Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+                gazDirectory = dsNoCredentials.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
+                stream = new FileInputStream(gazDirectory.getPath() + File.separator + "gazetteers" + File.separator + "gazetteers-list.txt");
+            }
             BufferedReader br = new BufferedReader(new InputStreamReader(stream));
             String line;
+            ArrayList<String> filenames = new ArrayList<>();
             while ((line = br.readLine()) != null)
                 filenames.add(line);
 

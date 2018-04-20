@@ -7,7 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
+import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -181,7 +183,9 @@ public class NerBenchmark {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
                             System.out.println("\n\n----- Training models for evaluation for "+confFile+" ------");
                             Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
-
+                            ResourceManager rm = new ResourceManager(confFile);
+                            ModelLoader.load(rm, rm.getString("modelName"));
+                            
                             // there is a training directory, with training enabled, so train. We use the same dataset
                             // for both training and evaluating.
                             LearningCurveMultiDataset.getLearningCurve(iterations, trainDirName, devDirName);
@@ -200,6 +204,8 @@ public class NerBenchmark {
                     } else if (!release) {
                         System.out.println("\n\n----- Reporting results from existing models for "+confFile+" ------");
                         Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
+                        ResourceManager rm = new ResourceManager(confFile);
+                        ModelLoader.load(rm, rm.getString("modelName"));
                         System.out.println("Benchmark against configuration : " + confFile);
                         if (reportLabels)
                             NEDisplayPredictions.test(testDirName, "-c", verbose);
@@ -213,7 +219,9 @@ public class NerBenchmark {
 
                     if (release) {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
-                            Parameters.readConfigAndLoadExternalData(confFile, true);
+                            Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
+                            ResourceManager rm = new ResourceManager(confFile);
+                            ModelLoader.load(rm, rm.getString("modelName"));
                             System.out.println("\n\n----- Building a final model for "+confFile+" ------");
 
                             // there is a training directory, with training enabled, so train. We use the same dataset

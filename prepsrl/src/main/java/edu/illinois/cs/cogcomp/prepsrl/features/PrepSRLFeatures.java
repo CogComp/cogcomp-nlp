@@ -32,23 +32,19 @@ public class PrepSRLFeatures extends LBJavaFeatureExtractor {
     private final FeatureExtractor fex;
     private static WordNetFeatureExtractor firstSense, wordNetFexes;
     static {
-        try {
-            firstSense = getWordNetFeatureExtractor(WordNetFeatureClass.synsetsFirstSense);
-            wordNetFexes =
-                    getWordNetFeatureExtractor(WordNetFeatureClass.existsEntry,
-                            WordNetFeatureClass.synonymsFirstSense,
-                            WordNetFeatureClass.synsetsAllSenses,
-                            WordNetFeatureClass.partHolonymsFirstSense,
-                            WordNetFeatureClass.partHolonymsAllSenses,
-                            WordNetFeatureClass.memberHolonymsFirstSense,
-                            WordNetFeatureClass.memberHolonymsAllSenses,
-                            WordNetFeatureClass.substanceHolonymsFirstSense,
-                            WordNetFeatureClass.substanceHolonymsAllSenses,
-                            WordNetFeatureClass.lexicographerFileNamesFirstSense,
-                            WordNetFeatureClass.lexicographerFileNamesAllSenses);
-        } catch (EdisonException e) {
-            System.err.println("Cannot inialise WordNet feature extractors");
-        }
+        firstSense = getWordNetFeatureExtractor(WordNetFeatureClass.synsetsFirstSense);
+        wordNetFexes =
+                getWordNetFeatureExtractor(WordNetFeatureClass.existsEntry,
+                        WordNetFeatureClass.synonymsFirstSense,
+                        WordNetFeatureClass.synsetsAllSenses,
+                        WordNetFeatureClass.partHolonymsFirstSense,
+                        WordNetFeatureClass.partHolonymsAllSenses,
+                        WordNetFeatureClass.memberHolonymsFirstSense,
+                        WordNetFeatureClass.memberHolonymsAllSenses,
+                        WordNetFeatureClass.substanceHolonymsFirstSense,
+                        WordNetFeatureClass.substanceHolonymsAllSenses,
+                        WordNetFeatureClass.lexicographerFileNamesFirstSense,
+                        WordNetFeatureClass.lexicographerFileNamesAllSenses);
     }
 
     private PrepSRLFeatures(FeatureExtractor fex) {

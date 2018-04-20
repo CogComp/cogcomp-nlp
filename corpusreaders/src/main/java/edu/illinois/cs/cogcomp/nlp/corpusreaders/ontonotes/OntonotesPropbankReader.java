@@ -13,20 +13,16 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes.utils.DocumentIterator;
@@ -48,20 +44,15 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
     final boolean debug = false;
 
     /** the name of the resulting view. */
-    final protected static String parseViewName = "Ontonotes-Propbank";
+    final protected static String VIEW_NAME = "SRL_ONTONOTES_5_GOLD";
     
     /** we will use this to generate the text annotation with the treebank parse, 
      * then we will add the propbank parse over that.
      */
     private OntonotesTreebankReader otr = null;
     
-    /** this is something we add to the predicate to make it unique, for cases where 
-     * traces to missing verbage exist. */
-    final private String DISAMBIGUATION_ATTR = "DISAMBIGUATION_ATTR";
-    
     /** holds the character that indicates if this is a continuation of a previous relation. */
     final private String CONTINUATION_ATTR = "CONTINUATION_ATTR";
-    
     
     /**
      * Reads the specified sections from propbank data. Creates an instance
@@ -75,7 +66,7 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
      */
     public OntonotesPropbankReader(String dir, String language) 
                     throws IllegalArgumentException, IOException {
-        super(parseViewName, dir, language, DocumentIterator.FileKind.prop);
+        super(VIEW_NAME, dir, language, DocumentIterator.FileKind.prop);
         
         // Need to be able to iterate over the ".parse" files so we can vet the required 
         // treebank data. We have to make sure for each propbank file we have, we have the
@@ -142,7 +133,7 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
         TextAnnotation ta = this.otr.next();
         if (ta == null)
             return null;
-        TreeView tv = (TreeView)ta.getView(OntonotesTreebankReader.PENN_TREEBANK_ONTONOTES);
+        TreeView tv = (TreeView)ta.getView(OntonotesTreebankReader.VIEW_NAME);
         
         // now parse out the propbank data, we will compile the data into SRLNode container
         // class instances that capture all thee data form the file, we will then need to 
@@ -210,10 +201,10 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
 
     /**
      * We want to reuse any constituent with the same label and token span and attributes. The 
-     * equals method checks all kinds of stuff, ingoing and outgoing relations, which are changing
+     * equals method checks all kinds of stuff, in going and out going relations, which are changing
      * as we construct the view.
      * @param c the constituent.
-     * @return
+     * @return the disambiguation key for constituents.
      */
     private String constituentDisambiguationKey(Constituent c) {
         StringBuffer sb = new StringBuffer();
@@ -304,10 +295,6 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
         String[] argLabels = tempArgLabels.toArray(new String[tempArgLabels.size()]);
         double[] scores = new double[tempArgLabels.size()];
         for (int i = 0; i < scores.length; i++) scores[i] = 1.0;
-        
-        //public void addPredicateArguments(Constituent predicate, List<Constituent> args,
-        //    String[] relations, double[] scores) {
- 
         srlView.addPredicateArguments(predicate, args, argLabels, scores, continuationArgs);
     }
     
@@ -343,27 +330,7 @@ public class OntonotesPropbankReader extends AbstractOntonotesReader {
         while (otr.hasNext()) {
             TextAnnotation ta = otr.next();
             if (ta != null) {
-                
-                // check the view for hash collisions
-                View view = ta.getView(ViewNames.SRL_VERB);
-                List<Constituent> constituents = view.getConstituents();
-                HashMap<Integer, Constituent> hashmap = new HashMap<>();
 
-                // add each constituent to the map keyed by it's hashcode. Check first to see if the hashcode
-                // is already used, if it is report it.
-                for (Constituent c : constituents) {
-                    int code = c.hashCode();
-                    if (hashmap.containsKey(code)) {
-                        Constituent dup = hashmap.get(code);
-                        System.err.println(c+" == "+dup);
-                        int chash = c.hashCode();
-                        int dhash = dup.hashCode();
-                        hashcollisions++;
-                    } else {
-                        hashmap.put(code, c);
-                    }
-                }
-                
                 // write the serialized form
                 String json = SerializationHelper.serializeToJson(ta);
                 String outfile = otr.currentfile.replace(topdir, args[2]);
