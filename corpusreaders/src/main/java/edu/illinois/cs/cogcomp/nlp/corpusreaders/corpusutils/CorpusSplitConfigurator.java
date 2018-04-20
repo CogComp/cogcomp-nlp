@@ -8,7 +8,8 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+// import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -24,7 +25,7 @@ public class CorpusSplitConfigurator extends Configurator {
     public static final Property DEV_FRACTION = new Property("devFraction", "0.1");
     public static final Property TEST_FRACTION = new Property("testFraction", "0.2");
     public static final Property VIEWS_TO_CONSIDER = new Property("viewsToConsider",
-            StringUtils.join(",", new String[]{ViewNames.EVENT_ERE,ViewNames.MENTION_ERE}));
+            StringUtils.join(new String[]{ViewNames.EVENT_ERE,ViewNames.MENTION_ERE}, ","));
 
 
     /**
