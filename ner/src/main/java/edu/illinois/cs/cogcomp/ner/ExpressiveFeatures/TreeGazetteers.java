@@ -44,6 +44,7 @@ public class TreeGazetteers implements Gazetteers {
      * Making this private ensures singleton.
      *
      * @param phrase_length the max length of the phrases we will consider.
+     * @param pathToDictionaries the path to the gazetteers.
      * @throws IOException
      */
     TreeGazetteers(int phrase_length, String pathToDictionaries) throws IOException {
@@ -53,7 +54,7 @@ public class TreeGazetteers implements Gazetteers {
     /**
      * init all the gazetters, mangle each term in a variety of ways.
      *
-     * @param pathToDictionaries
+     * @param pathToDictionaries the path to the gazetteers.
      * @param phrase_length the max length of the phrases we will consider.
      * @throws IOException
      */
