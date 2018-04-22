@@ -400,7 +400,7 @@ public class PARC3Reader extends AbstractIncrementalCorpusReader<TextAnnotation>
             relations.addAll(new ArrayList<>(Collections.nCopies(contentCs.size(), REL_CONTENT)));
             relations.addAll(new ArrayList<>(Collections.nCopies(sourceCs.size(), REL_SOURCE)));
 
-            List<Constituent> merged = Stream.of(sourceCs, contentCs)
+            List<Constituent> merged = Stream.of(contentCs, sourceCs)
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
 
