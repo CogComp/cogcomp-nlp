@@ -219,7 +219,7 @@ public class Phrase {
     public static String fullNameDate(String phrase, datetype information) {
         int i;
         int j;
-        DateMapping temp = new DateMapping();
+        DateMapping temp = DateMapping.getInstance();
         String[] passby = new String[3];
         String patternStr = "\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*(?:\\s|[/\\-\\.\\,])\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*(?:\\s|[/\\-\\.\\,])\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*";
         Pattern pattern = Pattern.compile(patternStr);
@@ -408,7 +408,7 @@ public class Phrase {
     public static String halfnamedate(String phrase, datetype information) {
 
         int i;
-        DateMapping temp = new DateMapping();
+        DateMapping temp = DateMapping.getInstance();
 
 
         String patternStr = "\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*(?:\\s|[/\\-\\.\\,])\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*";
@@ -494,7 +494,7 @@ public class Phrase {
 
     public static String converter(String phrase1) {
         int i;
-        DateMapping temp = new DateMapping();
+        DateMapping temp = DateMapping.getInstance();
         //It records the number of term(Example:day,month,year)
         int numterm = 0;
         String result;
