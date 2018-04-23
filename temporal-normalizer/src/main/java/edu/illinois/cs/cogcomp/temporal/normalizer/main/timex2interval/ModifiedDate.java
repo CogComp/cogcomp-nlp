@@ -104,7 +104,7 @@ public class ModifiedDate {
 		}
 
 		int numterm;
-		DateMapping temp = new DateMapping();
+		DateMapping temp = DateMapping.getInstance();
 		int i;
 		int dayweek;
 		int year;

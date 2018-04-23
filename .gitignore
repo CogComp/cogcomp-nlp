@@ -8,3 +8,8 @@ edison/wordnet/
 **/.project
 **/.classpath
 *~
+
+# lbjava auto-generated files
+question-type/src/main/java/edu/illinois/cs/cogcomp/question_typer/lbjava
+ner/src/main/java/edu/illinois/cs/cogcomp/ner/LbjFeatures
+relation-extraction/src/main/java/org/cogcomp/re/LbjGen
