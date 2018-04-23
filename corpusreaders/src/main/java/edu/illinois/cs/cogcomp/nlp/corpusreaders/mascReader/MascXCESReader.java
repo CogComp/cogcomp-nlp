@@ -29,6 +29,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -65,6 +66,16 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
  *      Annotations: All
  *      Overlap mode: Nest
  *
+ * Note:
+ * 1. Some documents in the corpus can contain irregular sentence annotations,
+ *    such as nested sentences (as in written/fiction/cable_spool_fort.xml),
+ *    and tokens not covered by any sentence (as in written/blog/Acephalous-Cant-believe.xml).
+ *    The raw sentence spans are stored into ViewNames.SENTENCE_GOLD,
+ *    while the normalized spans which is guaranteed to be a partition of tokens are stored into ViewNames.SENTENCE.
+ * 2. MASC annotation contains date, location, organization, and person named entities.
+ *    The latter three are stored into ViewNames.NER_CONLL,
+ *    while the four are stoed into ViewNames.NER_ONTONOTES.
+ *
  * @author Xiaotian Le
  */
 public class MascXCESReader extends AnnotationReader<TextAnnotation> {
@@ -94,10 +105,14 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
         TOKEN_LABEL_PROCESSORS.add(new TokenLabelProcessor(ViewNames.POS, simpleAttrProcessor("msd")));  // POS Processor: the token label is the "msd" attribute of "tok" elements
 
         SPAN_LABEL_PROCESSORS = new ArrayList<>();
-        // NOTE: some sentences are nested, and some tokens are not in a sentence,
-        // so the sentences annotation is placed into SENTENCE_GOLD instead
-        // see written/fiction/cable_spool_fort.xml
+        // SENTENCE contains normalized sentences annotation, which is a partition of tokens for creating TextAnnotation
+        // NOTE: some tokens are not in a sentence, and they will be handled by OracleTokenizer
         // see written/blog/Acephalous-Cant-believe.xml
+        // NOTE: some sentences are nested, and the inner ones will be discarded here
+        // see written/fiction/cable_spool_fort.xml
+        SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor(SENTENCE_ELEMENT, ViewNames.SENTENCE, elem ->
+                getAllParentNodes(elem).stream().anyMatch(isElementWithTag(SENTENCE_ELEMENT)) ? null : ViewNames.SENTENCE));
+        // SENTENCE_GOLD contains raw sentences annotation, which might overlap, skip tokens, etc
         SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor(SENTENCE_ELEMENT, ViewNames.SENTENCE_GOLD, elem -> ViewNames.SENTENCE));  // Sentence Processor: the span label is simply ViewNames.SENTENCE
         SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor("nchunk", ViewNames.SHALLOW_PARSE, elem -> "NP"));  // Noun Chunk Processor
         SPAN_LABEL_PROCESSORS.add(new SpanLabelProcessor("vchunk", ViewNames.SHALLOW_PARSE, elem -> "VP"));  // Verb Chunk Processor
@@ -147,6 +162,7 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
                         file,
                         corpusAbsolutePath.relativize(Paths.get(file)).toString()
                 ));
+                logger.info("Created TextAnnotation from [" + file +"].");
             }
             catch (ParserConfigurationException e) {
                 throw e;
@@ -243,17 +259,23 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
 
         String rawText = doc.getDocumentElement().getTextContent();
 
+        List<Pair<IntPair, String>> sentencesWithLabel = spanLabels.get(ViewNames.SENTENCE);
+        List<IntPair> sentences = sentencesWithLabel.stream()
+                .map(Pair::getFirst)
+                .collect(Collectors.toList());
+        spanLabels.remove(ViewNames.SENTENCE);
+
         OracleTokenizer tokenizer = new OracleTokenizer();
-        Tokenizer.Tokenization tokenization = tokenizer.tokenize(rawText, tokens);
+        Tokenizer.Tokenization tokenization = tokenizer.tokenize(rawText, tokens, sentences);
         TextAnnotation ta = new TextAnnotation(corpusName, textId, rawText,
                 tokenization.getCharacterOffsets(), tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
 
-        for (TokenLabelProcessor processor : TOKEN_LABEL_PROCESSORS) {
-            createTokenLabelView(tokenLabels.get(processor.getViewName()).stream(), ta, processor.getViewName());
+        for (Map.Entry<String, List<Pair<Integer, String>>> entry : tokenLabels.entrySet()) {
+            createTokenLabelView(entry.getValue().stream(), ta, entry.getKey());
         }
 
-        for (SpanLabelProcessor processor : SPAN_LABEL_PROCESSORS) {
-            createSpanLabelView(spanLabels.get(processor.getViewName()).stream(), ta, processor.getViewName(), true);  // span labels in MASC dataset might overlap
+        for (Map.Entry<String, List<Pair<IntPair, String>>> entry : spanLabels.entrySet()) {
+            createSpanLabelView(entry.getValue().stream(), ta, entry.getKey(), true);  // span labels in MASC dataset might overlap
         }
 
         return ta;
@@ -351,9 +373,10 @@ public class MascXCESReader extends AnnotationReader<TextAnnotation> {
 
         MascXCESReader reader = new MascXCESReader("MASC-3.0.0", corpusDirectory, ".xml");
         for (TextAnnotation ta : reader) {
-            String outputFile = Paths.get(outputDirectory, ta.getId()).toAbsolutePath().toString();
+            String outputFile = Paths.get(outputDirectory, ta.getId() + ".json").toAbsolutePath().toString();
             new File(outputFile).getParentFile().mkdirs();
-            SerializationHelper.serializeTextAnnotationToFile(ta, outputFile + ".json", true, true);
+            SerializationHelper.serializeTextAnnotationToFile(ta, outputFile, true, true);
+            logger.info("Serialized TextAnnotation to [" + outputFile + "]");
         }
 
         System.out.print(reader.generateReport());
