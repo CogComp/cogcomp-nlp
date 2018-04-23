@@ -17,6 +17,7 @@ provided by the `cogcomp-core-utilities` package.
   - Ontonotes 5.0 POS Reader
   - TAC KBP reader
   - MASC Lemma, POS, Shallow Parse, NER Reader
+  - [PARC 3.0 Reader](doc/PARCReader.md)
 
 ## Citation
 
