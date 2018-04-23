@@ -8,7 +8,6 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 import java.util.Properties;
 
 /**
- * 
  * Configurations for PARC3 Reader. Source directory must be set for this configurator.
  * 
  * @author Sihao Chen

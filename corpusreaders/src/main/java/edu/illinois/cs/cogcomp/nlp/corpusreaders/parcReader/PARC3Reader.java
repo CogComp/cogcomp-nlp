@@ -33,54 +33,32 @@ import java.util.stream.Stream;
  * A Reader for Penn Attribution Relations Copurs 3.0 (PARC 3.0)
  * 
  * Documents in corpus are stored as a syntactic tree in XML. Annotations are stored as child nodes
- * to "Word" nodes
- * 
- * A toy example document below:
+ * to "Word" nodes. A toy example document shown below:
  * 
  * <root>
- * 
- * <SENTENCE gorn="0">
- * 
- * <NP-HLN gorn="0">
- * 
- * <WORD ByteCount="9,16" gorn="0,0" lemma="two-way" pos="NNP" sentenceWord="0" text="Two-Way"
- * word="0">
- * 
- * <attribution id="wsj_2401_PDTB_annotation_level.xml_set_0">
- * 
- * <attributionRole roleValue="content"/>
- * 
- * </attribution>
- * 
- * </WORD>
- * 
- * <WORD ByteCount="17,23" gorn="0,1" lemma="street" pos="NNP" sentenceWord="1" text="Street"
- * word="1"/>
- * 
- * </NP-HLN>
- * 
- * </SENTENCE>
- * 
+ *   <SENTENCE gorn="0">
+ *     <NP-HLN gorn="0">
+ *       <WORD ByteCount="9,16" gorn="0,0" lemma="two-way" pos="NNP" sentenceWord="0" text="Two-Way" word="0">
+ *         <attribution id="wsj_2401_PDTB_annotation_level.xml_set_0">
+ *           <attributionRole roleValue="content"/>
+ *         </attribution>
+ *       </WORD>
+ *       <WORD ByteCount="17,23" gorn="0,1" lemma="street" pos="NNP" sentenceWord="1" text="Street" word="1"/>
+ *     </NP-HLN>
+ *   </SENTENCE>
  * </root>
  * 
  * Given a input directory, this reader looks for files with .xml extension in all nested
- * directories.
+ * directories. Sample Directory Structure shown below.
  * 
- * Sample Directory Structure -
- * 
- * \train
- * 
- * - \00
- * 
- * - wsj-0001.xml
- * 
- * - ...
+ * - \train
+ * -   \00
+ * -     wsj-0001.xml
+ * -     ...
  * 
  * The current implementation only takes tokenization, sentence split, POS, Lemma and Attribution
- * Relation
- * 
- * from original annotation. The Attribution Relation annotations for each document are stored in an
- * instance of
+ * Relation from original annotation. The Attribution Relation annotations for each document are
+ * stored in an instance of
  * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView
  * PredicateArgumentView}.
  * 
