@@ -67,7 +67,9 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
  *      Overlap mode: Nest
  *
  * Note:
- * 1. MASC annotation can have nested sentences and tokens uncovered by sentences.
+ * 1. Some documents in the corpus can contain irregular sentence annotations,
+ *    such as nested sentences (as in written/fiction/cable_spool_fort.xml),
+ *    and tokens not covered by any sentence (as in written/blog/Acephalous-Cant-believe.xml).
  *    The raw sentence spans are stored into ViewNames.SENTENCE_GOLD,
  *    while the normalized spans which is guaranteed to be a partition of tokens are stored into ViewNames.SENTENCE.
  * 2. MASC annotation contains date, location, organization, and person named entities.

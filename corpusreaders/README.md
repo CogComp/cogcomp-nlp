@@ -43,9 +43,13 @@ is either nw or df, for newswire and discussion forum data, respectively.
 ## MASC Reader
 
 mascReader.MascXCESReader is a reader for the entire MASC dataset from Open American National Corpus.
-
 It processes Lemma, POS, Sentence, Shallow Parse, NER CoNLL (LOC, ORG, PER),
 and NER Ontonotes (DATE, LOCATION, ORGANIZATION, PERSON) annotations.
 
 The reader takes XCES XML format as input.
 Please check MascXCESReader.java for details on how to generate the input files.
+
+Some documents in the corpus can contain irregular sentence annotations,
+such as nested sentences (as in written/fiction/cable_spool_fort.xml),
+and tokens not covered by any sentence (as in written/blog/Acephalous-Cant-believe.xml).
+Please check MascXCESReader.java for details on how they are being handled.
