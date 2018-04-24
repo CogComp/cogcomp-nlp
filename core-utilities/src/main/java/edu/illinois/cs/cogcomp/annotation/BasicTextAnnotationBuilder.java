@@ -9,7 +9,6 @@ package edu.illinois.cs.cogcomp.annotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
 import org.apache.commons.lang.StringUtils;
 
@@ -116,7 +115,7 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
                 // The next token should start after a single space
                 tokenStartOffset += sentenceToken.length() + 1;
-                nextSentStartCharOffset = tokenCharEnd + 1; // by end of loop, this should match
+                nextSentStartCharOffset = tokenCharEnd + System.lineSeparator().length(); // by end of loop, this should match
                                                             // start of next sentence
             }
 
