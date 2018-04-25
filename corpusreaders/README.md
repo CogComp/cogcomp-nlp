@@ -49,3 +49,16 @@ and NER Ontonotes (DATE, LOCATION, ORGANIZATION, PERSON) annotations.
 
 The reader takes XCES XML format as input.
 Please check MascXCESReader.java for details on how to generate the input files.
+
+## Corpus Splitter
+
+corpusutils.CreateTrainDevTestSplit is a utility that divides a corpus in to training, development, and test
+subsets. In addition to respecting fractions specified by the user, it *stratifies* the subsets to balance
+characteristics specified by the user, preferring to balance the least frequent.  This was developed to support
+use cases where the corpus should be divided in a way that prevents certain kinds of overlap between training
+and test data, to avoid "memorization" by a learner applied to the task (so, for example, making sure all
+examples from a given document are assigned to the same subset). For cases where the annotation
+can be read into TextAnnotation objects, use a corpusutils.TextAnnotationLabelCounter; otherwise, use a
+corpusUtils.ListExampleLabelCounter and generate a flat boolean-featured representation using the characteristics
+you care about balancing across dev/train/test, and where each ListExample represents the non-divisible unit of
+assignment (e.g. a document, or a complete game, etc.).

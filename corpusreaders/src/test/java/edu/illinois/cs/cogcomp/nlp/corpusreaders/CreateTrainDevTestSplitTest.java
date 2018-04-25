@@ -7,16 +7,11 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.CreateTrainDevTestSplit;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.CreateTrainDevTestSplitSimple;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.LabelCountExtractor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.ListExampleLabelCounter;
-import org.apache.commons.math3.optim.InitialGuess;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -72,15 +67,15 @@ public class CreateTrainDevTestSplitTest {
 
         Map<String, Map<String, Integer>> smallExampleList = generateListExamples(categories, NUM_EX);
         ListExampleLabelCounter listCounter = new ListExampleLabelCounter(smallExampleList);
-        CreateTrainDevTestSplitSimple createTrainDevTestSplit = new CreateTrainDevTestSplitSimple(listCounter);
-        Map<CreateTrainDevTestSplitSimple.Split, Set<String>> splits =
+        CreateTrainDevTestSplit createTrainDevTestSplit = new CreateTrainDevTestSplit(listCounter);
+        Map<CreateTrainDevTestSplit.Split, Set<String>> splits =
                 createTrainDevTestSplit.getSplits(TRAIN_FRAC, DEV_FRAC, TEST_FRAC);
 
-        assertTrue(checkCount(NUM_EX, TRAIN_FRAC, splits.get(CreateTrainDevTestSplitSimple.Split.TRAIN)));
-        assertTrue(checkCount(NUM_EX, TEST_FRAC, splits.get(CreateTrainDevTestSplitSimple.Split.TEST)));
-        assertTrue(checkCount(NUM_EX, DEV_FRAC, splits.get(CreateTrainDevTestSplitSimple.Split.DEV)));
+        assertTrue(checkCount(NUM_EX, TRAIN_FRAC, splits.get(CreateTrainDevTestSplit.Split.TRAIN)));
+        assertTrue(checkCount(NUM_EX, TEST_FRAC, splits.get(CreateTrainDevTestSplit.Split.TEST)));
+        assertTrue(checkCount(NUM_EX, DEV_FRAC, splits.get(CreateTrainDevTestSplit.Split.DEV)));
 
-        double[] featureCounts = getFeatureCounts(splits.get(CreateTrainDevTestSplitSimple.Split.DEV), smallExampleList);
+        double[] featureCounts = getFeatureCounts(splits.get(CreateTrainDevTestSplit.Split.DEV), smallExampleList);
 
         assertTrue(compareProportions(proportions, featureCounts));
     }
