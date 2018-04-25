@@ -13,6 +13,11 @@ import edu.illinois.cs.cogcomp.core.utilities.ShellInterface;
 
 import java.util.*;
 
+
+/**
+ * This class requires that you have installed 'get1t' (e.g. https://github.com/sangmank/get1t) and
+ *    an appropriate ngram corpus.
+ */
 public class GoogleNgramsCounts extends CachedNgramCounter {
 
     private static int MAX_NUM_TOKENS = 5;
@@ -29,6 +34,12 @@ public class GoogleNgramsCounts extends CachedNgramCounter {
         return MAX_NUM_TOKENS;
     }
 
+    /**
+     * this method runs a google ngram program to retrieve the appropriate count for the specified
+     *   terms.
+     * @param set
+     * @return
+     */
     protected Map<String, Long> getNgramCount(Set<String> set) {
 
         Map<Integer, List<String>> byLength = splitByLengths(set);
@@ -38,7 +49,10 @@ public class GoogleNgramsCounts extends CachedNgramCounter {
 
             List<String> item = byLength.get(numTokens);
 
-            String tmpFile = "/tmp/google.ngrams.get1t" + (new Random()).nextInt();
+            String tmpDir = "~/tmp";
+            String tmpFile = tmpDir + "/google.ngrams.get1t" + (new Random()).nextInt();
+
+            IOUtils.mkdir(tmpDir);
 
             try {
                 String outputFile = tmpFile + ".ngrams";

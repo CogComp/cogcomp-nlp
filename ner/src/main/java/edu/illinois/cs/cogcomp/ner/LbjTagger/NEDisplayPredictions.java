@@ -7,26 +7,21 @@
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
+import java.util.ArrayList;
+import java.util.Vector;
+
+import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
-import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * This class will show each prediction for each word in each sentence (if there is a prediction).
- * 
  * @author redman
- *
  */
 public class NEDisplayPredictions {
-    private static Logger logger = LoggerFactory.getLogger(NEDisplayPredictions.class);
-
+    
     /**
      * Display the predictions, the gazetteer matches and the labels.
      * 
@@ -42,20 +37,10 @@ public class NEDisplayPredictions {
         ExpressiveFeaturesAnnotator.annotate(testData);
         Vector<Data> data = new Vector<>();
         data.addElement(testData);
-
-        NETaggerLevel1 taggerLevel1 =
-                new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.lex");
-        NETaggerLevel2 taggerLevel2 = null;
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            taggerLevel2 =
-                    new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2.lex");
-        }
+        NETaggerLevel1 t1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
+        NETaggerLevel2 t2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
         for (int i = 0; i < data.size(); i++)
-            Decoder.annotateDataBIO(data.elementAt(i), taggerLevel1, taggerLevel2);
+            Decoder.annotateDataBIO(data.elementAt(i), t1, t2);
         reportPredictions(data.get(0));
     }
 

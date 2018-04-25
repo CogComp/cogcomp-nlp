@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * @author Vivek Srikumar
@@ -65,6 +66,47 @@ public class CoreferenceView extends View {
         super.addRelation(relation);
     }
 
+    /**
+     * Adds the constituents provided in the arguments, with {@link Relation}s connecting the
+     *   canonical mention to the coreferent mentions.
+     * @param canonicalMention the 'most explicit' descriptor of the underlying entity
+     * @param coreferentMentions mentions that co-refer with the canonical mention
+     * @param attrs the attributes for each edge.
+     */
+    public void addCorefEdges(Constituent canonicalMention, List<Constituent> coreferentMentions, 
+            List<HashMap<String, String>> attrs) {
+        
+        // make sure the attributes and the coreferent mentions are the same number.
+        if (coreferentMentions.size() != attrs.size())
+            throw new RuntimeException("The 'CoreferenceView.addCorefEdges' method requires the "
+                + "same number of coreferant mentions and attribute sets");
+        
+        // add the head mention.
+        this.addConstituent(canonicalMention);
+        int canonicalMentionId = this.constituents.indexOf(canonicalMention);
+        canonicalEntitiesMap.put(canonicalMentionId, canonicalMentionId);
+        
+        // for each related constituent, add a relation object.
+        int i = 0;
+        for (Constituent c : coreferentMentions) {
+            if (c != canonicalMention) {
+                this.addConstituent(c);
+                Relation relation = new Relation(viewName, canonicalMention, c, 1.0);
+                
+                // add each of the included attributes for the relation.
+                HashMap <String, String> attr = attrs.get(i);
+                for (Entry<String, String> entry : attr.entrySet())
+                    relation.addAttribute(entry.getKey(), entry.getValue());
+
+                // add the relation
+                this.addRelation(relation);
+                int cId = this.constituents.indexOf(c);
+                canonicalEntitiesMap.put(cId, canonicalMentionId);
+            }
+            i++;
+        }
+    }
+    
     /**
      * Adds the constituents provided in the arguments, with {@link Relation}s connecting the
      *   canonical mention to the coreferent mentions.

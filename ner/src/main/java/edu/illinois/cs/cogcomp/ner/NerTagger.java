@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.ner.IO.Keyboard;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
@@ -33,27 +34,24 @@ public class NerTagger {
         ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
         try {
             boolean areWeTraining = args[0].equalsIgnoreCase("-train");
+            ResourceManager rm = new ResourceManager(args[args.length - 1]);
             Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
 
+            // load up the models
+            ModelLoader.load(rm, rm.getString("modelName"));
             if (args[0].equalsIgnoreCase("-annotate")) {
                 NETagPlain.init();
                 NETagPlain.tagData(args[1], args[2]);
             }
             if (args[0].equalsIgnoreCase("-demo")) {
-                logger.info("Reading model file : " + cp.pathToModelFile + ".level1");
-                NETaggerLevel1 tagger1 =
-                        new NETaggerLevel1(cp.pathToModelFile + ".level1", cp.pathToModelFile
-                                + ".level1.lex");
-                logger.info("Reading model file : " + cp.pathToModelFile + ".level2");
-                NETaggerLevel2 tagger2 =
-                        new NETaggerLevel2(cp.pathToModelFile + ".level2", cp.pathToModelFile
-                                + ".level2.lex");
                 String input = "";
                 while (!input.equalsIgnoreCase("quit")) {
                     input = Keyboard.readLine();
                     if (input.equalsIgnoreCase("quit"))
                         System.exit(0);
-                    String res = NETagPlain.tagLine(input, tagger1, tagger2);
+                    String res = NETagPlain.tagLine(input, 
+                        (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1, 
+                        (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2);
                     res = NETagPlain.insertHtmlColors(res);
                     StringTokenizer st = new StringTokenizer(res);
                     StringBuilder output = new StringBuilder();

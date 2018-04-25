@@ -1,6 +1,5 @@
 # CogCompNLP
 [![Build Status](http://morgoth.cs.illinois.edu:5800/app/rest/builds/buildType:(id:CogcompNlp_Build)/statusIcon)](morgoth.cs.illinois.edu:5800)
-[![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=cogcomp-nlp)](http://morgoth.cs.illinois.edu:8080/job/cogcomp-nlp/)
 [![Build status](https://ci.appveyor.com/api/projects/status/f53iv8435rq875ex/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
 
 
@@ -64,4 +63,16 @@ To include one of the modules in your Maven project, add the following snippet w
             <url>http://cogcomp.org/m2repo/</url>
         </repository>
     </repositories>
+```
+
+### Citing 
+If you are using the framework, please cite our paper: 
+```
+@inproceedings{2018_lrec_cogcompnlp,
+    author = {Daniel Khashabi, Mark Sammons, Ben Zhou, Tom Redman, Christos Christodoulopoulos, Vivek Srikumar, Nicholas Rizzolo, Lev Ratinov, Guanheng Luo, Quang Do, Chen-Tse Tsai, Subhro Roy, Stephen Mayhew, Zhili Feng, John Wieting, Xiaodong Yu, Yangqiu Song, Shashank Gupta, Shyam Upadhyay, Naveen Arivazhagan, Qiang Ning, Shaoshi Ling, Dan Roth},
+    title = {CogCompNLP: Your Swiss Army Knife for NLP},
+    booktitle = {11th Language Resources and Evaluation Conference},
+    year = {2018},
+    url = "http://cogcomp.org/papers/2018_lrec_cogcompnlp.pdf",
+}
 ```

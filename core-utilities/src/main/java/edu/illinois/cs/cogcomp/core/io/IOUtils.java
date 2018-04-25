@@ -151,6 +151,23 @@ public abstract class IOUtils {
         return files.toArray(new String[files.size()]);
     }
 
+    /**
+     * Filters the files contained in a directory or in its subdirectory structure. Returns all
+     * files (not directories) that pass the filter.
+     */
+    public static String[] lsFilesRecursive(String directory, FileFilter filter)
+            throws IOException {
+        File dir = new File(directory);
+        ArrayList<String> files = new ArrayList<>();
+        for (File filepath : dir.listFiles(filter)) {
+            if (filepath.isFile())
+                files.add(filepath.getAbsolutePath());
+            else if (filepath.isDirectory())
+                files.addAll(Arrays.asList(lsFilesRecursive(filepath.getAbsolutePath(), filter)));
+        }
+        return files.toArray(new String[files.size()]);
+    }
+
 
     /**
      * List the directories contained within a directory.
@@ -467,5 +484,15 @@ public abstract class IOUtils {
 
         in.close();
         return obj;
+    }
+
+    /**
+     * Changes "/a/b/c/d/e/f/g.h" into "/a/b/.../e/f/g.h",
+     * or "C:\d\e\f\g\h\i\j.k" into "C:\d\e\...\h\i\j.k"
+     * @param path The long path
+     * @return The shortened path
+     */
+    public static String shortenPath(String path) {
+        return path.replaceAll("^(\\w+:|)([\\\\|/][^\\\\|/]+[\\\\|/][^\\\\|/]+[\\\\|/]).*([\\\\|/][^\\\\|/]+[\\\\|/][^\\\\|/]+)$", "$1$2...$3");
     }
 }
