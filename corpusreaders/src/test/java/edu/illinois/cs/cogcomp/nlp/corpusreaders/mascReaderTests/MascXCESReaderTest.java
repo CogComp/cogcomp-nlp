@@ -46,10 +46,15 @@ public class MascXCESReaderTest {
         Assert.assertEquals(pos.size(), 13389);  // msd= 13390, clean tok with msd= 13389
         Assert.assertEquals(pos.get(1).getLabel(), "VBG");
 
-        List<Constituent> sentences = ta.getView(ViewNames.SENTENCE_GOLD).getConstituents();
-        Assert.assertEquals(sentences.size(), 1046);  // s 1046
-        Assert.assertEquals(sentences.get(0).getStartSpan(), 0);
-        Assert.assertEquals(sentences.get(0).getEndSpan(), 25);
+        List<Constituent> sentences = ta.getView(ViewNames.SENTENCE).getConstituents();
+        Assert.assertEquals(sentences.size(), 1205);  // normalized sentences 1205
+        Assert.assertEquals(sentences.get(4).getStartSpan(), 39);  // a sentence is created to cover uncovered tokens
+        Assert.assertEquals(sentences.get(4).getEndSpan(), 41);
+
+        List<Constituent> sentencesGold = ta.getView(ViewNames.SENTENCE_GOLD).getConstituents();
+        Assert.assertEquals(sentencesGold.size(), 1046);  // s 1046
+        Assert.assertEquals(sentencesGold.get(4).getStartSpan(), 41);
+        Assert.assertEquals(sentencesGold.get(4).getEndSpan(), 46);
 
         List<Constituent> shallowParse = ta.getView(ViewNames.SHALLOW_PARSE).getConstituents();
         Assert.assertEquals(shallowParse.size(), 5504);  // nchunk 3551, vchunk 1953

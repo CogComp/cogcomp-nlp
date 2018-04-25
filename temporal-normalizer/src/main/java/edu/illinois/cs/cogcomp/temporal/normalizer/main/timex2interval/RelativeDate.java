@@ -22,7 +22,7 @@ import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.Kn
  */
 public class RelativeDate {
 
-	public static DateMapping temp = new DateMapping();
+	public static DateMapping temp = DateMapping.getInstance();
 
 	/**
 	 * This function converts phrase that contains a relative date: more than xxx, etc
