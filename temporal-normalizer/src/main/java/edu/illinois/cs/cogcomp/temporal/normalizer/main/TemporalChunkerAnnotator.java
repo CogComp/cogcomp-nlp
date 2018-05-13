@@ -196,13 +196,29 @@ public class TemporalChunkerAnnotator extends Annotator{
             logger.debug("{} {}", lbjtoken.toString(), (null == lbjtoken.type) ? "NULL"
                     : lbjtoken.type);
 
+            /*Enforce some rules to avoid silly mistakes of temporal chunker*/
             if(lbjtoken.type.charAt(0) == 'O'){
-                // if this token matches to any month names or day-of-week names (either full names or abbr. names), then force the chunker label to be Begin
                 DateMapping dateMapping = DateMapping.getInstance();
                 String tmp = lbjtoken.form.toLowerCase();
+                String prev_token = null;
+                if(previous!=null&&previous.getSurfaceForm()!=null)
+                    prev_token = previous.getSurfaceForm().toLowerCase();
                 if(dateMapping.getHm_month().containsKey(tmp)
-                        ||dateMapping.getHm_month().containsKey(tmp))
+                        ||dateMapping.getHm_dayOfWeek().containsKey(tmp))// if this token matches to any month names or day-of-week names (either full names or abbr. names), then force the chunker label to be Begin
                     lbjtoken.type = "B-null";
+                else if(prev_token!=null
+                            && dateMapping.getHm_month().containsKey(prev_token)){// previous token was a "month"
+                    if(dateMapping.getHm_dayOfMonth().contains(tmp))// curr token is an ordinal number
+                        lbjtoken.type = "I-null";
+                    else{
+                        try {
+                            int currint = Integer.valueOf(tmp);
+                            if(currint>=1&&currint<=31)// curr token is an int number in [1,31]
+                                lbjtoken.type = "I-null";
+                        }
+                        catch (Exception e){}// nothing needed
+                    }
+                }
             }
 
             // what happens if we see an Inside tag -- even if it doesn't follow a Before tag
