@@ -417,7 +417,7 @@ public class MascReader extends AbstractIncrementalCorpusReader<TextAnnotation> 
             e.printStackTrace();
             System.exit(-1);
         }
-        TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true));
+        TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, false));
 
         int numGoldTokCorrect = 0;
         int numGoldTokTotal = 0;

@@ -10,8 +10,6 @@ package edu.illinois.cs.cogcomp.nlp.tokenizer;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.TokenizerStateMachine.State;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This is the entry point to the tokenizer state machine. This class is thread-safe, the
@@ -21,34 +19,37 @@ import org.slf4j.LoggerFactory;
  */
 public class StatefulTokenizer implements Tokenizer {
     
-    /** the logger specific to this class. */
-    private static Logger logger = LoggerFactory.getLogger(StatefulTokenizer.class);
-
     /** this is set to split tokens where dashes are found within words. */
     private boolean splitOnDash;
+    
+    /** set to split on second consecutive newline. */
+    private boolean splitOnSecondNewline;
     
     /**
      * Takes a boolean indicating if we are to split on dash or not. The default
      * constructor assumes we do split on dash.
      */
     public StatefulTokenizer () {
-        this(true);
+        this(true, false);
     }
     
     /**
      * Takes a boolean indicating if we are to split on dash or not. The default
      * constructor assumes we do split on dash.
      * @param splitOnDash if true, we will split words on a "-".
+     * @param splitOnSecondNL split if we encounter two newlines in a row, ignore additional newlines though.
      */
-    public StatefulTokenizer (boolean splitOnDash) {
+    public StatefulTokenizer (boolean splitOnDash, boolean splitOnSecondNL) {
         super();
         this.splitOnDash = splitOnDash;
+        this.splitOnSecondNewline = splitOnSecondNL;
     }
     
     @Override
     public Pair<String[], IntPair[]> tokenizeSentence(String sentence) {
+        
         // parse the test
-        TokenizerStateMachine tsm = new TokenizerStateMachine(splitOnDash);
+        TokenizerStateMachine tsm = new TokenizerStateMachine(splitOnDash, splitOnSecondNewline);
         tsm.parseText(sentence);
 
         // construct the data needed for the tokenization.
@@ -75,7 +76,7 @@ public class StatefulTokenizer implements Tokenizer {
     public Tokenization tokenizeTextSpan(String textSpan) {
 
         // parse the text
-        TokenizerStateMachine tsm = new TokenizerStateMachine(splitOnDash);
+        TokenizerStateMachine tsm = new TokenizerStateMachine(splitOnDash, splitOnSecondNewline);
         tsm.parseText(textSpan);
 
         // construct the data needed for the tokenization.
@@ -125,5 +126,19 @@ public class StatefulTokenizer implements Tokenizer {
      */
     public void setSplitOnDash(boolean splitOnDash) {
         this.splitOnDash = splitOnDash;
+    }
+    
+    /**
+     * @return if we split on multiple newlines or not.
+     */
+    public boolean isSplitOnMultipleNewlines() {
+        return splitOnSecondNewline;
+    }
+
+    /**
+     * @param onnewlines the splitOnDash to set
+     */
+    public void setSplitOnMultipleNewlines(boolean onnewlines) {
+        this.splitOnSecondNewline = onnewlines;
     }
 }

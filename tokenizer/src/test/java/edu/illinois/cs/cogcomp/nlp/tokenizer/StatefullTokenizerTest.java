@@ -31,6 +31,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Sentence;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
@@ -273,6 +274,55 @@ public class StatefullTokenizerTest {
     }
 
     /**
+     * Parse an empty string.
+     */
+    @Test
+    public void testSentenceSplitOnMultipleNewlines() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String text = "Mary loves Dick. Dick loves Jane.";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+        text = "Mary loves Dick\n\nDick loves Jane.";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+        text = "Mary loves Dick\n\n\nDick loves Jane.";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+        text = "Mary loves Dick\n\n\n\nDick loves Jane.\n\n";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+    }
+
+    /**
+     * Parse an empty string.
+     */
+    @Test
+    public void testDecimalNotation() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String text = ".9 percent like me.";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        String[] toks = taA.getTokens();
+        assertEquals(toks[0], ".9");
+    }
+
+    /**
+     * Parse an empty string.
+     */
+    @Test
+    public void testEmail() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String text = "Although tomredman@mchsi.com is an email address.";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        String[] toks = taA.getTokens();
+        assertEquals(toks[1], "tomredman@mchsi.com");
+    }
+
+    /**
      * Make sure newline is recognized.
      */
     @Test
@@ -299,7 +349,7 @@ public class StatefullTokenizerTest {
      * @param args
      */
     public static void main(String [] args) {
-        Tokenizer tkr = new StatefulTokenizer(false);
+        Tokenizer tkr = new StatefulTokenizer(false, false);
         String text = "We going to--. ";
         tkr.tokenizeTextSpan(text);
         
@@ -320,11 +370,11 @@ public class StatefullTokenizerTest {
 
     @Test
     public void testSplitPeriodEnd() {
-        Tokenizer tkr = new StatefulTokenizer(false);
+        Tokenizer tkr = new StatefulTokenizer(false, false);
         String text = "You see always, oh we're going to do this, we're going to--. ";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
         assertEquals(tknzn.getTokens().length, 17);
-        tkr = new StatefulTokenizer(true);
+        tkr = new StatefulTokenizer(true, false);
         tknzn = tkr.tokenizeTextSpan(text);
         assertEquals(tknzn.getTokens().length, 18);
     }

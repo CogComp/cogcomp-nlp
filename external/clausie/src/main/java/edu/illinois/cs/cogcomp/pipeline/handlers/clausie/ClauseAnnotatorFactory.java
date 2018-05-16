@@ -44,7 +44,7 @@ public class ClauseAnnotatorFactory {
     public static BasicAnnotatorService buildPipeline(ResourceManager rm) throws IOException,
             AnnotatorException {
         TextAnnotationBuilder taBldr =
-                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false, false));
 
         Map<String, Annotator> annotators = buildAnnotators();
         return new BasicAnnotatorService(taBldr, annotators, rm);

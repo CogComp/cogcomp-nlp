@@ -54,7 +54,7 @@ public class ExternalAnnotatorServiceFactory {
                 fullRm.getBoolean(ExternalToolsConfigurator.USE_SENTENCE_PIPELINE.key);
 
         TextAnnotationBuilder taBldr =
-                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash, false));
 
         return new BasicAnnotatorService(taBldr, annotators, fullRm);
     }
