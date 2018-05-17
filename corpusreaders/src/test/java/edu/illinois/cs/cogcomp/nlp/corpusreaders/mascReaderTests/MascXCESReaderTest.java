@@ -24,9 +24,10 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.mascReader.MascXCESReader;
  * Please change CORPUS_DIRECTORY if your MASC XCES XML files are stored elsewhere
  */
 public class MascXCESReaderTest {
-    private static final String CORPUS_DIRECTORY = "/shared/corpora/corporaWeb/written/eng/MASC-3.0.0/xces";
+    private static final String CORPUS_DIRECTORY = "dummy/path"; ///shared/corpora/corporaWeb/written/eng/MASC-3.0.0/xces";
 
-    @Test
+    // commenting '@Test' annotation so it doesn't run automatically
+//    @Test
     public void testCreateTextAnnotation() throws Exception {
         Logger.getLogger(MascXCESReader.class).setLevel(Level.INFO);
 
