@@ -40,7 +40,7 @@ public class Preprocessor {
                         rm);
         try {
             TextAnnotationBuilder taBldr =
-                    new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true));
+                    new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, false));
             Map<String, Annotator> annotators = new HashMap<>();
             annotators.put(ViewNames.POS, new POSAnnotator());
             annotators.put(ViewNames.LEMMA, new IllinoisLemmatizer());

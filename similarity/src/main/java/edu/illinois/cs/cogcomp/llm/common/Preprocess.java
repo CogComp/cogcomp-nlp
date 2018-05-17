@@ -94,7 +94,7 @@ public class Preprocess {
 		TextAnnotationBuilder tab;
 
 		boolean splitOnHyphens = false;
-		tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
+		tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens, false));
 
 		TextAnnotation ta = tab.createTextAnnotation("001", "001", s);
 

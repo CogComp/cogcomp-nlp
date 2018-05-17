@@ -82,7 +82,7 @@ public class MainClass {
 
     private static void annotate(String filepath) throws IOException {
         DepAnnotator annotator = new DepAnnotator();
-        TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true));
+        TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, false));
         Preprocessor preprocessor = new Preprocessor();
         Files.lines(Paths.get(filepath)).forEach(line -> {
             TextAnnotation ta = taBuilder.createTextAnnotation(line);

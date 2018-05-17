@@ -28,8 +28,6 @@ public interface Tokenizer {
         private final String[] tokens;
         private final IntPair[] characterOffsets;
         private final int[] sentenceEndTokenIndexes;
-        private List<Pair<String[], IntPair[]>> tokenizedSentences;
-
 
         public Tokenization(String[] tokens, IntPair[] characterOffsets,
                 int[] sentenceEndTokenIndexes) {
@@ -37,48 +35,6 @@ public interface Tokenizer {
             this.characterOffsets = characterOffsets;
             this.sentenceEndTokenIndexes = sentenceEndTokenIndexes;
         }
-
-        /**
-         * get a list of pairs, each pair corresponding to a sentence's tokens and their *absolute*
-         * character offsets.
-         */
-        public List<Pair<String[], IntPair[]>> getTokenizedSentences() {
-            if (null == tokenizedSentences)
-                buildTokenizedSentences();
-
-            return tokenizedSentences;
-        }
-
-        private void buildTokenizedSentences() {
-            this.tokenizedSentences = new ArrayList<>(sentenceEndTokenIndexes.length);
-            Set<Integer> sentenceEndIndexes = new HashSet<>();
-            int sentenceIndex = 0;
-            IntPair[] sentTokenOffsets = null;
-            String[] sentTokens = null;
-            int lastSentEnd = 0;
-
-            for (int i = 0; i < this.tokens.length; ++i) {
-                if (sentenceEndIndexes.contains(i)) {
-                    if (null == sentTokens)
-                        throw new IllegalArgumentException("Found null token or offset array. "
-                                + "Sentence end indexes must be incorrect.");
-
-                    this.tokenizedSentences.add(new Pair<>(sentTokens, sentTokenOffsets));
-                    sentTokens = null;
-                    sentTokenOffsets = null;
-                }
-
-                if (null == sentTokens) {
-                    int sentEnd = this.sentenceEndTokenIndexes[sentenceIndex];
-                    sentTokens = new String[(sentEnd - lastSentEnd)];
-                    sentTokenOffsets = new IntPair[(sentEnd - lastSentEnd)];
-
-                    lastSentEnd = sentEnd;
-                    sentenceEndIndexes.add(lastSentEnd);
-                }
-            }
-        }
-
 
         public String[] getTokens() {
             return tokens;

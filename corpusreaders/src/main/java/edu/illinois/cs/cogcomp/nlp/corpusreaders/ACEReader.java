@@ -55,7 +55,7 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
     protected static final String RelationSecondArgumentTag = "Arg-2";
     protected static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
     protected static final AceFileProcessor fileProcessor = new AceFileProcessor();
-    protected static final TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+    protected static final TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false, false));
     protected final String aceCorpusHome;
     protected final boolean is2004mode;
     protected final String corpusId;
