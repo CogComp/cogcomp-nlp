@@ -101,16 +101,28 @@ public class EntityComparison {
 	 *            First of the two names being compared
 	 * @param name2
 	 *            Second of the two names being compared
+     * @param type1
+                  Type of the first name or null if type is unknown
+     * @param type2
+                  Type of the second name or null if type is unknown
 	 */
-	public void compare(String name1, String name2) {
+	public void compare(String name1, String name2, String type1, String type2) {
 		score = 0.0f;
 		reason = "";
 
+		if (type1 == null) {
+			type1 = NameInfo.GENERIC_TYPE;
+		}
+		if (type2 == null) {
+			type2 = NameInfo.GENERIC_TYPE;
+		}
 		NameInfo name1Info = new NameInfo(name1);
 		NameInfo name2Info = new NameInfo(name2);
+		name1Info.setType(type1);
+		name2Info.setType(type2);
 
-		String type1 = name1Info.getType();
-		String type2 = name2Info.getType();
+		type1 = name1Info.getType();
+		type2 = name2Info.getType();
 
 		// If enforced types are different and neither is generic
 		if (!type1.equals(NameInfo.GENERIC_TYPE) && !type2.equals(NameInfo.GENERIC_TYPE) && !type2.equals(type1)) {
@@ -147,6 +159,22 @@ public class EntityComparison {
 
 		scoring(name1Info, name2Info, flag);
 	}
+
+	/**
+	 * Primary helper compare function that converts the comparable strings into
+	 * NameInfo objects. Since no type is given by the user, the types are
+     * inferred.
+	 * 
+	 * @param name1
+	 *            First of the two names being compared
+	 * @param name2
+	 *            Second of the two names being compared
+	 */
+    public void compare(String name1, String name2) {
+		String type1 = null;
+		String type2 = null;
+		compare(name1, name2, type1, type2);
+    }
 
 	/**
 	 * Primary method invoked by the user to initiate comparison of two strings.

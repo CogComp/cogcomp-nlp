@@ -32,6 +32,7 @@ In general, the best way to use the POS Tagger is through the [`POSAnnotator cla
 
 ```java
 	POSAnnotator posannotator = new POSAnnotator();
+	posannotator.doInitialize();
 	posannotator.addView(ta);
 ```
 

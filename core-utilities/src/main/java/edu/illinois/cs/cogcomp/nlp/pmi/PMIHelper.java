@@ -13,6 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * Compute PMI for pairs of terms. Allows for variants to be specified as lists.
+ * Requires a set of precomputed ngrams in a {@link CachedNgramCounter}.
+ */
 public class PMIHelper {
     private static Logger logger = LoggerFactory.getLogger(PMIHelper.class);
 

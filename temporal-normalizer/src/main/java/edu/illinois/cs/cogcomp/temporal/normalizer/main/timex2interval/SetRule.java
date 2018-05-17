@@ -73,7 +73,7 @@ public class SetRule {
         Matcher weekdayPatternMatcher = weekdayPattern.matcher(unitStr);
         Boolean weekdayPatternMatchFound = weekdayPatternMatcher.find();
         if (weekdayPatternMatchFound) {
-            DateMapping weekdayMap = new DateMapping();
+            DateMapping weekdayMap = DateMapping.getInstance();
             res = "XXXX-WXX-"+weekdayMap.hm.get(weekdayPatternMatcher.group(1));
         }
 
@@ -82,7 +82,7 @@ public class SetRule {
         Matcher monthPatternMatcher = monthPattern.matcher(unitStr);
         Boolean monthPatternMatchFound = monthPatternMatcher.find();
         if (monthPatternMatchFound) {
-            DateMapping monthMap = new DateMapping();
+            DateMapping monthMap = DateMapping.getInstance();
             String mapRes = monthMap.hm.get(monthPatternMatcher.group(1));
             mapRes = mapRes.length()==1?"0"+mapRes:mapRes;
             res = "XXXX-"+mapRes;

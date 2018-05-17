@@ -27,10 +27,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 
 
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TemporalPhrase;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexChunk;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNames;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNormalizer;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -199,6 +196,15 @@ public class TemporalChunkerAnnotator extends Annotator{
             logger.debug("{} {}", lbjtoken.toString(), (null == lbjtoken.type) ? "NULL"
                     : lbjtoken.type);
 
+            if(lbjtoken.type.charAt(0) == 'O'){
+                // if this token matches to any month names or day-of-week names (either full names or abbr. names), then force the chunker label to be Begin
+                DateMapping dateMapping = DateMapping.getInstance();
+                String tmp = lbjtoken.form.toLowerCase();
+                if(dateMapping.getHm_month().containsKey(tmp)
+                        ||dateMapping.getHm_month().containsKey(tmp))
+                    lbjtoken.type = "B-null";
+            }
+
             // what happens if we see an Inside tag -- even if it doesn't follow a Before tag
             if (null != lbjtoken.type && lbjtoken.type.charAt(0) == 'I') {
                 if (lbjtoken.type.length() < 3)
@@ -253,6 +259,9 @@ public class TemporalChunkerAnnotator extends Annotator{
                         label = new Constituent(normRes==null?"":normRes.toTIMEXTag(),
                                 ViewNames.TIMEX3, ta,
                                 currentChunkStart, currentChunkEnd);
+                        if(normRes!=null)
+                            for(String key:normRes.getAttributes().keySet())
+                                label.addAttribute(key, normRes.getAttribute(key));
                     }
                     chunkView.addConstituent(label);
                     clabel = null;
