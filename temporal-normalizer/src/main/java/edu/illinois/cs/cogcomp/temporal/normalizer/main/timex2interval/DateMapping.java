@@ -20,6 +20,7 @@ public class DateMapping {
 	HashMap<String, String> hm = new HashMap<String, String>();
 	HashMap<String, String> hm_month = new HashMap<String, String>();
 	HashMap<String, String> hm_dayOfWeek = new HashMap<String, String>();
+	HashSet<String> hm_dayOfMonth = new HashSet<>();
 
 	public static DateMapping getInstance(){
 		if(instance==null)
@@ -114,6 +115,38 @@ public class DateMapping {
 
 		hm.putAll(hm_month);
 		hm.putAll(hm_dayOfWeek);
+
+		hm_dayOfMonth.add("1st");
+		hm_dayOfMonth.add("2nd");
+		hm_dayOfMonth.add("3rd");
+		hm_dayOfMonth.add("4th");
+		hm_dayOfMonth.add("5th");
+		hm_dayOfMonth.add("6th");
+		hm_dayOfMonth.add("7th");
+		hm_dayOfMonth.add("8th");
+		hm_dayOfMonth.add("9th");
+		hm_dayOfMonth.add("10th");
+		hm_dayOfMonth.add("11th");
+		hm_dayOfMonth.add("12th");
+		hm_dayOfMonth.add("13th");
+		hm_dayOfMonth.add("14th");
+		hm_dayOfMonth.add("15th");
+		hm_dayOfMonth.add("16th");
+		hm_dayOfMonth.add("17th");
+		hm_dayOfMonth.add("18th");
+		hm_dayOfMonth.add("19th");
+		hm_dayOfMonth.add("20th");
+		hm_dayOfMonth.add("21st");
+		hm_dayOfMonth.add("22nd");
+		hm_dayOfMonth.add("23rd");
+		hm_dayOfMonth.add("24th");
+		hm_dayOfMonth.add("25th");
+		hm_dayOfMonth.add("26th");
+		hm_dayOfMonth.add("27th");
+		hm_dayOfMonth.add("28th");
+		hm_dayOfMonth.add("29th");
+		hm_dayOfMonth.add("30th");
+		hm_dayOfMonth.add("31st");
 	}
 
 	public HashMap<String, String> getHm() {
@@ -126,5 +159,9 @@ public class DateMapping {
 
 	public HashMap<String, String> getHm_dayOfWeek() {
 		return hm_dayOfWeek;
+	}
+
+	public HashSet<String> getHm_dayOfMonth() {
+		return hm_dayOfMonth;
 	}
 }
