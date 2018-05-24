@@ -155,7 +155,7 @@ public class StatefullTokenizerTest {
         IntPair intolerantOffsets = new IntPair(77, 87);
         assertEquals(intolerantOffsets, tokenOffsets[intolerantIndex]);
     }
-
+    
     /**
      * Test a tokenizers ability to tokenize sentences.
      * 
@@ -297,6 +297,19 @@ public class StatefullTokenizerTest {
     }
 
     /**
+     * Parse out a date, which will hopefully look like a date.
+     */
+    @Test
+    public void testDateTokenization() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String tmp = "One two, three-four-five 10/23/2018 at 5:20pm one? Of course not! Be well, stranger. Bye-bye!";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", tmp);
+        String[] toks = taA.getTokens();
+        assertEquals(toks[8], "10/23/2018");
+    }
+    
+    /**
      * Parse an empty string.
      */
     @Test
@@ -320,6 +333,14 @@ public class StatefullTokenizerTest {
         assertEquals(taA.getNumberOfSentences(), 1);
         toks = taA.getTokens();
         assertEquals(toks[2], "$10B");
+        text = "\n(\n$.10)";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        toks = taA.getTokens();
+        assertEquals(toks[1], "$.10");
+        assertEquals(toks[0], "(");
+        assertEquals(toks[2], ")");
+        assertEquals(taA.getNumberOfSentences(), 1);
     }
 
     /**

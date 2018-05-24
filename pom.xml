@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>4.0.5</version>
+    <version>4.0.6</version>
     <modules>
         <module>core-utilities</module>
         <module>tokenizer</module>
