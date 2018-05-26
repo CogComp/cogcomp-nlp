@@ -95,8 +95,12 @@ public class TokenizerStateMachine {
                 new StateProcessor() {
                     @Override
                     public void process(char token) {
+                        
+                        // we have something, so the paragraph has mass.
+                        stack.get(stack.size()-1).hasMass = true;
                         if (token == '$') {
-                            if (Character.isDigit(peek(1))) {
+                            Character next = peek(1);
+                            if (Character.isDigit(next) || ( next == '.' && Character.isDigit(peek(2)))) {
                                 push(new State(TokenizerState.IN_WORD), current);
                             } else {
                                 push(new State(TokenizerState.IN_SPECIAL), current);
@@ -113,6 +117,8 @@ public class TokenizerStateMachine {
                 new StateProcessor() {
                     @Override
                     public void process(char token) {
+                        // we have something, so the paragraph has mass.
+                        stack.get(stack.size()-1).hasMass = true;
                         push(new State(TokenizerState.IN_WORD), current);
                     }
                 },
@@ -123,7 +129,7 @@ public class TokenizerStateMachine {
                     new StateProcessor() {
                         @Override
                         public void process(char token) {
-                            if (token == '\n' && peek(-1) == '\n' && peek(-2) != '\n') {
+                            if (stack.get(stack.size()-1).hasMass && token == '\n' && peek(-1) == '\n' && peek(-2) != '\n') {
                                 // we are in a sentence, but we will pop it
                                 pop(current);
                             }
@@ -154,11 +160,11 @@ public class TokenizerStateMachine {
                             case '/':
                                 // numbers well may contain a comma or a period, check for an
                                 // entirely numeric word.
-                                if (getCurrent().isNumeric()) {
+                                if (getCurrent().isDate()) {
                                     int advance = 1;
                                     while (true) {
                                         char next = peek(advance);
-                                        if (Character.isDigit(next)) {
+                                        if (Character.isDigit(next) || next == '/') {
                                             advance++;
                                         } else {
                                             if (advance > 1
@@ -372,10 +378,16 @@ public class TokenizerStateMachine {
 
                         // we will keep like special characters together.
                         if (peek(-1) != token) {
-                            pop(current); // the current word is finished.
-                            push(new State(TokenizerState.IN_SPECIAL), current); // No matter what
-                                                                                 // we push a new
-                                                                                 // word token.
+                            pop(current); // the current token is finished.
+                            
+                            if (token == '$') {
+                                Character next = peek(1);
+                                if (Character.isDigit(next) || ( next == '.' && Character.isDigit(peek(2)))) {
+                                    push(new State(TokenizerState.IN_WORD), current);
+                                    return;
+                                }
+                            }
+                            push(new State(TokenizerState.IN_SPECIAL), current);
                         }
                     }
                 },
@@ -626,7 +638,6 @@ public class TokenizerStateMachine {
             return;
         this.text = new char[i];
         intext.getChars(0, i, this.text, 0);
-
         this.textstring = intext;
         this.text = this.textstring.toCharArray();
         current = 0;
@@ -681,6 +692,10 @@ public class TokenizerStateMachine {
         /** the index of the state. */
         int stateindex;
 
+        /** this is set only in paragraphs when it contains something, sentences with 
+         * only white space are of no use. */
+        boolean hasMass = false;
+        
         /**
          * Create a new span.
          * 
@@ -809,6 +824,21 @@ public class TokenizerStateMachine {
                 return new String(text, start, end - start);
         }
 
+        /**
+         * get the current word if we can.
+         * 
+         * @return true if the word is numeric.
+         */
+        public boolean isDate() {
+            int max = end == -1 ? current : end;
+            for (int i = start; i < max; i++) {
+                char c = text[i];
+                if (!Character.isDigit(c) && c != '/')
+                    return false;
+            }
+            return true;
+        }
+        
         /**
          * get the current word if we can.
          * 

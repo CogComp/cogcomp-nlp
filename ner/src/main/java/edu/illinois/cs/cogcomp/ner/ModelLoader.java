@@ -10,6 +10,7 @@ import org.cogcomp.DatastoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
@@ -69,10 +70,14 @@ public class ModelLoader {
             // all else has filed, load from the datastore, create artifact ids based on the view
             // name and training data designation.
             String dataset;
-            if(viewName.toLowerCase().contains("conll")) {
+            String lowercaseViewName = viewName.toLowerCase();
+            if (lowercaseViewName.contains(ViewNames.NER_CONLL.toLowerCase())) {
                 dataset = "enron-conll";
-            }else {
+            } else if (lowercaseViewName.contains(ViewNames.NER_ONTONOTES.toLowerCase())) {
                 dataset = "ontonotes";
+            } else {
+                // not a standard model, and we can't find it on the command line.
+                throw new IllegalArgumentException("The NER models could not be found at \""+modelPath+"\", and no default with view name "+viewName);
             }
             String data_split;
             if (!rm.containsKey(NerBaseConfigurator.TRAINED_ON))
