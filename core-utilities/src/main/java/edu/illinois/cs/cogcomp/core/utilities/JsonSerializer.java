@@ -349,7 +349,6 @@ public class JsonSerializer extends AbstractSerializer {
 
     private static String readString(String name, JsonObject obj) {
         return obj.getAsJsonPrimitive(name).getAsString();
-        // return obj.get(name).getAsString();
     }
 
     private static void writeInt(String name, int value, JsonObject out) {
@@ -435,8 +434,6 @@ public class JsonSerializer extends AbstractSerializer {
 
         JsonArray views = new JsonArray();
         for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
-//            if (viewName.equals(ViewNames.SENTENCE))
-//                continue;
 
             JsonObject view = new JsonObject();
 
