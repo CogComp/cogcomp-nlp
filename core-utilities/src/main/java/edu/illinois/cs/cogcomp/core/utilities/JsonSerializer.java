@@ -403,7 +403,7 @@ public class JsonSerializer extends AbstractSerializer {
     private static void writeLabelsToScores(Map<String, Double> obj, JsonObject out) {
         JsonObject labelScoreMap = new JsonObject();
         for (String key : Sorters.sortSet(obj.keySet()))
-            writeDouble( key, obj.get(key), out);
+            writeDouble( key, obj.get(key), labelScoreMap);
         out.add(LABEL_SCORE_MAP, labelScoreMap);
     }
 
@@ -435,9 +435,8 @@ public class JsonSerializer extends AbstractSerializer {
 
         JsonArray views = new JsonArray();
         for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
-            // TODO: comment out this next two lines as part of addressing issue #406
-            if (viewName.equals(ViewNames.SENTENCE))
-                continue;
+//            if (viewName.equals(ViewNames.SENTENCE))
+//                continue;
 
             JsonObject view = new JsonObject();
 
@@ -460,14 +459,18 @@ public class JsonSerializer extends AbstractSerializer {
 
         writeAttributes(ta, json);
 
-        // TODO: uncomment to generate Sentences fix (part of addressing issue #406)
-//        if (ta.hasView(ViewNames.SENTENCE))
-//            ta.setSentences();
-
         return json;
     }
 
-    //TODO: if token offset info is written, read it
+    /**
+     * if serialized TextAnnotation object has Sentence view, delete the View created by the TextAnnotation
+     *    constructor and replace it with the one read from the file.  This is to pick up any additional info
+     *    specified in the serialized version.
+     * @param string
+     * @return
+     * @throws Exception
+     */
+
     TextAnnotation readTextAnnotation(String string) throws Exception {
         JsonObject json = (JsonObject) new JsonParser().parse(string);
 
@@ -501,7 +504,14 @@ public class JsonSerializer extends AbstractSerializer {
                 topKViews.add(readView(kView, ta));
             }
 
+            // replace TextAnnotation constructor's SENTENCE view if specified in json
+            if (viewName.equals(ViewNames.SENTENCE))
+                ta.removeView(viewName);
+
             ta.addTopKView(viewName, topKViews);
+
+            if (viewName.equals(ViewNames.SENTENCE))
+                ta.setSentences();
         }
 
         readAttributes(ta, json);
