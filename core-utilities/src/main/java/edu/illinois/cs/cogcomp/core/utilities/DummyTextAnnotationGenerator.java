@@ -246,6 +246,7 @@ public class DummyTextAnnotationGenerator {
                         sentView.addConstituent(new Constituent("sent3", ViewNames.SENTENCE, ta,
                                 pos1.length + pos2.length, pos1.length + pos2.length + pos3.length));
                     ta.addView(ViewNames.SENTENCE, sentView);
+                    ta.setSentences();
                     break;
                 case ViewNames.POS:
                     TokenLabelView posView = new TokenLabelView(viewName, ta);
