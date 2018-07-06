@@ -45,12 +45,6 @@ public class NETesterMultiDataset {
             data.elementAt(0).setLabelsToAnonymize(labelsToAnonymizeInEvaluation);
         NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
         NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
-        SparseAveragedPerceptron sap1 = (SparseAveragedPerceptron)taggerLevel1.getBaseLTU();
-        System.out.println("L1 SparseAveragedPerceptron learning rate = "+sap1.getLearningRate()+", thickness = "+sap1.getPositiveThickness());
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            SparseAveragedPerceptron sap2 = (SparseAveragedPerceptron)taggerLevel2.getBaseLTU();
-            System.out.println("L2 SparseAveragedPerceptron learning rate = "+sap2.getLearningRate()+", thickness = "+sap2.getPositiveThickness());
-        }
         printTestResultsByDataset(data, taggerLevel1, taggerLevel2, verbose);
     }
 
