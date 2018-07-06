@@ -37,41 +37,43 @@ public class NerTagger {
             ResourceManager rm = new ResourceManager(args[args.length - 1]);
             Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
 
-            // load up the models
-            ModelLoader.load(rm, rm.getString("modelName"), false);
-            if (args[0].equalsIgnoreCase("-annotate")) {
-                NETagPlain.init();
-                NETagPlain.tagData(args[1], args[2]);
-            }
-            if (args[0].equalsIgnoreCase("-demo")) {
-                String input = "";
-                while (!input.equalsIgnoreCase("quit")) {
-                    input = Keyboard.readLine();
-                    if (input.equalsIgnoreCase("quit"))
-                        System.exit(0);
-                    String res = NETagPlain.tagLine(input, 
-                        (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1, 
-                        (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2);
-                    res = NETagPlain.insertHtmlColors(res);
-                    StringTokenizer st = new StringTokenizer(res);
-                    StringBuilder output = new StringBuilder();
-                    while (st.hasMoreTokens()) {
-                        String s = st.nextToken();
-                        output.append(" ").append(s);
-                    }
-                    logger.info(output.toString());
-                }
-            }
-            if (args[0].equalsIgnoreCase("-test"))
-                NETesterMultiDataset.test(args[1], false, cp.labelsToIgnoreInEvaluation,
-                        cp.labelsToAnonymizeInEvaluation);
-            if (args[0].equalsIgnoreCase("-dumpFeatures"))
-                NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2]);
             if (args[0].equalsIgnoreCase("-train"))
                 LearningCurveMultiDataset.getLearningCurve(-1, args[1], args[2], false);
-            if (args[0].equalsIgnoreCase("-trainFixedIterations"))
+            else if (args[0].equalsIgnoreCase("-trainFixedIterations"))
                 LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2],
                         args[3], false);
+            else {
+                // load up the models
+                ModelLoader.load(rm, rm.getString("modelName"), true);
+                if (args[0].equalsIgnoreCase("-annotate")) {
+                    NETagPlain.init();
+                    NETagPlain.tagData(args[1], args[2]);
+                }
+                if (args[0].equalsIgnoreCase("-demo")) {
+                    String input = "";
+                    while (!input.equalsIgnoreCase("quit")) {
+                        input = Keyboard.readLine();
+                        if (input.equalsIgnoreCase("quit"))
+                            System.exit(0);
+                        String res = NETagPlain.tagLine(input,
+                                (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1,
+                                (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2);
+                        res = NETagPlain.insertHtmlColors(res);
+                        StringTokenizer st = new StringTokenizer(res);
+                        StringBuilder output = new StringBuilder();
+                        while (st.hasMoreTokens()) {
+                            String s = st.nextToken();
+                            output.append(" ").append(s);
+                        }
+                        logger.info(output.toString());
+                    }
+                }
+                if (args[0].equalsIgnoreCase("-test"))
+                    NETesterMultiDataset.test(args[1], false, cp.labelsToIgnoreInEvaluation,
+                            cp.labelsToAnonymizeInEvaluation);
+                if (args[0].equalsIgnoreCase("-dumpFeatures"))
+                    NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2]);
+            }
         } catch (Exception e) {
             logger.error("Exception caught: ");
             e.printStackTrace();
