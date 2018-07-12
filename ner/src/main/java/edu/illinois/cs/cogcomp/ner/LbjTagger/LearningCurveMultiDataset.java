@@ -121,24 +121,13 @@ public class LearningCurveMultiDataset {
         logger.info("Level 1 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1+
             ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
 
-        System.out.println("LAM-tlr Level 1 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1+
-            ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
-
         NETaggerLevel1 tagger1 =
                 new NETaggerLevel1(paramLevel1, modelPath + ".level1", modelPath + ".level1.lex");
         if (!incremental) {
             logger.info("Training L1 model from scratch.");
-
-            System.out.println("LAM-tlr Training L1 model from scratch.");
-
             tagger1.forget();
         } else {
             logger.info("Training L1 model incrementally.");
-
-
-            System.out.println("LAM-tlr Training L1 model incrementally.");
-
-
         }
         ParametersForLbjCode.currentParameters.taggerLevel1 = tagger1;
         for (int dataId = 0; dataId < trainDataSet.size(); dataId++) {
