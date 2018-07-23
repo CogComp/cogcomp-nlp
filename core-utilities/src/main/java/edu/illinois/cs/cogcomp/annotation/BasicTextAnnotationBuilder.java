@@ -48,20 +48,47 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
      * @param tokenizedSentences A list of sentences, each one being an array of tokens
      * @return A {@link TextAnnotation} containing the SENTENCE and TOKENS views.
      */
-    public static TextAnnotation createTextAnnotationFromListofListofTokens(List<List<String>> tokenizedSentences) {
+    public static TextAnnotation createTextAnnotationFromListofListofTokens(List<List<Object>> tokenizedSentences) {
         // Function name is not createTextAnnotationFromTokens - due to same erasure error
         // Convert the inner lists to String arrays
         // Call the default TextAnnotation builder function
         List<String[]> tokenizedSentences_formatted = new ArrayList<String[]>();
 
         // Converting inner list to array
-        for (List<String> sentence : tokenizedSentences) {
-            String[] sentence_array = (String[]) sentence.toArray();
+        for (List<Object> sentence : tokenizedSentences) {
+            String[] sentence_array = new String[sentence.size()];
+            int token_idx = 0;
+            for (Object w : sentence) {
+                sentence_array[token_idx] = (String) w;
+            }
             tokenizedSentences_formatted.add(sentence_array);
         }
 
         return createTextAnnotationFromTokens("", "", tokenizedSentences_formatted);
     }
+
+
+
+//    /**
+//     * The default way to create a {@link TextAnnotation} from pre-tokenized text.
+//     *
+//     * @param tokenizedSentences A list of sentences, each one being an array of tokens
+//     * @return A {@link TextAnnotation} containing the SENTENCE and TOKENS views.
+//     */
+//    public static TextAnnotation createTextAnnotationFromListofListofTokens(List<List<String>> tokenizedSentences) {
+//        // Function name is not createTextAnnotationFromTokens - due to same erasure error
+//        // Convert the inner lists to String arrays
+//        // Call the default TextAnnotation builder function
+//        List<String[]> tokenizedSentences_formatted = new ArrayList<String[]>();
+//
+//        // Converting inner list to array
+//        for (List<String> sentence : tokenizedSentences) {
+//            String[] sentence_array = (String[]) sentence.toArray();
+//            tokenizedSentences_formatted.add(sentence_array);
+//        }
+//
+//        return createTextAnnotationFromTokens("", "", tokenizedSentences_formatted);
+//    }
 
 
     /**
