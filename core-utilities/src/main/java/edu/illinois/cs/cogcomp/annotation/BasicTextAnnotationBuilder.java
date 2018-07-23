@@ -60,6 +60,7 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
             int token_idx = 0;
             for (Object w : sentence) {
                 sentence_array[token_idx] = (String) w;
+                token_idx += 1;
             }
             tokenizedSentences_formatted.add(sentence_array);
         }
