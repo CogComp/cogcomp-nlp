@@ -43,15 +43,16 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
 
     /**
-     * The default way to create a {@link TextAnnotation} from pre-tokenized text.
+     * A way to create a {@link TextAnnotation} from pre-tokenized text from Python
      *
-     * @param tokenizedSentences A list of sentences, each one being an array of tokens
+     * @param tokenizedSentences A list of sentences, each one being an list of tokens
      * @return A {@link TextAnnotation} containing the SENTENCE and TOKENS views.
      */
     public static TextAnnotation createTextAnnotationFromListofListofTokens(List<List<Object>> tokenizedSentences) {
-        // Function name is not createTextAnnotationFromTokens - due to same erasure error
+        // This function takes List<List<Object>> to be able to run with cogcomp-nlpy (using pyjnius)
         // Convert the inner lists to String arrays
         // Call the default TextAnnotation builder function
+
         List<String[]> tokenizedSentences_formatted = new ArrayList<String[]>();
 
         // Converting inner list to array
@@ -67,29 +68,6 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
         return createTextAnnotationFromTokens("", "", tokenizedSentences_formatted);
     }
-
-
-
-//    /**
-//     * The default way to create a {@link TextAnnotation} from pre-tokenized text.
-//     *
-//     * @param tokenizedSentences A list of sentences, each one being an array of tokens
-//     * @return A {@link TextAnnotation} containing the SENTENCE and TOKENS views.
-//     */
-//    public static TextAnnotation createTextAnnotationFromListofListofTokens(List<List<String>> tokenizedSentences) {
-//        // Function name is not createTextAnnotationFromTokens - due to same erasure error
-//        // Convert the inner lists to String arrays
-//        // Call the default TextAnnotation builder function
-//        List<String[]> tokenizedSentences_formatted = new ArrayList<String[]>();
-//
-//        // Converting inner list to array
-//        for (List<String> sentence : tokenizedSentences) {
-//            String[] sentence_array = (String[]) sentence.toArray();
-//            tokenizedSentences_formatted.add(sentence_array);
-//        }
-//
-//        return createTextAnnotationFromTokens("", "", tokenizedSentences_formatted);
-//    }
 
 
     /**
