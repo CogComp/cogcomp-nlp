@@ -247,7 +247,7 @@ public class NerBenchmark {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
                             Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                             ResourceManager rm = new ResourceManager(confFile);
-                            ModelLoader.load(rm, rm.getString("modelName"), !skiptraining);
+                            ModelLoader.load(rm, rm.getString("modelName"), true);
                             System.out.println("\n\n----- Building a final model for "+confFile+" ------");
 
                             // there is a training directory, with training enabled, so train. We use the same dataset

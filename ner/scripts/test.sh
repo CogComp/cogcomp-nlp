@@ -41,7 +41,7 @@ configFile=$2
 # Classpath
 DIST=target
 LIB=target/dependency
-cpath=".:target/test-classes"
+cpath="./config/:.:target/test-classes"
 for JAR in `ls $DIST/*jar`; do
     cpath="$cpath:$JAR"
 done
