@@ -38,13 +38,13 @@ public class NerTagger {
             Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
 
             if (args[0].equalsIgnoreCase("-train"))
-                LearningCurveMultiDataset.getLearningCurve(-1, args[1], args[2]);
+                LearningCurveMultiDataset.getLearningCurve(-1, args[1], args[2], false);
             else if (args[0].equalsIgnoreCase("-trainFixedIterations"))
                 LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2],
-                        args[3]);
+                        args[3], false);
             else {
                 // load up the models
-                ModelLoader.load(rm, rm.getString("modelName"));
+                ModelLoader.load(rm, rm.getString("modelName"), false);
                 if (args[0].equalsIgnoreCase("-annotate")) {
                     NETagPlain.init();
                     NETagPlain.tagData(args[1], args[2]);

@@ -30,7 +30,7 @@ if [ ! -e $LIB ]; then
 fi
 
 # Classpath
-cpath=".:target/classes"
+cpath="./config/:.:target/classes"
 
 for JAR in `ls $DIST/*.jar`; do
     cpath="$cpath:$JAR"
@@ -40,7 +40,7 @@ for JAR in `ls $LIB/*.jar`; do
     cpath="$cpath:$JAR"
 done
 
-CMD="java -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerBenchmark $1 $2 $3 $4 $5"
+CMD="java -classpath  ${cpath} -Xmx15g edu.illinois.cs.cogcomp.ner.NerBenchmark $1 $2 $3 $4 $5"
 
 echo "$0: running command '$CMD'..."
 

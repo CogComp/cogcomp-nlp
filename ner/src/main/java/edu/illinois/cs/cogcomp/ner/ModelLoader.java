@@ -38,8 +38,9 @@ public class ModelLoader {
      * from Minio datastore.
      * @param rm the resource manager.
      * @param viewName the name of the view identifies the model.
+     * @param training if true, we are going to train the model, if it doesn't exist, create it.
      */
-    static public void load(ResourceManager rm, String viewName) {
+    static public void load(ResourceManager rm, String viewName, boolean training) {
         
         // the loaded built into the model will check the local file system and the jar files in the classpath.
         ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
@@ -65,9 +66,21 @@ public class ModelLoader {
             } else {
                 logger.info("L2 model not required.");
             }
+        } else if (training) {
+            
+            // we are training a new model, so it it doesn't exist, we don't care, just create a
+            // container.
+            tagger1 = new NETaggerLevel1(modelPath + ".level1", modelPath + ".level1.lex");
+            logger.info("Reading L1 model from file : " + modelPath + ".level2");
+            if (cp.featuresToUse.containsKey("PredictionsLevel1")) {
+                tagger2 = new NETaggerLevel2(modelPath + ".level2", modelPath + ".level2.lex");
+                logger.info("Reading L2 model from file : " + modelPath + ".level2");
+            } else {
+                logger.info("L2 model not required.");
+            }
         } else {
 
-            // all else has filed, load from the datastore, create artifact ids based on the view
+            // all else has failed, load from the datastore, create artifact ids based on the view
             // name and training data designation.
             String dataset;
             String lowercaseViewName = viewName.toLowerCase();
