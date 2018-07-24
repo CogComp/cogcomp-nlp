@@ -204,8 +204,16 @@ public class TemporalChunkerAnnotator extends Annotator{
                 if(previous!=null&&previous.getSurfaceForm()!=null)
                     prev_token = previous.getSurfaceForm().toLowerCase();
                 if(dateMapping.getHm_month().containsKey(tmp)
-                        ||dateMapping.getHm_dayOfWeek().containsKey(tmp))// if this token matches to any month names or day-of-week names (either full names or abbr. names), then force the chunker label to be Begin
-                    lbjtoken.type = "B-null";
+                        ||!tmp.equals("sun")&&dateMapping.getHm_dayOfWeek().containsKey(tmp)) {
+                    // if this token matches to any month names or day-of-week names (either full names or abbr. names), then force the chunker label to be Begin
+                    // "Sun" is a bit tricky since the star "Sun" and the day of week "Sunday" are both NNP. We leave it to chunker now.
+                    if(tmp.equals("may")||tmp.equals("sat")){
+                        if(current.getLabel().startsWith("NNP"))
+                            lbjtoken.type = "B-null";
+                    }
+                    else
+                        lbjtoken.type = "B-null";
+                }
                 else if(prev_token!=null
                             && dateMapping.getHm_month().containsKey(prev_token)){// previous token was a "month"
                     if(dateMapping.getHm_dayOfMonth().contains(tmp))// curr token is an ordinal number
