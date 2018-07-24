@@ -44,7 +44,7 @@ public class NerTagger {
                         args[3], false);
             else {
                 // load up the models
-                ModelLoader.load(rm, rm.getString("modelName"), true);
+                ModelLoader.load(rm, rm.getString("modelName"), false);
                 if (args[0].equalsIgnoreCase("-annotate")) {
                     NETagPlain.init();
                     NETagPlain.tagData(args[1], args[2]);
