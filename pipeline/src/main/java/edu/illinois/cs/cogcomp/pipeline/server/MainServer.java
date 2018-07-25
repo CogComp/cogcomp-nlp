@@ -125,6 +125,27 @@ public class MainServer {
             }
         });
 
+        get("/addviews", "application/json", (request, response) -> {
+            logger.info("GET request . . . ");
+            boolean canServe = true;
+            if (rate > 0) {
+                resetServer();
+                String ip = request.ip();
+                int callsSofar = (Integer) clients.getOrDefault(ip, 0);
+                if (callsSofar > rate) canServe = false;
+                clients.put(ip, callsSofar + 1);
+            }
+            if (canServe) {
+                logger.info("request.body(): " + request.body());
+                String jsonStrTA = request.queryParams("jsonstr");
+                String views = request.queryParams("views");
+                return addAdditionalViewToTA(finalPipeline, jsonStrTA, views, logger);
+            } else {
+                response.status(429);
+                return "You have reached your maximum daily query limit :-/ ";
+            }
+        });
+
         post("/annotate", (request, response) ->
                 {
                     logger.info("POST request . . . ");
@@ -143,6 +164,31 @@ public class MainServer {
                         String text = map.get("text");
                         String views = map.get("views");
                         return annotateText(finalPipeline, text, views, logger);
+                    } else {
+                        response.status(429);
+                        return "You have reached your maximum daily query limit :-/ ";
+                    }
+                }
+        );
+
+        post("/addviews", (request, response) ->
+                {
+                    logger.info("POST request . . . ");
+                    boolean canServe = true;
+                    if (rate > 0) {
+                        resetServer();
+                        String ip = request.ip();
+                        int callsSofar = (Integer) clients.getOrDefault(ip, 0);
+                        if (callsSofar > rate) canServe = false;
+                        clients.put(ip, callsSofar + 1);
+                    }
+                    if (canServe) {
+                        logger.info("request.body(): " + request.body());
+                        Map<String, String> map = splitQuery(request.body());
+                        System.out.println("POST body parameters parsed: " + map);
+                        String jsonStrTA = map.get("jsonstr");
+                        String views = map.get("views");
+                        return addAdditionalViewToTA(finalPipeline, jsonStrTA, views, logger);
                     } else {
                         response.status(429);
                         return "You have reached your maximum daily query limit :-/ ";
@@ -203,6 +249,44 @@ public class MainServer {
                 printMemoryDetails(logger);
             }
             logger.info("Done adding the views. Deserializing the view now.");
+            String output = SerializationHelper.serializeToJson(ta);
+            logger.info("Done. Sending the result back. ");
+            return output;
+        }
+    }
+
+    private static String addAdditionalViewToTA(AnnotatorService finalPipeline, String jsonStrTA, String views,
+                                                Logger logger) throws AnnotatorException {
+        if (views == null || jsonStrTA == null) {
+            return "The parameters 'jsonstr' and/or 'views' are not specified.";
+        } else {
+            logger.info("------------------------------");
+            logger.info("Views to add: " + views);
+            String[] viewsInArray = views.split(",");
+            logger.info("Adding the basic annotations . . . ");
+
+            TextAnnotation ta = null;
+            try {
+                ta = SerializationHelper.deserializeFromJson(jsonStrTA);
+            } catch (Exception e) {
+                logger.error("Error reading TA from JsonStr . . . ");
+            }
+
+            if (ta == null) {
+                logger.info("Error reading TA from JsonStr. Views cannot be added.");
+                return jsonStrTA;
+            }
+
+            for (String vuName : viewsInArray) {
+                logger.info("Adding the view: ->" + vuName.trim() + "<-");
+                try {
+                    finalPipeline.addView(ta, vuName.trim());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                printMemoryDetails(logger);
+            }
+            logger.info("Done adding the views. Serializing the view now.");
             String output = SerializationHelper.serializeToJson(ta);
             logger.info("Done. Sending the result back. ");
             return output;
