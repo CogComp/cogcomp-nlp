@@ -102,7 +102,7 @@ public class NERAnnotator extends Annotator {
         Parameters.readConfigAndLoadExternalData(nerRm);
         
         // load the models.
-        ModelLoader.load(nerRm, viewName, false);
+        ModelLoader.load(nerRm, viewName);
     }
 
     /**
