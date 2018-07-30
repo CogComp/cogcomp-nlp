@@ -1,5 +1,5 @@
 # CogCompNLP
-[![Build Status](http://morgoth.cs.illinois.edu:5800/app/rest/builds/buildType:(id:CogcompNlp_Build)/statusIcon)](morgoth.cs.illinois.edu:5800)
+[![Build Status](http://morgoth.cs.illinois.edu:5800/app/rest/builds/buildType:(id:CogcompNlp_Build)/statusIcon)](http://morgoth.cs.illinois.edu:5800/)
 [![Build status](https://ci.appveyor.com/api/projects/status/f53iv8435rq875ex/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
 
 This project collects a number of core libraries for Natural Language Processing (NLP) developed 
