@@ -25,6 +25,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
+import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
@@ -46,6 +47,12 @@ public class NERAnnotator extends Annotator {
 
     /** our specific logger. */
     private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
+
+    /** the level one model. */
+    public SparseNetworkLearner taggerLevel1;
+    
+    /** the level two model. */
+    public SparseNetworkLearner taggerLevel2;
 
     /**
      * @param nonDefaultConfigValues a configuration file specifying non-default parameters for the
@@ -82,7 +89,9 @@ public class NERAnnotator extends Annotator {
                 AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE), nonDefaultRm);
     }
 
-
+    /** this is used to sync loading models. */
+    static final String LOADING_MODELS = "LOADING_MODELS";
+    
     /**
      * Superclass calls this method either on instantiation or at first call to getView(). Logging
      * has been disabled because non-static logger is not initialized at the time this is called if
@@ -102,7 +111,11 @@ public class NERAnnotator extends Annotator {
         Parameters.readConfigAndLoadExternalData(nerRm);
         
         // load the models.
-        ModelLoader.load(nerRm, viewName, false);
+        synchronized (LOADING_MODELS) {
+            ModelLoader.load(nerRm, viewName, false);
+            this.taggerLevel1 = ParametersForLbjCode.currentParameters.taggerLevel1;
+            this.taggerLevel2 = ParametersForLbjCode.currentParameters.taggerLevel2;
+        }
     }
 
     /**
@@ -139,8 +152,8 @@ public class NERAnnotator extends Annotator {
         Data data = new Data(new NERDocument(sentences, "input"));
         try {
             ExpressiveFeaturesAnnotator.annotate(data);
-            Decoder.annotateDataBIO(data, (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1, 
-                (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2);
+            Decoder.annotateDataBIO(data, (NETaggerLevel1) taggerLevel1, 
+                (NETaggerLevel2) taggerLevel2);
         } catch (Exception e) {
             logger.error("Cannot annotate the text, the exception was: ", e);
             return;
@@ -228,7 +241,7 @@ public class NERAnnotator extends Annotator {
         if (!isInitialized()) {
             doInitialize();
         }
-        Lexicon labelLexicon =  ParametersForLbjCode.currentParameters.taggerLevel1.getLabelLexicon();
+        Lexicon labelLexicon =  taggerLevel1.getLabelLexicon();
         Set<String> tagSet = new HashSet<String>();
         for (int i =0; i < labelLexicon.size(); ++i) {
             tagSet.add(labelLexicon.lookupKey(i).getStringValue());

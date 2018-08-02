@@ -12,7 +12,6 @@ import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
-import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 
 import java.io.File;
 import java.io.FilenameFilter;
