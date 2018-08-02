@@ -12,7 +12,6 @@ import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
-import edu.illinois.cs.cogcomp.lbjava.learn.featurepruning.SparseNetworkOptimizer;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TwoLayerPredictionAggregationFeatures;
@@ -60,19 +59,35 @@ public class LearningCurveMultiDataset {
     }
 
     /**
-     * train a model with the specified inputs, evaluate with the specified test data
-     * <p>
-     * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
+     * Convenience function that has a default value for dataFormat of -c
+     * @param fixedNumIterations
+     * @param trainDataPath
+     * @param testDataPath
+     * @throws Exception
      */
     public static void getLearningCurve(int fixedNumIterations, String trainDataPath,
-            String testDataPath) throws Exception {
+                                        String testDataPath) throws Exception {
+        getLearningCurve(fixedNumIterations, trainDataPath, "-c", testDataPath);
+    }
+
+    /**
+     * train a model with the specified inputs, evaluate with the specified test data
+     * <p>
+     *     Use fixedNumIterations=-1 if you want to use the automatic convergence criterion
+     * </p>
+     * <p>
+     *     In practice, testDataPath should be a Development set.
+     * </p>
+     */
+    public static void getLearningCurve(int fixedNumIterations, String dataFormat, String trainDataPath,
+                                        String testDataPath) throws Exception {
         logger.debug("getLearningCurve(): fni = " + fixedNumIterations + " trainDataPath = '"
                 + trainDataPath + "' testDataPath = '" + testDataPath + "'....");
         Data trainData =
-                new Data(trainDataPath, trainDataPath, "-c", new String[] {}, new String[] {});
+                new Data(trainDataPath, trainDataPath, dataFormat, new String[] {}, new String[] {});
         ExpressiveFeaturesAnnotator.annotate(trainData);
         Data testData =
-                new Data(testDataPath, testDataPath, "-c", new String[] {}, new String[] {});
+                new Data(testDataPath, testDataPath, dataFormat, new String[] {}, new String[] {});
         ExpressiveFeaturesAnnotator.annotate(testData);
         Vector<Data> train = new Vector<>();
         train.addElement(trainData);
