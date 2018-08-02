@@ -83,7 +83,7 @@ public class NerTagger {
                     }else{
                         dataFormat = args[2];
                     }
-                    NETesterMultiDataset.test(args[1], false, dataFormat, cp.labelsToIgnoreInEvaluation,
+                    NETesterMultiDataset.test(args[1], true, dataFormat, cp.labelsToIgnoreInEvaluation,
                             cp.labelsToAnonymizeInEvaluation);
                 }if (args[0].equalsIgnoreCase("-dumpFeatures"))
                     NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2]);

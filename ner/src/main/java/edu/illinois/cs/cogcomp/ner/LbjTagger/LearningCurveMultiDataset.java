@@ -169,6 +169,7 @@ public class LearningCurveMultiDataset {
                 TestDiscrete simpleTest = new TestDiscrete();
                 simpleTest.addNull("O");
                 TestDiscrete.testDiscrete(simpleTest, tagger1, null, testParser1, true, 0);
+
                 double f1Level1 = simpleTest.getOverallStats()[2];
                 if (f1Level1 > bestF1Level1) {
                     bestF1Level1 = f1Level1;
@@ -264,6 +265,7 @@ public class LearningCurveMultiDataset {
                     + "\t Level2: bestround=" + bestRoundLevel2 + "\t F1=" + bestF1Level2);
         }
 
+        NETesterMultiDataset.printTestResultsByDataset(testDataSet, tagger1, tagger2, true);
 
         /*
          * This will override the models forcing to save the iteration we're interested in- the
