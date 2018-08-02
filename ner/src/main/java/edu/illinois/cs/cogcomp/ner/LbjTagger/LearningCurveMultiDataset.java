@@ -12,7 +12,6 @@ import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
-import edu.illinois.cs.cogcomp.lbjava.learn.featurepruning.SparseNetworkOptimizer;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TwoLayerPredictionAggregationFeatures;
@@ -26,6 +25,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
+/**
+ * build the model test it out, report results and so on.
+ * @author nick
+ * @author redman
+ */
 public class LearningCurveMultiDataset {
 
     private static final String NAME = LearningCurveMultiDataset.class.getCanonicalName();
@@ -42,7 +46,7 @@ public class LearningCurveMultiDataset {
      * @param devDataPath data used to auto-converge.
      */
     public static void buildFinalModel(int fixedNumIterations, String trainDataPath,
-            String testDataPath, String devDataPath) throws Exception {
+            String testDataPath, String devDataPath, boolean incremental) throws Exception {
         Data trainData = new Data(trainDataPath, trainDataPath, "-c", new String[] {}, new String[] {});
         ExpressiveFeaturesAnnotator.annotate(trainData);
         Data testData = new Data(testDataPath, testDataPath, "-c", new String[] {}, new String[] {});
@@ -56,7 +60,7 @@ public class LearningCurveMultiDataset {
         test.addElement(devData);
         logger.debug("Building final model: iterations = " + fixedNumIterations + " train = '"
                         + trainDataPath + "' test = '"+testDataPath+"' dev = '" + testDataPath+"'");
-        getLearningCurve(train, test, fixedNumIterations);
+        getLearningCurve(train, test, fixedNumIterations, incremental);
     }
 
     /**
@@ -65,7 +69,7 @@ public class LearningCurveMultiDataset {
      * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
      */
     public static void getLearningCurve(int fixedNumIterations, String trainDataPath,
-            String testDataPath) throws Exception {
+            String testDataPath, boolean incremental) throws Exception {
         logger.debug("getLearningCurve(): fni = " + fixedNumIterations + " trainDataPath = '"
                 + trainDataPath + "' testDataPath = '" + testDataPath + "'....");
         Data trainData =
@@ -78,16 +82,18 @@ public class LearningCurveMultiDataset {
         train.addElement(trainData);
         Vector<Data> test = new Vector<>();
         test.addElement(testData);
-        getLearningCurve(train, test, fixedNumIterations);
+        getLearningCurve(train, test, fixedNumIterations, incremental);
     }
 
     /**
-     * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
+     * use fixedNumIterations=-1 if you want to use the automatic convergence criterion, incremental
+     * true will start with the existing models weights, and continue training with that set of default
+     * weights.
      * <p>
      * NB: assuming column format
      */
     public static void getLearningCurve(Vector<Data> trainDataSet, Vector<Data> testDataSet,
-            int fixedNumIterations) throws Exception {
+            int fixedNumIterations, boolean incremental) throws Exception {
         double bestF1Level1 = -1;
         int bestRoundLevel1 = 0;
         // Get the directory name (<configname>.model is appended in LbjTagger/Parameters.java:139)
@@ -114,9 +120,15 @@ public class LearningCurveMultiDataset {
         paramLevel1.baseLTU.featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
         logger.info("Level 1 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1+
             ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
+
         NETaggerLevel1 tagger1 =
                 new NETaggerLevel1(paramLevel1, modelPath + ".level1", modelPath + ".level1.lex");
-        tagger1.forget();
+        if (!incremental) {
+            logger.info("Training L1 model from scratch.");
+            tagger1.forget();
+        } else {
+            logger.info("Training L1 model incrementally.");
+        }
         ParametersForLbjCode.currentParameters.taggerLevel1 = tagger1;
         for (int dataId = 0; dataId < trainDataSet.size(); dataId++) {
             Data trainData = trainDataSet.elementAt(dataId);
@@ -192,7 +204,12 @@ public class LearningCurveMultiDataset {
                 new NETaggerLevel2(paramLevel2, ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2.lex");
-        tagger2.forget();
+        if (!incremental) {
+            logger.info("Training L2 model from scratch.");
+            tagger2.forget();
+        } else {
+            logger.info("Training L2 model incrementally.");
+        }
         ParametersForLbjCode.currentParameters.taggerLevel2 = tagger2;
  
         // Previously checked if PatternFeatures was in featuresToUse.
