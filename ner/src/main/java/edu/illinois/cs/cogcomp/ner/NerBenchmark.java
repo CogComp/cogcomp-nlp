@@ -8,9 +8,6 @@
 package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
-import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
-import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 
 import java.io.File;
@@ -46,7 +43,6 @@ import java.io.FilenameFilter;
  * -features : for debugging, reports the feature vector for each token in the dataset. Output produced in a "features.out" file.
  * -iterations : specify a fixed number of iterations, or -1 (the default) means auto converge requiring a "dev" directory.
  * -release : build a final model for release, it will build on test and train, and unless "-iterations" specified, it will autoconvert
- * -incremental : rather than discarding existing weights, start with those that already exist and continue training.
  * using "dev" for a holdout set.
  * }
  */
@@ -73,10 +69,6 @@ public class NerBenchmark {
     /** Report the input features for each level */
     static boolean verbose = false;
 
-    /** If this is set, we will start with the existing weights (and averages) for the 
-     * model and continue training from there. */
-    static boolean incremental = false;
-
     /** the output file name. */
     static String output = null;
 
@@ -100,10 +92,6 @@ public class NerBenchmark {
                                         + "containing the benchmark configuration and data.");
                     }
                     directory = args[i];
-                    break;
-                case "-incremental":
-                    System.out.println("Configured for incremental training.");
-                    incremental = true;
                     break;
                 case "-verbose":
                     verbose = true;
@@ -195,25 +183,11 @@ public class NerBenchmark {
                             System.out.println("\n\n----- Training models for evaluation for "+confFile+" ------");
                             Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                             ResourceManager rm = new ResourceManager(confFile);
-                            ModelLoader.load(rm, rm.getString("modelName"), !skiptraining);
+                            ModelLoader.load(rm, rm.getString("modelName"));
                             
-                            // report learning rates and thicknesses
-                            NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
-                            NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
-                            SparseAveragedPerceptron sap1 = (SparseAveragedPerceptron)taggerLevel1.getBaseLTU();
-                            sap1.setLearningRate(ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1);
-                            sap1.setThickness(ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
-                            System.out.println("L1 learning rate = "+sap1.getLearningRate()+", thickness = "+sap1.getPositiveThickness());
-                            if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-                                SparseAveragedPerceptron sap2 = (SparseAveragedPerceptron)taggerLevel2.getBaseLTU();
-                                sap2.setLearningRate(ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2);
-                                sap2.setThickness(ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
-                                System.out.println("L2 learning rate = "+sap2.getLearningRate()+", thickness = "+sap2.getPositiveThickness());
-                            }
-
                             // there is a training directory, with training enabled, so train. We use the same dataset
                             // for both training and evaluating.
-                            LearningCurveMultiDataset.getLearningCurve(iterations, trainDirName, devDirName, incremental);
+                            LearningCurveMultiDataset.getLearningCurve(iterations, trainDirName, devDirName);
                             System.out.println("\n\n----- Final results for "+confFile+", verbose ------");
                             NETesterMultiDataset.test(testDirName, true,
                                     ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
@@ -230,7 +204,7 @@ public class NerBenchmark {
                         System.out.println("\n\n----- Reporting results from existing models for "+confFile+" ------");
                         Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                         ResourceManager rm = new ResourceManager(confFile);
-                        ModelLoader.load(rm, rm.getString("modelName"), !skiptraining);
+                        ModelLoader.load(rm, rm.getString("modelName"));
                         System.out.println("Benchmark against configuration : " + confFile);
                         if (reportLabels)
                             NEDisplayPredictions.test(testDirName, "-c", verbose);
@@ -246,12 +220,12 @@ public class NerBenchmark {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
                             Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                             ResourceManager rm = new ResourceManager(confFile);
-                            ModelLoader.load(rm, rm.getString("modelName"), true);
+                            ModelLoader.load(rm, rm.getString("modelName"));
                             System.out.println("\n\n----- Building a final model for "+confFile+" ------");
 
                             // there is a training directory, with training enabled, so train. We use the same dataset
                             // for both training and evaluating.
-                            LearningCurveMultiDataset.buildFinalModel(iterations, trainDirName, testDirName, devDirName, incremental);
+                            LearningCurveMultiDataset.buildFinalModel(iterations, trainDirName, testDirName, devDirName);
                             System.out.println("\n\n----- Release results for "+confFile+", verbose ------");
                             NETesterMultiDataset.test(devDirName, true,
                                     ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
