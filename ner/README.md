@@ -240,8 +240,9 @@ Where the parameters are:
     - this file is used for parameter tuning of the training, use the training file if you don't have a development set (use the same file both for training and for development)
 - files-format can be either:
     - -c (for column format) or
-    - -r (for brackets format.
-    - See below for more information on the formats). Both the training and the development files have to be in the same format.
+    - -r (for brackets format)
+    - -json (for JSON-Serialized [TextAnnotation](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/datastructures/textannotation/TextAnnotation.java) format (see [SerializationHelper](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/utilities/SerializationHelper.java) for more details)
+    - See below for more information on the formats. Both the training and the development files have to be in the same format.
 
 Complete, working example. Before running this, open [`config/ner.properties`](config/ner.properties) and change the `pathToModelFile` to
 something else (for example, `ner/mymodels`). This will prevent it from attempting to overwrite the jar.

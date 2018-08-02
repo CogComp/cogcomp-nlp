@@ -31,10 +31,25 @@ public class NETesterMultiDataset {
      * NB: assuming column format
      */
     public static void test(String testDatapath, boolean verbose,
-            Vector<String> labelsToIgnoreInEvaluation, Vector<String> labelsToAnonymizeInEvaluation)
+                            Vector<String> labelsToIgnoreInEvaluation, Vector<String> labelsToAnonymizeInEvaluation)
+            throws Exception {
+        test(testDatapath,verbose, "-c", labelsToIgnoreInEvaluation, labelsToAnonymizeInEvaluation);
+    }
+
+    /**
+     * Allows format to be specified.
+     * @param testDatapath
+     * @param verbose
+     * @param dataFormat
+     * @param labelsToIgnoreInEvaluation
+     * @param labelsToAnonymizeInEvaluation
+     * @throws Exception
+     */
+    public static void test(String testDatapath, boolean verbose, String dataFormat,
+                            Vector<String> labelsToIgnoreInEvaluation, Vector<String> labelsToAnonymizeInEvaluation)
             throws Exception {
         Data testData =
-                new Data(testDatapath, testDatapath, "-c", new String[] {}, new String[] {});
+                new Data(testDatapath, testDatapath, dataFormat, new String[] {}, new String[] {});
         ExpressiveFeaturesAnnotator.annotate(testData);
         Vector<Data> data = new Vector<>();
         data.addElement(testData);
