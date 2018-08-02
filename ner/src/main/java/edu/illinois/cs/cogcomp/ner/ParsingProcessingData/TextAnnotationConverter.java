@@ -71,7 +71,7 @@ public class TextAnnotationConverter {
 
                 List<Constituent> cons = ner.getConstituentsCoveringToken(tokenid);
                 if(cons.size() > 1){
-                    logger.error("Too many constituents for token " + tokenid + ", choosing just the first.");
+                    logger.error("Doc: " + ta.getId() + ", Too many constituents for token " + tokenid + ", choosing just the first.");
                 }
 
                 String tag = "O";

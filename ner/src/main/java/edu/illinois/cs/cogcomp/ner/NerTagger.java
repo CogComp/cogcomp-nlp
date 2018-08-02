@@ -39,12 +39,13 @@ public class NerTagger {
 
             if (args[0].equalsIgnoreCase("-train")) {
                 String dataFormat;
-                if(args.length < 4){
+                // config file is always the last one.
+                if(args.length < 5){
                     dataFormat = "-c";
                 }else{
                     dataFormat = args[3];
                 }
-                LearningCurveMultiDataset.getLearningCurve(-1, args[1], args[2], dataFormat);
+                LearningCurveMultiDataset.getLearningCurve(-1, dataFormat, args[1], args[2]);
             }else if (args[0].equalsIgnoreCase("-trainFixedIterations"))
                 LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2],
                         args[3]);
@@ -76,7 +77,8 @@ public class NerTagger {
                 }
                 if (args[0].equalsIgnoreCase("-test")) {
                     String dataFormat;
-                    if(args.length < 3){
+                    // config file is always the last one.
+                    if(args.length < 4){
                         dataFormat = "-c";
                     }else{
                         dataFormat = args[2];

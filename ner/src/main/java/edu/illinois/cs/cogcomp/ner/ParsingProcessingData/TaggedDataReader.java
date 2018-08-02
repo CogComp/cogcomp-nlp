@@ -60,6 +60,9 @@ public class TaggedDataReader {
                 }
             }
         }
+
+        logger.info("Read " + files.length + " files from " + path);
+
         return res;
     }
 
@@ -71,7 +74,7 @@ public class TaggedDataReader {
         } else if (format.equals("-r")) {
             res = BracketFileReader.read(path, documentName);
         }else if (format.equals("-json")) {
-            TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile(Paths.get(path, documentName).toString());
+            TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile(path, true);
             res = TextAnnotationConverter.getNerDocument(ta);
         } else {
             System.err.println("Fatal error: unrecognized file format: " + format);
