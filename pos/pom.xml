@@ -4,7 +4,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.11</version>
+        <version>4.0.12</version>
     </parent>
 
     <artifactId>illinois-pos</artifactId>
