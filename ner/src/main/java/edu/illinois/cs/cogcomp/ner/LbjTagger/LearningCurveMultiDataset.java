@@ -64,19 +64,42 @@ public class LearningCurveMultiDataset {
     }
 
     /**
-     * train a model with the specified inputs, evaluate with the specified test data
-     * <p>
-     * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
+     * Convenience function that has a default value for dataFormat of -c
+     * @param fixedNumIterations if this is > -1 the number of training iterations that will run.
+     * @param trainDataPath the path on the file system for the training data.
+     * @param testDataPath the path on the file system for the test data used to test convergence.
+     * @param incremental if the model is being incremented, this is true.
+     * @throws Exception
      */
     public static void getLearningCurve(int fixedNumIterations, String trainDataPath,
-            String testDataPath, boolean incremental) throws Exception {
+                                        String testDataPath, boolean incremental) throws Exception {
+        getLearningCurve(fixedNumIterations, trainDataPath, "-c", testDataPath, incremental);
+    }
+
+    /**
+     * train a model with the specified inputs, evaluate with the specified test data
+     * <p>
+     *     Use fixedNumIterations=-1 if you want to use the automatic convergence criterion
+     * </p>
+     * <p>
+     *     In practice, testDataPath should be a Development set.
+     * </p>
+     * @param fixedNumIterations if this is > -1 the number of training iterations that will run.
+     * @param dataFormat the data format, bracketed or column.
+     * @param trainDataPath the path on the file system for the training data.
+     * @param testDataPath the path on the file system for the test data used to test convergence.
+     * @param incremental if the model is being incremented, this is true.
+     * @throws Exception 
+     */
+    public static void getLearningCurve(int fixedNumIterations, String dataFormat, String trainDataPath,
+                                        String testDataPath, boolean incremental) throws Exception {
         logger.debug("getLearningCurve(): fni = " + fixedNumIterations + " trainDataPath = '"
                 + trainDataPath + "' testDataPath = '" + testDataPath + "'....");
         Data trainData =
-                new Data(trainDataPath, trainDataPath, "-c", new String[] {}, new String[] {});
+                new Data(trainDataPath, trainDataPath, dataFormat, new String[] {}, new String[] {});
         ExpressiveFeaturesAnnotator.annotate(trainData);
         Data testData =
-                new Data(testDataPath, testDataPath, "-c", new String[] {}, new String[] {});
+                new Data(testDataPath, testDataPath, dataFormat, new String[] {}, new String[] {});
         ExpressiveFeaturesAnnotator.annotate(testData);
         Vector<Data> train = new Vector<>();
         train.addElement(trainData);
@@ -88,9 +111,13 @@ public class LearningCurveMultiDataset {
     /**
      * use fixedNumIterations=-1 if you want to use the automatic convergence criterion, incremental
      * true will start with the existing models weights, and continue training with that set of default
-     * weights.
+     * weights. Training data is assumed to be in column format.
      * <p>
-     * NB: assuming column format
+     * @param fixedNumIterations if this is > -1 the number of training iterations that will run.
+     * @param trainDataSet the path on the file system for the training data.
+     * @param testDataSet the path on the file system for the test data used to test convergence.
+     * @param incremental if the model is being incremented, this is true.
+     * @throws Exception 
      */
     public static void getLearningCurve(Vector<Data> trainDataSet, Vector<Data> testDataSet,
             int fixedNumIterations, boolean incremental) throws Exception {
@@ -166,6 +193,7 @@ public class LearningCurveMultiDataset {
                 TestDiscrete simpleTest = new TestDiscrete();
                 simpleTest.addNull("O");
                 TestDiscrete.testDiscrete(simpleTest, tagger1, null, testParser1, true, 0);
+
                 double f1Level1 = simpleTest.getOverallStats()[2];
                 if (f1Level1 > bestF1Level1) {
                     bestF1Level1 = f1Level1;
@@ -266,6 +294,7 @@ public class LearningCurveMultiDataset {
                     + "\t Level2: bestround=" + bestRoundLevel2 + "\t F1=" + bestF1Level2);
         }
 
+        NETesterMultiDataset.printTestResultsByDataset(testDataSet, tagger1, tagger2, true);
 
         /*
          * This will override the models forcing to save the iteration we're interested in- the

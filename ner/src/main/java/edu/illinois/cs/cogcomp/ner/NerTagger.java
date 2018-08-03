@@ -36,12 +36,17 @@ public class NerTagger {
             boolean areWeTraining = args[0].equalsIgnoreCase("-train");
             ResourceManager rm = new ResourceManager(args[args.length - 1]);
             Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
-
-            if (args[0].equalsIgnoreCase("-train"))
-                LearningCurveMultiDataset.getLearningCurve(-1, args[1], args[2], false);
-            else if (args[0].equalsIgnoreCase("-trainFixedIterations"))
-                LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2],
-                        args[3], false);
+            if (args[0].equalsIgnoreCase("-train")) {
+                String dataFormat;
+                // config file is always the last one.
+                if(args.length < 5){
+                    dataFormat = "-c";
+                }else{
+                    dataFormat = args[3];
+                }
+                LearningCurveMultiDataset.getLearningCurve(-1, dataFormat, args[1], args[2], false);
+            }else if (args[0].equalsIgnoreCase("-trainFixedIterations"))
+                LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2], args[3], false);
             else {
                 // load up the models
                 ModelLoader.load(rm, rm.getString("modelName"), false);
@@ -68,9 +73,17 @@ public class NerTagger {
                         logger.info(output.toString());
                     }
                 }
-                if (args[0].equalsIgnoreCase("-test"))
-                    NETesterMultiDataset.test(args[1], false, cp.labelsToIgnoreInEvaluation,
+                if (args[0].equalsIgnoreCase("-test")) {
+                    String dataFormat;
+                    // config file is always the last one.
+                    if(args.length < 4){
+                        dataFormat = "-c";
+                    }else{
+                        dataFormat = args[2];
+                    }
+                    NETesterMultiDataset.test(args[1], true, dataFormat, cp.labelsToIgnoreInEvaluation,
                             cp.labelsToAnonymizeInEvaluation);
+                }
                 if (args[0].equalsIgnoreCase("-dumpFeatures"))
                     NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2]);
             }
@@ -87,9 +100,10 @@ public class NerTagger {
                 "Usage: edu.illinois.cs.cogcomp.ner.NerTagger <command> [options] <config-file>\n";
         usage +=
                 "commands:\n" + "\t-demo\n" + "\t-annotate <input-dir> <output-dir>\n"
-                        + "\t-train <train-dir> <test-dir>\n"
+                        + "\t-train <train-dir> <test-dir> <dataformat = {-c, -r, -json}, -c by default>\n"
                         + "\t-trainFixedIterations <num-iters> <train-dir> <test-dir>\n"
-                        + "\t-test <test-dir>\n" + "\t-dumpFeatures <test-dir> <output-dir>";
+                        + "\t-test <test-dir> <dataformat = {-c, -r, -json}, -c by default>\n"
+                        + "\t-dumpFeatures <test-dir> <output-dir>";
         out.println(usage);
     }
 }

@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.ner.ParsingProcessingData;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -57,6 +60,9 @@ public class TaggedDataReader {
                 }
             }
         }
+
+        logger.info("Read " + files.length + " files from " + path);
+
         return res;
     }
 
@@ -65,13 +71,14 @@ public class TaggedDataReader {
         NERDocument res = null;
         if (format.equals("-c")) {
             res = (new ColumnFileReader(path)).read(documentName);
+        } else if (format.equals("-r")) {
+            res = BracketFileReader.read(path, documentName);
+        }else if (format.equals("-json")) {
+            TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile(path, true);
+            res = TextAnnotationConverter.getNerDocument(ta);
         } else {
-            if (format.equals("-r")) {
-                res = BracketFileReader.read(path, documentName);
-            } else {
-                System.err.println("Fatal error: unrecognized file format: " + format);
-                System.exit(0);
-            }
+            System.err.println("Fatal error: unrecognized file format: " + format);
+            System.exit(0);
         }
         connectSentenceBoundaries(res.sentences);
         return res;
