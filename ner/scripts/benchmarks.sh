@@ -30,7 +30,7 @@ if [ ! -e $LIB ]; then
 fi
 
 # Classpath
-cpath=".:target/classes"
+cpath="config:.:target/classes"
 
 for JAR in `ls $DIST/*.jar`; do
     cpath="$cpath:$JAR"

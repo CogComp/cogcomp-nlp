@@ -36,7 +36,6 @@ public class NerTagger {
             boolean areWeTraining = args[0].equalsIgnoreCase("-train");
             ResourceManager rm = new ResourceManager(args[args.length - 1]);
             Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
-
             if (args[0].equalsIgnoreCase("-train")) {
                 String dataFormat;
                 // config file is always the last one.
@@ -45,13 +44,12 @@ public class NerTagger {
                 }else{
                     dataFormat = args[3];
                 }
-                LearningCurveMultiDataset.getLearningCurve(-1, dataFormat, args[1], args[2]);
+                LearningCurveMultiDataset.getLearningCurve(-1, dataFormat, args[1], args[2], false);
             }else if (args[0].equalsIgnoreCase("-trainFixedIterations"))
-                LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2],
-                        args[3]);
+                LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2], args[3], false);
             else {
                 // load up the models
-                ModelLoader.load(rm, rm.getString("modelName"));
+                ModelLoader.load(rm, rm.getString("modelName"), false);
                 if (args[0].equalsIgnoreCase("-annotate")) {
                     NETagPlain.init();
                     NETagPlain.tagData(args[1], args[2]);
@@ -85,7 +83,8 @@ public class NerTagger {
                     }
                     NETesterMultiDataset.test(args[1], true, dataFormat, cp.labelsToIgnoreInEvaluation,
                             cp.labelsToAnonymizeInEvaluation);
-                }if (args[0].equalsIgnoreCase("-dumpFeatures"))
+                }
+                if (args[0].equalsIgnoreCase("-dumpFeatures"))
                     NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2]);
             }
         } catch (Exception e) {

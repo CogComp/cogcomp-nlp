@@ -37,9 +37,10 @@ public class ModelLoader {
      * Load the models wherever they are found. Check file system first, then classpath, and finally get it 
      * from Minio datastore.
      * @param rm the resource manager.
+     * @param training if we are training.
      * @param viewName the name of the view identifies the model.
      */
-    static public void load(ResourceManager rm, String viewName) {
+    static public void load(ResourceManager rm, String viewName, boolean training) {
         
         // the loaded built into the model will check the local file system and the jar files in the classpath.
         ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
@@ -62,6 +63,18 @@ public class ModelLoader {
             if (cp.featuresToUse.containsKey("PredictionsLevel1")) {
                 tagger2 = new NETaggerLevel2(modelPath + ".level2", modelPath + ".level2.lex");
                 logger.info("Reading L2 model from classpath : " + modelPath + ".level2");
+            } else {
+                logger.info("L2 model not required.");
+            }
+        } else if (training) {
+            
+            // we are training a new model, so it it doesn't exist, we don't care, just create a
+            // container.
+            tagger1 = new NETaggerLevel1(modelPath + ".level1", modelPath + ".level1.lex");
+            logger.info("Reading L1 model from file : " + modelPath + ".level2");
+            if (cp.featuresToUse.containsKey("PredictionsLevel1")) {
+                tagger2 = new NETaggerLevel2(modelPath + ".level2", modelPath + ".level2.lex");
+                logger.info("Reading L2 model from file : " + modelPath + ".level2");
             } else {
                 logger.info("L2 model not required.");
             }
