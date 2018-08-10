@@ -28,10 +28,10 @@ import java.io.File;
  * @author James Chen
  */
 public class ChunkerTrain {
-    private int iter; // Number of iterations to be used when training the chunker
-    private Chunker chunker;
+    protected int iter; // Number of iterations to be used when training the chunker
+    protected Chunker chunker;
     private ResourceManager rm;
-    private static final Logger logger = LoggerFactory.getLogger(ChunkerTrain.class);
+    protected static final Logger logger = LoggerFactory.getLogger(ChunkerTrain.class);
 
     public ChunkerTrain() {
         this(50);
@@ -131,10 +131,9 @@ public class ChunkerTrain {
                     cnt++;
             }
             chunker.doneWithRound();
-            writeModelsToDisk(modeldir,modelname);
             // Test on dev set
             BIOTester tester =
-                    new BIOTester(new Chunker(lcpath,lexpath), new ChunkLabel(), new ChildrenFromVectors(parser));
+                    new BIOTester(chunker, chunker.getLabeler(), new ChildrenFromVectors(parser));
             double[] result = tester.test().getOverallStats();
             tmpF1 = result[2];
 
