@@ -119,16 +119,13 @@ A complete example follows.
 
 ```java
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 import java.io.IOException;
-
-import java.util.Properties;
 
 // Filename: App.java
 public class App
@@ -146,12 +143,16 @@ public class App
         TextAnnotationBuilder tab;
         // don't split on hyphens, as NER models are trained this way
         boolean splitOnHyphens = false;
-        tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
+        tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens, false));
 
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
 
         NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-        co.getView(ta);
+        try {
+            co.getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
