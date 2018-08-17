@@ -152,7 +152,8 @@ public class StatefullTokenizerTest {
         IntPair notOffsets = new IntPair(42, 45);
         assertEquals(notOffsets, tokenOffsets[notIndex]);
         int intolerantIndex = 14;
-        IntPair intolerantOffsets = new IntPair(77, 87);
+        int lineSepLength = System.lineSeparator().length();
+        IntPair intolerantOffsets = new IntPair(76 + lineSepLength, 86 + lineSepLength);
         assertEquals(intolerantOffsets, tokenOffsets[intolerantIndex]);
     }
     
