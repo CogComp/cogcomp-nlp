@@ -44,16 +44,18 @@ When using`ChunkerAnnotator`, the models are loaded automatically from the direc
 Thus, to use your own models (maybe you need to train your models first; please read the following section `Training`), simply place them in this directory and they will be loaded; otherwise, the model version
 specified in this project's `pom.xml` file will be loaded from the Maven repository and used.
 
-**Note** : To use your own models, **exclude** the `illinois-chunker-model` artifact from the `cogcomp-chunker` dependency in your `pom.xml` to avoid potential conflicts.
+**Note** : To use your own models (either you're retraining it or using it), **exclude** the `illinois-chunker-model` artifact from the `cogcomp-chunker` dependency in your `pom.xml` to avoid potential conflicts.
 
 ## Training
-The class [`ChunkerTrain`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerTrain.java) contains a main method that can be used to
-train the models for a Chunker provided you have access to the necessary training data. It can be called from the top-level
+1. If you just want to retrain the chunker models using your data, i.e., without modifying [chunk.lbj](src/main/lbj/chunk.lbj), then please read the following:
+    
+    The class [`ChunkerTrain`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerTrain.java) contains a main method that can be used to train the models for a Chunker provided you have access to the necessary training data. It can be called from the top-level
 of the Chunker sub-project using the following command (`[DEV_RATIO]` means optional). `MODELDIR` and `MODELNAME` are the dir and name of the model you want to save, respectively. `ROUND` is the number of iterations. `DEV_RATIO` is the portion of training set you want to use as development set and it should be between 0 and 1. When `DEV_RATIO` is specified, `ROUND` is explained as the maximum number of iterations and the chunker will select the iter number (from 1 to `ROUND`) based on its performance on development set.
-```
-mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain -Dexec.args="$TRAINFILE $MODELDIR $MODELNAME $ROUND [$DEV_RATIO]"
-```
-Please also refer to [mvn_train.sh](scripts/mvn_train.sh) for an example of usage.
+    ```
+    mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain -Dexec.args="$TRAINFILE $MODELDIR $MODELNAME $ROUND [$DEV_RATIO]"
+    ```
+    Please also refer to [mvn_train.sh](scripts/mvn_train.sh) for an example of usage.
+2. If you want to modify the features used in chunker models, then you need to modify [chunk.lbj](src/main/lbj/chunk.lbj) first, and then `mvn lbjava:clean && mvn lbjava:generate`, such that the [lbjava](src/main/java/edu/illinois/cs/cogcomp/chunker/main/lbjava) files can be re-generated. However, please be noted that the current files in [lbjava](src/main/java/edu/illinois/cs/cogcomp/chunker/main/lbjava) have been **MANUALLY** modified after automatic `mvn lbjava:generate` (e.g., see [this manual change](https://github.com/CogComp/cogcomp-nlp/blob/15faa528ecda2679b8e631140b1116c84c2710a3/chunker/src/main/java/edu/illinois/cs/cogcomp/chunker/main/lbjava/PreviousTags.java#L26-L29) and [this manual change](https://github.com/CogComp/cogcomp-nlp/blob/467c324da318b48010d60b825eafc097da1d62f7/chunker/src/main/java/edu/illinois/cs/cogcomp/chunker/main/lbjava/Chunker.java#L39-L43)). The manual modifications to these automatically generated lbjava files include additional functionalities and if it's regenerated, these functionalities will be gone. Therefore, it is strongly recommended that the user not change the `.lbj` files in this repository unless the user is very familiar with `lbjava`.
 
 ## Off-the-shelf scripts
 There are a bunch of scripts provided with this package in [scripts](scripts/). Please make sure [apache maven](http://maven.apache.org/install.html) is installed before running these scripts. They should be run from the module root directory, i.e., illinois-cogcomp-nlp/chunker/. For example,
