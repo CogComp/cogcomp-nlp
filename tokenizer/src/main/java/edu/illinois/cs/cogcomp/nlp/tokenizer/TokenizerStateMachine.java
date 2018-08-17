@@ -336,7 +336,7 @@ public class TokenizerStateMachine {
                                     if (getCurrent().isAbbr())
                                         return; // previous was upper case, acronym and word
                                                 // continues
-                                    else if (Character.isWhitespace(c) && Character.isLowerCase(nextnextChar))
+                                    else if (Character.isLowerCase(nextnextChar))
                                         return; // when the next char is white space and the next next char
                                                 // is lowercase, we know that the next word is not start of
                                                 // a sentence, so we continue.
