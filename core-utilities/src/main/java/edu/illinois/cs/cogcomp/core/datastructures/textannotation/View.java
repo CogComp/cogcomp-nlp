@@ -141,15 +141,19 @@ public class View implements Serializable, IQueryable<Constituent> {
      * @param constituent The new constituent to be added.
      */
     public void addConstituent(Constituent constituent) {
-        constituents.add(constituent);
+        if(!constituents.contains(constituent)) {
+            constituents.add(constituent);
 
-        startSpan = Math.min(this.startSpan, constituent.getStartSpan());
-        endSpan = Math.max(this.endSpan, constituent.getEndSpan());
+            startSpan = Math.min(this.startSpan, constituent.getStartSpan());
+            endSpan = Math.max(this.endSpan, constituent.getEndSpan());
 
-        if (startSpan >= 0 && endSpan >= 0) {
-            for (int token = constituent.getStartSpan(); token < constituent.getEndSpan(); token++) {
-                this.addTokenToConstituentMapping(token, constituent);
+            if (startSpan >= 0 && endSpan >= 0) {
+                for (int token = constituent.getStartSpan(); token < constituent.getEndSpan(); token++) {
+                    this.addTokenToConstituentMapping(token, constituent);
+                }
             }
+        }else{
+            System.err.println("Warning (View.java): not adding duplicate Constituent.");
         }
     }
 
