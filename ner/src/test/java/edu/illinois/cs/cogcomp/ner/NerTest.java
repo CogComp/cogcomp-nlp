@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
@@ -43,7 +44,7 @@ public class NerTest {
             ResourceManager rm = new NerBaseConfigurator().getDefaultConfig();
             Parameters.readConfigAndLoadExternalData(rm);
             ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
-            ModelLoader.load(rm, "ontonotes");
+            ModelLoader.load(rm, ViewNames.NER_ONTONOTES, false);
             t1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
             t2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
         } catch (Exception e) {

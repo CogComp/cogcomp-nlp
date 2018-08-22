@@ -39,7 +39,7 @@ public class Phrase {
     static String monthnum = null;
     static String year = null;
     static String day = null;
-    static String month = "(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)";
+    static String month = "(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)";
     static String holiday1 = "(foundation day|new year|christmas|coming of age day|epiphany|martyrs Day|Martin Luther King's Day|Timkat|Husbands Day|National Day|The Three Holy Hierarchs|Air Force Day|Candlemas|Fiesta de la Candelaria|Constitution Day|Pre Eren Day|St. Paul's shipwreck|Unification Day|International Woman's Day|Army Day|Clean Monday|Shrove Monday|Washington's Birthday|Carnival|Ash Wednesday|Defender of the Fatherland|Independence Day|National Flag Day|Beer Day|Heroes' Day|Victory at Adwa Day|Liberation Day|The Spring Day|Saint Patrick's Day|Benito Juárez's birthday|St. Josephs day|Human Rights Day|Day of Remembrance for Truth and Justice|Annunciation|Freedom and Democracy Day|Mawlid an-Nabi|Malvinas Day|Maundy Thursday|Good Friday|Easter Saturday|Easter Monday|Easter|Juan Santamaria's day|First Day of Summer|Patriots' Day|Republic Day|Tiradentes' Day|St.George Day|ANZAC day|Freedom and Democracy Day|Liberation Day|Freedom Day|Showa DayQueen's birthday|Labour day|May Day|Bridging Holiday|General prayer day|Greenery Day|Children's Day|Victory Day|St.George Day|Bank Holiday|Victory Day|Mothers' Day|Ascension Day|Battle of Las Piedras|Navy day|Battle of Pichincha|Education, Culture and Literature Day|Saints Cyril and Methodius Day|May Revolution|Pentecost|Memorial Day|Pentecost Monday|Whit Monday|Freedom and Democracy Day|Republic Day|Corpus Christi|Sette Giugno|Chaco Armistice|Sacred Heart|Youth Day|Artigas' Birthday|Anti-Fascist Struggle Day|Midsummer Day|Victory Day|Battle of Carabobo|Johannis day|Jónsmessa|Statehood day|St. Peter and Paul day|St.Vitus' Day|St. Peter and Paul day|Saints Cyril and Methodius Day|Jan Hus Day|Republic Day|Statehood day|St.Peter's Day|Navy day|Virgin Carmen day|Birthday of Simón Bolivar|Guanacaste Day|St.Elijah's Day|Victory Day|Commerce Day|Battle of Boyacá|Independence of Quito|Assumption day|Assumption of Mary|Founding of Asunción|Day of Restoration of Independence|José de San Martín Day|St.Stephen's Day|National Uprising|Holy Rosa of Lima|National Language Day|Unification Day|Nativity of Mary|Nativity of our Lady|Enkutatash|Ramadan|Battle of San Jacinto|Respect-for-the-Aged Day|Heritage day|Meskel|St. Wenceslas Day|Battle of Angamos|Day of the Race|Health and Sports Day|Columbus Day|Revolution day|Day of the Indigenous Resistance|Our Lady of Aparecida|Eid ul-Fitr|Beatification of Mother Teresa|Ochi Day|Reformation day|All Saints|All Souls|Culture Day|Independence of Cuenca|Separation Day|Consolidation Day|October Revolution Day|St.Demetrius' Day|Armistice Day|Independence of Cartagena|Remembrance day|St. Martin's Day|Veterans Day|King's Feast|Thanksgiving Day|Self-governance Day|Foundation of Quito|St. Nicholas Day|Immaculate Conception Day|Saint Clement of Ohrid day|Day of Reconciliation|Eid ul-Adha|Emperors Birthday|Boxing Day|Day of Goodwill|St.Stephen's Day)";
     static String holiday = holiday1.toLowerCase();
     static String delims = "[(|)]";
@@ -219,7 +219,7 @@ public class Phrase {
     public static String fullNameDate(String phrase, datetype information) {
         int i;
         int j;
-        DateMapping temp = new DateMapping();
+        DateMapping temp = DateMapping.getInstance();
         String[] passby = new String[3];
         String patternStr = "\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*(?:\\s|[/\\-\\.\\,])\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*(?:\\s|[/\\-\\.\\,])\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*";
         Pattern pattern = Pattern.compile(patternStr);
@@ -408,7 +408,7 @@ public class Phrase {
     public static String halfnamedate(String phrase, datetype information) {
 
         int i;
-        DateMapping temp = new DateMapping();
+        DateMapping temp = DateMapping.getInstance();
 
 
         String patternStr = "\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*(?:\\s|[/\\-\\.\\,])\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|" + month + ")\\s*";
@@ -494,7 +494,7 @@ public class Phrase {
 
     public static String converter(String phrase1) {
         int i;
-        DateMapping temp = new DateMapping();
+        DateMapping temp = DateMapping.getInstance();
         //It records the number of term(Example:day,month,year)
         int numterm = 0;
         String result;

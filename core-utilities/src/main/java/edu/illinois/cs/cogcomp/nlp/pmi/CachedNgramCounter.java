@@ -54,7 +54,7 @@ public abstract class CachedNgramCounter {
             id++;
         }
 
-        log.info("{} found in cache, getting {} from google ngrams",
+        log.debug("{} found in cache, getting {} from google ngrams",
                 (items.length - toCache.size()), toCache.size());
 
         if (toCache.size() > 0) {
@@ -69,7 +69,6 @@ public abstract class CachedNgramCounter {
 
                 cache.add(item, count);
                 output[id] = count;
-
             }
         }
 

@@ -120,7 +120,7 @@ public class TemporalNormalizerBenchmark {
      * @throws Exception
      */
     public void testNormalizationWithTrueExtraction(String outputFolder, boolean verbose) throws Exception {
-        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false, false));
         System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
         ResourceManager nerRm = new TemporalChunkerConfigurator().getDefaultConfig();
@@ -190,7 +190,7 @@ public class TemporalNormalizerBenchmark {
      * @throws Exception
      */
     public void testTemporalChunker(String outputFolder, boolean verbose) throws Exception {
-        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false, false));
 
         ResourceManager nerRm = new TemporalChunkerConfigurator().getDefaultConfig();
         IOUtilities.existsInClasspath(TemporalChunkerAnnotator.class, nerRm.getString("modelDirPath"));

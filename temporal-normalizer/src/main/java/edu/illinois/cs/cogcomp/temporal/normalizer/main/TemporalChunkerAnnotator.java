@@ -27,10 +27,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 
 
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TemporalPhrase;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexChunk;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNames;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNormalizer;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -198,6 +195,39 @@ public class TemporalChunkerAnnotator extends Annotator{
             tagger.discreteValue(lbjtoken);
             logger.debug("{} {}", lbjtoken.toString(), (null == lbjtoken.type) ? "NULL"
                     : lbjtoken.type);
+
+            /*Enforce some rules to avoid silly mistakes of temporal chunker*/
+            if(lbjtoken.type.charAt(0) == 'O'){
+                DateMapping dateMapping = DateMapping.getInstance();
+                String tmp = lbjtoken.form.toLowerCase();
+                String prev_token = null;
+                if(previous!=null&&previous.getSurfaceForm()!=null)
+                    prev_token = previous.getSurfaceForm().toLowerCase();
+                if(dateMapping.getHm_month().containsKey(tmp)
+                        ||!tmp.equals("sun")&&dateMapping.getHm_dayOfWeek().containsKey(tmp)) {
+                    // if this token matches to any month names or day-of-week names (either full names or abbr. names), then force the chunker label to be Begin
+                    // "Sun" is a bit tricky since the star "Sun" and the day of week "Sunday" are both NNP. We leave it to chunker now.
+                    if(tmp.equals("may")||tmp.equals("sat")){
+                        if(current.getLabel().startsWith("NNP"))
+                            lbjtoken.type = "B-null";
+                    }
+                    else
+                        lbjtoken.type = "B-null";
+                }
+                else if(prev_token!=null
+                            && dateMapping.getHm_month().containsKey(prev_token)){// previous token was a "month"
+                    if(dateMapping.getHm_dayOfMonth().contains(tmp))// curr token is an ordinal number
+                        lbjtoken.type = "I-null";
+                    else{
+                        try {
+                            int currint = Integer.valueOf(tmp);
+                            if(currint>=1&&currint<=31)// curr token is an int number in [1,31]
+                                lbjtoken.type = "I-null";
+                        }
+                        catch (Exception e){}// nothing needed
+                    }
+                }
+            }
 
             // what happens if we see an Inside tag -- even if it doesn't follow a Before tag
             if (null != lbjtoken.type && lbjtoken.type.charAt(0) == 'I') {

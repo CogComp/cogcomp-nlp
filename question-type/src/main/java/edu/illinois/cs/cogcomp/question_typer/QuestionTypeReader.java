@@ -29,7 +29,7 @@ public class QuestionTypeReader implements Parser {
     String line;
 
     // annotators
-    public static TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+    public static TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false, false));
 
     public QuestionTypeReader(String file) {
         // format "ISO-8859-1"

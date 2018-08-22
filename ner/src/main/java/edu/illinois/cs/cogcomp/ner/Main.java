@@ -248,8 +248,19 @@ public class Main extends AbstractMain {
             System.out.println("Loading resources...");
             if (resourceManager == null)
                 this.resourceManager = new NerBaseConfigurator().getDefaultConfig();
-            this.nerAnnotator = new NERAnnotator(this.resourceManager, "CONLL_DEFAULT");
-            System.out.println("Completed loading resources.");
+            String viewName = this.resourceManager.getString(NerBaseConfigurator.VIEW_NAME);
+            if (viewName == null) {
+                String modelName = this.resourceManager.getString(NerBaseConfigurator.MODEL_NAME);
+                if (modelName.toLowerCase().equals("conll"))
+                    this.nerAnnotator = new NERAnnotator(this.resourceManager, ViewNames.NER_CONLL);
+                else if (modelName.toLowerCase().equals("ontonotes"))
+                    this.nerAnnotator = new NERAnnotator(this.resourceManager, ViewNames.NER_ONTONOTES);
+                else 
+                    this.nerAnnotator = new NERAnnotator(this.resourceManager, "NER_OTHER");
+            } else {
+                this.nerAnnotator = new NERAnnotator(this.resourceManager, viewName);
+            }
+            System.out.println("Completed loading resources, assuming a ");
         }
 
         // display the command prompt depending on the mode we are in.

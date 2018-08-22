@@ -179,7 +179,7 @@ public class PipelineFactory {
         boolean splitOnHypen = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH.key);
 
         TextAnnotationBuilder taBldr =
-                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHypen));
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHypen, false));
         Map<String, Annotator> annotators = buildAnnotators(fullRm);
         return new SentencePipeline(taBldr, annotators, fullRm);
     }
@@ -254,7 +254,7 @@ public class PipelineFactory {
         }
 
         TextAnnotationBuilder taBldr =
-                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash, false));
 
         Map<String, Annotator> annotators = buildAnnotators(fullRm);
         return isSentencePipeline ? new SentencePipeline(taBldr, annotators, fullRm) :

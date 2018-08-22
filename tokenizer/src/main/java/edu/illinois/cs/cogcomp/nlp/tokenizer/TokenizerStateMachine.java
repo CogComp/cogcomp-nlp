@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -26,10 +27,10 @@ import java.util.regex.Pattern;
  * 
  * <p>
  * States are assumed to be nested rather than linear, so there is a state stack that contains
- * {@link State} objects that encapsulate the state object as well as logic to manage poping and
+ * {@link State} objects that encapsulate the state object as well as logic to manage popping and
  * pushing that state. So the state objects do the work of actually creating the TextAnnotation
  * objects.
- * <p>
+ * </p>
  * 
  * <p>
  * The StateProcessor interface defines the interface class instances that operate on state
@@ -48,11 +49,6 @@ import java.util.regex.Pattern;
  * @author redman
  */
 public class TokenizerStateMachine {
-    /** valid URI schemes. */
-    final static String[] schemes = {"http", "https", "ftp", "svn", "email"};
-    /** matches up to the end of the url. */
-    final Pattern urlpat = Pattern
-            .compile("[a-zA-Z0-9]+://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
     /** the state stack, since state can be nested. */
     protected ArrayList<State> stack;
     /** the state stack, since state can be nested. */
@@ -82,24 +78,29 @@ public class TokenizerStateMachine {
     protected int current;
     /** the state we are in currently. */
     protected int state;
-
+    
     /**
      * Init the state machine decision matrix and the text annotation.
      */
-    public TokenizerStateMachine(final boolean splitOnDash) {
+    public TokenizerStateMachine(final boolean splitOnDash, final boolean splitOnTwoNewlines) {
         // cardinality of 1st dim the number of states(TokenizerState), 2nd is the number of token
         // types (TokenType enum)
-        StateProcessor[][] toopy = { {
+        StateProcessor[][] toopy = {
 
                 // process tokens in sentence, we are only in a sentences while processing white
                 // space. There is always a sentence on top of the stack.
-
+                {
+                    
                 /** get punctuation while in sentence. This starts a new word. */
                 new StateProcessor() {
                     @Override
                     public void process(char token) {
+                        
+                        // we have something, so the paragraph has mass.
+                        stack.get(stack.size()-1).hasMass = true;
                         if (token == '$') {
-                            if (Character.isDigit(peek(1))) {
+                            Character next = peek(1);
+                            if (Character.isDigit(next) || ( next == '.' && Character.isDigit(peek(2)))) {
                                 push(new State(TokenizerState.IN_WORD), current);
                             } else {
                                 push(new State(TokenizerState.IN_SPECIAL), current);
@@ -116,23 +117,39 @@ public class TokenizerStateMachine {
                 new StateProcessor() {
                     @Override
                     public void process(char token) {
+                        // we have something, so the paragraph has mass.
+                        stack.get(stack.size()-1).hasMass = true;
                         push(new State(TokenizerState.IN_WORD), current);
                     }
                 },
 
-                /** get whitespace while in sentence. */
-                new StateProcessor() {
-                    @Override
-                    public void process(char token) {}
-                },
+                /** get whitespace while in sentence, different processer if we sentence split on two newlines */
+                splitOnTwoNewlines ? 
+                    
+                    new StateProcessor() {
+                        @Override
+                        public void process(char token) {
+                            if (stack.get(stack.size()-1).hasMass && token == '\n' && peek(-1) == '\n' && peek(-2) != '\n') {
+                                // we are in a sentence, but we will pop it
+                                pop(current);
+                            }
+                        }
+                    }
+                    :
+                    new StateProcessor() {
+                        @Override
+                        public void process(char token) {}
+                    },
 
                 /** get unprintable character while in sentence. */
                 new StateProcessor() {
                     @Override
                     public void process(char token) {}
-                }}, {
-
+                }}, 
+            
                 // Token handlers while processing within a word
+                {
+
                 /** get punctuation while in word, the punctuation itself would be a word. */
                 new StateProcessor() {
                     @Override
@@ -143,11 +160,11 @@ public class TokenizerStateMachine {
                             case '/':
                                 // numbers well may contain a comma or a period, check for an
                                 // entirely numeric word.
-                                if (getCurrent().isNumeric()) {
+                                if (getCurrent().isDate()) {
                                     int advance = 1;
                                     while (true) {
                                         char next = peek(advance);
-                                        if (Character.isDigit(next)) {
+                                        if (Character.isDigit(next) || next == '/') {
                                             advance++;
                                         } else {
                                             if (advance > 1
@@ -273,6 +290,14 @@ public class TokenizerStateMachine {
                                 push(new State(TokenizerState.IN_SPECIAL), current);
                                 break;
                             }
+                            case '@':
+                                if (isEmail()) {
+                                    return;
+                                }
+                                pop(current); // the current word is finished.
+                                push(new State(TokenizerState.IN_SPECIAL), current);
+                                break;
+
                             case '.': {
                                 // we have a period, this is often an end-of-sentence marker. There
                                 // are other examples of areas where it is not, No.2, U.S., US.,
@@ -353,10 +378,16 @@ public class TokenizerStateMachine {
 
                         // we will keep like special characters together.
                         if (peek(-1) != token) {
-                            pop(current); // the current word is finished.
-                            push(new State(TokenizerState.IN_SPECIAL), current); // No matter what
-                                                                                 // we push a new
-                                                                                 // word token.
+                            pop(current); // the current token is finished.
+                            
+                            if (token == '$') {
+                                Character next = peek(1);
+                                if (Character.isDigit(next) || ( next == '.' && Character.isDigit(peek(2)))) {
+                                    push(new State(TokenizerState.IN_WORD), current);
+                                    return;
+                                }
+                            }
+                            push(new State(TokenizerState.IN_SPECIAL), current);
                         }
                     }
                 },
@@ -457,7 +488,6 @@ public class TokenizerStateMachine {
      * @return return true if it is a url.
      */
     protected boolean isURL() {
-        final boolean debug = false;
         char nc = peek(1);
         switch (nc) {
             case ' ':
@@ -478,24 +508,37 @@ public class TokenizerStateMachine {
                 if (new URI(ss) != null) {
                     this.current = cs.start + (ss.length() - 1);
                     this.pop(this.current + 1);
-                    if (debug)
-                        System.err.println("Good : " + ss);
                     return true;
                 }
             } catch (URISyntaxException e) {
-                if (debug)
-                    System.err.println("Invalid : " + ss);
                 return false;
             }
-        } else {
-            if (debug) {
-                int len = Math.min(100, text.length - cs.start);
-                String ss = new String(text, cs.start, len);
-                System.err.println("Not even close : " + ss);
-            }
-
         }
         return false;
+    }
+    
+    /** this regex finds emails addresses. */
+    private static final Pattern emailRegex = 
+                    Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}", Pattern.CASE_INSENSITIVE);
+    
+    /**
+     * We have encountered a colon in the input data stream, check to see if it is a URL, and if it
+     * is, advance the cursor and return true, or return false.
+     * 
+     * @return return true if it is a url.
+     */
+    protected boolean isEmail() {
+        int start = this.getCurrent().start;
+        String tmp = new String (text).substring(start);
+        Matcher matcher = emailRegex.matcher(tmp);
+        if (matcher.find()) {
+            int end = matcher.end();
+            current = start + (end-1);
+            this.pop(this.current + 1);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -595,7 +638,6 @@ public class TokenizerStateMachine {
             return;
         this.text = new char[i];
         intext.getChars(0, i, this.text, 0);
-
         this.textstring = intext;
         this.text = this.textstring.toCharArray();
         current = 0;
@@ -650,6 +692,10 @@ public class TokenizerStateMachine {
         /** the index of the state. */
         int stateindex;
 
+        /** this is set only in paragraphs when it contains something, sentences with 
+         * only white space are of no use. */
+        boolean hasMass = false;
+        
         /**
          * Create a new span.
          * 
@@ -783,6 +829,21 @@ public class TokenizerStateMachine {
          * 
          * @return true if the word is numeric.
          */
+        public boolean isDate() {
+            int max = end == -1 ? current : end;
+            for (int i = start; i < max; i++) {
+                char c = text[i];
+                if (!Character.isDigit(c) && c != '/')
+                    return false;
+            }
+            return true;
+        }
+        
+        /**
+         * get the current word if we can.
+         * 
+         * @return true if the word is numeric.
+         */
         public boolean isNumeric() {
             int max = end == -1 ? current : end;
             for (int i = start; i < max; i++) {
@@ -829,4 +890,19 @@ public class TokenizerStateMachine {
             return end - start;
         }
     }
+    static public void main(String[] args) {
+        final Pattern emailRegex = 
+                        Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}", Pattern.CASE_INSENSITIVE);
+        String tmp = "redman@illinois.edu-tmpl.ak is my email.";
+        Matcher matcher = emailRegex.matcher(tmp);
+        if (matcher.find()) {
+            int end = matcher.end();
+            System.out.println("did work : "+tmp.substring(matcher.start(), matcher.end()));
+
+        } else {
+            System.err.println("didn't work.");
+        }
+
+    }
+
 }

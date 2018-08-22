@@ -119,16 +119,13 @@ A complete example follows.
 
 ```java
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 import java.io.IOException;
-
-import java.util.Properties;
 
 // Filename: App.java
 public class App
@@ -146,12 +143,16 @@ public class App
         TextAnnotationBuilder tab;
         // don't split on hyphens, as NER models are trained this way
         boolean splitOnHyphens = false;
-        tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
+        tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens, false));
 
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
 
         NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-        co.getView(ta);
+        try {
+            co.getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
@@ -240,8 +241,9 @@ Where the parameters are:
     - this file is used for parameter tuning of the training, use the training file if you don't have a development set (use the same file both for training and for development)
 - files-format can be either:
     - -c (for column format) or
-    - -r (for brackets format.
-    - See below for more information on the formats). Both the training and the development files have to be in the same format.
+    - -r (for brackets format)
+    - -json (for JSON-Serialized [TextAnnotation](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/datastructures/textannotation/TextAnnotation.java) format (see [SerializationHelper](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/utilities/SerializationHelper.java) for more details)
+    - See below for more information on the formats. Both the training and the development files have to be in the same format.
 
 Complete, working example. Before running this, open [`config/ner.properties`](config/ner.properties) and change the `pathToModelFile` to
 something else (for example, `ner/mymodels`). This will prevent it from attempting to overwrite the jar.

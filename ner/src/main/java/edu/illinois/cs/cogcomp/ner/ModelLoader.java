@@ -10,6 +10,7 @@ import org.cogcomp.DatastoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
@@ -36,9 +37,10 @@ public class ModelLoader {
      * Load the models wherever they are found. Check file system first, then classpath, and finally get it 
      * from Minio datastore.
      * @param rm the resource manager.
+     * @param training if we are training.
      * @param viewName the name of the view identifies the model.
      */
-    static public void load(ResourceManager rm, String viewName) {
+    static public void load(ResourceManager rm, String viewName, boolean training) {
         
         // the loaded built into the model will check the local file system and the jar files in the classpath.
         ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
@@ -64,15 +66,31 @@ public class ModelLoader {
             } else {
                 logger.info("L2 model not required.");
             }
+        } else if (training) {
+            
+            // we are training a new model, so it it doesn't exist, we don't care, just create a
+            // container.
+            tagger1 = new NETaggerLevel1(modelPath + ".level1", modelPath + ".level1.lex");
+            logger.info("Reading L1 model from file : " + modelPath + ".level2");
+            if (cp.featuresToUse.containsKey("PredictionsLevel1")) {
+                tagger2 = new NETaggerLevel2(modelPath + ".level2", modelPath + ".level2.lex");
+                logger.info("Reading L2 model from file : " + modelPath + ".level2");
+            } else {
+                logger.info("L2 model not required.");
+            }
         } else {
 
             // all else has filed, load from the datastore, create artifact ids based on the view
             // name and training data designation.
             String dataset;
-            if(viewName.toLowerCase().contains("conll")) {
+            String lowercaseViewName = viewName.toLowerCase();
+            if (lowercaseViewName.contains(ViewNames.NER_CONLL.toLowerCase())) {
                 dataset = "enron-conll";
-            }else {
+            } else if (lowercaseViewName.contains(ViewNames.NER_ONTONOTES.toLowerCase())) {
                 dataset = "ontonotes";
+            } else {
+                // not a standard model, and we can't find it on the command line.
+                throw new IllegalArgumentException("The NER models could not be found at \""+modelPath+"\", and no default with view name "+viewName);
             }
             String data_split;
             if (!rm.containsKey(NerBaseConfigurator.TRAINED_ON))

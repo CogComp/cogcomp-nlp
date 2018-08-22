@@ -51,7 +51,7 @@ public class TextPreProcessor {
             chunker = null;
         } else {
             annotator = null;
-            taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+            taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false, false));
             pos = new POSAnnotator();
             ner = new NERAnnotator(ViewNames.NER_CONLL);
             lemma = new IllinoisLemmatizer();

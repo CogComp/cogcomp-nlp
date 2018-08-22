@@ -20,58 +20,59 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.mascReader.MascXCESReader;
 
-/**
- * Please change CORPUS_DIRECTORY if your MASC XCES XML files are stored elsewhere
- */
 public class MascXCESReaderTest {
-    private static final String CORPUS_DIRECTORY = "/shared/corpora/corporaWeb/written/eng/MASC-3.0.0/xces";
+    private static final String CORPUS_DIRECTORY = "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/masc/xces";
 
     @Test
     public void testCreateTextAnnotation() throws Exception {
         Logger.getLogger(MascXCESReader.class).setLevel(Level.INFO);
 
-        MascXCESReader cnr = new MascXCESReader("", Paths.get(CORPUS_DIRECTORY, "written/twitter").toString(), ".xml");
-
-        TextAnnotation ta = cnr.next();
-
-        List<Constituent> tokens = ta.getView(ViewNames.TOKENS).getConstituents();
-        Assert.assertEquals(tokens.size(), 13389);  // tok 13390, clean tok 13389
-        Assert.assertEquals(tokens.get(1).toString(), "setting");
-
-        List<Constituent> lemma = ta.getView(ViewNames.LEMMA).getConstituents();
-        Assert.assertEquals(lemma.size(), 13375);  // base= 13376, clean tok with base= 13375
-        Assert.assertEquals(lemma.get(1).getLabel(), "set");
-
-        List<Constituent> pos = ta.getView(ViewNames.POS).getConstituents();
-        Assert.assertEquals(pos.size(), 13389);  // msd= 13390, clean tok with msd= 13389
-        Assert.assertEquals(pos.get(1).getLabel(), "VBG");
-
-        List<Constituent> sentences = ta.getView(ViewNames.SENTENCE_GOLD).getConstituents();
-        Assert.assertEquals(sentences.size(), 1046);  // s 1046
-        Assert.assertEquals(sentences.get(0).getStartSpan(), 0);
-        Assert.assertEquals(sentences.get(0).getEndSpan(), 25);
-
-        List<Constituent> shallowParse = ta.getView(ViewNames.SHALLOW_PARSE).getConstituents();
-        Assert.assertEquals(shallowParse.size(), 5504);  // nchunk 3551, vchunk 1953
-        Assert.assertEquals(shallowParse.get(0).getStartSpan(), 1);
-        Assert.assertEquals(shallowParse.get(0).getEndSpan(), 2);
-        Assert.assertEquals(shallowParse.get(0).getLabel(), "VP");
-
-        List<Constituent> ner = ta.getView(ViewNames.NER_CONLL).getConstituents();
-        Assert.assertEquals(ner.size(), 288);  // location 93, org 112, person 83
-        Assert.assertEquals(ner.get(0).getStartSpan(), 379);  // Singapore
-        Assert.assertEquals(ner.get(0).getEndSpan(), 380);
-        Assert.assertEquals(ner.get(0).getLabel(), "LOC");
-
-        List<Constituent> nerOntonotes = ta.getView(ViewNames.NER_ONTONOTES).getConstituents();
-        Assert.assertEquals(nerOntonotes.size(), 408);  // date 120, location 93, org 112, person 83
-        Assert.assertEquals(nerOntonotes.get(3).getStartSpan(), 379);  // Singapore
-        Assert.assertEquals(nerOntonotes.get(3).getEndSpan(), 380);
-        Assert.assertEquals(nerOntonotes.get(3).getLabel(), "LOCATION");
+        MascXCESReader cnr = new MascXCESReader("", CORPUS_DIRECTORY, ".xml");
 
         Assert.assertTrue(cnr.hasNext());
         cnr.next();
-
+        Assert.assertTrue(cnr.hasNext());
+        TextAnnotation ta = cnr.next();
         Assert.assertFalse(cnr.hasNext());
+
+        List<Constituent> tokens = ta.getView(ViewNames.TOKENS).getConstituents();
+        Assert.assertEquals(tokens.size(), 291);  // tok 291
+        Assert.assertEquals(tokens.get(6).toString(), "Which");
+
+        List<Constituent> lemma = ta.getView(ViewNames.LEMMA).getConstituents();
+        Assert.assertEquals(lemma.size(), 282);  // base= 282
+        Assert.assertEquals(lemma.get(6).getLabel(), "which");
+
+        List<Constituent> pos = ta.getView(ViewNames.POS).getConstituents();
+        Assert.assertEquals(pos.size(), 291);  // msd= 291
+        Assert.assertEquals(pos.get(6).getLabel(), "WDT");
+
+        List<Constituent> sentences = ta.getView(ViewNames.SENTENCE).getConstituents();
+        Assert.assertEquals(sentences.size(), 29);  // normalized sentences 29
+        Assert.assertEquals(sentences.get(2).getStartSpan(), 14);  // a sentence is created to cover uncovered tokens
+        Assert.assertEquals(sentences.get(2).getEndSpan(), 17);
+
+        List<Constituent> sentencesGold = ta.getView(ViewNames.SENTENCE_GOLD).getConstituents();
+        Assert.assertEquals(sentencesGold.size(), 21);  // s 21
+        Assert.assertEquals(sentencesGold.get(2).getStartSpan(), 17);
+        Assert.assertEquals(sentencesGold.get(2).getEndSpan(), 25);
+
+        List<Constituent> shallowParse = ta.getView(ViewNames.SHALLOW_PARSE).getConstituents();
+        Assert.assertEquals(shallowParse.size(), 130);  // nchunk 91, vchunk 39
+        Assert.assertEquals(shallowParse.get(1).getStartSpan(), 3);
+        Assert.assertEquals(shallowParse.get(1).getEndSpan(), 5);
+        Assert.assertEquals(shallowParse.get(1).getLabel(), "NP");
+
+        List<Constituent> ner = ta.getView(ViewNames.NER_CONLL).getConstituents();
+        Assert.assertEquals(ner.size(), 12);  // location 1, org 5, person 6
+        Assert.assertEquals(ner.get(1).getStartSpan(), 33);  // Knoxville
+        Assert.assertEquals(ner.get(1).getEndSpan(), 34);
+        Assert.assertEquals(ner.get(1).getLabel(), "LOC");
+
+        List<Constituent> nerOntonotes = ta.getView(ViewNames.NER_ONTONOTES).getConstituents();
+        Assert.assertEquals(nerOntonotes.size(), 13);  // date 1, location 1, org 5, person 6
+        Assert.assertEquals(nerOntonotes.get(1).getStartSpan(), 33);  // Knoxville
+        Assert.assertEquals(nerOntonotes.get(1).getEndSpan(), 34);
+        Assert.assertEquals(nerOntonotes.get(1).getLabel(), "LOCATION");
     }
 }
