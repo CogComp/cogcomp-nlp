@@ -47,7 +47,7 @@ specified in this project's `pom.xml` file will be loaded from the Maven reposit
 **Note** : To use your own models (either you're retraining it or using it), **exclude** the `illinois-chunker-model` artifact from the `cogcomp-chunker` dependency in your `pom.xml` to avoid potential conflicts.
 
 ## Training
-1. If you just want to retrain the chunker models using your data, i.e., without modifying [chunk.lbj](src/main/lbj/chunk.lbj), then please read the following:
+1. If you just want to retrain the chunker models using your data, i.e., without modifying the features of the chunker model, then please read the following:
     
     The class [`ChunkerTrain`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerTrain.java) contains a main method that can be used to train the models for a Chunker provided you have access to the necessary training data. It can be called from the top-level
 of the Chunker sub-project using the following command (`[DEV_RATIO]` means optional). `MODELDIR` and `MODELNAME` are the dir and name of the model you want to save, respectively. `ROUND` is the number of iterations. `DEV_RATIO` is the portion of training set you want to use as development set and it should be between 0 and 1. When `DEV_RATIO` is specified, `ROUND` is explained as the maximum number of iterations and the chunker will select the iter number (from 1 to `ROUND`) based on its performance on development set.

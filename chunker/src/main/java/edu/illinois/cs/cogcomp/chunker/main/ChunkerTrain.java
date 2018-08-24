@@ -131,9 +131,10 @@ public class ChunkerTrain {
                     cnt++;
             }
             chunker.doneWithRound();
+            writeModelsToDisk(modeldir,modelname);
             // Test on dev set
             BIOTester tester =
-                    new BIOTester(chunker, chunker.getLabeler(), new ChildrenFromVectors(parser));
+                    new BIOTester(new Chunker(lcpath,lexpath), new ChunkLabel(), new ChildrenFromVectors(parser));
             double[] result = tester.test().getOverallStats();
             tmpF1 = result[2];
 
