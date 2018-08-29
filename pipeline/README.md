@@ -225,6 +225,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
+// An example of "[PATH_TO_YOUR_CONFIG_FILE]" is "config/pipeline-config.properties"
 ResourceManager userConfig = new ResourceManager("[PATH_TO_YOUR_CONFIG_FILE]");
 AnnotatorService pipeline = PipelineFactory.buildPipeline(userConfig);
 ```
