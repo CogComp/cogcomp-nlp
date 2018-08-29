@@ -332,9 +332,14 @@ public class TokenizerStateMachine {
                                 } else {
                                     // check for all uppercase and periods back to the start of the
                                     // word or a "-"
+                                    char nextnextChar = peek(2);
                                     if (getCurrent().isAbbr())
                                         return; // previous was upper case, acronym and word
                                                 // continues
+                                    else if (Character.isLowerCase(nextnextChar))
+                                        return; // when the next char is white space and the next next char
+                                                // is lowercase, we know that the next word is not start of
+                                                // a sentence, so we continue.
                                     else
                                         ; // we will pass through, this is not an acronym, so must
                                           // be a special character.
