@@ -36,9 +36,9 @@ line, although there is the option to modify the confiruation during at runtime.
 The top level menu is as follows:
 
 ```bash
-1 - select input [<input file or directory>]
-2 - change output [<output file or directory>]
-3 - annotate <input file or directory>, storing <output file or directory>
+1 - select input [standard in]
+2 - change output [standard out]
+3 - annotate text entered from the command line, presenting results to the terminal.
 4 - show and modify configuration parameters.
 q - exit the application.
 Choose from above options:
@@ -55,7 +55,39 @@ To run this application run the runNER.sh bash script:
 ```bash
 $ ./scripts/runNER.sh configFilename
 ```
-This script requires the configuration file name.
+The configuration parameter is optional. If no config file is specified, default parameters are used.
+
+#### Interactive mode
+In the afore mentoned menue, you can choose the interactive mode, where you can annotate a text entered from the command line, and get the results back to the terminal. Here is a sample output: 
+
+```
+./scripts/runNER.sh
+
+[some logging here]
+
+1 - select input [standard in]
+2 - change output [standard out]
+3 - annotate text entered from the command line, presenting results to the terminal.
+4 - show and modify configuration parameters.
+q - exit the application.
+Choose from above options: 
+3
+Enter the text to process, or blank line to return to the menu.
+
+[some logging here]
+
+: 
+Obama just landed in Urbana-Champaign, after his trip to Europe last week. 
+-----------------
+Obama just landed in [LOC Urbana ] -[LOC Champaign ] , after his trip to [LOC Europe ]  last week. 
+: 
+
+Down below, bomb-sniffing dogs will patrol the trains and buses that are expected to take approximately 30,000 of the 80,000-plus spectators to Sunday's Super Bowl between the Denver Broncos and Seattle Seahawks.
+-----------------
+Down below, bomb-sniffing dogs will patrol the trains and buses that are expected to take approximately 30,000 of the 80,000-plus spectators to Sunday's [MISC Super Bowl ]  between the [ORG Denver Broncos ]  and [ORG Seattle Seahawks ] .
+: 
+```
+
 
 ### Java COMMAND LINE
 
