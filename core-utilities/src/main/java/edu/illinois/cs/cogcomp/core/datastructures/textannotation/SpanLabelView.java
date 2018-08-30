@@ -5,15 +5,12 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-/**
- *
- */
+
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * A SpanLabelView is a specialized view which corresponds to contiguous chunks of tokens that have
