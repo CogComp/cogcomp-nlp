@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
  * A SpanLabelView is a specialized view which corresponds to contiguous chunks of tokens that have
  * a label. Each chunk corresponds to a single {@code Consituent}. In this view, there will be no
@@ -60,6 +61,13 @@ public class SpanLabelView extends View {
 
     @Override
     public void addConstituent(Constituent constituent) {
+
+        int start = constituent.getStartSpan();
+        int end = constituent.getEndSpan();
+
+        if (!allowOverlappingSpans && this.getConstituentsCoveringSpan(start, end).size() != 0)
+            throw new IllegalArgumentException("Span [" + start + ", " + end + "] already labeled.");
+
         super.addConstituent(constituent);
 
         // this sort is grossly inefficient when appending contiguous tokens one at a time. 
@@ -94,9 +102,6 @@ public class SpanLabelView extends View {
         Constituent c =
                 new Constituent(label, score, this.getViewName(), this.getTextAnnotation(), start,
                         end);
-
-        if (!allowOverlappingSpans && this.getConstituentsCoveringSpan(start, end).size() != 0)
-            throw new IllegalArgumentException("Span [" + start + ", " + end + "] already labeled.");
 
         this.addConstituent(c);
 
