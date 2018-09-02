@@ -9,6 +9,7 @@ package org.cogcomp.re;
 
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
@@ -68,10 +69,9 @@ public class ACEMentionReader implements Parser, Serializable
             chunker.initialize(new ChunkerConfigurator().getDefaultConfig());
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            Gazetteers gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
             WordNetManager.loadConfigAsClasspathResource(true);
             WordNetManager wordNet = WordNetManager.getInstance();
-            Gazetteers gazetteers = GazetteersFactory.get();
             Properties stanfordProps = new Properties();
             stanfordProps.put("annotators", "pos, parse");
             stanfordProps.put("parse.originalDependencies", true);

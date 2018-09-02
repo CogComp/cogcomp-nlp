@@ -48,11 +48,10 @@ public class NERAnnotator extends Annotator {
     /** our specific logger. */
     private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
 
-    /** the level one model. */
-    public SparseNetworkLearner taggerLevel1;
-    
-    /** the level two model. */
-    public SparseNetworkLearner taggerLevel2;
+    /** params were once static, preventing mult-model runtimes, but now are stored here. Params
+     * include the models, gazetteers and brown clusters.
+     */
+    private ParametersForLbjCode params = null;
 
     /**
      * @param nonDefaultConfigValues a configuration file specifying non-default parameters for the
@@ -107,15 +106,12 @@ public class NERAnnotator extends Annotator {
             nerRm = new NerOntonotesConfigurator().getConfig(nerRm);
         else
             nerRm = new NerBaseConfigurator().getConfig(nerRm);
-        ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
-        Parameters.readConfigAndLoadExternalData(nerRm);
-        
+        this.params = Parameters.readConfigAndLoadExternalData(nerRm);
+        this.params.forceNewSentenceOnLineBreaks = false;
         // load the models.
         synchronized (LOADING_MODELS) {
-            ModelLoader.load(nerRm, viewName, false);
-            this.taggerLevel1 = ParametersForLbjCode.currentParameters.taggerLevel1;
-            this.taggerLevel2 = ParametersForLbjCode.currentParameters.taggerLevel2;
-        }
+            ModelLoader.load(nerRm, viewName, false, this.params);
+       }
     }
 
     /**
@@ -136,7 +132,7 @@ public class NERAnnotator extends Annotator {
             LinkedVector words = new LinkedVector();
             for (String w : wtoks) {
                 if (w.length() > 0) {
-                    NEWord.addTokenToSentence(words, w, "unlabeled");
+                    NEWord.addTokenToSentence(words, w, "unlabeled", this.params);
                     tokenindices[neWordIndex] = tokenIndex;
                     neWordIndex++;
                 } else {
@@ -151,9 +147,8 @@ public class NERAnnotator extends Annotator {
         // Do the annotation.
         Data data = new Data(new NERDocument(sentences, "input"));
         try {
-            ExpressiveFeaturesAnnotator.annotate(data);
-            Decoder.annotateDataBIO(data, (NETaggerLevel1) taggerLevel1, 
-                (NETaggerLevel2) taggerLevel2);
+            ExpressiveFeaturesAnnotator.annotate(data, this.params);
+            Decoder.annotateDataBIO(data, params);
         } catch (Exception e) {
             logger.error("Cannot annotate the text, the exception was: ", e);
             return;
@@ -241,7 +236,7 @@ public class NERAnnotator extends Annotator {
         if (!isInitialized()) {
             doInitialize();
         }
-        Lexicon labelLexicon =  taggerLevel1.getLabelLexicon();
+        Lexicon labelLexicon =  this.params.taggerLevel1.getLabelLexicon();
         Set<String> tagSet = new HashSet<String>();
         for (int i =0; i < labelLexicon.size(); ++i) {
             tagSet.add(labelLexicon.lookupKey(i).getStringValue());

@@ -50,7 +50,7 @@ public class TwoLayerPredictionAggregationFeatures {
      * going to use the predictions as features
      */
     private static void setLevel1AggregationFeatures(NEWord word, boolean useGoldData) {
-        ParametersForLbjCode parameters = ParametersForLbjCode.currentParameters;
+        ParametersForLbjCode parameters = word.params;
         // this used to be hard-coded to 0.1
         double omissionRate = parameters.omissionRate;
         // this used to be hard-coded to 0.2 for right direction and 0.1 for left

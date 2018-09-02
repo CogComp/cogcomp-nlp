@@ -9,6 +9,7 @@ package org.cogcomp.md;
 
 import org.cogcomp.md.LbjGen.*;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -208,13 +209,15 @@ public class ExtentTester {
         int correct = 0;
         POSAnnotator posAnnotator = null;
         WordNetManager wordNet = null;
+        Gazetteers gazetteers = null;
+        BrownClusters brownClusters = null;
         try{
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
             posAnnotator = new POSAnnotator();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
             Vector<String> bcs = new Vector<>();
             bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
             bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
@@ -227,13 +230,11 @@ public class ExtentTester {
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl, false);
+            brownClusters = BrownClusters.get(bcs, bcst, bcsl);
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        Gazetteers gazetteers = GazetteersFactory.get();
-        BrownClusters brownClusters = BrownClusters.get();
         for (int i = 0; i < 1; i++) {
             ExtentReader train_parser = new ExtentReader("data/partition_with_dev/train/"  + i, "COMBINED-ALL-TRAIN-" + i);
             extent_classifier classifier = train_extent_classifier(train_parser);
@@ -288,12 +289,14 @@ public class ExtentTester {
 
     public static void testExtentOnPredictedHead(){
         WordNetManager wordNet = null;
+        Gazetteers gazetteers = null;
+        BrownClusters brownClusters = null;
         try{
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
             Vector<String> bcs = new Vector<>();
             bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
             bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
@@ -306,13 +309,11 @@ public class ExtentTester {
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl, false);
+            brownClusters = BrownClusters.get(bcs, bcst, bcsl);
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        Gazetteers gazetteers = GazetteersFactory.get();
-        BrownClusters brownClusters = BrownClusters.get();
 
         int total_mention_predicted = 0;
         int total_mention_labeled = 0;

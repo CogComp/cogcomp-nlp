@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.ner.ParsingProcessingData;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.lbjava.nlp.ColumnFormat;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
@@ -19,10 +20,11 @@ import java.util.ArrayList;
 
 class ColumnFileReader extends ColumnFormat {
     String filename = null;
-
-    public ColumnFileReader(String file) {
+    ParametersForLbjCode params = null;
+    public ColumnFileReader(String file, ParametersForLbjCode params) {
         super(file);
         filename = file;
+        this.params = params;
     }
 
     int linec = 0;
@@ -52,7 +54,7 @@ class ColumnFileReader extends ColumnFormat {
 
         LinkedVector res = new LinkedVector();
         NEWord w = new NEWord(new Word(token, pos), null, label);
-        NEWord.addTokenToSentence(res, w.form, w.neLabel);
+        NEWord.addTokenToSentence(res, w.form, w.neLabel, params);
         for (line = (String[]) super.next(); line != null && line.length > 0; line =
                 (String[]) super.next()) {
             linec++;
@@ -72,7 +74,7 @@ class ColumnFileReader extends ColumnFormat {
                 continue;
             }
             w = new NEWord(new Word(token, pos), null, label);
-            NEWord.addTokenToSentence(res, w.form, w.neLabel);
+            NEWord.addTokenToSentence(res, w.form, w.neLabel, params);
         }
         if (res.size() == 0)
             return null;

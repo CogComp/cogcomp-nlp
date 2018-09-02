@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotato
 import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ import java.util.ArrayList;
  */
 public class ReferenceUtils {
 
-    public Data createNerDataStructuresForText(TextAnnotation ta) {
+    public Data createNerDataStructuresForText(TextAnnotation ta, ParametersForLbjCode params) {
         ArrayList<LinkedVector> sentences = new ArrayList<>();
         String[] tokens = ta.getTokens();
         int[] tokenindices = new int[tokens.length];
@@ -35,7 +36,7 @@ public class ReferenceUtils {
             LinkedVector words = new LinkedVector();
             for (String w : wtoks) {
                 if (w.length() > 0) {
-                    NEWord.addTokenToSentence(words, w, "unlabeled");
+                    NEWord.addTokenToSentence(words, w, "unlabeled", params);
                     tokenindices[neWordIndex] = tokenIndex;
                     neWordIndex++;
                 } else {

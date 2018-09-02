@@ -22,26 +22,26 @@ import java.util.Vector;
 class BracketFileReader {
     private static Logger logger = LoggerFactory.getLogger(BracketFileReader.class);
 
-    public static NERDocument read(String fileName, String docname) throws Exception {
+    public static NERDocument read(String fileName, String docname, ParametersForLbjCode cp) throws Exception {
         logger.info("Reading the file: " + fileName);
-        String annotatedText = PlainTextReader.normalizeText(getFileText(fileName));
-        return parseTextWithBrackets(annotatedText, docname);
+        String annotatedText = PlainTextReader.normalizeText(getFileText(fileName), cp);
+        return parseTextWithBrackets(annotatedText, docname, cp);
     }
 
-    public static NERDocument parseTextWithBrackets(String annotatedText, String docname)
+    public static NERDocument parseTextWithBrackets(String annotatedText, String docname, ParametersForLbjCode cp)
             throws Exception {
         if (annotatedText.replace(" ", "").replace("\n", "").replace("\t", "").length() == 0)
             return new NERDocument(new ArrayList<LinkedVector>(), docname);
         Vector<String> bracketTokens = new Vector<>();// can include newlines!!!!
         Vector<String> bracketTokensTags = new Vector<>();
-        parseBracketsAnnotatedText(annotatedText, bracketTokensTags, bracketTokens);
+        parseBracketsAnnotatedText(annotatedText, bracketTokensTags, bracketTokens, cp);
         StringBuilder buff = new StringBuilder(bracketTokens.size() * 20);
         for (int i = 0; i < bracketTokens.size(); i++)
             buff.append(bracketTokens.elementAt(i)).append(" ");
         // the tokens below will have no newline characters.
         // logger.info("Raw text: "+buff);
         Vector<Vector<String>> parsedTokens =
-                PlainTextReader.sentenceSplitAndTokenizeText(buff.toString());
+                PlainTextReader.sentenceSplitAndTokenizeText(buff.toString(), cp);
         // now we need to align the bracket tokens to the sentence split and tokenized tokens.
         // there are two issues to be careful with -
         // 1) The bracket tokens may have newline characters as individual tokens, the others will
@@ -92,7 +92,7 @@ class BracketFileReader {
             LinkedVector sentence = new LinkedVector();
             for (int j = 0; j < parsedTokens.elementAt(i).size(); j++) {
                 NEWord.addTokenToSentence(sentence, parsedTokensFlat.elementAt(parsedTokensPos),
-                        parsedTokensTagsFlat.elementAt(parsedTokensPos));
+                        parsedTokensTagsFlat.elementAt(parsedTokensPos), cp);
                 parsedTokensPos++;
             }
             res.add(sentence);
@@ -100,50 +100,48 @@ class BracketFileReader {
         return new NERDocument(res, docname);
     }
 
-    /*
+    /**
      * note that this one will do very little normalization/tokenization and token splitting. these
      * fancy stuff is done after we get the brackets files tokens and tags. it is important however
      * to keep the newline token to know where to split the sentences if we trust newlines as new
      * sentence starts.
      */
     public static void parseBracketsAnnotatedText(String text, Vector<String> tags,
-            Vector<String> words) {
+            Vector<String> words, ParametersForLbjCode cp) {
         // Add spaces before and after each bracket, except for after open bracket [
         text = text.replace("]", " ] ");
-        for (int i = 0; i < ParametersForLbjCode.currentParameters.labelTypes.length; i++)
+        for (int i = 0; i < cp.labelTypes.length; i++)
             text =
-                    text.replace("[" + ParametersForLbjCode.currentParameters.labelTypes[i], " ["
-                            + ParametersForLbjCode.currentParameters.labelTypes[i] + " ");
-
+                    text.replace("[" + cp.labelTypes[i], " ["  + cp.labelTypes[i] + " ");
 
         Vector<String> tokens = new Vector<>();
-        text = PlainTextReader.normalizeText(text);
+        text = PlainTextReader.normalizeText(text, cp);
         StringTokenizer stLines = new StringTokenizer(text, "\n");
         while (stLines.hasMoreTokens()) {
             String line = stLines.nextToken();
             StringTokenizer st = new StringTokenizer(line, " \t");
             while (st.hasMoreTokens())
                 tokens.addElement(st.nextToken());
-            if (ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks
-                    || ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
+            if (cp.forceNewSentenceOnLineBreaks
+                    || cp.keepOriginalFileTokenizationAndSentenceSplitting)
                 tokens.addElement("\n");
         }
         for (int i = 0; i < tokens.size(); i++) {
             boolean added = false;
-            for (int labelType = 0; labelType < ParametersForLbjCode.currentParameters.labelTypes.length; labelType++) {
+            for (int labelType = 0; labelType < cp.labelTypes.length; labelType++) {
                 if (tokens.elementAt(i).equals(
-                        "[" + ParametersForLbjCode.currentParameters.labelTypes[labelType])) {
+                        "[" + cp.labelTypes[labelType])) {
                     i++;
                     boolean first = true;
                     while (!tokens.elementAt(i).equals("]")) {
                         words.addElement(tokens.elementAt(i));
                         if (first) {
                             tags.addElement("B-"
-                                    + ParametersForLbjCode.currentParameters.labelTypes[labelType]);
+                                    + cp.labelTypes[labelType]);
                             first = false;
                         } else {
                             tags.addElement("I-"
-                                    + ParametersForLbjCode.currentParameters.labelTypes[labelType]);
+                                    + cp.labelTypes[labelType]);
                         }
                         i++;
                     }
