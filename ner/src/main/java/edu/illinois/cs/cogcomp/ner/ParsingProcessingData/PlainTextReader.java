@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class PlainTextReader {
-    public static ArrayList<LinkedVector> parsePlainTextFile(String file) {
+    public static ArrayList<LinkedVector> parsePlainTextFile(String file, ParametersForLbjCode cp) {
         InFile in = new InFile(file);
         String line = in.readLine();
         StringBuilder buf = new StringBuilder(100000);
@@ -30,17 +30,17 @@ public class PlainTextReader {
         }
         buf.append(" ");
         in.close();
-        return parseText(normalizeText(buf.toString()));
+        return parseText(normalizeText(buf.toString(), cp), cp);
     }
 
-    public static ArrayList<LinkedVector> parseText(String text) {
-        Vector<Vector<String>> processed = sentenceSplitAndTokenizeText(text);
+    public static ArrayList<LinkedVector> parseText(String text, ParametersForLbjCode cp) {
+        Vector<Vector<String>> processed = sentenceSplitAndTokenizeText(text, cp);
         ArrayList<LinkedVector> res = new ArrayList<>();
         for (int i = 0; i < processed.size(); i++) {
             LinkedVector sentence = new LinkedVector();
             for (int j = 0; j < processed.elementAt(i).size(); j++)
                 NEWord.addTokenToSentence(sentence, processed.elementAt(i).elementAt(j),
-                        "unlabeled");
+                        "unlabeled", cp);
             res.add(sentence);
         }
         TaggedDataReader.connectSentenceBoundaries(res);
@@ -55,14 +55,14 @@ public class PlainTextReader {
      * @param text the text to parse.
      * @return a list of sentences represented as an array of words.
      */
-    public static List<String[]> parseTextRaw(String text) {
-        text = normalizeText(text);
+    public static List<String[]> parseTextRaw(String text, ParametersForLbjCode cp) {
+        text = normalizeText(text, cp);
         ArrayList<String> sentences1 = new ArrayList<>();// sentences split by newlines. will keep
                                                          // just one element- the text if no
                                                          // sentence splitting on newlines is
                                                          // used...
-        if (ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks
-                || ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting) {
+        if (cp.forceNewSentenceOnLineBreaks
+                || cp.keepOriginalFileTokenizationAndSentenceSplitting) {
             StringTokenizer st = new StringTokenizer(text, "\n");
             while (st.hasMoreTokens())
                 sentences1.add(st.nextToken());
@@ -71,7 +71,7 @@ public class PlainTextReader {
 
         ArrayList<String> sentences2 = new ArrayList<>();// we add Lbj sentence splitting on
                                                          // top.
-        if (!ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting) {
+        if (!cp.keepOriginalFileTokenizationAndSentenceSplitting) {
             for (String aSentences1 : sentences1) {
                 SentenceSplitter parser = new SentenceSplitter(new String[] {aSentences1});
                 Sentence s = (Sentence) parser.next();
@@ -90,14 +90,14 @@ public class PlainTextReader {
                 // adding the space before the final period in the sentence,
                 // this is just a formatting issue with LBJ sentence splitter that can happen
                 if (sentenceText.charAt(sentenceText.length() - 1) == '.'
-                        && !ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
+                        && !cp.keepOriginalFileTokenizationAndSentenceSplitting)
                     sentenceText = sentenceText.substring(0, sentenceText.length() - 1) + " . ";
                 // now tokenizing for real...
 
                 String[] sentence = sentenceText.split("[ \\n\\t]");
                 if (sentence.length > 0) {
                     // fixing a bug in LBJ sentence splitter if needed
-                    if ((!ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
+                    if ((!cp.keepOriginalFileTokenizationAndSentenceSplitting)
                             && sentence.length == 1
                             && res.size() > 0
                             && (sentence[0].equals("\"") || sentence[0].equals("''") || sentence[0]
@@ -122,13 +122,12 @@ public class PlainTextReader {
 
     }
 
-    public static Vector<Vector<String>> sentenceSplitAndTokenizeText(String text) {
-        text = normalizeText(text);
+    public static Vector<Vector<String>> sentenceSplitAndTokenizeText(String text, ParametersForLbjCode cp) {
+        text = normalizeText(text, cp);
         Vector<String> sentences1 = new Vector<>();// sentences split by newlines. will keep just
                                                    // one element- the text if no sentence splitting
                                                    // on newlines is used...
-        if (ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks
-                || ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting) {
+        if (cp.forceNewSentenceOnLineBreaks || cp.keepOriginalFileTokenizationAndSentenceSplitting) {
             StringTokenizer st = new StringTokenizer(text, "\n");
             while (st.hasMoreTokens())
                 sentences1.addElement(st.nextToken());
@@ -136,7 +135,7 @@ public class PlainTextReader {
             sentences1.addElement(text);
 
         Vector<String> sentences2 = new Vector<>();// we add Lbj sentence splitting on top.
-        if (!ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting) {
+        if (!cp.keepOriginalFileTokenizationAndSentenceSplitting) {
             for (int i = 0; i < sentences1.size(); i++) {
                 SentenceSplitter parser =
                         new SentenceSplitter(new String[] {sentences1.elementAt(i)});
@@ -156,7 +155,7 @@ public class PlainTextReader {
                 // adding the space before the final period in the sentence,
                 // this is just a formatting issue with LBJ sentence splitter that can happen
                 if (sentenceText.charAt(sentenceText.length() - 1) == '.'
-                        && !ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
+                        && !cp.keepOriginalFileTokenizationAndSentenceSplitting)
                     sentenceText = sentenceText.substring(0, sentenceText.length() - 1) + " . ";
                 // now tokenizing for real...
                 StringTokenizer st = new StringTokenizer(sentenceText, " \n\t");
@@ -165,7 +164,7 @@ public class PlainTextReader {
                     sentence.addElement(st.nextToken());
                 if (sentence.size() > 0) {
                     // fixing a bug in LBJ sentence splitter if needed
-                    if ((!ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
+                    if ((!cp.keepOriginalFileTokenizationAndSentenceSplitting)
                             && sentence.size() == 1
                             && res.size() > 0
                             && (sentence.elementAt(0).equals("\"")
@@ -180,8 +179,8 @@ public class PlainTextReader {
         return res;
     }
 
-    public static String normalizeText(String text) {
-        if (ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
+    public static String normalizeText(String text, ParametersForLbjCode cp) {
+        if (cp.keepOriginalFileTokenizationAndSentenceSplitting)
             return text;
         StringBuilder buf = new StringBuilder((int) (text.length() * 1.2));
         for (int i = 0; i < text.length(); i++) {
@@ -220,15 +219,15 @@ public class PlainTextReader {
         text = text.replace(";", " ; ");
         text = text.replace("]", " ] ");
         // now, I want to replace all '[' by ' [ ', but I have to be careful with chunk markers!
-        for (int i = 0; i < ParametersForLbjCode.currentParameters.labelTypes.length; i++)
+        for (int i = 0; i < cp.labelTypes.length; i++)
             text =
-                    text.replace("[" + ParametersForLbjCode.currentParameters.labelTypes[i],
-                            "_START_" + ParametersForLbjCode.currentParameters.labelTypes[i] + "_");
+                    text.replace("[" + cp.labelTypes[i],
+                            "_START_" + cp.labelTypes[i] + "_");
         text = text.replace("[", " [ ");
-        for (int i = 0; i < ParametersForLbjCode.currentParameters.labelTypes.length; i++)
+        for (int i = 0; i < cp.labelTypes.length; i++)
             text =
-                    text.replace("_START_" + ParametersForLbjCode.currentParameters.labelTypes[i]
-                            + "_", " [" + ParametersForLbjCode.currentParameters.labelTypes[i]);
+                    text.replace("_START_" + cp.labelTypes[i]
+                            + "_", " [" + cp.labelTypes[i]);
         text = text.replace(")", " ) ");
         text = text.replace("(", " ( ");
         text = text.replace("{", " { ");

@@ -31,11 +31,11 @@ public class NerTagger {
             System.exit(-1);
         }
 
-        ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
+        ParametersForLbjCode cp = null;
         try {
             boolean areWeTraining = args[0].equalsIgnoreCase("-train");
             ResourceManager rm = new ResourceManager(args[args.length - 1]);
-            Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
+            cp = Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
             if (args[0].equalsIgnoreCase("-train")) {
                 String dataFormat;
                 // config file is always the last one.
@@ -44,15 +44,14 @@ public class NerTagger {
                 }else{
                     dataFormat = args[3];
                 }
-                LearningCurveMultiDataset.getLearningCurve(-1, dataFormat, args[1], args[2], false);
+                LearningCurveMultiDataset.getLearningCurve(-1, dataFormat, args[1], args[2], false, cp);
             }else if (args[0].equalsIgnoreCase("-trainFixedIterations"))
-                LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2], args[3], false);
+                LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2], args[3], false, cp);
             else {
                 // load up the models
-                ModelLoader.load(rm, rm.getString("modelName"), false);
+                ModelLoader.load(rm, rm.getString("modelName"), false, cp);
                 if (args[0].equalsIgnoreCase("-annotate")) {
-                    NETagPlain.init();
-                    NETagPlain.tagData(args[1], args[2]);
+                    NETagPlain.tagData(args[1], args[2], cp);
                 }
                 if (args[0].equalsIgnoreCase("-demo")) {
                     String input = "";
@@ -61,8 +60,7 @@ public class NerTagger {
                         if (input.equalsIgnoreCase("quit"))
                             System.exit(0);
                         String res = NETagPlain.tagLine(input,
-                                (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1,
-                                (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2);
+                                (NETaggerLevel1) cp.taggerLevel1, (NETaggerLevel2) cp.taggerLevel2, cp);
                         res = NETagPlain.insertHtmlColors(res);
                         StringTokenizer st = new StringTokenizer(res);
                         StringBuilder output = new StringBuilder();
@@ -82,10 +80,10 @@ public class NerTagger {
                         dataFormat = args[2];
                     }
                     NETesterMultiDataset.test(args[1], true, dataFormat, cp.labelsToIgnoreInEvaluation,
-                            cp.labelsToAnonymizeInEvaluation);
+                            cp.labelsToAnonymizeInEvaluation, cp);
                 }
                 if (args[0].equalsIgnoreCase("-dumpFeatures"))
-                    NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2]);
+                    NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2], cp);
             }
         } catch (Exception e) {
             logger.error("Exception caught: ");

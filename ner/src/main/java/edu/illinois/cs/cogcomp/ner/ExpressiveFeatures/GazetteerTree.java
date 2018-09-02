@@ -7,16 +7,14 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
-import edu.illinois.cs.cogcomp.core.constants.Language;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
-import gnu.trove.map.hash.THashMap;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import gnu.trove.map.hash.THashMap;
 
 /**
  * this is a class optimized to match an expression that may be a word or a phrase. It is a THashSet
@@ -34,26 +32,7 @@ public class GazetteerTree {
     final private int maxPhraseLength;
 
     /** String splitter, by default split on 1 or more white space. */
-    private StringSplitterInterface splitter = new StringSplitterInterface() {
-        @Override
-        public String[] split(String line) {
-
-            // character tokenization for Chinese
-            if(ParametersForLbjCode.currentParameters.language == Language.Chinese) {
-                String[] chars = new String[line.length()];
-                for(int i = 0; i < line.length(); i++)
-                    chars[i] = String.valueOf(line.charAt(i));
-                return chars;
-            }
-            else
-                return line.split("[\\s]+");
-        }
-
-        @Override
-        final public String normalize(String term) {
-            return term;
-        }
-    };
+    private StringSplitterInterface splitter = null;
 
     /**
      * instances of this interface can be passed in to control how strings are split. If not
@@ -99,6 +78,8 @@ public class GazetteerTree {
          * or make the entry with match not true, and children. The first term passed in is the key,
          * so we won't store it here, but if there are subsequent terms, we need to construct a tree
          * path.
+         * @param entries the entries for this node.
+         * @param n dictionary names.
          */
         GazEntry(String[] entries, DictionaryNames n) {
             if (entries.length == 1) {
@@ -121,6 +102,9 @@ public class GazetteerTree {
         /**
          * Term from a phrase, beyond the first term. If this is the last term, it indicates a
          * match, otherwise it does not, and the children must be constructed.
+         * @param entries the entries
+         * @param i the location in the list.
+         * @param n dict names.
          */
         GazEntry(String[] entries, int i, DictionaryNames n) {
             if (entries.length == i) {
@@ -291,19 +275,10 @@ public class GazetteerTree {
      * Initialize the tree, data will be read via a separate call.
      * 
      * @param phrase_length the max number of terms to match per phrase.
-     */
-    GazetteerTree(int phrase_length) {
-        this.maxPhraseLength = phrase_length;
-    }
-
-    /**
-     * Initialize the tree, data will be read via a separate call.
-     * 
-     * @param phrase_length the max number of terms to match per phrase.
      * @param splitr this interface implementation will determin how we split strings.
      */
     GazetteerTree(int phrase_length, StringSplitterInterface splitr) {
-        this(phrase_length);
+        this.maxPhraseLength = phrase_length;
         this.splitter = splitr;
     }
 
@@ -322,23 +297,6 @@ public class GazetteerTree {
         this(phrase_length, splitr);
         this.readDictionary(filename, suffix, res);
     }
-
-    /**
-     * Read the file, constructing an entry for each line in the file, for each line containing
-     * multiple words create a path farther down in the tree, with a match only at the end. If any
-     * entry already exists for the name, ensure the entry class is the correct one, add entries
-     * farther down if necessary.
-     * 
-     * @param filename the directory containing the gazetteers
-     * @param phrase_length the max number of terms to match per phrase.
-     * @throws IOException
-     */
-    GazetteerTree(int phrase_length, String filename, String suffix, InputStream res)
-            throws IOException {
-        this(phrase_length);
-        this.readDictionary(filename, suffix, res);
-    }
-
 
     /**
      * read the given dictionary file from the input stream.

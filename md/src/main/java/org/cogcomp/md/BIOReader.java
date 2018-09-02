@@ -7,6 +7,7 @@
  */
 package org.cogcomp.md;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
@@ -139,10 +140,12 @@ public class BIOReader implements Parser {
     private List<Constituent> getTokensFromTAs(){
         List<Constituent> ret = new ArrayList<>();
         WordNetManager wordNet = null;
+        Gazetteers gazetteers = null;
+        BrownClusters brownClusters = null;
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
             Vector<String> bcs = new Vector<>();
             bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
             bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
@@ -155,15 +158,14 @@ public class BIOReader implements Parser {
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl, false);
+            brownClusters = BrownClusters.get(bcs, bcst, bcsl);
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        Gazetteers gazetteers = GazetteersFactory.get();
-        BrownClusters brownClusters = BrownClusters.get();
+        
         String mentionViewName = "";
         if (_mode.equals("ACE05")){
             mentionViewName = ViewNames.MENTION_ACE;

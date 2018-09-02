@@ -20,8 +20,8 @@ public class ContextAggregation {
      * that the data was annotated with dictionaries etc.
      */
     public static void annotate(NEWord word) {
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("aggregateContext")
-                || ParametersForLbjCode.currentParameters.featuresToUse
+        if (word.params.featuresToUse.containsKey("aggregateContext")
+                || word.params.featuresToUse
                         .containsKey("aggregateGazetteerMatches")) {
             int i = 0;
             NEWord w = word, last = word.nextIgnoreSentenceBoundary;
@@ -57,7 +57,7 @@ public class ContextAggregation {
                     updateFeatureCounts(word, "appearsDownCased");
                 if (w.form.equalsIgnoreCase(word.form) && Character.isUpperCase(w.form.charAt(0))
                         && Character.isUpperCase(word.form.charAt(0)) && word != w) {
-                    if (ParametersForLbjCode.currentParameters.featuresToUse
+                    if (word.params.featuresToUse
                             .containsKey("aggregateContext")) {
                         if (w.previous == null)
                             updateFeatureCounts(word, "appearancesUpperStartSentence");
@@ -75,8 +75,8 @@ public class ContextAggregation {
                             wtemp = wtemp.previousIgnoreSentenceBoundary;
                         do {
                             updateFeatureCounts(word, "context:" + j + ":" + wtemp.form);
-                            if (BrownClusters.get().getResources() != null) {
-                                String[] brownPaths = BrownClusters.get().getPrefixes(wtemp);
+                            if (word.params.brownClusters.getResources() != null) {
+                                String[] brownPaths = word.params.brownClusters.getPrefixes(wtemp);
                                 // for(int k=0;k<brownPaths.length;k++)
                                 // updateFeatureCounts(word,"contextPath:"+j+":"+brownPaths[k]);
                                 if (brownPaths.length > 0)

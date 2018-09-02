@@ -37,16 +37,16 @@ public class NerTest {
 
     private static NETaggerLevel1 t1;
     private static NETaggerLevel2 t2 = null;
-
+    ParametersForLbjCode params = null;
     @Before
     public void setUp() throws Exception {
         try {
             ResourceManager rm = new NerBaseConfigurator().getDefaultConfig();
-            Parameters.readConfigAndLoadExternalData(rm);
-            ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
-            ModelLoader.load(rm, ViewNames.NER_ONTONOTES, false);
-            t1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
-            t2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
+            params = Parameters.readConfigAndLoadExternalData(rm);
+            params.forceNewSentenceOnLineBreaks = false;
+            ModelLoader.load(rm, ViewNames.NER_ONTONOTES, false, params);
+            t1 = (NETaggerLevel1) params.taggerLevel1;
+            t2 = (NETaggerLevel2) params.taggerLevel2;
         } catch (Exception e) {
             System.err.println("Cannot initialise the test, the exception was: ");
             e.printStackTrace();
@@ -56,11 +56,11 @@ public class NerTest {
 
     @Test
     public void testTaggers() {
-        ArrayList<LinkedVector> sentences = PlainTextReader.parseText(TEST_INPUT);
+        ArrayList<LinkedVector> sentences = PlainTextReader.parseText(TEST_INPUT, params);
         Data data = new Data(new NERDocument(sentences, "input"));
         String output = null;
         try {
-            output = NETagPlain.tagData(data, t1, t2);
+            output = NETagPlain.tagData(data, params);
         } catch (Exception e) {
             logger.info("Cannot annotate the test, the exception was: ");
             e.printStackTrace();

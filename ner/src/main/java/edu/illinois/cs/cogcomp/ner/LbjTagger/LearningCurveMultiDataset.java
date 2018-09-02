@@ -46,13 +46,13 @@ public class LearningCurveMultiDataset {
      * @param devDataPath data used to auto-converge.
      */
     public static void buildFinalModel(int fixedNumIterations, String trainDataPath,
-            String testDataPath, String devDataPath, boolean incremental) throws Exception {
-        Data trainData = new Data(trainDataPath, trainDataPath, "-c", new String[] {}, new String[] {});
-        ExpressiveFeaturesAnnotator.annotate(trainData);
-        Data testData = new Data(testDataPath, testDataPath, "-c", new String[] {}, new String[] {});
-        ExpressiveFeaturesAnnotator.annotate(testData);
-        Data devData = new Data(devDataPath, devDataPath, "-c", new String[] {}, new String[] {});
-        ExpressiveFeaturesAnnotator.annotate(devData);
+            String testDataPath, String devDataPath, boolean incremental, ParametersForLbjCode params) throws Exception {
+        Data trainData = new Data(trainDataPath, trainDataPath, "-c", new String[] {}, new String[] {}, params);
+        ExpressiveFeaturesAnnotator.annotate(trainData, params);
+        Data testData = new Data(testDataPath, testDataPath, "-c", new String[] {}, new String[] {}, params);
+        ExpressiveFeaturesAnnotator.annotate(testData, params);
+        Data devData = new Data(devDataPath, devDataPath, "-c", new String[] {}, new String[] {}, params);
+        ExpressiveFeaturesAnnotator.annotate(devData, params);
         Vector<Data> train = new Vector<>();
         train.addElement(trainData);
         train.addElement(testData);
@@ -60,7 +60,7 @@ public class LearningCurveMultiDataset {
         test.addElement(devData);
         logger.debug("Building final model: iterations = " + fixedNumIterations + " train = '"
                         + trainDataPath + "' test = '"+testDataPath+"' dev = '" + testDataPath+"'");
-        getLearningCurve(train, test, fixedNumIterations, incremental);
+        getLearningCurve(train, test, fixedNumIterations, incremental, params);
     }
 
     /**
@@ -71,9 +71,9 @@ public class LearningCurveMultiDataset {
      * @param incremental if the model is being incremented, this is true.
      * @throws Exception
      */
-    public static void getLearningCurve(int fixedNumIterations, String trainDataPath,
-                                        String testDataPath, boolean incremental) throws Exception {
-        getLearningCurve(fixedNumIterations, trainDataPath, "-c", testDataPath, incremental);
+    public static void getLearningCurve(int fixedNumIterations, String trainDataPath, String testDataPath, 
+            boolean incremental, ParametersForLbjCode params) throws Exception {
+        getLearningCurve(fixedNumIterations, "-c", trainDataPath, testDataPath, incremental, params);
     }
 
     /**
@@ -92,20 +92,20 @@ public class LearningCurveMultiDataset {
      * @throws Exception 
      */
     public static void getLearningCurve(int fixedNumIterations, String dataFormat, String trainDataPath,
-                                        String testDataPath, boolean incremental) throws Exception {
+                                        String testDataPath, boolean incremental, ParametersForLbjCode params) throws Exception {
         logger.debug("getLearningCurve(): fni = " + fixedNumIterations + " trainDataPath = '"
                 + trainDataPath + "' testDataPath = '" + testDataPath + "'....");
         Data trainData =
-                new Data(trainDataPath, trainDataPath, dataFormat, new String[] {}, new String[] {});
-        ExpressiveFeaturesAnnotator.annotate(trainData);
+                new Data(trainDataPath, trainDataPath, dataFormat, new String[] {}, new String[] {}, params);
+        ExpressiveFeaturesAnnotator.annotate(trainData, params);
         Data testData =
-                new Data(testDataPath, testDataPath, dataFormat, new String[] {}, new String[] {});
-        ExpressiveFeaturesAnnotator.annotate(testData);
+                new Data(testDataPath, testDataPath, dataFormat, new String[] {}, new String[] {}, params);
+        ExpressiveFeaturesAnnotator.annotate(testData, params);
         Vector<Data> train = new Vector<>();
         train.addElement(trainData);
         Vector<Data> test = new Vector<>();
         test.addElement(testData);
-        getLearningCurve(train, test, fixedNumIterations, incremental);
+        getLearningCurve(train, test, fixedNumIterations, incremental, params);
     }
 
     /**
@@ -120,11 +120,11 @@ public class LearningCurveMultiDataset {
      * @throws Exception 
      */
     public static void getLearningCurve(Vector<Data> trainDataSet, Vector<Data> testDataSet,
-            int fixedNumIterations, boolean incremental) throws Exception {
+            int fixedNumIterations, boolean incremental, ParametersForLbjCode params) throws Exception {
         double bestF1Level1 = -1;
         int bestRoundLevel1 = 0;
         // Get the directory name (<configname>.model is appended in LbjTagger/Parameters.java:139)
-        String modelPath = ParametersForLbjCode.currentParameters.pathToModelFile;
+        String modelPath = params.pathToModelFile;
         String modelPathDir = modelPath.substring(0, modelPath.lastIndexOf("/"));
         if (IOUtils.exists(modelPathDir)) {
             if (!IOUtils.isDirectory(modelPathDir)) {
@@ -142,11 +142,11 @@ public class LearningCurveMultiDataset {
 
         NETaggerLevel1.Parameters paramLevel1 = new NETaggerLevel1.Parameters();
         paramLevel1.baseLTU = new SparseAveragedPerceptron(
-            ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1, 0, 
-            ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
-        paramLevel1.baseLTU.featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
-        logger.info("Level 1 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1+
-            ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
+            params.learningRatePredictionsLevel1, 0, 
+            params.thicknessPredictionsLevel1);
+        paramLevel1.baseLTU.featurePruningThreshold = params.featurePruningThreshold;
+        logger.info("Level 1 classifier learning rate = "+params.learningRatePredictionsLevel1+
+            ", thickness = "+params.thicknessPredictionsLevel1);
 
         NETaggerLevel1 tagger1 =
                 new NETaggerLevel1(paramLevel1, modelPath + ".level1", modelPath + ".level1.lex");
@@ -156,11 +156,10 @@ public class LearningCurveMultiDataset {
         } else {
             logger.info("Training L1 model incrementally.");
         }
-        ParametersForLbjCode.currentParameters.taggerLevel1 = tagger1;
+        params.taggerLevel1 = tagger1;
         for (int dataId = 0; dataId < trainDataSet.size(); dataId++) {
             Data trainData = trainDataSet.elementAt(dataId);
-            if (ParametersForLbjCode.currentParameters.featuresToUse
-                    .containsKey("PredictionsLevel1")) {
+            if (params.featuresToUse.containsKey("PredictionsLevel1")) {
                 PredictionsAndEntitiesConfidenceScores.getAndMarkEntities(trainData,
                         NEWord.LabelToLookAt.GoldLabel);
                 TwoLayerPredictionAggregationFeatures.setLevel1AggregationFeatures(trainData, true);
@@ -168,7 +167,7 @@ public class LearningCurveMultiDataset {
         }
 
         // preextract the L1 test and train data.
-        String path = ParametersForLbjCode.currentParameters.pathToModelFile;
+        String path = params.pathToModelFile;
         String trainPathL1 = path + ".level1.prefetchedTrainData";
         File deleteme = new File(trainPathL1);
         if (deleteme.exists())
@@ -178,9 +177,9 @@ public class LearningCurveMultiDataset {
         if (deleteme.exists())
             deleteme.delete();
         logger.info("Pre-extracting the training data for Level 1 classifier, saving to "+trainPathL1);
-        BatchTrainer bt1train = prefetchAndGetBatchTrainer(tagger1, trainDataSet, trainPathL1);
+        BatchTrainer bt1train = prefetchAndGetBatchTrainer(tagger1, trainDataSet, trainPathL1, params);
         logger.info("Pre-extracting the testing data for Level 1 classifier, saving to "+testPathL1);
-        BatchTrainer bt1test = prefetchAndGetBatchTrainer(tagger1, testDataSet, testPathL1);
+        BatchTrainer bt1test = prefetchAndGetBatchTrainer(tagger1, testDataSet, testPathL1, params);
         Parser testParser1 = bt1test.getParser();
 
         // create the best model possible.
@@ -204,7 +203,7 @@ public class LearningCurveMultiDataset {
                 logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
                             + bestF1Level1);
             }
-            saveme.getBaseLTU().featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
+            saveme.getBaseLTU().featurePruningThreshold = params.featurePruningThreshold;
             saveme.doneTraining();
             saveme.save();
             logger.info("Level 1; best round : " + bestRoundLevel1 + "\tbest F1 : " + bestF1Level1);
@@ -225,12 +224,12 @@ public class LearningCurveMultiDataset {
 
         NETaggerLevel2.Parameters paramLevel2 = new NETaggerLevel2.Parameters();
         paramLevel2.baseLTU = new SparseAveragedPerceptron(
-            ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2, 0, 
-            ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
-        paramLevel2.baseLTU.featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
+            params.learningRatePredictionsLevel2, 0, 
+            params.thicknessPredictionsLevel2);
+        paramLevel2.baseLTU.featurePruningThreshold = params.featurePruningThreshold;
         NETaggerLevel2 tagger2 =
-                new NETaggerLevel2(paramLevel2, ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
+                new NETaggerLevel2(paramLevel2, params.pathToModelFile
+                        + ".level2", params.pathToModelFile
                         + ".level2.lex");
         if (!incremental) {
             logger.info("Training L2 model from scratch.");
@@ -238,20 +237,20 @@ public class LearningCurveMultiDataset {
         } else {
             logger.info("Training L2 model incrementally.");
         }
-        ParametersForLbjCode.currentParameters.taggerLevel2 = tagger2;
+        params.taggerLevel2 = tagger2;
  
         // Previously checked if PatternFeatures was in featuresToUse.
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            logger.info("Level 2 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2+
-                ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
+        if (params.featuresToUse.containsKey("PredictionsLevel1")) {
+            logger.info("Level 2 classifier learning rate = "+params.learningRatePredictionsLevel2+
+                ", thickness = "+params.thicknessPredictionsLevel2);
             double bestF1Level2 = -1;
             int bestRoundLevel2 = 0;
             logger.info("Pre-extracting the training data for Level 2 classifier, saving to "+trainPathL2);
             BatchTrainer bt2train =
-                    prefetchAndGetBatchTrainer(tagger2, trainDataSet, trainPathL2);
+                    prefetchAndGetBatchTrainer(tagger2, trainDataSet, trainPathL2, params);
             logger.info("Pre-extracting the testing data for Level 2 classifier, saving to "+testPathL2);
             BatchTrainer bt2test =
-                    prefetchAndGetBatchTrainer(tagger2, testDataSet, testPathL2);
+                    prefetchAndGetBatchTrainer(tagger2, testDataSet, testPathL2, params);
             Parser testParser2 = bt2test.getParser();
 
             // create the best model possible.
@@ -277,7 +276,7 @@ public class LearningCurveMultiDataset {
                     logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
                                 + bestF1Level2);
                 }
-                saveme.getBaseLTU().featurePruningThreshold = ParametersForLbjCode.currentParameters.featurePruningThreshold;
+                saveme.getBaseLTU().featurePruningThreshold = params.featurePruningThreshold;
                 saveme.doneTraining();
                 saveme.save();
             }
@@ -294,7 +293,7 @@ public class LearningCurveMultiDataset {
                     + "\t Level2: bestround=" + bestRoundLevel2 + "\t F1=" + bestF1Level2);
         }
 
-        NETesterMultiDataset.printTestResultsByDataset(testDataSet, tagger1, tagger2, true);
+        NETesterMultiDataset.printTestResultsByDataset(testDataSet, tagger1, tagger2, true, params);
 
         /*
          * This will override the models forcing to save the iteration we're interested in- the
@@ -313,12 +312,12 @@ public class LearningCurveMultiDataset {
      * samples- use 100 partitions otherwise, the zip doesn't work on training files larger than 4G
      */
     private static BatchTrainer prefetchAndGetBatchTrainer(SparseNetworkLearner classifier,
-            Vector<Data> dataSets, String exampleStorePath) {
+            Vector<Data> dataSets, String exampleStorePath, ParametersForLbjCode params) {
         for (int dataId = 0; dataId < dataSets.size(); dataId++) {
             Data data = dataSets.elementAt(dataId);
             TextChunkRepresentationManager.changeChunkRepresentation(
                     TextChunkRepresentationManager.EncodingScheme.BIO,
-                    ParametersForLbjCode.currentParameters.taggingEncodingScheme, data,
+                    params.taggingEncodingScheme, data,
                     NEWord.LabelToLookAt.GoldLabel);
         }
         BatchTrainer bt = new BatchTrainer(classifier, new SampleReader(dataSets), 0);
@@ -329,7 +328,7 @@ public class LearningCurveMultiDataset {
         for (int dataId = 0; dataId < dataSets.size(); dataId++) {
             Data trainData = dataSets.elementAt(dataId);
             TextChunkRepresentationManager.changeChunkRepresentation(
-                    ParametersForLbjCode.currentParameters.taggingEncodingScheme,
+                    params.taggingEncodingScheme,
                     TextChunkRepresentationManager.EncodingScheme.BIO, trainData,
                     NEWord.LabelToLookAt.GoldLabel);
         }

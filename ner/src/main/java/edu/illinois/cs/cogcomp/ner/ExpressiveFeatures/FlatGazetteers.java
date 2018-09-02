@@ -55,9 +55,6 @@ public class FlatGazetteers implements Gazetteers {
         dictionaries = null;
         dictionariesIgnoreCase = null;
         dictionariesOneWordIgnorePunctuation = null;
-        if (ParametersForLbjCode.currentParameters.debug) {
-            logger.info("Loading gazetteers from path '" + pathToDictionaries + "'....");
-        }
         ArrayList<String> filenames = new ArrayList<>();
         // List the Gazetteers directory (either local or in the classpath)
         // XXX Needed to add the dir listing file since there is no easy way to read inside the
@@ -78,10 +75,6 @@ public class FlatGazetteers implements Gazetteers {
 
         for (int i = 0; i < filenames.size(); i++) {
             String file = filenames.get(i);
-
-            if (ParametersForLbjCode.currentParameters.debug) {
-                logger.info("\tloading gazetteer:...." + file);
-            }
             dictionaries.add(new THashSet<String>());
             dictionariesIgnoreCase.add(new THashSet<String>());
             dictionariesOneWordIgnorePunctuation.add(new THashSet<String>());
@@ -115,9 +108,6 @@ public class FlatGazetteers implements Gazetteers {
                 }
                 in.close();
             }
-        }
-        if (ParametersForLbjCode.currentParameters.debug) {
-            logger.info("found " + dictionaries.size() + " gazetteers");
         }
     }
 

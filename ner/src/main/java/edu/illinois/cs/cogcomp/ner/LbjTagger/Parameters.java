@@ -52,8 +52,8 @@ public class Parameters {
      * @param rm a populated <code>ResourceManager</code> passed as argument to
      *        {@link #readAndLoadConfig readAndLoadConfig}
      */
-    public static void readConfigAndLoadExternalData(ResourceManager rm) {
-        ParametersForLbjCode.currentParameters = readAndLoadConfig(rm, false);
+    public static ParametersForLbjCode readConfigAndLoadExternalData(ResourceManager rm) {
+        return readAndLoadConfig(rm, false);
     }
 
 
@@ -66,9 +66,10 @@ public class Parameters {
      * @param areWeTraining this value determines whether or not this run will involve training a
      *        model. If we are training, then we make sure there exists a folder in which to put the
      *        trained model. If not, then we make sure the model exists.
+     * @return return the parameters instance
      * @throws IOException if the <code>ResourceManager</code> doesn't load correctly.
      */
-    public static void readConfigAndLoadExternalData(String configFile, boolean areWeTraining)
+    public static ParametersForLbjCode readConfigAndLoadExternalData(String configFile, boolean areWeTraining)
             throws IOException {
         ResourceManager rm = new ResourceManager(configFile);
         String modelName = rm.getString("modelName");
@@ -81,19 +82,13 @@ public class Parameters {
         // settings
         switch (modelName) {
             case ViewNames.NER_CONLL:
-                ParametersForLbjCode.currentParameters =
-                        readAndLoadConfig(baseConfigurator.getConfig(nonDefaultProps),
+                return readAndLoadConfig(baseConfigurator.getConfig(nonDefaultProps),
                                 areWeTraining);
-                break;
             case ViewNames.NER_ONTONOTES:
-                ParametersForLbjCode.currentParameters =
-                        readAndLoadConfig(baseConfigurator.getConfig(ontonotesConfigurator
+                return readAndLoadConfig(baseConfigurator.getConfig(ontonotesConfigurator
                                 .getConfig(nonDefaultProps)), areWeTraining);
-                break;
             default:
-                ParametersForLbjCode.currentParameters =
-                        readAndLoadConfig(baseConfigurator.getConfig(rm), areWeTraining);
-                break;
+                return readAndLoadConfig(baseConfigurator.getConfig(rm), areWeTraining);
         }
     }
 
@@ -140,9 +135,6 @@ public class Parameters {
             if (rm.containsKey("language")) {
                 Language lang = Language.getLanguageByCode(rm.getString("language"));
                 param.language = lang;
-
-                // becuase it is used in initializing tree gazetteers
-                ParametersForLbjCode.currentParameters.language = lang;
             }
 
             if (rm.containsKey("labelsToAnonymizeInEvaluation")) {
@@ -183,7 +175,7 @@ public class Parameters {
                                                                                 // models, never
                                                                                 // training
                     aux.nameAsAuxFeature = auxModels[i + 1];
-                    loadClassifierModels(aux);
+                    loadClassifierModels(aux, param);
                     param.auxiliaryModels.addElement(aux);
                 }
             }
@@ -258,20 +250,19 @@ public class Parameters {
             param.featuresToUse.put("TitleNormalization", true);
             param.featuresToUse.put("WordTopicTitleInfo", true);
 
-            // Conditional Features section
-            // GazetteersFeatures
+            // if enabled, load up the gazetteers.
             if (rm.containsKey("GazetteersFeatures")
                     && rm.getString("GazetteersFeatures").equals("1")) {
                 String pathToGazetteersLists = rm.getString("pathToGazetteersLists");
                 if (rm.containsKey("FlatGazetteers")
                         && Boolean.parseBoolean(rm.getString("FlatGazetteers"))) {
                     logger.info("Loading FlatGazetteers");
-                    GazetteersFactory.init(5, pathToGazetteersLists, true);
+                    param.gazetteers = GazetteersFactory.get(5, pathToGazetteersLists, true, param.language);
                 } else {
                     int maxPhraseLength = 5;
                     if (rm.containsKey(NerBaseConfigurator.PHRASE_LENGTH))
                         maxPhraseLength = rm.getInt(NerBaseConfigurator.PHRASE_LENGTH);
-                    GazetteersFactory.init(maxPhraseLength, pathToGazetteersLists, false);
+                    param.gazetteers = GazetteersFactory.get(maxPhraseLength, pathToGazetteersLists, false, param.language);
                 }
             }
 
@@ -324,7 +315,7 @@ public class Parameters {
 
             }
 
-            // BrownClusterPaths feature
+            // If enabled, load up the brown clusters
             String brownDebug = "";
             if (rm.containsKey("BrownClusterPaths")
                     && rm.getString("BrownClusterPaths").equals("1")) {
@@ -350,8 +341,8 @@ public class Parameters {
                         && rm.getString("UseLocalBrownCluster").equals("true")){
                     useLocalBrownCluster = true;
                 }
-                BrownClusters.init(pathsToBrownClusters, minWordAppThresholdsForBrownClusters,
-                        lowercaseBrown, useLocalBrownCluster);
+                param.brownClusters = BrownClusters.get(pathsToBrownClusters, minWordAppThresholdsForBrownClusters,
+                        lowercaseBrown);
 
                 // For output later
                 for (int i = 0; i < pathsToBrownClusters.size(); i++) {
@@ -391,16 +382,14 @@ public class Parameters {
         return param;
     }
 
-
-
-    public static void loadClassifierModels(ParametersForLbjCode config) {
-        if (ParametersForLbjCode.currentParameters.debug) {
+    public static void loadClassifierModels(ParametersForLbjCode config, ParametersForLbjCode outter) {
+        if (outter.debug) {
             logger.debug("Reading the model at: " + config.pathToModelFile + ".level1");
         }
         config.taggerLevel1 =
                 new NETaggerLevel1(config.pathToModelFile + ".level1", config.pathToModelFile
                         + ".level1.lex");
-        if (ParametersForLbjCode.currentParameters.debug) {
+        if (outter.debug) {
             logger.debug("Reading the model at: " + config.pathToModelFile + ".level2");
         }
         config.taggerLevel2 =

@@ -37,8 +37,6 @@ public class TitleTextNormalizer {
     public static HashMap<String, String> lowercasedToNormalizedTokensMap = null;
 
     public static void init() {
-        if (!ParametersForLbjCode.currentParameters.normalizeTitleText)
-            return;
         InFile in = new InFile(pathToBrownClusterForWordFrequencies);
         String line = in.readLine();
         lowercasedToNormalizedTokensMap = new HashMap<>();
@@ -64,19 +62,7 @@ public class TitleTextNormalizer {
 
     }
 
-    public static void normalizeCaseData(Vector<Data> data) {
-        if (!ParametersForLbjCode.currentParameters.normalizeTitleText)
-            return;
-        if (lowercasedToNormalizedTokensMap == null)
-            init();
-        for (int did = 0; did < data.size(); did++)
-            normalizeCase(data.elementAt(did));
-    }
-
-
     public static void normalizeCase(Data data) {
-        if (!ParametersForLbjCode.currentParameters.normalizeTitleText)
-            return;
         if (lowercasedToNormalizedTokensMap == null)
             init();
         // Below are the words that we'll want to normalize. We'll fill in the hashtable below with

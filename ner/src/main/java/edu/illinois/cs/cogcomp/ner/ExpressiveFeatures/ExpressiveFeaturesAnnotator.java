@@ -18,67 +18,34 @@ import java.util.Collections;
 import java.util.Vector;
 
 public class ExpressiveFeaturesAnnotator {
-    /**
-     * Do not worry about the brown clusters and word embeddings, this stuff is added on the fly in
-     * the .lbj feature generators...
-     */
-    public static void oldannotate(Data data, Gazetteers gaz) throws Exception {
-        // annotating with Gazetteers;
-        if (ParametersForLbjCode.currentParameters.featuresToUse != null) {
-            if (ParametersForLbjCode.currentParameters.featuresToUse
-                    .containsKey("GazetteersFeatures")) {
-
-                // first make sure the gazetteers arrays are inited for each word.
-                for (int docid = 0; docid < data.documents.size(); docid++) {
-                    ArrayList<LinkedVector> sentences = data.documents.get(docid).sentences;
-                    for (LinkedVector sentence : sentences) {
-                        for (int j = 0; j < sentence.size(); j++) {
-                            NEWord ww = (NEWord) sentence.get(j);
-                            if (ww.gazetteers == null)
-                                ww.gazetteers = new ArrayList<>();
-                        }
-                    }
-                }
-
-                // Annotating the data with gazetteers
-                for (int docid = 0; docid < data.documents.size(); docid++) {
-                    ArrayList<LinkedVector> sentences = data.documents.get(docid).sentences;
-                    for (LinkedVector sentence : sentences) {
-                        for (int j = 0; j < sentence.size(); j++)
-                            gaz.annotate((NEWord) sentence.get(j));
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Do not worry about the brown clusters and word embeddings, this stuff is added on the fly in
      * the .lbj feature generators...
      */
-    public static void annotate(Data data) throws Exception {
+    public static void annotate(Data data, ParametersForLbjCode params) throws Exception {
 
         // logger.info("Annotating the data with expressive features...");
 
         /*
          * must be after the linkability has been initialized!!!
          */
-        if (ParametersForLbjCode.currentParameters.normalizeTitleText) {
+        if (params.normalizeTitleText) {
             // logger.info("Normalizing text case ...");
             TitleTextNormalizer.normalizeCase(data);
         }
 
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("BrownClusterPaths")) {
+        if (params.featuresToUse.containsKey("BrownClusterPaths")) {
             // logger.info("Brown clusters OOV statistics:");
-            BrownClusters.get().printOovData(data);
+            params.brownClusters.printOovData(data);
         }
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordEmbeddings")) {
+        if (params.featuresToUse.containsKey("WordEmbeddings")) {
             // logger.info("Word Embeddings OOV statistics:");
             WordEmbeddings.printOovData(data);
         }
         // annotating with Gazetteers;
-        if (ParametersForLbjCode.currentParameters.featuresToUse != null) {
-            if (ParametersForLbjCode.currentParameters.featuresToUse
+        if (params.featuresToUse != null) {
+            if (params.featuresToUse
                     .containsKey("GazetteersFeatures")) {
                 // first make sure the gazetteers arrays are inited for each word.
                 for (int docid = 0; docid < data.documents.size(); docid++) {
@@ -92,7 +59,7 @@ public class ExpressiveFeaturesAnnotator {
                     }
                 }
 
-                Gazetteers gaz = GazetteersFactory.get();
+                Gazetteers gaz = params.gazetteers;
                 for (int docid = 0; docid < data.documents.size(); docid++) {
                     ArrayList<LinkedVector> sentences = data.documents.get(docid).sentences;
                     for (LinkedVector vector : sentences) {
@@ -123,17 +90,14 @@ public class ExpressiveFeaturesAnnotator {
         /*
          * Note that this piece of code must be the last!!! Here we are adding as features the
          * predictions of the aux models
+         * 
+         * @redman I changed this considerable, since the properties are no longer static, this bit is easier
          */
-        for (int i = 0; i < ParametersForLbjCode.currentParameters.auxiliaryModels.size(); i++) {
-            ParametersForLbjCode currentModel = ParametersForLbjCode.currentParameters;
-            ParametersForLbjCode.currentParameters =
-                    ParametersForLbjCode.currentParameters.auxiliaryModels.elementAt(i);
-            Decoder.annotateDataBIO(data,
-                    (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1,
-                    (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2);
+        for (int i = 0; i < params.auxiliaryModels.size(); i++) {
+            Decoder.annotateDataBIO(data, params.auxiliaryModels.elementAt(i));
             Vector<Data> v = new Vector<>();
             v.addElement(data);
-            NETesterMultiDataset.printAllTestResultsAsOneDataset(v, false);
+            NETesterMultiDataset.printAllTestResultsAsOneDataset(v, false, params);
             TextChunkRepresentationManager.changeChunkRepresentation(
                     TextChunkRepresentationManager.EncodingScheme.BIO,
                     TextChunkRepresentationManager.EncodingScheme.BILOU, data,
@@ -142,9 +106,6 @@ public class ExpressiveFeaturesAnnotator {
                     TextChunkRepresentationManager.EncodingScheme.BIO,
                     TextChunkRepresentationManager.EncodingScheme.BILOU, data,
                     NEWord.LabelToLookAt.PredictionLevel2Tagger);
-            // addAuxiliaryClassifierFeatures(data, "aux_model_" + i);
-
-            ParametersForLbjCode.currentParameters = currentModel;
         }
     }
 
