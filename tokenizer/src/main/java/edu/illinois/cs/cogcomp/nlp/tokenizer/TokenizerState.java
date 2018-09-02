@@ -11,8 +11,8 @@
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
 /**
+ * State for the state machine.
  * @author redman
- *
  */
 public enum TokenizerState {
 

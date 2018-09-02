@@ -11,18 +11,16 @@ package edu.illinois.cs.cogcomp.chunker.main;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.ChunkLabel;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.Math;
 /**
  * Trains chunker models with user specified labeled data in the CoNLL2000 format. Similar to
  * POSTrain.java.
@@ -30,10 +28,10 @@ import java.lang.Math;
  * @author James Chen
  */
 public class ChunkerTrain {
-    private int iter; // Number of iterations to be used when training the chunker
-    private Chunker chunker;
+    protected int iter; // Number of iterations to be used when training the chunker
+    protected Chunker chunker;
     private ResourceManager rm;
-    private static final Logger logger = LoggerFactory.getLogger(ChunkerTrain.class);
+    protected static final Logger logger = LoggerFactory.getLogger(ChunkerTrain.class);
 
     public ChunkerTrain() {
         this(50);

@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
@@ -31,7 +33,7 @@ public class NerTest {
     private static final String TEST_INPUT =
             "JFK has one dog and Newark has a handful, Farbstein said.";
     private static final String TEST_OUTPUT =
-            "JFK has one dog and [LOC Newark] has a handful , [PER Farbstein] said . ";
+            "[PERSON JFK] has [CARDINAL one] dog and [GPE Newark] has a handful , [PERSON Farbstein] said . ";
 
     private static NETaggerLevel1 t1;
     private static NETaggerLevel2 t2 = null;
@@ -39,23 +41,12 @@ public class NerTest {
     @Before
     public void setUp() throws Exception {
         try {
-            Parameters.readConfigAndLoadExternalData(new NerBaseConfigurator().getDefaultConfig());
+            ResourceManager rm = new NerBaseConfigurator().getDefaultConfig();
+            Parameters.readConfigAndLoadExternalData(rm);
             ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
-            logger.info("Reading model file : "
-                    + ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
-            t1 =
-                    new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level1.lex");
-            if (ParametersForLbjCode.currentParameters.featuresToUse
-                    .containsKey("PredictionsLevel1")) {
-                logger.info("Reading model file : "
-                        + ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
-                t2 =
-                        new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
-                                + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
-                                + ".level2.lex");
-            }
+            ModelLoader.load(rm, ViewNames.NER_ONTONOTES, false);
+            t1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
+            t2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
         } catch (Exception e) {
             System.err.println("Cannot initialise the test, the exception was: ");
             e.printStackTrace();

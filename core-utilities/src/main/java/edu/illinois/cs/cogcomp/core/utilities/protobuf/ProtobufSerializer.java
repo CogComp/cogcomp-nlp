@@ -220,8 +220,6 @@ public class ProtobufSerializer extends AbstractSerializer {
         writeSentences(ta, taBuilder);
 
         for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
-            if (viewName.equals(ViewNames.SENTENCE))
-                continue;
 
             ViewProto.Builder viewBuilder = ViewProto.newBuilder();
 
@@ -265,7 +263,14 @@ public class ProtobufSerializer extends AbstractSerializer {
                 topKViews.add(readViewData(viewData, ta));
             }
 
+
+            if (viewName.equals(ViewNames.SENTENCE))
+                ta.removeView(viewName);
+
             ta.addTopKView(viewName, topKViews);
+
+            if (viewName.equals(ViewNames.SENTENCE))
+                ta.setSentences();
         }
 
         for (Map.Entry<String, String> entry: taImpl.getPropertiesMap().entrySet()) {

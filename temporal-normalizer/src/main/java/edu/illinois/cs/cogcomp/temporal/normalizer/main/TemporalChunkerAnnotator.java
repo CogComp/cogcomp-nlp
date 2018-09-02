@@ -27,10 +27,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 
 
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TemporalPhrase;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexChunk;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNames;
-import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNormalizer;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -173,19 +170,19 @@ public class TemporalChunkerAnnotator extends Annotator{
     }
 
     @Override
-    public void addView(TextAnnotation record) throws AnnotatorException {
-        if (!record.hasView(tokensfield) || !record.hasView(sentencesfield)
-                || !record.hasView(posfield)) {
+    public void addView(TextAnnotation ta) throws AnnotatorException {
+        if (!ta.hasView(tokensfield) || !ta.hasView(sentencesfield)
+                || !ta.hasView(posfield)) {
             String msg = "Record must be tokenized, sentence split, and POS-tagged first.";
             logger.error(msg);
             throw new AnnotatorException(msg);
         }
 
-        List<Constituent> tags = record.getView(posfield).getConstituents();
+        List<Constituent> tags = ta.getView(posfield).getConstituents();
 
-        List<Token> lbjTokens = LBJavaUtils.recordToLBJTokens(record);
+        List<Token> lbjTokens = LBJavaUtils.recordToLBJTokens(ta);
 
-        View chunkView = new SpanLabelView(ViewNames.TIMEX3, this.NAME, record, 1.0);
+        View chunkView = new SpanLabelView(ViewNames.TIMEX3, this.NAME, ta, 1.0);
 
         int currentChunkStart = 0;
         int currentChunkEnd = 0;
@@ -198,6 +195,39 @@ public class TemporalChunkerAnnotator extends Annotator{
             tagger.discreteValue(lbjtoken);
             logger.debug("{} {}", lbjtoken.toString(), (null == lbjtoken.type) ? "NULL"
                     : lbjtoken.type);
+
+            /*Enforce some rules to avoid silly mistakes of temporal chunker*/
+            if(lbjtoken.type.charAt(0) == 'O'){
+                DateMapping dateMapping = DateMapping.getInstance();
+                String tmp = lbjtoken.form.toLowerCase();
+                String prev_token = null;
+                if(previous!=null&&previous.getSurfaceForm()!=null)
+                    prev_token = previous.getSurfaceForm().toLowerCase();
+                if(dateMapping.getHm_month().containsKey(tmp)
+                        ||!tmp.equals("sun")&&dateMapping.getHm_dayOfWeek().containsKey(tmp)) {
+                    // if this token matches to any month names or day-of-week names (either full names or abbr. names), then force the chunker label to be Begin
+                    // "Sun" is a bit tricky since the star "Sun" and the day of week "Sunday" are both NNP. We leave it to chunker now.
+                    if(tmp.equals("may")||tmp.equals("sat")){
+                        if(current.getLabel().startsWith("NNP"))
+                            lbjtoken.type = "B-null";
+                    }
+                    else
+                        lbjtoken.type = "B-null";
+                }
+                else if(prev_token!=null
+                            && dateMapping.getHm_month().containsKey(prev_token)){// previous token was a "month"
+                    if(dateMapping.getHm_dayOfMonth().contains(tmp))// curr token is an ordinal number
+                        lbjtoken.type = "I-null";
+                    else{
+                        try {
+                            int currint = Integer.valueOf(tmp);
+                            if(currint>=1&&currint<=31)// curr token is an int number in [1,31]
+                                lbjtoken.type = "I-null";
+                        }
+                        catch (Exception e){}// nothing needed
+                    }
+                }
+            }
 
             // what happens if we see an Inside tag -- even if it doesn't follow a Before tag
             if (null != lbjtoken.type && lbjtoken.type.charAt(0) == 'I') {
@@ -217,13 +247,10 @@ public class TemporalChunkerAnnotator extends Annotator{
                     && clabel != null) {
 
                 if (previous != null) {
-                    int curSentenceId = current.getSentenceId();
-                    Sentence curSentence = record.getSentence(curSentenceId);
-
                     currentChunkEnd = previous.getEndSpan();
                     Constituent label;
                     Constituent temp_label =
-                            new Constituent(clabel, ViewNames.TIMEX3, record,
+                            new Constituent(clabel, ViewNames.TIMEX3, ta,
                                     currentChunkStart, currentChunkEnd);
                     if (this.useHeidelTime) {
                         try {
@@ -232,11 +259,11 @@ public class TemporalChunkerAnnotator extends Annotator{
                             e.printStackTrace();
                         }
 
-                        label = new Constituent(clabel, ViewNames.TIMEX3, record,
+                        label = new Constituent(clabel, ViewNames.TIMEX3, ta,
                                 currentChunkStart, currentChunkEnd);
                     }
                     else {
-                        String tense = this.getSentenceTense(record, temp_label.getSpan());
+                        String tense = this.getSentenceTense(ta, temp_label.getSpan());
                         TemporalPhrase temporalPhrase = new TemporalPhrase(temp_label.toString(), tense);
                         TimexChunk normRes = timexNormalizer.normalize(temporalPhrase);
                         if (normRes != null) {
@@ -254,8 +281,11 @@ public class TemporalChunkerAnnotator extends Annotator{
                             this.timex.add(placeHolder);
                         }
                         label = new Constituent(normRes==null?"":normRes.toTIMEXTag(),
-                                ViewNames.TIMEX3, record,
+                                ViewNames.TIMEX3, ta,
                                 currentChunkStart, currentChunkEnd);
+                        if(normRes!=null)
+                            for(String key:normRes.getAttributes().keySet())
+                                label.addAttribute(key, normRes.getAttribute(key));
                     }
                     chunkView.addConstituent(label);
                     clabel = null;
@@ -269,11 +299,12 @@ public class TemporalChunkerAnnotator extends Annotator{
             previous = current;
             tcounter++;
         }
+
         if (clabel != null && null != previous) {
             currentChunkEnd = previous.getEndSpan();
             Constituent label;
             Constituent temp_label =
-                    new Constituent(clabel, ViewNames.TIMEX3, record,
+                    new Constituent(clabel, ViewNames.TIMEX3, ta,
                             currentChunkStart, currentChunkEnd);
 
             if (this.useHeidelTime) {
@@ -282,16 +313,15 @@ public class TemporalChunkerAnnotator extends Annotator{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                label = new Constituent(clabel, ViewNames.TIMEX3, record,
+                label = new Constituent(clabel, ViewNames.TIMEX3, ta,
                         currentChunkStart, currentChunkEnd);
             }
             else {
-                String tense = this.getSentenceTense(record, temp_label.getSpan());
+                String tense = this.getSentenceTense(ta, temp_label.getSpan());
                 TemporalPhrase temporalPhrase = new TemporalPhrase(temp_label.toString(), tense);
                 TimexChunk normRes = timexNormalizer.normalize(temporalPhrase);
-
                 label = new Constituent(normRes==null?"":normRes.toTIMEXTag(),
-                        ViewNames.TIMEX3, record,
+                        ViewNames.TIMEX3, ta,
                         currentChunkStart, currentChunkEnd);
                 if (normRes != null){
                     normRes.setCharStart(temp_label.getStartCharOffset());
@@ -307,9 +337,7 @@ public class TemporalChunkerAnnotator extends Annotator{
             }
             chunkView.addConstituent(label);
         }
-        record.addView(ViewNames.TIMEX3, chunkView);
-
-        return; // chunkView;
+        ta.addView(ViewNames.TIMEX3, chunkView);
     }
 
     /**
@@ -669,10 +697,8 @@ public class TemporalChunkerAnnotator extends Annotator{
                                 htTc.setCharStart(htStart);
                                 htTc.setCharEnd(htEnd);
                                 timex.add(htTc);
-                                //res.put(new IntPair(htStart, htEnd), htTc);
                             }
                         }
-
                     }
                     else
                         tc = timexNormalizer.normalize(new TemporalPhrase(currStr, tense));

@@ -50,6 +50,7 @@ public class PipelineConfigurator extends AnnotatorServiceConfigurator {
     public static final Property USE_TIMEX3 = new Property("useTimex3", FALSE);
     public static final Property USE_DATALESS_ESA = new Property("useDatalessESA", FALSE);
     public static final Property USE_DATALESS_W2V = new Property("useDatalessW2V", FALSE);
+    public static final Property USE_QUESTION_TYPER = new Property("useQuestionTyper", FALSE);
 
     /**
      * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable
@@ -82,7 +83,7 @@ public class PipelineConfigurator extends AnnotatorServiceConfigurator {
                         USE_QUANTIFIER, USE_VERB_SENSE, USE_JSON, USE_RELATION,
                         USE_LAZY_INITIALIZATION, USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH,
 						USE_SENTENCE_PIPELINE, USE_TIMEX3, USE_MENTION, USE_TRANSLITERATION,
-                        USE_DATALESS_ESA, USE_DATALESS_W2V};
+                        USE_DATALESS_ESA, USE_DATALESS_W2V, USE_QUESTION_TYPER};
         
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(
                 generateProperties(properties))));

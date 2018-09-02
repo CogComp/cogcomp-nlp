@@ -7,31 +7,37 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
-import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
-import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
-import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
-import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
-import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
-import edu.illinois.cs.cogcomp.ner.config.NerOntonotesConfigurator;
-import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
+import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
+import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
+import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
+import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
+import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.Parameters;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
+import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
+import edu.illinois.cs.cogcomp.ner.config.NerOntonotesConfigurator;
 
 /**
  * Generate NER annotations using the Annotator API.
@@ -41,12 +47,12 @@ public class NERAnnotator extends Annotator {
 
     /** our specific logger. */
     private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
+
+    /** the level one model. */
+    public SparseNetworkLearner taggerLevel1;
     
-    /** the level one tagger. */
-    private NETaggerLevel1 t1;
-    
-    /** the level two tagger. */
-    private NETaggerLevel2 t2;
+    /** the level two model. */
+    public SparseNetworkLearner taggerLevel2;
 
     /**
      * @param nonDefaultConfigValues a configuration file specifying non-default parameters for the
@@ -54,6 +60,7 @@ public class NERAnnotator extends Annotator {
      * @param viewName indicates the view name, and hence the model, that you wish to use. If you
      *        specify {@link ViewNames#NER_CONLL} or {@link ViewNames#NER_ONTONOTES}, This name will
      *        be used when creating Views in TextAnnotation objects.
+     * @throws IOException if we can't read the resources or models.
      */
     public NERAnnotator(String nonDefaultConfigValues, String viewName) throws IOException {
         this(new ResourceManager(nonDefaultConfigValues), viewName);
@@ -82,7 +89,9 @@ public class NERAnnotator extends Annotator {
                 AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE), nonDefaultRm);
     }
 
-
+    /** this is used to sync loading models. */
+    static final String LOADING_MODELS = "LOADING_MODELS";
+    
     /**
      * Superclass calls this method either on instantiation or at first call to getView(). Logging
      * has been disabled because non-static logger is not initialized at the time this is called if
@@ -92,28 +101,21 @@ public class NERAnnotator extends Annotator {
      */
     @Override
     public void initialize(ResourceManager nerRm) {
+        
+        // set up the configuration
         if (ViewNames.NER_ONTONOTES.equals(getViewName()))
             nerRm = new NerOntonotesConfigurator().getConfig(nerRm);
         else
             nerRm = new NerBaseConfigurator().getConfig(nerRm);
-
         ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
         Parameters.readConfigAndLoadExternalData(nerRm);
-
-         NETaggerLevel1 tagger1 =
-                new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.lex");
-
-        NETaggerLevel2 tagger2 = null;
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            tagger2 =
-                    new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2.lex");
+        
+        // load the models.
+        synchronized (LOADING_MODELS) {
+            ModelLoader.load(nerRm, viewName, false);
+            this.taggerLevel1 = ParametersForLbjCode.currentParameters.taggerLevel1;
+            this.taggerLevel2 = ParametersForLbjCode.currentParameters.taggerLevel2;
         }
-        this.t1 = tagger1;
-        this.t2 = tagger2;
     }
 
     /**
@@ -150,7 +152,8 @@ public class NERAnnotator extends Annotator {
         Data data = new Data(new NERDocument(sentences, "input"));
         try {
             ExpressiveFeaturesAnnotator.annotate(data);
-            Decoder.annotateDataBIO(data, t1, t2);
+            Decoder.annotateDataBIO(data, (NETaggerLevel1) taggerLevel1, 
+                (NETaggerLevel2) taggerLevel2);
         } catch (Exception e) {
             logger.error("Cannot annotate the text, the exception was: ", e);
             return;
@@ -238,7 +241,7 @@ public class NERAnnotator extends Annotator {
         if (!isInitialized()) {
             doInitialize();
         }
-        Lexicon labelLexicon = t1.getLabelLexicon();
+        Lexicon labelLexicon =  taggerLevel1.getLabelLexicon();
         Set<String> tagSet = new HashSet<String>();
         for (int i =0; i < labelLexicon.size(); ++i) {
             tagSet.add(labelLexicon.lookupKey(i).getStringValue());

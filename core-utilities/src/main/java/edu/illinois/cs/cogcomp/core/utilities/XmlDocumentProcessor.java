@@ -184,7 +184,7 @@ public class XmlDocumentProcessor {
                     while (!openTagName.equals(tagName) && !isLoneClose) {
 
                         if (throwExceptionOnUnrecognizedTag)
-                            throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTagAndAtts +
+                            throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTagName +
                                     "', found '" + tagName + "'");
                         else {//someone used xml special chars in body text
                             logger.warn("WARNING: found close tag '{}' after open tag '{}', and (obviously) they don't match.",

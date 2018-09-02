@@ -31,6 +31,7 @@ import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordParseHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.illinois.cs.cogcomp.prepsrl.PrepSRLAnnotator;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
+import edu.illinois.cs.cogcomp.question_typer.QuestionTypeAnnotator;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
@@ -137,14 +138,21 @@ public class PipelineFactory {
                     case ViewNames.MENTION:
                         nonDefaultValues.put(PipelineConfigurator.USE_MENTION.key,
                                 Configurator.TRUE);
+                        break;
                     case ViewNames.RELATION:
                         nonDefaultValues.put(PipelineConfigurator.USE_RELATION.key,
                                 Configurator.TRUE);
+                        break;
                     case ViewNames.DATALESS_ESA:
                         nonDefaultValues.put(PipelineConfigurator.USE_DATALESS_ESA.key,
                                 Configurator.TRUE);
+                        break;
                     case ViewNames.DATALESS_W2V:
                         nonDefaultValues.put(PipelineConfigurator.USE_DATALESS_W2V.key,
+                                Configurator.TRUE);
+                        break;
+                    case ViewNames.QUESTION_TYPE:
+                        nonDefaultValues.put(PipelineConfigurator.USE_QUESTION_TYPER.key,
                                 Configurator.TRUE);
                         break;
                     default:
@@ -171,7 +179,7 @@ public class PipelineFactory {
         boolean splitOnHypen = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH.key);
 
         TextAnnotationBuilder taBldr =
-                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHypen));
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHypen, false));
         Map<String, Annotator> annotators = buildAnnotators(fullRm);
         return new SentencePipeline(taBldr, annotators, fullRm);
     }
@@ -246,7 +254,7 @@ public class PipelineFactory {
         }
 
         TextAnnotationBuilder taBldr =
-                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash, false));
 
         Map<String, Annotator> annotators = buildAnnotators(fullRm);
         return isSentencePipeline ? new SentencePipeline(taBldr, annotators, fullRm) :
@@ -407,6 +415,11 @@ public class PipelineFactory {
         	W2VDatalessAnnotator w2vDataless = new W2VDatalessAnnotator(rm);
             viewGenerators.put(ViewNames.DATALESS_W2V, w2vDataless);
         }
+        if(rm.getBoolean(PipelineConfigurator.USE_QUESTION_TYPER)) {
+            QuestionTypeAnnotator questionTyper = new QuestionTypeAnnotator();
+            viewGenerators.put(ViewNames.QUESTION_TYPE, questionTyper);
+        }
+
         return viewGenerators;
     }
 

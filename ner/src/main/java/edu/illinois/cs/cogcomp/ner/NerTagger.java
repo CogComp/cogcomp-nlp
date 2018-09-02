@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.ner.IO.Keyboard;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
@@ -33,47 +34,59 @@ public class NerTagger {
         ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
         try {
             boolean areWeTraining = args[0].equalsIgnoreCase("-train");
+            ResourceManager rm = new ResourceManager(args[args.length - 1]);
             Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
-
-            if (args[0].equalsIgnoreCase("-annotate")) {
-                NETagPlain.init();
-                NETagPlain.tagData(args[1], args[2]);
-            }
-            if (args[0].equalsIgnoreCase("-demo")) {
-                logger.info("Reading model file : " + cp.pathToModelFile + ".level1");
-                NETaggerLevel1 tagger1 =
-                        new NETaggerLevel1(cp.pathToModelFile + ".level1", cp.pathToModelFile
-                                + ".level1.lex");
-                logger.info("Reading model file : " + cp.pathToModelFile + ".level2");
-                NETaggerLevel2 tagger2 =
-                        new NETaggerLevel2(cp.pathToModelFile + ".level2", cp.pathToModelFile
-                                + ".level2.lex");
-                String input = "";
-                while (!input.equalsIgnoreCase("quit")) {
-                    input = Keyboard.readLine();
-                    if (input.equalsIgnoreCase("quit"))
-                        System.exit(0);
-                    String res = NETagPlain.tagLine(input, tagger1, tagger2);
-                    res = NETagPlain.insertHtmlColors(res);
-                    StringTokenizer st = new StringTokenizer(res);
-                    StringBuilder output = new StringBuilder();
-                    while (st.hasMoreTokens()) {
-                        String s = st.nextToken();
-                        output.append(" ").append(s);
-                    }
-                    logger.info(output.toString());
+            if (args[0].equalsIgnoreCase("-train")) {
+                String dataFormat;
+                // config file is always the last one.
+                if(args.length < 5){
+                    dataFormat = "-c";
+                }else{
+                    dataFormat = args[3];
                 }
+                LearningCurveMultiDataset.getLearningCurve(-1, dataFormat, args[1], args[2], false);
+            }else if (args[0].equalsIgnoreCase("-trainFixedIterations"))
+                LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2], args[3], false);
+            else {
+                // load up the models
+                ModelLoader.load(rm, rm.getString("modelName"), false);
+                if (args[0].equalsIgnoreCase("-annotate")) {
+                    NETagPlain.init();
+                    NETagPlain.tagData(args[1], args[2]);
+                }
+                if (args[0].equalsIgnoreCase("-demo")) {
+                    String input = "";
+                    while (!input.equalsIgnoreCase("quit")) {
+                        input = Keyboard.readLine();
+                        if (input.equalsIgnoreCase("quit"))
+                            System.exit(0);
+                        String res = NETagPlain.tagLine(input,
+                                (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1,
+                                (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2);
+                        res = NETagPlain.insertHtmlColors(res);
+                        StringTokenizer st = new StringTokenizer(res);
+                        StringBuilder output = new StringBuilder();
+                        while (st.hasMoreTokens()) {
+                            String s = st.nextToken();
+                            output.append(" ").append(s);
+                        }
+                        logger.info(output.toString());
+                    }
+                }
+                if (args[0].equalsIgnoreCase("-test")) {
+                    String dataFormat;
+                    // config file is always the last one.
+                    if(args.length < 4){
+                        dataFormat = "-c";
+                    }else{
+                        dataFormat = args[2];
+                    }
+                    NETesterMultiDataset.test(args[1], true, dataFormat, cp.labelsToIgnoreInEvaluation,
+                            cp.labelsToAnonymizeInEvaluation);
+                }
+                if (args[0].equalsIgnoreCase("-dumpFeatures"))
+                    NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2]);
             }
-            if (args[0].equalsIgnoreCase("-test"))
-                NETesterMultiDataset.test(args[1], false, cp.labelsToIgnoreInEvaluation,
-                        cp.labelsToAnonymizeInEvaluation);
-            if (args[0].equalsIgnoreCase("-dumpFeatures"))
-                NETesterMultiDataset.dumpFeaturesLabeledData(args[1], args[2]);
-            if (args[0].equalsIgnoreCase("-train"))
-                LearningCurveMultiDataset.getLearningCurve(-1, args[1], args[2]);
-            if (args[0].equalsIgnoreCase("-trainFixedIterations"))
-                LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2],
-                        args[3]);
         } catch (Exception e) {
             logger.error("Exception caught: ");
             e.printStackTrace();
@@ -87,9 +100,10 @@ public class NerTagger {
                 "Usage: edu.illinois.cs.cogcomp.ner.NerTagger <command> [options] <config-file>\n";
         usage +=
                 "commands:\n" + "\t-demo\n" + "\t-annotate <input-dir> <output-dir>\n"
-                        + "\t-train <train-dir> <test-dir>\n"
+                        + "\t-train <train-dir> <test-dir> <dataformat = {-c, -r, -json}, -c by default>\n"
                         + "\t-trainFixedIterations <num-iters> <train-dir> <test-dir>\n"
-                        + "\t-test <test-dir>\n" + "\t-dumpFeatures <test-dir> <output-dir>";
+                        + "\t-test <test-dir> <dataformat = {-c, -r, -json}, -c by default>\n"
+                        + "\t-dumpFeatures <test-dir> <output-dir>";
         out.println(usage);
     }
 }

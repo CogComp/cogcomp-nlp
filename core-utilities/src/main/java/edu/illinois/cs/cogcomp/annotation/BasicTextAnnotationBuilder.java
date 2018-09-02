@@ -9,7 +9,6 @@ package edu.illinois.cs.cogcomp.annotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
 import org.apache.commons.lang.StringUtils;
 
@@ -41,6 +40,35 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
     public static TextAnnotation createTextAnnotationFromTokens(List<String[]> tokenizedSentences) {
         return createTextAnnotationFromTokens("", "", tokenizedSentences);
     }
+
+
+    /**
+     * A way to create a {@link TextAnnotation} from pre-tokenized text from Python
+     *
+     * @param tokenizedSentences A list of sentences, each one being an list of tokens
+     * @return A {@link TextAnnotation} containing the SENTENCE and TOKENS views.
+     */
+    public static TextAnnotation createTextAnnotationFromListofListofTokens(List<List<Object>> tokenizedSentences) {
+        // This function takes List<List<Object>> to be able to run with cogcomp-nlpy (using pyjnius)
+        // Convert the inner lists to String arrays
+        // Call the default TextAnnotation builder function
+
+        List<String[]> tokenizedSentences_formatted = new ArrayList<String[]>();
+
+        // Converting inner list to array
+        for (List<Object> sentence : tokenizedSentences) {
+            String[] sentence_array = new String[sentence.size()];
+            int token_idx = 0;
+            for (Object w : sentence) {
+                sentence_array[token_idx] = (String) w;
+                token_idx += 1;
+            }
+            tokenizedSentences_formatted.add(sentence_array);
+        }
+
+        return createTextAnnotationFromTokens("", "", tokenizedSentences_formatted);
+    }
+
 
     /**
      * The default way to create a {@link TextAnnotation} from pre-tokenized text.
@@ -116,7 +144,7 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
                 // The next token should start after a single space
                 tokenStartOffset += sentenceToken.length() + 1;
-                nextSentStartCharOffset = tokenCharEnd + 1; // by end of loop, this should match
+                nextSentStartCharOffset = tokenCharEnd + System.lineSeparator().length(); // by end of loop, this should match
                                                             // start of next sentence
             }
 

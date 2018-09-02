@@ -22,14 +22,12 @@ public class ChunkerConfigurator extends Configurator {
     public static final Property TEST_GOLDPOS_DATA = new Property("testGoldPOSData",
             "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.txt");
 
-    public static final Property TEST_NOPOS_DATA =
-            new Property("testNoPOSData",
+    public static final Property TEST_NOPOS_DATA = new Property("testNoPOSData",
                     "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.noPOS.txt");
 
     /*Change the following two properties if a retrained model is desired*/
     public static final Property MODEL_NAME = new Property("modelName", "Chunker");
-    public static final Property MODEL_DIR_PATH = new Property("modelDirPath",
-            "ChunkerModel/");
+    public static final Property MODEL_DIR_PATH = new Property("modelDirPath", "ChunkerModel/");
 
     public static final Property MODEL_PATH = new Property("modelPath", MODEL_DIR_PATH.value
             + MODEL_NAME.value + ".lc");

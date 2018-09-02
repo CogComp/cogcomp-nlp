@@ -99,7 +99,7 @@ public class StatefullTokenizerTest {
      * Test method for {@link IllinoisTokenizer} .
      */
     @Test
-    public void testIllinoisTokenizer() {
+    public void testStatefulTokenizer() {
         Tokenizer tokenizer = new StatefulTokenizer();
 
         String sentence = "This is a   test.";
@@ -152,10 +152,11 @@ public class StatefullTokenizerTest {
         IntPair notOffsets = new IntPair(42, 45);
         assertEquals(notOffsets, tokenOffsets[notIndex]);
         int intolerantIndex = 14;
-        IntPair intolerantOffsets = new IntPair(77, 87);
+        int lineSepLength = System.lineSeparator().length();
+        IntPair intolerantOffsets = new IntPair(76 + lineSepLength, 86 + lineSepLength);
         assertEquals(intolerantOffsets, tokenOffsets[intolerantIndex]);
     }
-
+    
     /**
      * Test a tokenizers ability to tokenize sentences.
      * 
@@ -273,6 +274,91 @@ public class StatefullTokenizerTest {
     }
 
     /**
+     * Parse an empty string.
+     */
+    @Test
+    public void testSentenceSplitOnMultipleNewlines() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String text = "Mary loves Dick. Dick loves Jane.";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+        text = "Mary loves Dick\n\nDick loves Jane.";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+        text = "Mary loves Dick\n\n\nDick loves Jane.";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+        text = "Mary loves Dick\n\n\n\nDick loves Jane.\n\n";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+        text = "\n\nMary loves Dick\n\n\n\nDick loves Jane.\n\n";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 2);
+    }
+
+    /**
+     * Parse out a date, which will hopefully look like a date.
+     */
+    @Test
+    public void testDateTokenization() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String tmp = "One two, three-four-five 10/23/2018 at 5:20pm one? Of course not! Be well, stranger. Bye-bye!";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", tmp);
+        String[] toks = taA.getTokens();
+        assertEquals(toks[8], "10/23/2018");
+    }
+    
+    /**
+     * Parse an empty string.
+     */
+    @Test
+    public void testDecimalNotation() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String text = "$1.09 percent like me.";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        String[] toks = taA.getTokens();
+        assertEquals(toks[0], "$1.09");
+        
+        text = "Take the $.10 tour.";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        toks = taA.getTokens();
+        assertEquals(toks[2], "$.10");
+
+        text = "Take the $10B tour.";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        toks = taA.getTokens();
+        assertEquals(toks[2], "$10B");
+        text = "\n(\n$.10)";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        toks = taA.getTokens();
+        assertEquals(toks[1], "$.10");
+        assertEquals(toks[0], "(");
+        assertEquals(toks[2], ")");
+        assertEquals(taA.getNumberOfSentences(), 1);
+    }
+
+    /**
+     * Parse an empty string.
+     */
+    @Test
+    public void testEmail() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String text = "Although tomredman@mchsi.com is an email address.";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        String[] toks = taA.getTokens();
+        assertEquals(toks[1], "tomredman@mchsi.com");
+    }
+
+    /**
      * Make sure newline is recognized.
      */
     @Test
@@ -293,38 +379,38 @@ public class StatefullTokenizerTest {
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
         assertEquals(tknzn.getTokens().length, 6);
     }
-    
+
+    /**
+     * Test sentence splitter behavior when a there is a lower cased acronym followed immediately by a dot.
+     */
+    @Test
+    public void testLowerCaseAcronymEndWithDot(){
+        TokenizerTextAnnotationBuilder tab =
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String text = "I was born in Urbana, Il. in 1992.";
+        TextAnnotation ta = tab.createTextAnnotation(text);
+        assertEquals(ta.getNumberOfSentences(), 1);
+    }
     /**
      * This can be used to just quickly debug when a sentence produces an error.
      * @param args
      */
     public static void main(String [] args) {
-        Tokenizer tkr = new StatefulTokenizer(false);
+        Tokenizer tkr = new StatefulTokenizer(false, false);
         String text = "We going to--. ";
         tkr.tokenizeTextSpan(text);
-        
-        
-        /*TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true));
-        Map<String, Annotator> annotators = buildAnnotators(fullRm);
-        return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm)
-        TextAnnotation basicTextAnnotation = null;
-        BasicAnnotatorService bas = new BasicAnnotatorService();
-        try {
-            basicTextAnnotation = processor.createBasicTextAnnotation("test", "test", text);
-        } catch (AnnotatorException e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }*/
-
     }
 
+    /**
+     * Test the ending with a couple dashes.
+     */
     @Test
     public void testSplitPeriodEnd() {
-        Tokenizer tkr = new StatefulTokenizer(false);
+        Tokenizer tkr = new StatefulTokenizer(false, false);
         String text = "You see always, oh we're going to do this, we're going to--. ";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
         assertEquals(tknzn.getTokens().length, 17);
-        tkr = new StatefulTokenizer(true);
+        tkr = new StatefulTokenizer(true, false);
         tknzn = tkr.tokenizeTextSpan(text);
         assertEquals(tknzn.getTokens().length, 18);
     }

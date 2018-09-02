@@ -349,7 +349,6 @@ public class JsonSerializer extends AbstractSerializer {
 
     private static String readString(String name, JsonObject obj) {
         return obj.getAsJsonPrimitive(name).getAsString();
-        // return obj.get(name).getAsString();
     }
 
     private static void writeInt(String name, int value, JsonObject out) {
@@ -403,7 +402,7 @@ public class JsonSerializer extends AbstractSerializer {
     private static void writeLabelsToScores(Map<String, Double> obj, JsonObject out) {
         JsonObject labelScoreMap = new JsonObject();
         for (String key : Sorters.sortSet(obj.keySet()))
-            writeDouble( key, obj.get(key), out);
+            writeDouble( key, obj.get(key), labelScoreMap);
         out.add(LABEL_SCORE_MAP, labelScoreMap);
     }
 
@@ -435,9 +434,6 @@ public class JsonSerializer extends AbstractSerializer {
 
         JsonArray views = new JsonArray();
         for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
-            // TODO: comment out this next two lines as part of addressing issue #406
-            if (viewName.equals(ViewNames.SENTENCE))
-                continue;
 
             JsonObject view = new JsonObject();
 
@@ -460,12 +456,17 @@ public class JsonSerializer extends AbstractSerializer {
 
         writeAttributes(ta, json);
 
-        // TODO: uncomment to generate Sentences fix (part of addressing issue #406)
-//        if (ta.hasView(ViewNames.SENTENCE))
-//            ta.setSentences();
-
         return json;
     }
+
+    /**
+     * if serialized TextAnnotation object has Sentence view, delete the View created by the TextAnnotation
+     *    constructor and replace it with the one read from the file.  This is to pick up any additional info
+     *    specified in the serialized version.
+     * @param string
+     * @return
+     * @throws Exception
+     */
 
     TextAnnotation readTextAnnotation(String string) throws Exception {
         JsonObject json = (JsonObject) new JsonParser().parse(string);
@@ -477,7 +478,12 @@ public class JsonSerializer extends AbstractSerializer {
 
         Pair<Pair<String, Double>, int[]> sentences = readSentences(json);
 
-        IntPair[] offsets = TokenUtils.getTokenOffsets(text, tokens);
+        IntPair[] offsets = null;
+
+        if (json.has(TOKENOFFSETS))
+            offsets = readTokenOffsets(json.getAsJsonArray(TOKENOFFSETS), tokens);
+        else
+            offsets = TokenUtils.getTokenOffsets(text, tokens);
 
         TextAnnotation ta =
                 new TextAnnotation(corpusId, id, text, offsets, tokens, sentences.getSecond());
@@ -495,11 +501,53 @@ public class JsonSerializer extends AbstractSerializer {
                 topKViews.add(readView(kView, ta));
             }
 
+            // replace TextAnnotation constructor's SENTENCE view if specified in json
+            if (viewName.equals(ViewNames.SENTENCE))
+                ta.removeView(viewName);
+
             ta.addTopKView(viewName, topKViews);
+
+            if (viewName.equals(ViewNames.SENTENCE))
+                ta.setSentences();
         }
 
         readAttributes(ta, json);
 
         return ta;
+    }
+
+    /**
+     *   "tokenOffsets": [
+     {
+     "form": "Facebook",
+     "startCharOffset": 4,
+     "endCharOffset": 12
+     },
+     {
+     "form": "Fans",
+     "startCharOffset": 13,
+     "endCharOffset": 17
+     },
+
+     * @param json array of tokenOffset objects
+     * @param tokens used to validate tokenOffset info
+     * @return
+     */
+    private IntPair[] readTokenOffsets(JsonArray json, String[] tokens) {
+        IntPair[] offsets = new IntPair[json.size()];
+        for (int i = 0; i < json.size(); ++i) {
+            JsonObject offsetInfo = (JsonObject) json.get(i);
+            int start = readInt(STARTCHAROFFSET, offsetInfo);
+            int end = readInt(ENDCHAROFFSET, offsetInfo);
+            String form = readString(FORM, offsetInfo);
+
+            if (!form.equals(tokens[i]))
+                throw new IllegalArgumentException("ERROR: form " + i + "(" + form +
+                        ") didn't match corresponding token (" + tokens[i] + "); char offsets are (" +
+                        start + "," + end + ").");
+
+            offsets[i] = new IntPair(start, end);
+        }
+        return offsets;
     }
 }

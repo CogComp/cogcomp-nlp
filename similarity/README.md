@@ -40,6 +40,14 @@ NESim nesim=new NESim();
 double score=nesim.compare("Donald Trump", "Trump");
 ```
 
+You can also provide the types of one mention or both of the mentions. When specifying the type of only one mention, use null for the type of the other mention. For example,
+
+```java
+NESim nesim = new NESim();
+double score=nesim.compare("Donald Trump", "Trump", "PER", "PER");
+double score2=nesim.compare("Obama", "chair", "PER", null);
+```
+
 ## Lexical Level Matching
 When you want to compute similarity score between two sentences, you can use lexical level matching comparison:
 

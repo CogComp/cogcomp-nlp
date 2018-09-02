@@ -213,64 +213,35 @@ This will include the two views `ViewNames.POS` and `ViewNames.SRL_VERB` in the 
 
 ### Configuration Options
 
-The default configuration options are specified in the class
-`edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator`.
-Each property has a String as a key and a value.  If you want to change specific behaviors,
-such as activating or deactivating specific components, you can write non-default entries
-in a configuration file and use a ResourceManager (see `cogcomp-core-utilities`)
-to instantiate an instance of the pipeline (any entries
-that duplicate default values will have no effect and are not required).
+If you want to change specific behaviors,
+such as activating or deactivating specific components, you need to write a custom config file and use
+it as the example below. 
 
-Code snippet to show how to override default configuration with user-specified properties.
+This mostly happens when you have limited resourcesΩ. For example, SRL and parsers tend to take more time and memory,
+ so you can turn them off if you don't need them.
+
 ```java
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
-ResourceManager userConfig = new ResourceManager("config/pipeline-config.properties");
+// An example of "[PATH_TO_YOUR_CONFIG_FILE]" is "config/pipeline-config.properties"
+ResourceManager userConfig = new ResourceManager("[PATH_TO_YOUR_CONFIG_FILE]");
 AnnotatorService pipeline = PipelineFactory.buildPipeline(userConfig);
 ```
 
-The default keys and values are specified below; comments provide more information where the
-values themselves are not self-explanatory.  Note that the key/value pairs each appear
-on a separate line and are themselves separated by a tab key. If you have limited memory or wish
-to save on processing time, you should set the values for unnecessary annotations to 'false'
--- in particular, SRL components require more time and memory than most other components,
-and the parsers can take a relatively long time on long sentences.
-
-```
-// Used by PipelineFactory. If 'true', instantiates a version of the pipeline --
-//    SentencePipeline -- that where possible, processes text 
-//    sentence-by-sentence to minimize failures at the document level
-isSentenceLevel false
-
-// in milliseconds
-stanfordMaxTimePerSentence  1000
-
-// in tokens
-stanfordParseMaxSentenceLength  60
-
-// directory in which cached annotations will be written.
-simpleCacheDir simple-annotation-cache
-
-// flags indicating which NLP components will be used
-usePos  true
-useLemma    true
-useShallowParse true
-
-// "standard" NER: see http://cogcomp.cs.illinois.edu/page/demo_view/NER
-useNerConll true
-
-// "extended" NER -- see http://cogcomp.cs.illinois.edu/page/demo_view/NERextended
-useNerOntonotes true
-
-useStanfordParse    true
-useStanfordDep  true
-
-// semantic role labelers
-useSrlVerb  true
-useSrlNom   true
-```
+The config file is composed with lines of `[KEY]\t[VAL]` pairs, 
+ where each pair specifies a property name and its value.
+ `[KEY]`s are property names specified in 
+ [PipelineConfigurator](https://github.com/CogComp/cogcomp-nlp/blob/master/pipeline/src/main/java/edu/illinois/cs/cogcomp/pipeline/common/PipelineConfigurator.java).
+The mechanism behind is that the config file will be parsed by our 
+ [ResourceManager](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/utilities/configuration/ResourceManager.java).
+Please see the documentation of
+ [core-utilities](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/README.md)
+ to learn more.
+ 
+You can refer to [the default config file](https://github.com/CogComp/cogcomp-nlp/blob/master/pipeline/config/pipeline-config.properties)
+ if you need an example. Most property names are self-explanatory, please see specific usages if some are not.
 
 Note that individual annotators have their own configuration options -- see the documentation
 for individual components for details.
@@ -314,29 +285,6 @@ Here are the available APIs:
 
 Note that the current web server is very basic. It does not support parallel processing within a single request, nor across multiple requests.
 
-### Server clients 
-
-#### Java Client 
-
-After setting up the server on a remote machine, we can create a java client to make calls to the server. 
-Here in the snnippet we show how it is done: 
-
-```java 
-import edu.illinois.cs.cogcomp.pipeline.server.ServerClientAnnotator; 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-
-ServerClientAnnotator annotator = new ServerClientAnnotator();
-annotator.setUrl("localhost", "8080"); // set the url and port name of your server here 
-annotator.setViews(ViewNames.POS, ViewNames.LEMMA); // specify the views that you want 
-TextAnnotation ta = annotator.annotate("This is the best sentence ever."); 
-System.out.println(ta.getAvailableViews()); // here you should see that the required views are added  
-```
-
-#### Python Client
-
-[CogComp-NLPy](https://github.com/CogComp/cogcomp-nlpy) is our library for accessing our pipeline from Java.   
-
 
 ## Frequently Asked Questions (FAQs)
 
@@ -346,7 +294,7 @@ export MAVEN_OPTS="-Xmx10g"
 ```
 
 - Between different runs of the Pipeline, if you see the following exception, you should remove the temporary cache folders created by MapDB.
-```java
+```
 Caused by: org.mapdb.DBException$DataCorruption: Header checksum broken. Store was not closed correctly, or is corrupted
 ```
 
@@ -368,7 +316,7 @@ public class TestPipeline {
 }
 ```
 would lead to the following exception:
-```java
+```
 Exception in thread "main" org.mapdb.DBException$FileLocked: File is already opened and is locked: annotation-cache
 	at org.mapdb.volume.Volume.lockFile(Volume.java:446)
 	at org.mapdb.volume.RandomAccessFileVol.<init>(RandomAccessFileVol.java:52)
@@ -398,6 +346,7 @@ public class TestPipeline {
     }
 }
 ```
+
 
 ## LICENSE
 

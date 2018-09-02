@@ -16,8 +16,8 @@ own NerOntonotesConfigurator class).
 | Corpus | F1 on held-out data | Model classifier | Model version | View Name |
 | :--- | :--- | :--- | :--- | :--- |
 | CoNLL (trained on CoNLL only)| 90.88 | CoNLL | 3.1 | ViewNames.NER_CONLL |
-| CoNLL (trained on CoNLL + enron) | 91.08 | CoNLL_enron | 3.3 | ViewNames.NER_CONLL |
-| OntoNotes | 84.88 | OntoNotes | 3.3 | ViewNames.NER_ONTONOTES |
+| CoNLL (trained on CoNLL + enron) | 91.12 | CoNLL_enron | 4.0 | ViewNames.NER_CONLL |
+| OntoNotes | 84.61 | OntoNotes | 4.0| ViewNames.NER_ONTONOTES |
 | Enron email | 77.68 | ConLL_enron | 3.3 | ViewNames.NER_CONLL |
 | MUC | 88.37 | CoNLL_enron | 3.3 | ViewNames.NER_CONLL |
 
@@ -36,9 +36,9 @@ line, although there is the option to modify the confiruation during at runtime.
 The top level menu is as follows:
 
 ```bash
-1 - select input [<input file or directory>]
-2 - change output [<output file or directory>]
-3 - annotate <input file or directory>, storing <output file or directory>
+1 - select input [standard in]
+2 - change output [standard out]
+3 - annotate text entered from the command line, presenting results to the terminal.
 4 - show and modify configuration parameters.
 q - exit the application.
 Choose from above options:
@@ -55,7 +55,39 @@ To run this application run the runNER.sh bash script:
 ```bash
 $ ./scripts/runNER.sh configFilename
 ```
-This script requires the configuration file name.
+The configuration parameter is optional. If no config file is specified, default parameters are used.
+
+#### Interactive mode
+In the afore mentoned menue, you can choose the interactive mode, where you can annotate a text entered from the command line, and get the results back to the terminal. Here is a sample output: 
+
+```
+./scripts/runNER.sh
+
+[some logging here]
+
+1 - select input [standard in]
+2 - change output [standard out]
+3 - annotate text entered from the command line, presenting results to the terminal.
+4 - show and modify configuration parameters.
+q - exit the application.
+Choose from above options: 
+3
+Enter the text to process, or blank line to return to the menu.
+
+[some logging here]
+
+: 
+Obama just landed in Urbana-Champaign, after his trip to Europe last week. 
+-----------------
+Obama just landed in [LOC Urbana ] -[LOC Champaign ] , after his trip to [LOC Europe ]  last week. 
+: 
+
+Down below, bomb-sniffing dogs will patrol the trains and buses that are expected to take approximately 30,000 of the 80,000-plus spectators to Sunday's Super Bowl between the Denver Broncos and Seattle Seahawks.
+-----------------
+Down below, bomb-sniffing dogs will patrol the trains and buses that are expected to take approximately 30,000 of the 80,000-plus spectators to Sunday's [MISC Super Bowl ]  between the [ORG Denver Broncos ]  and [ORG Seattle Seahawks ] .
+: 
+```
+
 
 ### Java COMMAND LINE
 
@@ -119,16 +151,13 @@ A complete example follows.
 
 ```java
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 import java.io.IOException;
-
-import java.util.Properties;
 
 // Filename: App.java
 public class App
@@ -146,12 +175,16 @@ public class App
         TextAnnotationBuilder tab;
         // don't split on hyphens, as NER models are trained this way
         boolean splitOnHyphens = false;
-        tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
+        tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens, false));
 
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
 
         NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-        co.getView(ta);
+        try {
+            co.getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
@@ -240,8 +273,9 @@ Where the parameters are:
     - this file is used for parameter tuning of the training, use the training file if you don't have a development set (use the same file both for training and for development)
 - files-format can be either:
     - -c (for column format) or
-    - -r (for brackets format.
-    - See below for more information on the formats). Both the training and the development files have to be in the same format.
+    - -r (for brackets format)
+    - -json (for JSON-Serialized [TextAnnotation](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/datastructures/textannotation/TextAnnotation.java) format (see [SerializationHelper](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/utilities/SerializationHelper.java) for more details)
+    - See below for more information on the formats. Both the training and the development files have to be in the same format.
 
 Complete, working example. Before running this, open [`config/ner.properties`](config/ner.properties) and change the `pathToModelFile` to
 something else (for example, `ner/mymodels`). This will prevent it from attempting to overwrite the jar.
