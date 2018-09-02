@@ -401,6 +401,64 @@ to specify only non-default configuration options when you instantiate
 one or more classes that use `ResourceManager` and `Configurator`
 to manage configuration options.
 
+A configurator must inherit from `edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator.java`
+and override the `getDefaultConfig()` method. Specify any configuration parameters as public static
+`edu.illinois.cs.cogcomp.core.utilities.configuration.Property` fields in the Configurator subclass you
+create. This specifies configuration parameter keys and default values, and makes the names available
+to clients. 
+
+The `getDefaultConfig()` method should simply populate a `ResourceManager` object with all default values --
+there are convenience methods in `Configurator` to make this easier. 
+
+When implementing your Annotator's simplest constructor, instantiate your configurator subclass and
+call its `getDefaultConfig()` method. Implement a second Constructor that takes a `ResourceManager`
+as its argument, instantiate your configurator, and call its `getConfig(ResourceManager)` method.
+
+Here's the constructor code from ChunkAnnotator:
+```
+    public ChunkerAnnotator(boolean lazilyInitialize) {
+        this(lazilyInitialize, new ChunkerConfigurator().getDefaultConfig());
+    }
+
+    public ChunkerAnnotator(boolean lazilyInitialize, ResourceManager rm) {
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize, new ChunkerConfigurator().getConfig(rm));
+    }
+``` 
+
+This allows you to only specify configuration parameters you wish to modify from their default values, using the keys specified
+in the relevant Configurator's Property fields. You can
+either directly populate a java `Properties` object with these key/value pairs, then instantiate a `ResourceManager` and call
+your Configurator's `getConfig()` method with that; or you can write these non-default values into a text file with each 
+key/value pair on a new line, with the key and value separated by a tab character. 
+
+For the Chunker example, suppose you want to change the model path. In `ChunkerConfigurator` this is specified as:
+```
+    public static final Property MODEL_PATH = new Property("modelPath", MODEL_DIR_PATH.value
+            + MODEL_NAME.value + ".lc");
+```
+
+To directly populate a Properties object:
+```
+    import edu.illinois.cs.cogcomp.core.resources.ResourceManager;
+    import java.util.Properties;
+    import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
+
+    Properties props = new Properties;
+    props.setProperty(ChunkerConfigurator.MODEL_PATH.key, "/some/other/path");
+    ChunkerAnnotator ca = new ChunkerAnnotator(new ResourceManager(props));
+```
+
+To use a text file instead, create a text file (for this example, "config/altChunker.config") with the single line:
+```
+modelPath	/some/other/path
+```
+
+...and use it to instantiate a ResourceManager object:
+
+```
+    ChunkerAnnotator ca = new ChunkerAnnotator(new ResourceManager("config/altChunker.config"));
+```
+
 ### Serialization and Deserialization
 
 To store `TextAnnotation` objects on disk, serialization/deserialization is supported in the following formats:
