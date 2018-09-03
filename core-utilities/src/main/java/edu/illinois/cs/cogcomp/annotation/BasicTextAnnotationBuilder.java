@@ -79,11 +79,12 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
     public static TextAnnotation createTextAnnotationFromTokens(String corpusId, String textId,
             List<String[]> tokenizedSentences) {
         Tokenization tokenization = tokenizeTextSpan(tokenizedSentences);
-        String text = "";
+        StringBuilder text = new StringBuilder();
         for (String[] sentenceTokens : tokenizedSentences)
-            text += StringUtils.join(sentenceTokens, ' ') + System.lineSeparator();
+            text.append(StringUtils.join(sentenceTokens, ' '))
+                    .append(System.lineSeparator());
 
-        return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
+        return new TextAnnotation(corpusId, textId, text.toString(), tokenization.getCharacterOffsets(),
                 tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
     }
 
