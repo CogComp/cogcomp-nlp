@@ -59,11 +59,12 @@ public class SpanLabelView extends View {
     @Override
     public void addConstituent(Constituent constituent) {
 
-        int start = constituent.getStartSpan();
-        int end = constituent.getEndSpan();
-
-        if (!allowOverlappingSpans && this.getConstituentsCoveringSpan(start, end).size() != 0)
-            throw new IllegalArgumentException("Span [" + start + ", " + end + "] already labeled.");
+        if (!allowOverlappingSpans) {
+            int start = constituent.getStartSpan();
+            int end = constituent.getEndSpan();
+            if (this.getConstituentsCoveringSpan(start, end).size() != 0)
+                throw new IllegalArgumentException("Span [" + start + ", " + end + "] already labeled.");
+        }
 
         super.addConstituent(constituent);
 

@@ -1,5 +1,7 @@
-package edu.illinois.cs.cogcomp.annotation;
+package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
@@ -11,8 +13,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Test that addConstituent(Constituent) does not allow overlapping spans
+ */
 public class SpanLabelViewTest {
-    // test that addConstituent(Constituent) does not allow overlapping spans
     SpanLabelView overlappingSpansView;
     SpanLabelView noOverlappingSpansView;
     TextAnnotation ta;
