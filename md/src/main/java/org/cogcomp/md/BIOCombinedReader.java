@@ -172,7 +172,7 @@ public class BIOCombinedReader extends BIOReader {
                 mentionViewName = ViewNames.MENTION_ERE;
             }
             View mentionView = ta.getView(mentionViewName);
-            View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
+            View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f, true);
             String[] token2tags = new String[tokenView.getConstituents().size()];
             for (int i = 0; i < token2tags.length; i++){
                 token2tags[i] = "O";

@@ -180,7 +180,7 @@ public class BIOReader implements Parser {
         for (TextAnnotation ta : taList){
             View tokenView = ta.getView(ViewNames.TOKENS);
             View mentionView = ta.getView(mentionViewName);
-            View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
+            View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f, true);
             String[] token2tags = new String[tokenView.getConstituents().size()];
             for (int i = 0; i < token2tags.length; i++){
                 token2tags[i] = "O";
