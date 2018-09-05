@@ -7,7 +7,13 @@
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.IO.OutFile;
@@ -15,30 +21,11 @@ import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.ParsingProcessingData.PlainTextReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Vector;
 
 public class NETagPlain {
     private static final String NAME = NETagPlain.class.getCanonicalName();
 
-    private static NETaggerLevel1 tagger1 = null;
-    private static NETaggerLevel2 tagger2 = null;
-
     private static Logger logger = LoggerFactory.getLogger(NETagPlain.class);
-
-    /**
-     * assumes ParametersForLbjCode has been initialized
-     */
-    public static void init() {
-        String modelFile = ParametersForLbjCode.currentParameters.pathToModelFile;
-        tagger1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
-        tagger2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
-    }
 
     /**
      * Does this assume that {@link #init()} has been called already?
@@ -47,7 +34,7 @@ public class NETagPlain {
      * @param outputPath
      * @throws Exception
      */
-    public static void tagData(String inputPath, String outputPath) throws Exception {
+    public static void tagData(String inputPath, String outputPath, ParametersForLbjCode params) throws Exception {
         File f = new File(inputPath);
         Vector<String> inFiles = new Vector<>();
         Vector<String> outFiles = new Vector<>();
@@ -65,13 +52,13 @@ public class NETagPlain {
         for (int fileId = 0; fileId < inFiles.size(); fileId++) {
             logger.debug("Tagging file: " + inFiles.elementAt(fileId));
             ArrayList<LinkedVector> sentences =
-                    PlainTextReader.parsePlainTextFile(inFiles.elementAt(fileId));
+                    PlainTextReader.parsePlainTextFile(inFiles.elementAt(fileId), params);
             NERDocument doc = new NERDocument(sentences, "consoleInput");
             Data data = new Data(doc);
-            ExpressiveFeaturesAnnotator.annotate(data);
+            ExpressiveFeaturesAnnotator.annotate(data, params);
             // formerly there was code to load models here. Check that NETagPlain.init() is
             // happening.
-            String tagged = tagData(data, tagger1, tagger2);
+            String tagged = tagData(data, params);
             OutFile out = new OutFile(outFiles.elementAt(fileId));
             out.println(tagged);
             out.close();
@@ -97,63 +84,57 @@ public class NETagPlain {
      *         )
      * @throws Exception
      */
-    public static String tagLine(String line) throws Exception {
+    public static String tagLine(String line, ParametersForLbjCode params) throws Exception {
         logger.debug(NAME + ".tagLine(): tagging input '" + line + "'...");
-        ArrayList<LinkedVector> sentences = PlainTextReader.parseText(line);
+        ArrayList<LinkedVector> sentences = PlainTextReader.parseText(line, params);
 
         // NOTICE: this only checks tagger1 because tagger2 may legally be null.
-        if (tagger1 == null) {
+        if (params.taggerLevel1 == null) {
             logger.error("Tagger1 is null. You may need to call NETagPlain.init() first.");
             return "";
         }
 
-        return tagSentenceVector(sentences, tagger1, tagger2);
+        return tagSentenceVector(sentences, params);
     }
 
-    public static AnnotatedDocument getAnnotatedDocument(String input) throws Exception {
-        ArrayList<LinkedVector> sentences = PlainTextReader.parseText(input);
+    public static AnnotatedDocument getAnnotatedDocument(String input, ParametersForLbjCode params) throws Exception {
+        ArrayList<LinkedVector> sentences = PlainTextReader.parseText(input, params);
         NERDocument doc = new NERDocument(sentences, "consoleInput");
         Data data = new Data(doc);
-        ExpressiveFeaturesAnnotator.annotate(data);
+        ExpressiveFeaturesAnnotator.annotate(data, params);
 
         // NOTICE: this only checks tagger1 because tagger2 may legally be null.
-        if (tagger1 == null) {
+        if (params.taggerLevel1 == null) {
             logger.error("Tagger1 is null. You may need to call NETagPlain.init() first.");
             return null;
         }
 
-        Decoder.annotateDataBIO(data, tagger1, tagger2);
+        Decoder.annotateDataBIO(data, params);
         return new AnnotatedDocument(data);
     }
 
-    public static String tagLine(String line, NETaggerLevel1 tagger1, NETaggerLevel2 tagger2)
+    public static String tagLine(String line, NETaggerLevel1 tagger1, NETaggerLevel2 tagger2, ParametersForLbjCode params)
             throws Exception {
-        ArrayList<LinkedVector> sentences = PlainTextReader.parseText(line);
-        return tagSentenceVector(sentences, tagger1, tagger2);
+        ArrayList<LinkedVector> sentences = PlainTextReader.parseText(line, params);
+        return tagSentenceVector(sentences, params);
     }
 
 
-    public static String tagTextFromFile(String line, NETaggerLevel1 tagger1, NETaggerLevel2 tagger2)
+    public static String tagTextFromFile(String line, ParametersForLbjCode params)
             throws Exception {
-        ArrayList<LinkedVector> sentences = PlainTextReader.parsePlainTextFile(line);
-        return tagSentenceVector(sentences, tagger1, tagger2);
+        ArrayList<LinkedVector> sentences = PlainTextReader.parsePlainTextFile(line, params);
+        return tagSentenceVector(sentences, params);
     }
 
-    public static String tagSentenceVector(ArrayList<LinkedVector> sentences,
-            NETaggerLevel1 tagger1, NETaggerLevel2 tagger2) throws Exception {
+    public static String tagSentenceVector(ArrayList<LinkedVector> sentences, ParametersForLbjCode params) throws Exception {
         NERDocument doc = new NERDocument(sentences, "consoleInput");
         Data data = new Data(doc);
-        return tagData(data, tagger1, tagger2);
+        return tagData(data, params);
     }
 
-    public static String tagData(Data data) throws Exception {
-        return tagData(data, tagger1, tagger2);
-    }
-
-    public static String tagData(Data data, NETaggerLevel1 tagger1, NETaggerLevel2 tagger2)
-            throws Exception {
-        ExpressiveFeaturesAnnotator.annotate(data);
-        Decoder.annotateDataBIO(data, tagger1, tagger2);
+    public static String tagData(Data data, ParametersForLbjCode params) throws Exception {
+        ExpressiveFeaturesAnnotator.annotate(data, params);
+        Decoder.annotateDataBIO(data, params);
 
         StringBuffer res = new StringBuffer();
         for (int docid = 0; docid < data.documents.size(); docid++) {

@@ -10,6 +10,7 @@ package org.cogcomp.re;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
@@ -21,6 +22,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pipeline.common.Stanford331Configurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+//import edu.stanford.nlp.pipeline.CoreNLPProtos.Language;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 import org.cogcomp.Datastore;
@@ -104,6 +106,7 @@ public class ExampleUsage {
         ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
         StanfordDepHandler stanfordDepHandler = new StanfordDepHandler(posAnnotator, parseAnnotator);
         String modelPath = "";
+        FlatGazetteers gazetteers = null;
         try {
             ta.addView(pos_annotator);
             chunker.addView(ta);
@@ -112,7 +115,8 @@ public class ExampleUsage {
             File model = ds.getDirectory("org.cogcomp.re", "SEMEVAL", 1.1, false);
             modelPath = model.getPath();
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            gazetteers = (FlatGazetteers) GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", 
+                true, Language.English);
             WordNetManager.loadConfigAsClasspathResource(true);
             WordNetManager wordnet = WordNetManager.getInstance();
             View annotatedTokenView = new SpanLabelView("RE_ANNOTATED", ta);
@@ -130,7 +134,6 @@ public class ExampleUsage {
         catch (Exception e){
             e.printStackTrace();
         }
-        FlatGazetteers gazetteers = (FlatGazetteers)GazetteersFactory.get();
 
 
         Constituent source = new Constituent("first", "Mention", ta, 0, 1);

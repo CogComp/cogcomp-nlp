@@ -190,74 +190,70 @@ public class NerBenchmark {
                 });
                 for (String confFile : configfiles) {
                     confFile = dir + "/config/" + confFile;
+                    ParametersForLbjCode prms = null;
                     if (!skiptraining) {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
                             System.out.println("\n\n----- Training models for evaluation for "+confFile+" ------");
-                            Parameters.readConfigAndLoadExternalData(confFile, true);
+                            prms = Parameters.readConfigAndLoadExternalData(confFile, true);
                             ResourceManager rm = new ResourceManager(confFile);
-                            ModelLoader.load(rm, rm.getString("modelName"), true);
-                            NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
-                            NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
+                            ModelLoader.load(rm, rm.getString("modelName"), true, prms);
+                            NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) prms.taggerLevel1;
+                            NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) prms.taggerLevel2;
                             SparseAveragedPerceptron sap1 = (SparseAveragedPerceptron)taggerLevel1.getBaseLTU();
-                            sap1.setLearningRate(ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1);
-                            sap1.setThickness(ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
+                            sap1.setLearningRate(prms.learningRatePredictionsLevel1);
+                            sap1.setThickness(prms.thicknessPredictionsLevel1);
                             System.out.println("L1 learning rate = "+sap1.getLearningRate()+", thickness = "+sap1.getPositiveThickness());
-                            if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
+                            if (prms.featuresToUse.containsKey("PredictionsLevel1")) {
                                 SparseAveragedPerceptron sap2 = (SparseAveragedPerceptron)taggerLevel2.getBaseLTU();
-                                sap2.setLearningRate(ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2);
-                                sap2.setThickness(ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
+                                sap2.setLearningRate(prms.learningRatePredictionsLevel2);
+                                sap2.setThickness(prms.thicknessPredictionsLevel2);
                                 System.out.println("L2 learning rate = "+sap2.getLearningRate()+", thickness = "+sap2.getPositiveThickness());
                             }
                             
                             // there is a training directory, with training enabled, so train. We use the same dataset
                             // for both training and evaluating.
-                            LearningCurveMultiDataset.getLearningCurve(iterations, trainDirName, devDirName, incremental);
+                            LearningCurveMultiDataset.getLearningCurve(iterations, trainDirName, devDirName, incremental, prms);
                             System.out.println("\n\n----- Final results for "+confFile+", verbose ------");
                             NETesterMultiDataset.test(testDirName, true,
-                                    ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
-                                    ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                                prms.labelsToIgnoreInEvaluation, prms.labelsToAnonymizeInEvaluation, prms);
                             System.out.println("\n\n----- Final results for "+confFile+", F1 only ------");
                             NETesterMultiDataset.test(testDirName, false,
-                                    ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
-                                    ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                                prms.labelsToIgnoreInEvaluation, prms.labelsToAnonymizeInEvaluation, prms);
                         } else {
                             System.out.println("Training requires a \"train\", \"test\" and \"dev\" subdirectory, "
                                 + "not so within "+dir+", skipping that directory.");
                         }
                     } else if (!release) {
                         System.out.println("\n\n----- Reporting results from existing models for "+confFile+" ------");
-                        Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
+                        prms = Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                         ResourceManager rm = new ResourceManager(confFile);
-                        ModelLoader.load(rm, rm.getString("modelName"), !skiptraining);
+                        ModelLoader.load(rm, rm.getString("modelName"), !skiptraining, prms);
                         System.out.println("Benchmark against configuration : " + confFile);
                         if (reportLabels)
-                            NEDisplayPredictions.test(testDirName, "-c", verbose);
+                            NEDisplayPredictions.test(testDirName, "-c", verbose, prms);
                         else if (reportFeatures)
-                            NETesterMultiDataset.dumpFeaturesLabeledData(testDirName, output);
+                            NETesterMultiDataset.dumpFeaturesLabeledData(testDirName, output, prms);
                         else
                             NETesterMultiDataset.test(testDirName, verbose,
-                                            ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
-                                            ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                                prms.labelsToIgnoreInEvaluation, prms.labelsToAnonymizeInEvaluation, prms);
                     }
 
                     if (release) {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
-                            Parameters.readConfigAndLoadExternalData(confFile, true);
+                            prms = Parameters.readConfigAndLoadExternalData(confFile, true);
                             ResourceManager rm = new ResourceManager(confFile);
-                            ModelLoader.load(rm, rm.getString("modelName"), true);
+                            ModelLoader.load(rm, rm.getString("modelName"), true, prms);
                             System.out.println("\n\n----- Building a final model for "+confFile+" ------");
 
                             // there is a training directory, with training enabled, so train. We use the same dataset
                             // for both training and evaluating.
-                            LearningCurveMultiDataset.buildFinalModel(iterations, trainDirName, testDirName, devDirName, incremental);
+                            LearningCurveMultiDataset.buildFinalModel(iterations, trainDirName, testDirName, devDirName, incremental, prms);
                             System.out.println("\n\n----- Release results for "+confFile+", verbose ------");
                             NETesterMultiDataset.test(devDirName, true,
-                                    ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
-                                    ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                                prms.labelsToIgnoreInEvaluation, prms.labelsToAnonymizeInEvaluation, prms);
                             System.out.println("\n\n----- Release results for "+confFile+", F1 only ------");
                             NETesterMultiDataset.test(devDirName, false,
-                                    ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
-                                    ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                                    prms.labelsToIgnoreInEvaluation, prms.labelsToAnonymizeInEvaluation, prms);
                         } else {
                             System.out.println("Building a final model requires a \"train\", \"test\" and \"dev\" subdirectory, "
                                 + "not so within "+dir+", skipping that directory.");
