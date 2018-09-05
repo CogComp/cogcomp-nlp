@@ -28,9 +28,15 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import net.didion.jwnl.JWNLException;
+
 import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +71,7 @@ public class ExtentTester {
         return train_extent_classifier(train_parser, null);
     }
 
-    public static void testSimpleExtent(){
+    public static void testSimpleExtent() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         int true_labeled = 0;
         int true_predicted = 0;
         int true_correct = 0;
@@ -204,7 +210,7 @@ public class ExtentTester {
         return fullMention;
     }
 
-    public static void testExtentOnGoldHead(){
+    public static void testExtentOnGoldHead() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         int labeled = 0;
         int correct = 0;
         POSAnnotator posAnnotator = null;
@@ -287,7 +293,7 @@ public class ExtentTester {
                 Integer.parseInt(c.getAttribute("EntityHeadEndSpan")));
     }
 
-    public static void testExtentOnPredictedHead(){
+    public static void testExtentOnPredictedHead() throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         WordNetManager wordNet = null;
         Gazetteers gazetteers = null;
         BrownClusters brownClusters = null;
@@ -399,7 +405,7 @@ public class ExtentTester {
         System.out.println("Total extent correct: " + total_mention_extent_correct);
     }
 
-    public static void TrainModel(String corpus){
+    public static void TrainModel(String corpus) throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         if (corpus.equals("ACE")){
             ExtentReader e_train_parser = new ExtentReader("data/all", "ACE");
             train_extent_classifier(e_train_parser, "models/EXTENT_ACE_TYPE");
@@ -410,11 +416,11 @@ public class ExtentTester {
         }
     }
 
-    public static void TrainACEModel(){
+    public static void TrainACEModel() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         TrainModel("ACE");
     }
 
-    public static void TrainEREModel() {
+    public static void TrainEREModel() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException {
         TrainModel("ERE");
     }
 

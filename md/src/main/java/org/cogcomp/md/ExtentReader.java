@@ -21,9 +21,15 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReaderWithTrueCaseFixer;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import net.didion.jwnl.JWNLException;
+
 import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -46,8 +52,13 @@ public class ExtentReader implements Parser
      *
      * @param path The data pth
      * @param corpus The corpus "ACE/ERE"
+     * @throws DatastoreException 
+     * @throws JWNLException 
+     * @throws IOException 
+     * @throws InvalidEndpointException 
+     * @throws InvalidPortException 
      */
-    public ExtentReader(String path, String corpus){
+    public ExtentReader(String path, String corpus) throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         _path = path;
         _corpus = corpus;
         taList = getTextAnnotations();
@@ -57,11 +68,15 @@ public class ExtentReader implements Parser
     /**
      *  When no corpus is selected, it is set to "ACE"
      */
-    public ExtentReader(String path){
+    public ExtentReader(String path) {
         _path = path;
         _corpus = "ACE";
-        taList = getTextAnnotations();
-        pairList = getPairs();
+        try {
+            taList = getTextAnnotations();
+            pairList = getPairs();
+        } catch (Throwable t) {
+            throw new RuntimeException("TextAnnotation generation failed",t);
+        }
     }
 
     /**
@@ -74,7 +89,7 @@ public class ExtentReader implements Parser
         return ret;
     }
 
-    public List<TextAnnotation> getTextAnnotations(){
+    public List<TextAnnotation> getTextAnnotations() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         List<TextAnnotation> ret = new ArrayList<>();
         if (_corpus.equals("ACE")) {
             ACEReaderWithTrueCaseFixer aceReader = null;

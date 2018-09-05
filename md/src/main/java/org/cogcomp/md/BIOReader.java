@@ -22,9 +22,15 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReaderWithTrueCaseFixer;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import net.didion.jwnl.JWNLException;
+
 import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -71,8 +77,13 @@ public class BIOReader implements Parser {
      *             "PRO" -> Only pronouns
      *             "ALL" -> All mentions
      * @param isBIO Indicates if the tagging schema is "BIO" or "BIOLU"
+     * @throws JWNLException 
+     * @throws IOException 
+     * @throws DatastoreException 
+     * @throws InvalidEndpointException 
+     * @throws InvalidPortException 
      */
-    public BIOReader(String path, String mode, String type, Boolean isBIO){
+    public BIOReader(String path, String mode, String type, Boolean isBIO) {
         _path = path;
         _mode = mode.split("-")[0];
         _binary_indicator = mode.split("-")[1];
@@ -83,7 +94,11 @@ public class BIOReader implements Parser {
         id = group + "_" + type;
         taList = getTextAnnotations();
         annotateTas();
-        tokenList = getTokensFromTAs();
+        try {
+            tokenList = getTokensFromTAs();
+        } catch (Throwable t) {
+            throw new RuntimeException("Tokens could not be reproduced form the text annotations.",t);
+        }
     }
 
     public List<TextAnnotation> getTextAnnotations(){
@@ -137,34 +152,29 @@ public class BIOReader implements Parser {
         }
     }
 
-    private List<Constituent> getTokensFromTAs(){
+    private List<Constituent> getTokensFromTAs() throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         List<Constituent> ret = new ArrayList<>();
         WordNetManager wordNet = null;
         Gazetteers gazetteers = null;
         BrownClusters brownClusters = null;
-        try {
-            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
-            Vector<String> bcs = new Vector<>();
-            bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
-            bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
-            bcs.add("brown-clusters" + File.separator + "brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
-            Vector<Integer> bcst = new Vector<>();
-            bcst.add(5);
-            bcst.add(5);
-            bcst.add(5);
-            Vector<Boolean> bcsl = new Vector<>();
-            bcsl.add(false);
-            bcsl.add(false);
-            bcsl.add(false);
-            brownClusters = BrownClusters.get(bcs, bcst, bcsl);
-            WordNetManager.loadConfigAsClasspathResource(true);
-            wordNet = WordNetManager.getInstance();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+        File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
+        gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
+        Vector<String> bcs = new Vector<>();
+        bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+        bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
+        bcs.add("brown-clusters" + File.separator + "brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+        Vector<Integer> bcst = new Vector<>();
+        bcst.add(5);
+        bcst.add(5);
+        bcst.add(5);
+        Vector<Boolean> bcsl = new Vector<>();
+        bcsl.add(false);
+        bcsl.add(false);
+        bcsl.add(false);
+        brownClusters = BrownClusters.get(bcs, bcst, bcsl);
+        WordNetManager.loadConfigAsClasspathResource(true);
+        wordNet = WordNetManager.getInstance();
         
         String mentionViewName = "";
         if (_mode.equals("ACE05")){
