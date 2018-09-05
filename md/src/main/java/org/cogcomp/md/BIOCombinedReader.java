@@ -20,7 +20,12 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import net.didion.jwnl.JWNLException;
+
 import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import java.io.*;
 import java.util.*;
@@ -46,8 +51,13 @@ public class BIOCombinedReader extends BIOReader {
      * @param mode Indicates the corpus and train/eval e.g. "ERE-TRAIN"
      *              mode "ALL-TRAIN/EVAL" indicates hybrid corpus.
      * @param type Indicates the type (NAM/NOM/PRO/ALL) kept
+     * @throws DatastoreException 
+     * @throws JWNLException 
+     * @throws IOException 
+     * @throws InvalidEndpointException 
+     * @throws InvalidPortException 
      */
-    public BIOCombinedReader(int fold, String mode, String type){
+    public BIOCombinedReader(int fold, String mode, String type) throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         _mode = mode;
         _type = type;
         _taOnly = false;
@@ -58,7 +68,7 @@ public class BIOCombinedReader extends BIOReader {
         id = "Hybrid_" + fold;
     }
 
-    public BIOCombinedReader(int fold, String mode, String type, Boolean taOnly){
+    public BIOCombinedReader(int fold, String mode, String type, Boolean taOnly) throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         _mode = mode;
         _type = type;
         _taOnly = taOnly;
@@ -135,34 +145,29 @@ public class BIOCombinedReader extends BIOReader {
         }
         return ret;
     }
-    private List<Constituent> getTokensFromTAs(){
+    private List<Constituent> getTokensFromTAs() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException {
         List<Constituent> ret = new ArrayList<>();
         WordNetManager wordNet = null;
         Gazetteers gazetteers = null;
         BrownClusters brownClusters = null;
-        try {
-            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
-            Vector<String> bcs = new Vector<>();
-            bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
-            bcs.add("brown-clusters/brownBllipClusters");
-            bcs.add("brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
-            Vector<Integer> bcst = new Vector<>();
-            bcst.add(5);
-            bcst.add(5);
-            bcst.add(5);
-            Vector<Boolean> bcsl = new Vector<>();
-            bcsl.add(false);
-            bcsl.add(false);
-            bcsl.add(false);
-            brownClusters = BrownClusters.get(bcs, bcst, bcsl);
-            WordNetManager.loadConfigAsClasspathResource(true);
-            wordNet = WordNetManager.getInstance();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+        File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
+        gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
+        Vector<String> bcs = new Vector<>();
+        bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+        bcs.add("brown-clusters/brownBllipClusters");
+        bcs.add("brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+        Vector<Integer> bcst = new Vector<>();
+        bcst.add(5);
+        bcst.add(5);
+        bcst.add(5);
+        Vector<Boolean> bcsl = new Vector<>();
+        bcsl.add(false);
+        bcsl.add(false);
+        bcsl.add(false);
+        brownClusters = BrownClusters.get(bcs, bcst, bcsl);
+        WordNetManager.loadConfigAsClasspathResource(true);
+        wordNet = WordNetManager.getInstance();
         for (TextAnnotation ta : currentTas){
             View tokenView = ta.getView(ViewNames.TOKENS);
             String mentionViewName = "";
