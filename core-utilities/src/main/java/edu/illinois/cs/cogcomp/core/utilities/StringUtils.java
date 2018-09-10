@@ -52,29 +52,15 @@ public class StringUtils {
     }
 
     public static String join(String separator, Object... objects) {
-        StringBuilder sb = new StringBuilder();
-
-        for (Object o : objects) {
-            sb.append(o.toString()).append(separator);
-        }
-        return sb.toString().trim();
+        return org.apache.commons.lang.StringUtils.join(objects, separator);
     }
 
     public static String join(String separator, List<String> tokens) {
-        if (tokens.size() == 1)
-            return tokens.get(0);
-
-        StringBuilder sb = new StringBuilder();
-
-        for (String token : tokens) {
-            sb.append(token).append(separator);
-        }
-
-        return sb.toString().trim();
+        return org.apache.commons.lang.StringUtils.join(tokens, separator);
     }
 
     public static String join(String separator, String[] tokens) {
-        return join(separator, Arrays.asList(tokens));
+        return org.apache.commons.lang.StringUtils.join(tokens, separator);
     }
 
     public static String generateUniqueString() {
