@@ -52,7 +52,7 @@ public class TestBrownClusterFeatureExtractor {
                     + "prefix-6:011010,prefix-6:011011,prefix-6:011100,prefix-6:011111,prefix-6:100010,prefix-6:100011,"
                     + "prefix-6:100101,prefix-6:100110,prefix-6:100111,prefix-6:101001,prefix-6:101010,prefix-6:101011,"
                     + "prefix-6:101100,prefix-6:101111,prefix-6:110111,prefix-6:111000,prefix-6:111001,prefix-6:111010,"
-                    + "prefix-6:111011,prefix-6:111100,prefix-6:111101,prefix-6:111111,";
+                    + "prefix-6:111011,prefix-6:111100,prefix-6:111101,prefix-6:111111";
 
     @Test
     public final void test() {
