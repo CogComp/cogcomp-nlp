@@ -20,7 +20,7 @@
         <pluginRepository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+            <url>http://macniece.seas.upenn.edu/m2repo/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -164,16 +164,4 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <distributionManagement>
-        <repository>
-            <id>CogcompSoftware</id>
-            <name>CogcompSoftware</name>
-            <url>scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/m2repo</url>
-        </repository>
-        <site>
-            <id>CogcompSoftwareDoc</id>
-            <url>scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/software/doc/${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 </project>
