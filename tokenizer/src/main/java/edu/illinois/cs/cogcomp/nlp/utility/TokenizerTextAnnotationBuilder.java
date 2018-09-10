@@ -138,7 +138,7 @@ public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
         TextAnnotation ta = new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
                 tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
         SpanLabelView view =
-                new SpanLabelView(ViewNames.SENTENCE, NAME, ta, 1.0);
+                new SpanLabelView(ViewNames.SENTENCE, NAME, ta, 1);
 
         int start = 0;
         for (int s : tokenization.getSentenceEndTokenIndexes()) {
