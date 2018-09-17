@@ -292,7 +292,9 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
                     relations.toArray(new String[relations.size()]), scoresDoubleArray);
         }
 
-        ta.addView(ViewNames.SRL_VERB, pav);
+        if(pav.getConstituents().size() > 0) {
+            ta.addView(ViewNames.SRL_VERB, pav);
+        }
     }
 
     private void addNERView(List<String> neLabels, List<Integer> neStart, List<Integer> neEnd,
