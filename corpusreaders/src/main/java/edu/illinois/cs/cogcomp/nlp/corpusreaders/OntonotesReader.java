@@ -58,7 +58,7 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
         this.textAnnotations = new ArrayList<>();
 
         String ontonotesDirectory =
-                this.resourceManager.getString(CorpusReaderConfigurator.CORPUS_DIRECTORY.key);
+                this.resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY.key);
 
         String[] files = new String[0];
         // In case the input argument is a single file
@@ -77,6 +77,7 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
         }
         try {
             for (String file : files) {
+                System.out.println("loading: " + file);
                 // Load all parts of the document (part # = -1)
                 // TODO Add this as a global parameter?
                 textAnnotations.add(loadCoNLLfile(file, -1));
@@ -155,6 +156,9 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
             if (line.contains("#end document"))
                 break;
 
+            if (line.contains("#begin document"))
+                continue;
+
             // Initialize a sentence
             if (sentenceStart) {
                 if (!lines.get(i + 1).contains("#end document")) {
@@ -174,6 +178,7 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
                 sentences.add(sentence.toArray(new String[sentence.size()]));
                 sentenceStart = true;
                 predicateNumOffset += numPredicates;
+                sentence = new ArrayList<>();
                 continue;
             }
 
