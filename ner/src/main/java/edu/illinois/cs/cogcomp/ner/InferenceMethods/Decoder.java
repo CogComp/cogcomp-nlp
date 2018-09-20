@@ -26,50 +26,46 @@ public class Decoder {
     /**
      * If you don't wanna use some of the classifiers - pass null parameters.
      */
-    public static void annotateDataBIO(Data data, NETaggerLevel1 taggerLevel1,
-            NETaggerLevel2 taggerLevel2) throws Exception {
-        Decoder.annotateBIO_AllLevelsWithTaggers(data, taggerLevel1, taggerLevel2);
+    public static void annotateDataBIO(Data data, ParametersForLbjCode params) throws Exception {
+        Decoder.annotateBIO_AllLevelsWithTaggers(data, params);
     }
 
     /**
      * use taggerLevel2=null if you want to use only one level of inference
      */
-    protected static void annotateBIO_AllLevelsWithTaggers(Data data, NETaggerLevel1 taggerLevel1,
-            NETaggerLevel2 taggerLevel2) throws Exception {
+    protected static void annotateBIO_AllLevelsWithTaggers(Data data, ParametersForLbjCode params) throws Exception {
 
         clearPredictions(data);
         NETaggerLevel1.isTraining = false;
         NETaggerLevel2.isTraining = false;
 
 
-        GreedyDecoding.annotateGreedy(data, taggerLevel1, 1);
+        GreedyDecoding.annotateGreedy(data, params.taggerLevel1, 1);
 
         TextChunkRepresentationManager.changeChunkRepresentation(
-                ParametersForLbjCode.currentParameters.taggingEncodingScheme,
+                params.taggingEncodingScheme,
                 TextChunkRepresentationManager.EncodingScheme.BIO, data,
                 NEWord.LabelToLookAt.PredictionLevel1Tagger);
 
 
         PredictionsAndEntitiesConfidenceScores.pruneLowConfidencePredictions(data,
-                ParametersForLbjCode.currentParameters.minConfidencePredictionsLevel1,
+                params.minConfidencePredictionsLevel1,
                 NEWord.LabelToLookAt.PredictionLevel1Tagger);
 
         // this block runs the level2 tagger
         // Previously checked if features included 'PatternFeatures'
-        boolean level2 =
-                ParametersForLbjCode.currentParameters.featuresToUse
-                        .containsKey("PredictionsLevel1");
-        if (taggerLevel2 != null && level2) {
+        boolean level2 = params.featuresToUse.containsKey("PredictionsLevel1");
+        if (params.taggerLevel2 != null && level2) {
             // annotate with patterns
             PredictionsAndEntitiesConfidenceScores.pruneLowConfidencePredictions(data, 0.0,
                     NEWord.LabelToLookAt.PredictionLevel1Tagger);
             TwoLayerPredictionAggregationFeatures.setLevel1AggregationFeatures(data, false);
-            GreedyDecoding.annotateGreedy(data, taggerLevel2, 2);
+            GreedyDecoding.annotateGreedy(data, params.taggerLevel2, 2);
             PredictionsAndEntitiesConfidenceScores.pruneLowConfidencePredictions(data,
-                    ParametersForLbjCode.currentParameters.minConfidencePredictionsLevel2,
+                    params.minConfidencePredictionsLevel2,
                     NEWord.LabelToLookAt.PredictionLevel2Tagger);
             TextChunkRepresentationManager.changeChunkRepresentation(
-                    ParametersForLbjCode.currentParameters.taggingEncodingScheme,
+                    params.taggingEncodingScheme,
                     TextChunkRepresentationManager.EncodingScheme.BIO, data,
                     NEWord.LabelToLookAt.PredictionLevel2Tagger);
         } else {

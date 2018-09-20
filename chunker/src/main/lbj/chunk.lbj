@@ -5,7 +5,6 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
-import edu.illinois.cs.cogcomp.chunker.utils.Constants;
 
 /**
   * Feature generator that senses the chunk tags of the previous two words.
@@ -169,7 +168,6 @@ discrete Chunker(Token word) cachedin word.type <-
 learn ChunkLabel
   using Forms, Capitalization, WordTypeInformation, Affixes, PreviousTags,
         POSWindow, Mixed, POSWindowpp, Formpp, SOPrevious
-  //from new ChildrenFromVectors(new CoNLL2000Parser(Constants.trainingData)) 50 rounds
   with SparseNetworkLearner {
     SparseAveragedPerceptron.Parameters p =
       new SparseAveragedPerceptron.Parameters();
@@ -177,8 +175,6 @@ learn ChunkLabel
     p.thickness = 2;
     baseLTU = new SparseAveragedPerceptron(p);
   }
-
-  testFrom new ChildrenFromVectors(new CoNLL2000Parser(Constants.testData))
 
   progressOutput 300000
 end

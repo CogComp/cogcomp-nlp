@@ -15,14 +15,14 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
  
 discrete% wordType(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordTopicTitleInfo")){
+	if(word.params.featuresToUse.containsKey("WordTopicTitleInfo")){
 		sense "" : WordTopicAndLayoutFeatures.getWordType(word); 
 	}
 }
 
 discrete% GazetteersFeatures(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("GazetteersFeatures"))
+	if(word.params.featuresToUse.containsKey("GazetteersFeatures"))
 	{ 
  		int i=0;
    		NEWord w = word, last = (NEWord)word.next;
@@ -44,7 +44,7 @@ discrete% GazetteersFeatures(NEWord word) <-
 
 real% WordEmbeddingFeatures(NEWord word) <-
 {
-  	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordEmbeddings"))
+  	if(word.params.featuresToUse.containsKey("WordEmbeddings"))
 	{ 
   		int i;
   		NEWord w = word, last = word;
@@ -63,7 +63,7 @@ real% WordEmbeddingFeatures(NEWord word) <-
 
 discrete% WikifierFeatures(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WikifierFeatures")){
+	if(word.params.featuresToUse.containsKey("WikifierFeatures")){
 
         if(word.wikifierFeatures != null){
             for(int i = 0; i < word.wikifierFeatures.length; i++){
@@ -83,7 +83,7 @@ discrete% IsSentenceStart(NEWord word) <-
 
 discrete% Forms(NEWord word) <-
 {
-  	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Forms"))
+  	if(word.params.featuresToUse.containsKey("Forms"))
 	{ 
   		int i;
   		NEWord w = word, last = word;
@@ -105,9 +105,9 @@ discrete% Forms(NEWord word) <-
 // Problem 1
 discrete% BrownClusterPaths(NEWord word) <-
 {
-  	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("BrownClusterPaths"))
+  	if(word.params.featuresToUse.containsKey("BrownClusterPaths"))
 	{ 
-		BrownClusters bc = BrownClusters.get();
+		BrownClusters bc = word.params.brownClusters;
   		int i;
   		NEWord w = word, last = word;
   		for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
@@ -126,8 +126,8 @@ discrete% BrownClusterPaths(NEWord word) <-
 // Problem 1
 discrete% FormParts(NEWord word) <-
 {
-  	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Forms")&&
-  		ParametersForLbjCode.currentParameters.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))
+  	if(word.params.featuresToUse.containsKey("Forms")&&
+  		word.params.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))
 	{ 
 		sense "0" : word.form;
 		int i=-1;
@@ -163,7 +163,7 @@ discrete% FormParts(NEWord word) <-
 // Feature set i
 discrete{false, true}% Capitalization(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Capitalization"))
+	if(word.params.featuresToUse.containsKey("Capitalization"))
 	{ 
 	 	int i;
   		NEWord w = word, last = word;
@@ -177,7 +177,7 @@ discrete{false, true}% Capitalization(NEWord word) <-
 // Feature set ii
 discrete{false, true}% WordTypeInformation(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordTypeInformation"))
+	if(word.params.featuresToUse.containsKey("WordTypeInformation"))
 	{ 
 	  int i;
 	  NEWord w = word, last = word;
@@ -204,7 +204,7 @@ discrete{false, true}% WordTypeInformation(NEWord word) <-
 // Feature set iii
 discrete% Affixes(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Affixes"))
+	if(word.params.featuresToUse.containsKey("Affixes"))
 	{ 
   		int N = word.form.length();
 	  	for (int i = 3; i <= 4; ++i)
@@ -212,7 +212,7 @@ discrete% Affixes(NEWord word) <-
   		for (int i = 1; i <= 4; ++i)
     		if (word.form.length() > i) sense "s|" : word.form.substring(N - i);
 		
-		if(ParametersForLbjCode.currentParameters.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))	
+		if(word.params.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))	
 			for(int i=0;i<word.parts.length;i++)
 				sense "part"+i : word.parts[i];
 
@@ -221,8 +221,8 @@ discrete% Affixes(NEWord word) <-
 
 discrete% AffixesZH(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Affixes")
-	&& ParametersForLbjCode.currentParameters.language.equals("zh"))
+	if(word.params.featuresToUse.containsKey("Affixes")
+	&& word.params.language.equals("zh"))
 	{
   		int N = word.form.length();
 	  	for (int i = 1; i <= 2; ++i)
@@ -248,13 +248,13 @@ real% nonLocalFeatures(NEWord word) <-
 // Feature set iv
 discrete% PreviousTag1Level1(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag1"))
+	if(word.params.featuresToUse.containsKey("PreviousTag1"))
 	{ 
 	  	int i;
 	  	NEWord w = word;
 	  	if(w.previous!=null)
 	  	{
-			if (NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) 
+			if (NETaggerLevel1.isTraining) 
 	    		sense "-1" : ((NEWord)w.previous).neLabel;
 	    	else
 	    		sense "-1" : ((NEWord)w.previous).neTypeLevel1;
@@ -265,7 +265,7 @@ discrete% PreviousTag1Level1(NEWord word) <-
 // Feature set iv
 discrete% PreviousTag2Level1(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag2"))
+	if(word.params.featuresToUse.containsKey("PreviousTag2"))
 	{ 
 	  int i;
 	  NEWord w = word;
@@ -273,7 +273,7 @@ discrete% PreviousTag2Level1(NEWord word) <-
 	  {
 		if(((NEWord)w.previous).previous!=null)
 	  	{
-			if (NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) 
+			if (NETaggerLevel1.isTraining) 
 		   		sense "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
 		   	else
 		    	sense "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
@@ -284,7 +284,7 @@ discrete% PreviousTag2Level1(NEWord word) <-
 
 real% prevTagsForContextLevel1(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PrevTagsForContext"))
+	if(word.params.featuresToUse.containsKey("PrevTagsForContext"))
 	{
 	  	int i,j;
   		NEWord w = word;
@@ -300,9 +300,9 @@ real% prevTagsForContextLevel1(NEWord word) <-
 		for(i=0;i<1000&&w!=null;i++){
 			for(j=0;j<words.length;j++){
 				if(words[j]!=null&&w.form.equals(words[j])){
-						if(NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/){
-							if(ParametersForLbjCode.currentParameters.prevPredictionsLevel1RandomGenerator.useNoise())
-								count[j].addToken(ParametersForLbjCode.currentParameters.prevPredictionsLevel1RandomGenerator.randomLabel());
+						if(NETaggerLevel1.isTraining){
+							if(word.params.prevPredictionsLevel1RandomGenerator.useNoise())
+								count[j].addToken(word.params.prevPredictionsLevel1RandomGenerator.randomLabel());
 							else					 
 								count[j].addToken(w.neLabel);
 						}
@@ -327,7 +327,7 @@ real% prevTagsForContextLevel1(NEWord word) <-
 // See nearly identical PreviousTagPatternLevel2 for comments on this.   
 discrete% PreviousTagPatternLevel1(NEWord word) <-
 {
-    if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTagPatternLevel1")){
+    if(word.params.featuresToUse.containsKey("PreviousTagPatternLevel1")){
         NEWord w = (NEWord)word.previous;
         Vector pattern = new Vector();
         String label ="O";
@@ -380,13 +380,13 @@ end
 // Feature set iv
 discrete% PreviousTag1Level2(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag1"))
+	if(word.params.featuresToUse.containsKey("PreviousTag1"))
 	{ 
 	  	int i;
 	  	NEWord w = word;
 	  	if(w.previous!=null)
 	  	{
-			if (NETaggerLevel2.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) 
+			if (NETaggerLevel2.isTraining) 
 	    		sense "-1" : ((NEWord)w.previous).neLabel;
 	    	else
 	    		sense "-1" : ((NEWord)w.previous).neTypeLevel2;
@@ -397,7 +397,7 @@ discrete% PreviousTag1Level2(NEWord word) <-
 // Feature set iv
 discrete% PreviousTag2Level2(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag2"))
+	if(word.params.featuresToUse.containsKey("PreviousTag2"))
 	{ 
 	  int i;
 	  NEWord w = word;
@@ -405,7 +405,7 @@ discrete% PreviousTag2Level2(NEWord word) <-
 	  {
 		if(((NEWord)w.previous).previous!=null)
 	  	{
-			if (NETaggerLevel2.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) 
+			if (NETaggerLevel2.isTraining) 
 		   		sense "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
 		   	else
 		    	sense "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel2;
@@ -416,7 +416,7 @@ discrete% PreviousTag2Level2(NEWord word) <-
 
 real% prevTagsForContextLevel2(NEWord word) <-
 {
-	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PrevTagsForContext"))
+	if(word.params.featuresToUse.containsKey("PrevTagsForContext"))
 	{
 	  	int i,j;
   		NEWord w = word;
@@ -432,9 +432,9 @@ real% prevTagsForContextLevel2(NEWord word) <-
 		for(i=0;i<1000&&w!=null;i++){
 			for(j=0;j<words.length;j++){
 				if(words[j]!=null&&w.form.equals(words[j])){
-						if(NETaggerLevel2.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) {
-							if(ParametersForLbjCode.currentParameters.prevPredictionsLevel2RandomGenerator.useNoise())
-								count[j].addToken(ParametersForLbjCode.currentParameters.prevPredictionsLevel2RandomGenerator.randomLabel());
+						if(NETaggerLevel2.isTraining) {
+							if(word.params.prevPredictionsLevel2RandomGenerator.useNoise())
+								count[j].addToken(word.params.prevPredictionsLevel2RandomGenerator.randomLabel());
 							else					 
 								count[j].addToken(w.neLabel);
 						}
@@ -459,7 +459,7 @@ real% prevTagsForContextLevel2(NEWord word) <-
 
 real% Level1AggregationFeatures(NEWord word) <-
 {
-        if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")){
+        if(word.params.featuresToUse.containsKey("PredictionsLevel1")){
         	for(int i=0;i<word.getLevel1AggregationFeatures().size();i++){
         		NEWord.RealFeature f=word.getLevel1AggregationFeatures().get(i);
         		sense f.featureGroupName: f.featureValue;
@@ -471,7 +471,7 @@ real% Level1AggregationFeatures(NEWord word) <-
 // If there is a named entity in the window, make feature out of NETag+(w-2)+(w-1)
 discrete% PreviousTagPatternLevel2(NEWord word) <-
 {
-    if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTagPatternLevel2")){
+    if(word.params.featuresToUse.containsKey("PreviousTagPatternLevel2")){
         Vector pattern = new Vector();
         String label ="O";
 

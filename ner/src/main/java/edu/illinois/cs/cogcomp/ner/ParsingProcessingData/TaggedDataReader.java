@@ -26,25 +26,25 @@ public class TaggedDataReader {
     private static Logger logger = LoggerFactory.getLogger(TaggedDataReader.class);
 
     public static NERDocument parseTextAnnotatedWithBrackets(String annotatedText,
-            String documentName) throws Exception {
-        return BracketFileReader.parseTextWithBrackets(annotatedText, documentName);
+            String documentName, ParametersForLbjCode cp) throws Exception {
+        return BracketFileReader.parseTextWithBrackets(annotatedText, documentName, cp);
     }
 
-    public static Vector<NERDocument> readFolder(String path, String format) throws Exception {
+    public static Vector<NERDocument> readFolder(String path, String format, ParametersForLbjCode cp) throws Exception {
         Vector<NERDocument> res = new Vector<>();
         String[] files = (new File(path)).list();
 
         // sort the files so we can get deterministic order.
-        if (ParametersForLbjCode.currentParameters.sortLexicallyFilesInFolders) {
+        if (cp.sortLexicallyFilesInFolders) {
             Arrays.sort(files);
         }
         for (String file1 : files) {
             String file = path + "/" + file1;
             if ((new File(file)).isFile() && (!file1.equals(".DS_Store"))) {
-                res.addElement(readFile(file, format, file1));
+                res.addElement(readFile(file, format, file1, cp));
             }
         }
-        if (ParametersForLbjCode.currentParameters.treatAllFilesInFolderAsOneBigDocument) {
+        if (cp.treatAllFilesInFolderAsOneBigDocument) {
             // connecting sentence boundaries
             for (int i = 0; i < res.size() - 1; i++) {
                 ArrayList<LinkedVector> ss1 = res.elementAt(i).sentences;
@@ -66,13 +66,13 @@ public class TaggedDataReader {
         return res;
     }
 
-    public static NERDocument readFile(String path, String format, String documentName)
+    public static NERDocument readFile(String path, String format, String documentName, ParametersForLbjCode cp)
             throws Exception {
         NERDocument res = null;
         if (format.equals("-c")) {
-            res = (new ColumnFileReader(path)).read(documentName);
+            res = (new ColumnFileReader(path, cp)).read(documentName);
         } else if (format.equals("-r")) {
-            res = BracketFileReader.read(path, documentName);
+            res = BracketFileReader.read(path, documentName, cp);
         }else if (format.equals("-json")) {
             TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile(path, true);
             res = TextAnnotationConverter.getNerDocument(ta);

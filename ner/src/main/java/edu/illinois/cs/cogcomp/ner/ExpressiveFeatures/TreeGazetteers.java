@@ -14,7 +14,6 @@ import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteerTree.StringSplitterInterface;
 import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import io.minio.errors.InvalidEndpointException;
 import io.minio.errors.InvalidPortException;
 import org.slf4j.Logger;
@@ -47,8 +46,8 @@ public class TreeGazetteers implements Gazetteers {
      * @param pathToDictionaries the path to the gazetteers.
      * @throws IOException
      */
-    TreeGazetteers(int phrase_length, String pathToDictionaries) throws IOException {
-        init(phrase_length, pathToDictionaries);
+    TreeGazetteers(int phrase_length, String pathToDictionaries, Language language) throws IOException {
+        init(phrase_length, pathToDictionaries, language);
     }
 
     /**
@@ -58,7 +57,7 @@ public class TreeGazetteers implements Gazetteers {
      * @param phrase_length the max length of the phrases we will consider.
      * @throws IOException
      */
-    private void init(int phrase_length, String pathToDictionaries) throws IOException {
+    private void init(int phrase_length, String pathToDictionaries, final Language language) throws IOException {
         try {
                         
             // check the local file system for it.
@@ -66,11 +65,13 @@ public class TreeGazetteers implements Gazetteers {
             String pathToLists = gazDirectory.getPath() + File.separator + "gazetteers" + File.separator + "gazetteers-list.txt";
             InputStream stream = ResourceUtilities.loadResource(pathToLists);
             if (stream == null) {
-                
+                logger.info("Loading gazetteers from \""+pathToLists+"\" using the Minio cache.");
                 // not in file system or classpath, try Minio.
                 Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
                 gazDirectory = dsNoCredentials.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
                 stream = new FileInputStream(gazDirectory.getPath() + File.separator + "gazetteers" + File.separator + "gazetteers-list.txt");
+            } else {
+                logger.info("Loading gazetteers from \""+pathToLists+"\" from the local file system.");
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(stream));
             String line;
@@ -81,7 +82,25 @@ public class TreeGazetteers implements Gazetteers {
             // init the dictionaries.
             dictionaries = new ArrayList<>(filenames.size());
             dictionariesIgnoreCase = new ArrayList<>(filenames.size());
-            GazetteerTree gaz = new GazetteerTree(phrase_length);
+            GazetteerTree gaz = new GazetteerTree(phrase_length, new StringSplitterInterface() {
+                @Override
+                public String[] split(String line) {
+
+                    // character tokenization for Chinese
+                    if(language == Language.Chinese) {
+                        String[] chars = new String[line.length()];
+                        for(int i = 0; i < line.length(); i++)
+                            chars[i] = String.valueOf(line.charAt(i));
+                        return chars;
+                    } else
+                        return line.split("[\\s]+");
+                }
+
+                @Override
+                final public String normalize(String term) {
+                    return term;
+                }
+            });
             GazetteerTree gazIC = new GazetteerTree(phrase_length, new StringSplitterInterface() {
                 @Override
                 public String[] split(String line) {
@@ -91,7 +110,7 @@ public class TreeGazetteers implements Gazetteers {
                         return new String[0];
                     else {
                         // character tokenization for Chinese
-                        if (ParametersForLbjCode.currentParameters.language == Language.Chinese) {
+                        if (language == Language.Chinese) {
                             String[] chars = new String[line.length()];
                             for (int i = 0; i < line.length(); i++)
                                 chars[i] = String.valueOf(line.charAt(i));
@@ -117,9 +136,7 @@ public class TreeGazetteers implements Gazetteers {
             gazIC.trimToSize();
             dictionaries.add(gaz);
             dictionariesIgnoreCase.add(gazIC);
-            if (ParametersForLbjCode.currentParameters.debug) {
-                logger.info("found " + dictionaries.size() + " gazetteers");
-            }
+            logger.info("Gazetteers from \""+pathToLists+"\" are loaded.");
         } catch (InvalidPortException | InvalidEndpointException e) {
             e.printStackTrace();
         } catch (DatastoreException e) {
