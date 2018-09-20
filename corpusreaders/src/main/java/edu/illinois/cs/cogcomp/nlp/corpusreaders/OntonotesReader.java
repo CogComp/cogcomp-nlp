@@ -154,7 +154,7 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
 
             // end of the document
             if (line.contains("#end document"))
-                break;
+                continue;
 
             if (line.contains("#begin document"))
                 continue;
