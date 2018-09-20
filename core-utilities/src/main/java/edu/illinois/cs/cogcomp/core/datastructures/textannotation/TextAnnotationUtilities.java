@@ -432,24 +432,40 @@ public class TextAnnotationUtilities {
                 newTA.addView(vuName, newVu);
             }
 
-            Map<Constituent, Constituent> consMap = new HashMap<>();
+            List<Pair<Constituent, Constituent>> consMap = new ArrayList<>();
             List<Constituent> constituentsToCopy = vu.getConstituents();
 
             for (Constituent c : constituentsToCopy) {
                 // replacing the constituents with new ones, token ids remain the same (!)
-//                IntPair origCharOffsets = st.getOriginalOffsets(c.getStartCharOffset(), c.getEndCharOffset());
                 Constituent newC = copyConstituentWithNewTokenOffsets(newTA, c, 0);
-                consMap.put(c, newC);
-                newVu.addConstituent(newC);
+                consMap.add(new Pair<>(c, newC));
+                newVu.addConstituent(newC, true);
             }
+
             for (Relation r : vu.getRelations()) {
-                //don't include relations that cross into irrelevant span
-                if (!consMap.containsKey(r.getSource()) || !consMap.containsKey(r.getTarget()))
-                    continue;
-                // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
-                Relation newR = copyRelation(r, consMap);
-                newVu.addRelation(newR);
+
+                // only include relations which have both source and target in the consMap
+                boolean sourcePresent = false;
+                boolean targetPresent = false;
+                for(Pair<Constituent, Constituent> p : consMap){
+                    // the == is very important. We do not want to check attribute, but object equality.
+                    // this is because duplicates are technically allowed.
+                    if(r.getSource() == p.getFirst()){
+                        sourcePresent = true;
+                    }
+                    if(r.getTarget() == p.getFirst()){
+                        targetPresent = true;
+                    }
+                }
+
+                if(sourcePresent && targetPresent) {
+                    // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
+                    Relation newR = copyRelation(r, consMap);
+                    newVu.addRelation(newR);
+                }
             }
+
+
             if (vu instanceof TreeView) {
                 ((TreeView) newVu).makeTrees();
             }
