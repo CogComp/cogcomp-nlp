@@ -258,46 +258,46 @@ public class Constituent implements Serializable, HasAttributes {
      * @return whether the two constituents are the same or not.
      */
     public boolean equalsWithoutAttributeEqualityCheck(Constituent that) {
-        if (this.getIncomingRelations().size() != that.getIncomingRelations().size())
-            return false;
+//        if (this.getIncomingRelations().size() != that.getIncomingRelations().size())
+//            return false;
 
-        for (int relationId = 0; relationId < this.getIncomingRelations().size(); relationId++) {
-            Relation myRelation = this.getIncomingRelations().get(relationId);
-            Relation otherRelation = that.getIncomingRelations().get(relationId);
-
-            int myRelationName = myRelation.relationName;
-
-            int otherRelationName = otherRelation.relationName;
-            if (myRelationName != otherRelationName)
-                return false;
-
-            if (!myRelation.getSource().getSpan().equals(otherRelation.getSource().getSpan()))
-                return false;
-            
-            if (myRelation.getSource().label != otherRelation.getSource().label)
-                return false;
-        }
-
-        if (this.getOutgoingRelations().size() != that.getOutgoingRelations().size())
-            return false;
-
-        for (int relationId = 0; relationId < this.getOutgoingRelations().size(); relationId++) {
-            Relation myRelation = this.getOutgoingRelations().get(relationId);
-            Relation otherRelation = that.getOutgoingRelations().get(relationId);
-
-            int myRelationName = myRelation.relationName;
-
-            int otherRelationName = otherRelation.relationName;
-
-            if (myRelationName != otherRelationName)
-                return false;
-
-            if (!myRelation.getTarget().getSpan().equals(otherRelation.getTarget().getSpan()))
-                return false;
-            
-            if (myRelation.getTarget().label != otherRelation.getTarget().label)
-                return false;
-        }
+//        for (int relationId = 0; relationId < this.getIncomingRelations().size(); relationId++) {
+//            Relation myRelation = this.getIncomingRelations().get(relationId);
+//            Relation otherRelation = that.getIncomingRelations().get(relationId);
+//
+//            int myRelationName = myRelation.relationName;
+//
+//            int otherRelationName = otherRelation.relationName;
+//            if (myRelationName != otherRelationName)
+//                return false;
+//
+//            if (!myRelation.getSource().getSpan().equals(otherRelation.getSource().getSpan()))
+//                return false;
+//
+//            if (myRelation.getSource().label != otherRelation.getSource().label)
+//                return false;
+//        }
+//
+//        if (this.getOutgoingRelations().size() != that.getOutgoingRelations().size())
+//            return false;
+//
+//        for (int relationId = 0; relationId < this.getOutgoingRelations().size(); relationId++) {
+//            Relation myRelation = this.getOutgoingRelations().get(relationId);
+//            Relation otherRelation = that.getOutgoingRelations().get(relationId);
+//
+//            int myRelationName = myRelation.relationName;
+//
+//            int otherRelationName = otherRelation.relationName;
+//
+//            if (myRelationName != otherRelationName)
+//                return false;
+//
+//            if (!myRelation.getTarget().getSpan().equals(otherRelation.getTarget().getSpan()))
+//                return false;
+//
+//            if (myRelation.getTarget().label != otherRelation.getTarget().label)
+//                return false;
+//        }
 
         return this.textAnnotation.getText().equals(that.textAnnotation.getText())
                 && this.getStartSpan() == that.getStartSpan()
@@ -461,20 +461,20 @@ public class Constituent implements Serializable, HasAttributes {
         hashCode += (new Double(this.constituentScore)).hashCode() * 67;
         hashCode += this.getViewName().hashCode();
 
-        for (Relation relation : this.getIncomingRelations()) {
-
-            hashCode += relation.getRelationName().hashCode() * 3;
-            hashCode += relation.getSource().getStartSpan() * 11;
-            hashCode += relation.getSource().getEndSpan() * 17;
-        }
-
-        for (Relation relation : this.getOutgoingRelations()) {
-
-            hashCode += relation.getRelationName().hashCode() * 5;
-            hashCode += relation.getTarget().getStartSpan() * 13;
-            hashCode += relation.getTarget().getEndSpan() * 19;
-
-        }
+//        for (Relation relation : this.getIncomingRelations()) {
+//
+//            hashCode += relation.getRelationName().hashCode() * 3;
+//            hashCode += relation.getSource().getStartSpan() * 11;
+//            hashCode += relation.getSource().getEndSpan() * 17;
+//        }
+//
+//        for (Relation relation : this.getOutgoingRelations()) {
+//
+//            hashCode += relation.getRelationName().hashCode() * 5;
+//            hashCode += relation.getTarget().getStartSpan() * 13;
+//            hashCode += relation.getTarget().getEndSpan() * 19;
+//
+//        }
 
         return hashCode;
 

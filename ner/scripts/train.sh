@@ -5,10 +5,10 @@
 # and the last argument specifies the config file.
 #
 
-if [ "$#" -ne 3 ]; then
-    echo "usage: $0 TRAINING_DATA_DIRECTORY TESTING_DATA_DIRECTORY CONFIGURATION_FILE"
-	exit
-fi
+#if [ "$#" -ne 3 ]; then
+#    echo "usage: $0 TRAINING_DATA_DIRECTORY TESTING_DATA_DIRECTORY CONFIGURATION_FILE"
+#	exit
+#fi
 
 # make sure expected directories are so, and everything required exists.
 if ! [ -e "$1" ] 
@@ -63,7 +63,7 @@ for JAR in `ls $LIB/*jar`; do
     cpath="$cpath:$JAR"
 done
 
-CMD="java -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerTagger -train $train $test $configFile"
+CMD="java -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerTagger -train $train $test -json $configFile"
 
 echo "$0: running command '$CMD'..."
 
