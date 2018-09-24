@@ -39,7 +39,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker-model</artifactId>
-            <version>3.0.77</version>
+            <version>4.0.12</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
