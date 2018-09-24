@@ -9,6 +9,7 @@ package org.cogcomp.md;
 
 import org.cogcomp.md.LbjGen.*;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -27,9 +28,15 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import net.didion.jwnl.JWNLException;
+
 import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +71,7 @@ public class ExtentTester {
         return train_extent_classifier(train_parser, null);
     }
 
-    public static void testSimpleExtent(){
+    public static void testSimpleExtent() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         int true_labeled = 0;
         int true_predicted = 0;
         int true_correct = 0;
@@ -203,18 +210,20 @@ public class ExtentTester {
         return fullMention;
     }
 
-    public static void testExtentOnGoldHead(){
+    public static void testExtentOnGoldHead() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         int labeled = 0;
         int correct = 0;
         POSAnnotator posAnnotator = null;
         WordNetManager wordNet = null;
+        Gazetteers gazetteers = null;
+        BrownClusters brownClusters = null;
         try{
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
             posAnnotator = new POSAnnotator();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
             Vector<String> bcs = new Vector<>();
             bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
             bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
@@ -227,13 +236,11 @@ public class ExtentTester {
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl, false);
+            brownClusters = BrownClusters.get(bcs, bcst, bcsl);
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        Gazetteers gazetteers = GazetteersFactory.get();
-        BrownClusters brownClusters = BrownClusters.get();
         for (int i = 0; i < 1; i++) {
             ExtentReader train_parser = new ExtentReader("data/partition_with_dev/train/"  + i, "COMBINED-ALL-TRAIN-" + i);
             extent_classifier classifier = train_extent_classifier(train_parser);
@@ -286,14 +293,16 @@ public class ExtentTester {
                 Integer.parseInt(c.getAttribute("EntityHeadEndSpan")));
     }
 
-    public static void testExtentOnPredictedHead(){
+    public static void testExtentOnPredictedHead() throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         WordNetManager wordNet = null;
+        Gazetteers gazetteers = null;
+        BrownClusters brownClusters = null;
         try{
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
             Vector<String> bcs = new Vector<>();
             bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
             bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
@@ -306,13 +315,11 @@ public class ExtentTester {
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl, false);
+            brownClusters = BrownClusters.get(bcs, bcst, bcsl);
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        Gazetteers gazetteers = GazetteersFactory.get();
-        BrownClusters brownClusters = BrownClusters.get();
 
         int total_mention_predicted = 0;
         int total_mention_labeled = 0;
@@ -398,7 +405,7 @@ public class ExtentTester {
         System.out.println("Total extent correct: " + total_mention_extent_correct);
     }
 
-    public static void TrainModel(String corpus){
+    public static void TrainModel(String corpus) throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         if (corpus.equals("ACE")){
             ExtentReader e_train_parser = new ExtentReader("data/all", "ACE");
             train_extent_classifier(e_train_parser, "models/EXTENT_ACE_TYPE");
@@ -409,11 +416,11 @@ public class ExtentTester {
         }
     }
 
-    public static void TrainACEModel(){
+    public static void TrainACEModel() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         TrainModel("ACE");
     }
 
-    public static void TrainEREModel() {
+    public static void TrainEREModel() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException {
         TrainModel("ERE");
     }
 

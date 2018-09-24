@@ -7,6 +7,7 @@
  */
 package org.cogcomp.md;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
@@ -20,9 +21,15 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReaderWithTrueCaseFixer;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import net.didion.jwnl.JWNLException;
+
 import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -45,8 +52,13 @@ public class ExtentReader implements Parser
      *
      * @param path The data pth
      * @param corpus The corpus "ACE/ERE"
+     * @throws DatastoreException 
+     * @throws JWNLException 
+     * @throws IOException 
+     * @throws InvalidEndpointException 
+     * @throws InvalidPortException 
      */
-    public ExtentReader(String path, String corpus){
+    public ExtentReader(String path, String corpus) throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         _path = path;
         _corpus = corpus;
         taList = getTextAnnotations();
@@ -56,11 +68,15 @@ public class ExtentReader implements Parser
     /**
      *  When no corpus is selected, it is set to "ACE"
      */
-    public ExtentReader(String path){
+    public ExtentReader(String path) {
         _path = path;
         _corpus = "ACE";
-        taList = getTextAnnotations();
-        pairList = getPairs();
+        try {
+            taList = getTextAnnotations();
+            pairList = getPairs();
+        } catch (Throwable t) {
+            throw new RuntimeException("TextAnnotation generation failed",t);
+        }
     }
 
     /**
@@ -73,7 +89,7 @@ public class ExtentReader implements Parser
         return ret;
     }
 
-    public List<TextAnnotation> getTextAnnotations(){
+    public List<TextAnnotation> getTextAnnotations() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         List<TextAnnotation> ret = new ArrayList<>();
         if (_corpus.equals("ACE")) {
             ACEReaderWithTrueCaseFixer aceReader = null;
@@ -117,12 +133,14 @@ public class ExtentReader implements Parser
     public List<Relation> getPairs(){
         List<Relation> ret = new ArrayList<>();
         WordNetManager wordNet = null;
+        Gazetteers gazetteers = null;
+        BrownClusters brownClusters = null;
         try {
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", true, Language.English);
             Vector<String> bcs = new Vector<>();
             bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
             bcs.add("brown-clusters/brownBllipClusters");
@@ -135,14 +153,11 @@ public class ExtentReader implements Parser
             bcsl.add(false);
             bcsl.add(false);
             bcsl.add(false);
-            BrownClusters.init(bcs, bcst, bcsl, false);
-
+            brownClusters = BrownClusters.get(bcs, bcst, bcsl);
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        Gazetteers gazetteers = GazetteersFactory.get();
-        BrownClusters brownClusters = BrownClusters.get();
         for (TextAnnotation ta : taList){
             String mentionViewName = ViewNames.MENTION_ERE;
             if (ta.getId().startsWith("bn") || ta.getId().startsWith("nw")){

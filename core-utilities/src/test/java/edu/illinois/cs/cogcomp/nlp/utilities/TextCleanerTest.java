@@ -159,12 +159,12 @@ public class TextCleanerTest {
             fail(e.getMessage());
         }
 
-        String badText = "";
+        StringBuilder badText = new StringBuilder();
 
         for (String line : badTextLines)
-            badText += line + "\n";
+            badText.append(line).append("\n");
 
-        String cleanText = TextCleaner.replaceControlSequence(badText);
+        String cleanText = TextCleaner.replaceControlSequence(badText.toString());
 
         boolean isGood = !(cleanText.contains("^@"));
 

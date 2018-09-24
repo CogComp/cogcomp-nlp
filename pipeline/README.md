@@ -39,7 +39,7 @@ of several other components for which it is a dependency.
 6. [Constituency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): 1G, no dependencies.
 6. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies.
 7. Dependency Parser (CogComp): <1G requires Part-of-Speech tagger, Chunker.
-8. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+8. Verb Semantic Role Labeler: ~40G (see [issue656](https://github.com/CogComp/cogcomp-nlp/issues/656)), requires Lemmatizer, Part-of-Speech, Shallow Parsing, Named Entity Recognizer (CoNLL),
    Constituency Parser.
 9. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
@@ -213,64 +213,35 @@ This will include the two views `ViewNames.POS` and `ViewNames.SRL_VERB` in the 
 
 ### Configuration Options
 
-The default configuration options are specified in the class
-`edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator`.
-Each property has a String as a key and a value.  If you want to change specific behaviors,
-such as activating or deactivating specific components, you can write non-default entries
-in a configuration file and use a ResourceManager (see `cogcomp-core-utilities`)
-to instantiate an instance of the pipeline (any entries
-that duplicate default values will have no effect and are not required).
+If you want to change specific behaviors,
+such as activating or deactivating specific components, you need to write a custom config file and use
+it as the example below. 
 
-Code snippet to show how to override default configuration with user-specified properties.
+This mostly happens when you have limited resourcesΩ. For example, SRL and parsers tend to take more time and memory,
+ so you can turn them off if you don't need them.
+
 ```java
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
-ResourceManager userConfig = new ResourceManager("config/pipeline-config.properties");
+// An example of "[PATH_TO_YOUR_CONFIG_FILE]" is "config/pipeline-config.properties"
+ResourceManager userConfig = new ResourceManager("[PATH_TO_YOUR_CONFIG_FILE]");
 AnnotatorService pipeline = PipelineFactory.buildPipeline(userConfig);
 ```
 
-The default keys and values are specified below; comments provide more information where the
-values themselves are not self-explanatory.  Note that the key/value pairs each appear
-on a separate line and are themselves separated by a tab key. If you have limited memory or wish
-to save on processing time, you should set the values for unnecessary annotations to 'false'
--- in particular, SRL components require more time and memory than most other components,
-and the parsers can take a relatively long time on long sentences.
-
-```
-// Used by PipelineFactory. If 'true', instantiates a version of the pipeline --
-//    SentencePipeline -- that where possible, processes text 
-//    sentence-by-sentence to minimize failures at the document level
-isSentenceLevel false
-
-// in milliseconds
-stanfordMaxTimePerSentence  1000
-
-// in tokens
-stanfordParseMaxSentenceLength  60
-
-// directory in which cached annotations will be written.
-simpleCacheDir simple-annotation-cache
-
-// flags indicating which NLP components will be used
-usePos  true
-useLemma    true
-useShallowParse true
-
-// "standard" NER: see http://cogcomp.cs.illinois.edu/page/demo_view/NER
-useNerConll true
-
-// "extended" NER -- see http://cogcomp.cs.illinois.edu/page/demo_view/NERextended
-useNerOntonotes true
-
-useStanfordParse    true
-useStanfordDep  true
-
-// semantic role labelers
-useSrlVerb  true
-useSrlNom   true
-```
+The config file is composed with lines of `[KEY]\t[VAL]` pairs, 
+ where each pair specifies a property name and its value.
+ `[KEY]`s are property names specified in 
+ [PipelineConfigurator](https://github.com/CogComp/cogcomp-nlp/blob/master/pipeline/src/main/java/edu/illinois/cs/cogcomp/pipeline/common/PipelineConfigurator.java).
+The mechanism behind is that the config file will be parsed by our 
+ [ResourceManager](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/src/main/java/edu/illinois/cs/cogcomp/core/utilities/configuration/ResourceManager.java).
+Please see the documentation of
+ [core-utilities](https://github.com/CogComp/cogcomp-nlp/blob/master/core-utilities/README.md)
+ to learn more.
+ 
+You can refer to [the default config file](https://github.com/CogComp/cogcomp-nlp/blob/master/pipeline/config/pipeline-config.properties)
+ if you need an example. Most property names are self-explanatory, please see specific usages if some are not.
 
 Note that individual annotators have their own configuration options -- see the documentation
 for individual components for details.

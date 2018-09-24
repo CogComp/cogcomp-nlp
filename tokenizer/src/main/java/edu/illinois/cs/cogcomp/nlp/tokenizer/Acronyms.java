@@ -60,7 +60,7 @@ public class Acronyms {
             "Nev", "NV", "N.H", "NH", "N.J", "NJ", "N.M", "NM", "N.Y", "NY", "N.C", "NC", "N.D",
             "ND", "MP", "OH", "Okla", "OK", "Ore", "OR", "pub", "PW", "Pa", "PA", "P.R", "PR",
             "R.I", "RI", "S.C", "SC", "S.D", "SD", "Tenn", "TN", "Tex", "TX", "UT", "Vt", "VT",
-            "Va", "VA", "V.I", "VI", "Wash", "WA", "W.Va", "WV", "Wis", "WI", "Wyo", "WY"};
+            "Va", "VA", "V.I", "VI", "Wash", "WA", "W.Va", "WV", "Wis", "WI", "Wyo", "WY", "Fr"};
 
     // init the abbr data structure.
     static {

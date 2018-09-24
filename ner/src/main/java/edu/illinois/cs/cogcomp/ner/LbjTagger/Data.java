@@ -25,7 +25,6 @@ public class Data {
     HashSet<String> labelsToAnonymizeForEvaluation = new HashSet<>();
 
     private Data(Data other) {
-        // no copy!!!
     }
 
 
@@ -42,38 +41,37 @@ public class Data {
 
     public Data(String pathToData, String nickname, String dataFormat,
             Vector<String> labelsToIgnoreForEvaluation,
-            Vector<String> labelsToAnonymizeForEvaluation) throws Exception {
+            Vector<String> labelsToAnonymizeForEvaluation, ParametersForLbjCode params) throws Exception {
         this.datasetPath = pathToData;
         this.nickname = nickname;
         this.pathToData = pathToData;
         if ((new File(pathToData)).isDirectory()) {
-            Vector<NERDocument> docs = TaggedDataReader.readFolder(pathToData, dataFormat);
+            Vector<NERDocument> docs = TaggedDataReader.readFolder(pathToData, dataFormat, params);
             for (int i = 0; i < docs.size(); i++)
                 documents.add(docs.elementAt(i));
         } else {
             int idx =
                     Math.max(Math.max(0, pathToData.lastIndexOf("/")), pathToData.lastIndexOf('\\'));
             String docname = pathToData.substring(idx);
-            documents.add(TaggedDataReader.readFile(pathToData, dataFormat, docname));
+            documents.add(TaggedDataReader.readFile(pathToData, dataFormat, docname, params));
         }
         setLabelsToIgnore(labelsToIgnoreForEvaluation);
         setLabelsToAnonymize(labelsToAnonymizeForEvaluation);
     }
 
-    public Data(String pathToData, String nickname, String dataFormat,
-            String[] labelsToIgnoreForEvaluation, String[] labelsToAnonymizeForEvaluation)
-            throws Exception {
+    public Data(String pathToData, String nickname, String dataFormat, String[] labelsToIgnoreForEvaluation, 
+            String[] labelsToAnonymizeForEvaluation, ParametersForLbjCode params) throws Exception {
         this.datasetPath = pathToData;
         this.nickname = nickname;
         if ((new File(pathToData)).isDirectory()) {
-            Vector<NERDocument> docs = TaggedDataReader.readFolder(pathToData, dataFormat);
+            Vector<NERDocument> docs = TaggedDataReader.readFolder(pathToData, dataFormat, params);
             for (int i = 0; i < docs.size(); i++)
                 documents.add(docs.elementAt(i));
         } else {
             int idx =
                     Math.max(Math.max(0, pathToData.lastIndexOf("/")), pathToData.lastIndexOf('\\'));
             String docname = pathToData.substring(idx);
-            documents.add(TaggedDataReader.readFile(pathToData, dataFormat, docname));
+            documents.add(TaggedDataReader.readFile(pathToData, dataFormat, docname, params));
         }
         setLabelsToIgnore(labelsToIgnoreForEvaluation);
         setLabelsToAnonymize(labelsToAnonymizeForEvaluation);

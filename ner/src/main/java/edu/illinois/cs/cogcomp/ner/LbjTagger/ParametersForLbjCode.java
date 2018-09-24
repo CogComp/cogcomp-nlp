@@ -9,27 +9,33 @@ package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 
 import java.util.HashMap;
 import java.util.Vector;
 
 public class ParametersForLbjCode {
-    // The only static member in the class
-    public static ParametersForLbjCode currentParameters = new ParametersForLbjCode();
 
-    // Enums
-    // TODO: fix or remove DualTokenizationScheme
+    /** Enums
+    TODO: fix or remove DualTokenizationScheme*/
     public enum TokenizationScheme {
         LbjTokenizationScheme, DualTokenizationScheme
     }
 
-    // Optional / predefined features
+    /** this is the gazetteers if we are using them, or null if not. */
+    public Gazetteers gazetteers = null;
+    
+    /** the brown clusters, or null if disabled. */
+    public BrownClusters brownClusters = null;
+    
+    /** Optional / predefined features
     // This is necessary for brackets file reader
-    // will be initialized to something like {"PER","ORG","LOC","MISC"};
+    // will be initialized to something like {"PER","ORG","LOC","MISC"}; */
     public String[] labelTypes = {"PER", "ORG", "LOC", "MISC"};
 
-    // Labels to ignore when evaluating model performance, e.g. "MISC" for the MUC7 dataset.
+    /** Labels to ignore when evaluating model performance, e.g. "MISC" for the MUC7 dataset. */
     public Vector<String> labelsToIgnoreInEvaluation = null;
 
     // Labels to evaluate only for having found an NE regardless of the label found.
