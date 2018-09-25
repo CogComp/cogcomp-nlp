@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 TESTFILE=src/test/resources/testIn.txt
 OUTFILE=src/test/resources/testOut.txt
-REFFILE=src/test/resources/testRefOut.txt
+REFFILE=src/test/resources/testRefOut-demo.txt
 
 mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.ChunkerDemo -Dexec.args="$TESTFILE $OUTFILE"
 
