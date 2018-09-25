@@ -1,10 +1,11 @@
-TESTFILE=test/testIn.txt
-OUTFILE=test/testOut.txt
-REFFILE=test/testRefOut.txt
+#!/usr/bin/env bash
+TESTFILE=src/test/resources/testIn.txt
+OUTFILE=src/test/resources/testOut.txt
+REFFILE=src/test/resources/testRefOut.txt
 
 mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.ChunkerDemo -Dexec.args="$TESTFILE $OUTFILE"
 
-DIFFFILE=test/testDiff.txt
+DIFFFILE=src/test/resources/testDiff.txt
 rm -f ${DIFFFILE}
 diff $REFFILE $OUTFILE > $DIFFFILE
 
