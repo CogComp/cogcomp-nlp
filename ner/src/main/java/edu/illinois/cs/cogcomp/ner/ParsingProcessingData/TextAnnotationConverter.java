@@ -23,11 +23,11 @@ public class TextAnnotationConverter {
      *
      * @param tas list of text annotations
      */
-    public static Data loaddataFromTAs(List<TextAnnotation> tas) throws Exception {
+    public static Data loaddataFromTAs(List<TextAnnotation> tas, ParametersForLbjCode cp) throws Exception {
 
         Data data = new Data();
         for(TextAnnotation ta : tas) {
-            NERDocument doc = getNerDocument(ta);
+            NERDocument doc = getNerDocument(ta, cp);
 
             data.documents.add(doc);
         }
