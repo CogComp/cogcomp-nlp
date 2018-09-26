@@ -75,7 +75,7 @@ public class TaggedDataReader {
             res = BracketFileReader.read(path, documentName, cp);
         }else if (format.equals("-json")) {
             TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile(path, true);
-            res = TextAnnotationConverter.getNerDocument(ta);
+            res = TextAnnotationConverter.getNerDocument(ta, cp);
         } else {
             System.err.println("Fatal error: unrecognized file format: " + format);
             System.exit(0);
