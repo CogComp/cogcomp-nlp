@@ -48,8 +48,10 @@ public class TextAnnotationConverter {
         String[] tokens = ta.getTokens();
 
         View ner;
-        if(ta.hasView(ViewNames.NER_CONLL)){
+        if(ta.hasView(ViewNames.NER_CONLL)) {
             ner = ta.getView(ViewNames.NER_CONLL);
+        }else if(ta.hasView(ViewNames.NER_ONTONOTES)){
+            ner = ta.getView(ViewNames.NER_ONTONOTES);
         }else{
             ner = new View(ViewNames.NER_CONLL, "Ltf2TextAnnotation",ta,1.0);
             ta.addView(ViewNames.NER_CONLL, ner);
