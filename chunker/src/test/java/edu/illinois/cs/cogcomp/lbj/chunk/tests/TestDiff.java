@@ -37,7 +37,7 @@ import static org.junit.Assert.fail;
 public class TestDiff {
     private static final String testFileName = "testIn.txt";
     private static String testFile;
-    private static final String refFileName = "testRefOutput.txt";
+    private static final String refFileName = "testRefOut.txt";
     private static List<String> refSentences;
 
     @Before

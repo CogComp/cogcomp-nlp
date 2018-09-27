@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-TESTFILE=test/testCoNLL.txt
+TESTFILE=src/test/resources/testCoNLL.txt
 
 #	Use the default chunker model
 if [ $# -eq 0 ]; then
