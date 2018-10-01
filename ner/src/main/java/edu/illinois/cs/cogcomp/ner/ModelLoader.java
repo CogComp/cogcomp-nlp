@@ -39,11 +39,11 @@ public class ModelLoader {
      * @param rm the resource manager.
      * @param training if we are training.
      * @param viewName the name of the view identifies the model.
+     * @param cp the parameters for the calling model.
      */
-    static public void load(ResourceManager rm, String viewName, boolean training) {
+    static public void load(ResourceManager rm, String viewName, boolean training, ParametersForLbjCode cp) {
         
         // the loaded built into the model will check the local file system and the jar files in the classpath.
-        ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
         String modelPath = cp.pathToModelFile;
         java.io.File modelFile = new File(modelPath + ".level1");
         NETaggerLevel1 tagger1 = null;
@@ -109,15 +109,15 @@ public class ModelLoader {
                     model = modelDir.getPath() + "/model/OntoNotes.model";
                 }
                 tagger1 = new NETaggerLevel1(model + ".level1", model + ".level1.lex");
-                if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
+                if (cp.featuresToUse.containsKey("PredictionsLevel1")) {
                     tagger2 = new NETaggerLevel2(model + ".level2", model + ".level2.lex");
                 }
             } catch (InvalidPortException | DatastoreException | InvalidEndpointException e) {
                 e.printStackTrace();
             }
         }
-        ParametersForLbjCode.currentParameters.taggerLevel1 = tagger1;
-        ParametersForLbjCode.currentParameters.taggerLevel2 = tagger2;
+        cp.taggerLevel1 = tagger1;
+        cp.taggerLevel2 = tagger2;
     }
     
     /**

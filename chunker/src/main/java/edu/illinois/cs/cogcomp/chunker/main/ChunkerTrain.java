@@ -79,7 +79,7 @@ public class ChunkerTrain {
      */
     public void trainModelsWithParser(Parser parser) {
         Chunker.isTraining = true;
-
+        chunker.forget();
         // Run the learner
         for (int i = 1; i <= iter; i++) {
             LinkedVector ex;
@@ -97,6 +97,7 @@ public class ChunkerTrain {
 
     public void trainModelsWithParser(Parser parser, String modeldir, String modelname, double dev_ratio) {
         Chunker.isTraining = true;
+        chunker.forget();
         double tmpF1 = 0;
         double bestF1 = 0;
         int bestIter = 0;
@@ -107,16 +108,11 @@ public class ChunkerTrain {
         // Get the total number of training set
         int cnt = 0;
         LinkedVector ex;
-        while ((ex = (LinkedVector) parser.next()) != null) {
-            cnt++;
-        }
+        while (parser.next() != null) cnt++;
         parser.reset();
         // Get the boundary between train and dev
+        dev_ratio = Math.min(1,Math.max(dev_ratio,0));
         long idx = Math.round(cnt*(1-dev_ratio));
-        if( idx < 0 )
-            idx = 0;
-        if( idx > cnt )
-            idx = cnt;
 
         // Run the learner and save F1 for each iteration
         for (int i = 1; i <= iter; i++) {
@@ -125,10 +121,8 @@ public class ChunkerTrain {
                 for (int j = 0; j < ex.size(); j++) {
                     chunker.learn(ex.get(j));
                 }
-                if(cnt>=idx)
-                    break;
-                else
-                    cnt++;
+                if(cnt>=idx) break;
+                cnt++;
             }
             chunker.doneWithRound();
             writeModelsToDisk(modeldir,modelname);
@@ -153,6 +147,7 @@ public class ChunkerTrain {
         System.out.println("Best #Iter = "+bestIter+" (F1="+bestF1+")");
         System.out.println("Rerun the learner using best #Iter...");
         // Rerun the learner
+        chunker.forget();
         for (int i = 1; i <= bestIter; i++) {
             while ((ex = (LinkedVector) parser.next()) != null) {
                 for (int j = 0; j < ex.size(); j++) {

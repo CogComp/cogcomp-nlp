@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -33,95 +34,141 @@ import java.util.Vector;
 public class BrownClusters {
     private static Logger logger = LoggerFactory.getLogger(BrownClusters.class);
 
-    /** the sole instance of this class. */
-    private static BrownClusters brownclusters = null;
-
     /** used to synchronize initialization. */
     static private final String INIT_SYNC = "Brown Cluster Initialization Synchronization Token";
-    
-    /**
-     * This method should never be called before init, or the gazetteer will not be initialized.
-     * 
-     * @return the singleton instance of the Gazetteers class.
-     */
-    static public BrownClusters get() {
-        synchronized (INIT_SYNC) {
-            return brownclusters;
-        }
-    }
-
-    static public void set(BrownClusters bc){
-        brownclusters = bc;
-    }
 
     /** ensures singleton-ness. */
     private BrownClusters() {
-
     }
 
     private boolean[] isLowercaseBrownClustersByResource = null;
     private ArrayList<String> resources = null;
     private ArrayList<THashMap<String, String>> wordToPathByResource = null;
-    private final int[] prefixLengths = {4, 6, 10, 20};
+    private final int[] prefixLengths = { 4, 6, 10, 20 };
+
+    /** clusters store, keyed on catenated paths. */
+    static private HashMap<String, BrownClusters> clusters = new HashMap<>();
 
     /**
-     * Initialze the brown cluster data. This is a singleton, so this process is sychronized and
-     * atomic with resprect to the <code>get()</code> method above.
+     * Makes a unique key based on the paths, for storage in a hashmap.
+     * @param pathsToClusterFiles the paths.
+     * @return the key.
+     */
+    private static String getKey(Vector<String> pathsToClusterFiles) {
+        ArrayList<String> paths = new ArrayList<>();
+        for (String path : pathsToClusterFiles) {
+            paths.add(path);
+        }
+        Collections.sort(paths);
+        StringBuffer sb = new StringBuffer();
+        for (String path : paths) {
+            sb.append(path);
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Initialze the brown cluster data. Clusters are stored in a static data structure to avoid reloading the same (read-only)
+     * clusters over and over.
      * @param pathsToClusterFiles the files containing the data.
      * @param thresholds
      * @param isLowercaseBrownClusters
      */
-    public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
-            Vector<Boolean> isLowercaseBrownClusters, boolean useLocalBrownCluster) {
-
-        try {
-        Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
-        File bcDirectory = dsNoCredentials.getDirectory("org.cogcomp.brown-clusters", "brown-clusters", 1.5, false);
-
+    public static BrownClusters get(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds, Vector<Boolean> isLowercaseBrownClusters) {
+        boolean useLocalBrownCluster = true;
+        String key = null;
         synchronized (INIT_SYNC) {
-            brownclusters = new BrownClusters();
-            brownclusters.isLowercaseBrownClustersByResource =
-                    new boolean[isLowercaseBrownClusters.size()];
-            brownclusters.wordToPathByResource = new ArrayList<>();
-            brownclusters.resources = new ArrayList<>();
-            for (int i = 0; i < pathsToClusterFiles.size(); i++) {
-                THashMap<String, String> h = new THashMap<>();
-                // We used to access the files as resources. Now we are accessing them programmatically.
-                // InFile in = new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
-                // Here we check if local resource is specified.
-                String bcFilePath = bcDirectory.getPath() + File.separator + pathsToClusterFiles.elementAt(i);
-                if (useLocalBrownCluster){
-                    bcFilePath = pathsToClusterFiles.elementAt(i);
-                }
-                InputStream is = new FileInputStream(bcFilePath);
-                InFile in = new InFile(is);
-                String line = in.readLine();
-                int wordsAdded = 0;
-                while (line != null) {
-                    StringTokenizer st = new StringTokenizer(line);
-                    String path = st.nextToken();
-                    String word = st.nextToken();
-                    int occ = Integer.parseInt(st.nextToken());
-                    if (occ >= thresholds.elementAt(i)) {
-                        h.put(word, path);
-                        wordsAdded++;
+            // first check for a cluster already loaded for this data.
+            key = getKey(pathsToClusterFiles);
+            if (!clusters.containsKey(key)) {
+
+                // check to see if all the paths exist on the local file system.
+                for (String path : pathsToClusterFiles) {
+                    if (!new File(path).exists()) {
+                        useLocalBrownCluster = false;
+                        break;
                     }
-                    line = in.readLine();
                 }
 
-                if (ParametersForLbjCode.currentParameters.debug) {
-                    logger.info(wordsAdded + " words added");
+                // create the cluster data structure.
+                BrownClusters brownclusters = new BrownClusters();
+                brownclusters.isLowercaseBrownClustersByResource = new boolean[isLowercaseBrownClusters.size()];
+                brownclusters.wordToPathByResource = new ArrayList<>();
+                brownclusters.resources = new ArrayList<>();
+                if (!useLocalBrownCluster) {
+
+                    // load everything from Minio
+                    try {
+                        Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+                        File bcDirectory = dsNoCredentials.getDirectory("org.cogcomp.brown-clusters", "brown-clusters", 1.5, false);
+                        for (int i = 0; i < pathsToClusterFiles.size(); i++) {
+                            THashMap<String, String> h = new THashMap<>();
+
+                            // Here we check if local resource is specified.
+                            String bcFilePath = bcDirectory.getPath() + File.separator + pathsToClusterFiles.elementAt(i);
+                            InputStream is = new FileInputStream(bcFilePath);
+                            InFile in = new InFile(is);
+                            String line = in.readLine();
+                            while (line != null) {
+                                StringTokenizer st = new StringTokenizer(line);
+                                String path = st.nextToken();
+                                String word = st.nextToken();
+                                int occ = Integer.parseInt(st.nextToken());
+                                if (occ >= thresholds.elementAt(i)) {
+                                    h.put(word, path);
+                                }
+                                line = in.readLine();
+                            }
+
+                            brownclusters.wordToPathByResource.add(h);
+                            brownclusters.isLowercaseBrownClustersByResource[i] = isLowercaseBrownClusters.elementAt(i);
+                            brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
+                            in.close();
+                        }
+                        logger.info("Loaded brown cluster from "+key+" from Minio system.");
+                        clusters.put(key, brownclusters);
+                    } catch (InvalidPortException | InvalidEndpointException | DatastoreException
+                                    | FileNotFoundException e) {
+                        throw new RuntimeException("Brown Clusters could not be loaded.", e);
+                    }
+                } else {
+                    
+                    // load the clusters from the local file system.
+                    try {
+                        for (int i = 0; i < pathsToClusterFiles.size(); i++) {
+                            THashMap<String, String> h = new THashMap<>();
+
+                            // Here we check if local resource is specified.
+                            String bcFilePath = pathsToClusterFiles.elementAt(i);
+                            InputStream is;
+                            is = new FileInputStream(bcFilePath);
+                            InFile in = new InFile(is);
+                            String line = in.readLine();
+                            while (line != null) {
+                                StringTokenizer st = new StringTokenizer(line);
+                                String path = st.nextToken();
+                                String word = st.nextToken();
+                                int occ = Integer.parseInt(st.nextToken());
+                                if (occ >= thresholds.elementAt(i)) {
+                                    h.put(word, path);
+                                }
+                                line = in.readLine();
+                            }
+                            brownclusters.wordToPathByResource.add(h);
+                            brownclusters.isLowercaseBrownClustersByResource[i] = isLowercaseBrownClusters.elementAt(i);
+                            brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
+                            in.close();
+                        }
+                        logger.info("Loaded brown cluster from "+key+" from the local file system.");
+                        clusters.put(key, brownclusters);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException("Brown Clusters files existed on local disk, but could not be loaded.", e);
+                    }
                 }
-                brownclusters.wordToPathByResource.add(h);
-                brownclusters.isLowercaseBrownClustersByResource[i] =
-                        isLowercaseBrownClusters.elementAt(i);
-                brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
-                in.close();
             }
         }
-        } catch (InvalidPortException | InvalidEndpointException | DatastoreException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        return clusters.get(key);
     }
 
     /**
@@ -156,10 +203,10 @@ public class BrownClusters {
         return res;
     }
 
-    final public String getPrefixesCombined(String word){
+    final public String getPrefixesCombined(String word) {
         String[] cl = getPrefixes(word);
         String ret = "";
-        for (String s : cl){
+        for (String s : cl) {
             ret += s + ",";
         }
         return ret;
@@ -184,12 +231,6 @@ public class BrownClusters {
                 tokensHash.put(form, true);
                 tokensHashIC.put(form.toLowerCase(), true);
             }
-        /*
-         * System.out.println("Data statistics:");
-         * System.out.println("\t\t- Total tokens with repetitions ="+ totalTokens);
-         * System.out.println("\t\t- Total unique tokens  ="+ tokensHash.size());
-         * System.out.println("\t\t- Total unique tokens ignore case ="+ tokensHashIC.size());
-         */
         for (THashMap<String, String> wordToPath : wordToPathByResource) {
             HashMap<String, Boolean> oovCaseSensitiveHash = new HashMap<>();
             HashMap<String, Boolean> oovAfterLowercasingHash = new HashMap<>();
@@ -199,30 +240,12 @@ public class BrownClusters {
                     if (!wordToPath.containsKey(form)) {
                         oovCaseSensitiveHash.put(form, true);
                     }
-                    if ((!wordToPath.containsKey(form))
-                            && (!wordToPath.containsKey(form.toLowerCase()))) {
+                    if ((!wordToPath.containsKey(form)) && (!wordToPath.containsKey(form.toLowerCase()))) {
                         oovAfterLowercasingHash.put(form.toLowerCase(), true);
                     }
                 }
             }
         }
 
-    }
-
-    public static void main(String[] args) {
-        /*
-         * Vector<String> resources=new Vector<>();
-         * resources.addElement("Data/BrownHierarchicalWordClusters/brownBllipClusters");
-         * Vector<Integer> thres=new Vector<>(); thres.addElement(5); Vector<Boolean> lowercase=new
-         * Vector<>(); lowercase.addElement(false); init(resources,thres,lowercase);
-         * logger.info("finance "); printArr(getPrefixes(new NEWord(new
-         * Word("finance"),null,null))); logger.info("help"); printArr(getPrefixes(new
-         * NEWord(new Word("help"),null,null))); logger.info("resque ");
-         * printArr(getPrefixes(new NEWord(new Word("resque"),null,null)));
-         * logger.info("assist "); printArr(getPrefixes(new NEWord(new
-         * Word("assist"),null,null))); logger.info("assistance "); printArr(getPrefixes(new
-         * NEWord(new Word("assistance"),null,null))); logger.info("guidance ");
-         * printArr(getPrefixes(new NEWord(new Word("guidance"),null,null)));
-         */
     }
 }

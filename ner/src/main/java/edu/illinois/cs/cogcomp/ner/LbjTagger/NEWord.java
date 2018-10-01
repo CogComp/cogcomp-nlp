@@ -28,7 +28,7 @@ public class NEWord extends Word {
     public String neTypeLevel1;
     public String neTypeLevel2;
     public NamedEntity predictedEntity = null;// if non-null it keeps the named entity the tagger
-                                              // annotated this word with
+    public ParametersForLbjCode params = null;
     public CharacteristicWords predictionConfidencesLevel1Classifier = null;
     public CharacteristicWords predictionConfidencesLevel2Classifier = null;
     public NamedEntity goldEntity = null;// if non-null it keeps the named entity the tagger
@@ -89,28 +89,29 @@ public class NEWord extends Word {
      * @param token the individual token.
      * @param tag the tag to annotate the word with.
      */
-    public static void addTokenToSentence(LinkedVector sentence, String token, String tag) {
+    public static void addTokenToSentence(LinkedVector sentence, String token, String tag, ParametersForLbjCode prs) {
         NEWord word = new NEWord(new Word(token), null, tag);
+        word.params = prs;
         addTokenToSentence(sentence, word);
     }
 
     public static void addTokenToSentence(LinkedVector sentence, NEWord word) {
         Vector<NEWord> v = NEWord.splitWord(word);
-        if (ParametersForLbjCode.currentParameters.tokenizationScheme
+        if (word.params.tokenizationScheme
                 .equals(TokenizationScheme.DualTokenizationScheme)) {
             sentence.add(word);
             word.parts = new String[v.size()];
             for (int j = 0; j < v.size(); j++)
                 word.parts[j] = v.elementAt(j).form;
         } else {
-            if (ParametersForLbjCode.currentParameters.tokenizationScheme
+            if (word.params.tokenizationScheme
                     .equals(TokenizationScheme.LbjTokenizationScheme)) {
                 for (int j = 0; j < v.size(); j++)
                     sentence.add(v.elementAt(j));
             } else {
                 System.err
                         .println("Fatal error in BracketFileManager.readAndAnnotate - unrecognized tokenization scheme: "
-                                + ParametersForLbjCode.currentParameters.tokenizationScheme);
+                                + word.params.tokenizationScheme);
                 System.exit(0);
             }
         }
