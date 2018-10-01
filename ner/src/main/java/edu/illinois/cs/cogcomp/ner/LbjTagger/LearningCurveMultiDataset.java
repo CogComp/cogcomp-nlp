@@ -73,7 +73,7 @@ public class LearningCurveMultiDataset {
      */
     public static void getLearningCurve(int fixedNumIterations, String trainDataPath,
                                         String testDataPath, boolean incremental) throws Exception {
-        getLearningCurve(fixedNumIterations, trainDataPath, "-c", testDataPath, incremental);
+        getLearningCurve(fixedNumIterations, "-c", trainDataPath, testDataPath, incremental);
     }
 
     /**
