@@ -30,10 +30,10 @@ public class NETesterMultiDataset {
     /**
      * NB: assuming column format
      */
-    public static void test(String testDatapath, boolean verbose,
-                            Vector<String> labelsToIgnoreInEvaluation, Vector<String> labelsToAnonymizeInEvaluation)
+    public static void test(String testDatapath, boolean verbose,  Vector<String> labelsToIgnoreInEvaluation, 
+        Vector<String> labelsToAnonymizeInEvaluation, ParametersForLbjCode params)
             throws Exception {
-        test(testDatapath,verbose, "-c", labelsToIgnoreInEvaluation, labelsToAnonymizeInEvaluation);
+        test(testDatapath,verbose, "-c", labelsToIgnoreInEvaluation, labelsToAnonymizeInEvaluation, params);
     }
 
     /**
@@ -45,12 +45,12 @@ public class NETesterMultiDataset {
      * @param labelsToAnonymizeInEvaluation
      * @throws Exception
      */
-    public static void test(String testDatapath, boolean verbose, String dataFormat,
-                            Vector<String> labelsToIgnoreInEvaluation, Vector<String> labelsToAnonymizeInEvaluation)
+    public static void test(String testDatapath, boolean verbose, String dataFormat, Vector<String> labelsToIgnoreInEvaluation,
+        Vector<String> labelsToAnonymizeInEvaluation, ParametersForLbjCode params)
             throws Exception {
         Data testData =
-                new Data(testDatapath, testDatapath, dataFormat, new String[] {}, new String[] {});
-        ExpressiveFeaturesAnnotator.annotate(testData);
+                new Data(testDatapath, testDatapath, dataFormat, new String[] {}, new String[] {}, params);
+        ExpressiveFeaturesAnnotator.annotate(testData, params);
         Vector<Data> data = new Vector<>();
         data.addElement(testData);
 
@@ -58,26 +58,26 @@ public class NETesterMultiDataset {
             data.elementAt(0).setLabelsToIgnore(labelsToIgnoreInEvaluation);
         if (labelsToAnonymizeInEvaluation != null)
             data.elementAt(0).setLabelsToAnonymize(labelsToAnonymizeInEvaluation);
-        NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
-        NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
+        NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) params.taggerLevel1;
+        NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) params.taggerLevel2;
         SparseAveragedPerceptron sap1 = (SparseAveragedPerceptron)taggerLevel1.getBaseLTU();
         System.out.println("L1 SparseAveragedPerceptron learning rate = "+sap1.getLearningRate()+", thickness = "+sap1.getPositiveThickness());
-        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
+        if (params.featuresToUse.containsKey("PredictionsLevel1")) {
             SparseAveragedPerceptron sap2 = (SparseAveragedPerceptron)taggerLevel2.getBaseLTU();
             System.out.println("L2 SparseAveragedPerceptron learning rate = "+sap2.getLearningRate()+", thickness = "+sap2.getPositiveThickness());
         }
-        printTestResultsByDataset(data, taggerLevel1, taggerLevel2, verbose);
+        printTestResultsByDataset(data, taggerLevel1, taggerLevel2, verbose, params);
     }
 
     /**
      * NB: assuming column format
      */
-    public static void dumpFeaturesLabeledData(String testDatapath, String outDatapath)
+    public static void dumpFeaturesLabeledData(String testDatapath, String outDatapath, ParametersForLbjCode params)
             throws Exception {
         FeaturesLevel1SharedWithLevel2 features1 = new FeaturesLevel1SharedWithLevel2();
         FeaturesLevel2 features2 = new FeaturesLevel2();
-        NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
-        NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
+        NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) params.taggerLevel1;
+        NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) params.taggerLevel2;
         File f = new File(testDatapath);
         Vector<String> inFiles = new Vector<>();
         Vector<String> outFiles = new Vector<>();
@@ -95,9 +95,9 @@ public class NETesterMultiDataset {
         for (int fileId = 0; fileId < inFiles.size(); fileId++) {
             Data testData =
                     new Data(inFiles.elementAt(fileId), inFiles.elementAt(fileId), "-c",
-                            new String[] {}, new String[] {});
-            ExpressiveFeaturesAnnotator.annotate(testData);
-            Decoder.annotateDataBIO(testData, taggerLevel1, taggerLevel2);
+                            new String[] {}, new String[] {}, params);
+            ExpressiveFeaturesAnnotator.annotate(testData, params);
+            Decoder.annotateDataBIO(testData, params);
             OutFile out = new OutFile(outFiles.elementAt(fileId));
             for (int docid = 0; docid < testData.documents.size(); docid++) {
                 ArrayList<LinkedVector> sentences = testData.documents.get(docid).sentences;
@@ -125,17 +125,17 @@ public class NETesterMultiDataset {
     }
 
     public static Vector<TestDiscrete[]> printTestResultsByDataset(Vector<Data> dataCollection,
-            NETaggerLevel1 tagger1, NETaggerLevel2 tagger2, boolean verbose) throws Exception {
+            NETaggerLevel1 tagger1, NETaggerLevel2 tagger2, boolean verbose, ParametersForLbjCode params) throws Exception {
         for (int i = 0; i < dataCollection.size(); i++)
-            Decoder.annotateDataBIO(dataCollection.elementAt(i), tagger1, tagger2);
-        return printTestResultsByDataset(dataCollection, verbose);
+            Decoder.annotateDataBIO(dataCollection.elementAt(i), params);
+        return printTestResultsByDataset(dataCollection, verbose, params);
     }
 
     public static TestDiscrete[] printAllTestResultsAsOneDataset(Vector<Data> dataCollection,
-            NETaggerLevel1 tagger1, NETaggerLevel2 tagger2, boolean verbose) throws Exception {
+            NETaggerLevel1 tagger1, NETaggerLevel2 tagger2, boolean verbose, ParametersForLbjCode params) throws Exception {
         for (int i = 0; i < dataCollection.size(); i++)
-            Decoder.annotateDataBIO(dataCollection.elementAt(i), tagger1, tagger2);
-        return printAllTestResultsAsOneDataset(dataCollection, verbose);
+            Decoder.annotateDataBIO(dataCollection.elementAt(i), params);
+        return printAllTestResultsAsOneDataset(dataCollection, verbose, params);
     }
 
 
@@ -143,7 +143,7 @@ public class NETesterMultiDataset {
      * assumes that the data has been annotated by both levels of taggers
      */
     public static Vector<TestDiscrete[]> printTestResultsByDataset(Vector<Data> dataCollection,
-            boolean verbose) {
+            boolean verbose, ParametersForLbjCode params) {
         Vector<TestDiscrete[]> res = new Vector<>();
         for (int dataSetId = 0; dataSetId < dataCollection.size(); dataSetId++) {
             TestDiscrete resultsPhraseLevel1 = new TestDiscrete();
@@ -171,7 +171,7 @@ public class NETesterMultiDataset {
                 System.out.println("******	Performance on dataset "
                         + dataCollection.elementAt(dataSetId).datasetPath + "  **********");
                 System.out.println("------------------------------------------------------------");
-                if (ParametersForLbjCode.currentParameters.featuresToUse
+                if (params.featuresToUse
                         .containsKey("PredictionsLevel1")) {
                     System.out.println("Phrase-level Acc Level2:");
                     resultsPhraseLevel2.printPerformance(System.out);
@@ -194,7 +194,7 @@ public class NETesterMultiDataset {
                 System.out.println(">>>>>>>>>	Phrase-level F1 on the dataset: "
                         + dataCollection.elementAt(dataSetId).datasetPath);
                 System.out.println("\t Level 1: " + resultsPhraseLevel1.getOverallStats()[2]);
-                if (ParametersForLbjCode.currentParameters.featuresToUse
+                if (params.featuresToUse
                         .containsKey("PredictionsLevel1"))
                     System.out.println("\t Level 2: " + resultsPhraseLevel2.getOverallStats()[2]);
             }
@@ -206,7 +206,7 @@ public class NETesterMultiDataset {
      * assumes that the data has been annotated by both levels of taggers
      */
     public static TestDiscrete[] printAllTestResultsAsOneDataset(Vector<Data> dataCollection,
-            boolean verbose) {
+            boolean verbose, ParametersForLbjCode params) {
         TestDiscrete resultsPhraseLevel1 = new TestDiscrete();
         resultsPhraseLevel1.addNull("O");
         TestDiscrete resultsTokenLevel1 = new TestDiscrete();
@@ -233,7 +233,7 @@ public class NETesterMultiDataset {
             System.out.println("\t>>> Dataset path : \t" + dataCollection.elementAt(i).datasetPath);
         System.out.println("------------------------------------------------------------");
         if (verbose) {
-            if (ParametersForLbjCode.currentParameters.featuresToUse
+            if (params.featuresToUse
                     .containsKey("PredictionsLevel1")) {
                 System.out.println("Phrase-level Acc Level2:");
                 resultsPhraseLevel2.printPerformance(System.out);
@@ -250,7 +250,7 @@ public class NETesterMultiDataset {
             resultsTokenLevel1.printPerformance(System.out);
         } else {
             System.out.println("\t Level 1: " + resultsPhraseLevel1.getOverallStats()[2]);
-            if (ParametersForLbjCode.currentParameters.featuresToUse
+            if (params.featuresToUse
                     .containsKey("PredictionsLevel1"))
                 System.out.println("\t Level 2: " + resultsPhraseLevel2.getOverallStats()[2]);
         }

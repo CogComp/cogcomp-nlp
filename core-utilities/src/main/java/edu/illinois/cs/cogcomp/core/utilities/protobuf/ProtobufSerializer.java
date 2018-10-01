@@ -168,7 +168,11 @@ public class ProtobufSerializer extends AbstractSerializer {
         for (ConstituentProto consProto : viewData.getConstituentsList()) {
             Constituent cons = readConstituent(consProto, ta, viewName);
             constituents.add(cons);
-            view.addConstituent(cons);
+
+            if(viewName.contains("PARSE"))
+                view.addConstituent(cons, true);
+            else
+                view.addConstituent(cons);
         }
 
         for (RelationProto relationProto : viewData.getRelationsList()) {

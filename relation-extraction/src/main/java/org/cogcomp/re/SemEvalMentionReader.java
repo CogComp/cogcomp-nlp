@@ -10,6 +10,7 @@ package org.cogcomp.re;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -50,11 +51,10 @@ public class SemEvalMentionReader implements Parser {
             _posAnnotator = new POSAnnotator();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            _gazetteers = (FlatGazetteers)GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + 
+                "gazetteers", true, Language.English);
             WordNetManager.loadConfigAsClasspathResource(true);
             _wordnet = WordNetManager.getInstance();
-            _gazetteers = (FlatGazetteers)GazetteersFactory.get();
-
             __chunker  = new ChunkerAnnotator(true);
             __chunker.initialize(new ChunkerConfigurator().getDefaultConfig());
 

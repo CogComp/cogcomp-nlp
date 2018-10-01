@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.ner.ParsingProcessingData;
 
 import edu.illinois.cs.cogcomp.ner.IO.OutFile;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.OccurrenceCounter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +42,10 @@ public class BuildEvaluationFiles {
 
     public static void appendToEvaluationFile(String goldFile, String taggedFile,
             OutFile outPhrase, OutFile outToken) {
+        ParametersForLbjCode cp = new ParametersForLbjCode();
         Vector<String> goldTags = new Vector<>();
         Vector<String> goldWords = new Vector<>();
-        BracketFileReader.parseBracketsAnnotatedText(goldFile, goldTags, goldWords);
+        BracketFileReader.parseBracketsAnnotatedText(goldFile, goldTags, goldWords, cp);
         Vector<String> tempgoldTags = new Vector<>();
         Vector<String> tempgoldWords = new Vector<>();
         Hashtable<Integer, Boolean> newlines = new Hashtable<>();
@@ -62,7 +64,7 @@ public class BuildEvaluationFiles {
 
         Vector<String> resTags = new Vector<>();
         Vector<String> resWords = new Vector<>();
-        BracketFileReader.parseBracketsAnnotatedText(taggedFile, resTags, resWords);
+        BracketFileReader.parseBracketsAnnotatedText(taggedFile, resTags, resWords, cp);
         Vector<String> tempresTags = new Vector<>();
         Vector<String> tempresWords = new Vector<>();
         for (int i = 0; i < resWords.size(); i++) {

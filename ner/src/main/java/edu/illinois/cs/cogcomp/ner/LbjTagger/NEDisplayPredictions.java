@@ -30,17 +30,15 @@ public class NEDisplayPredictions {
      * @param verbose report more.
      * @throws Exception
      */
-    public static void test(String testDatapath, String dataFormat, boolean verbose)
+    public static void test(String testDatapath, String dataFormat, boolean verbose, ParametersForLbjCode params)
             throws Exception {
         Data testData =
-                new Data(testDatapath, testDatapath, dataFormat, new String[] {}, new String[] {});
-        ExpressiveFeaturesAnnotator.annotate(testData);
+                new Data(testDatapath, testDatapath, dataFormat, new String[] {}, new String[] {}, params);
+        ExpressiveFeaturesAnnotator.annotate(testData, params);
         Vector<Data> data = new Vector<>();
         data.addElement(testData);
-        NETaggerLevel1 t1 = (NETaggerLevel1) ParametersForLbjCode.currentParameters.taggerLevel1;
-        NETaggerLevel2 t2 = (NETaggerLevel2) ParametersForLbjCode.currentParameters.taggerLevel2;
         for (int i = 0; i < data.size(); i++)
-            Decoder.annotateDataBIO(data.elementAt(i), t1, t2);
+            Decoder.annotateDataBIO(data.elementAt(i), params);
         reportPredictions(data.get(0));
     }
 

@@ -9,6 +9,7 @@ package org.cogcomp.re;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
@@ -58,10 +59,10 @@ public class RelationAnnotator extends Annotator {
             relationClassifier.readLexicon(lexFile);
             constrainedClassifier = new ACERelationConstrainedClassifier(relationClassifier);
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.6, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            gazetteers = GazetteersFactory.get(5, gazetteersResource.getPath() + File.separator + "gazetteers", 
+                true, Language.English);
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
-            gazetteers = GazetteersFactory.get();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -112,7 +112,7 @@ of annotations over some text.
     are white-space tokenized.
     
     ```java 
-    String corpus = "2001_ODYSSEY"
+    String corpus = "2001_ODYSSEY";
     String textId2 = "002";
     
 	String[] sentence1 = {"Good",  "afternoon", ",", "gentlemen", "."};

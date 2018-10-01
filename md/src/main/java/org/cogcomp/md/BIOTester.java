@@ -24,11 +24,17 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReaderWithTrueCaseFixer;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import net.didion.jwnl.JWNLException;
+
+import org.cogcomp.DatastoreException;
 import org.cogcomp.md.LbjGen.bio_classifier_nam;
 import org.cogcomp.md.LbjGen.bio_classifier_nom;
 import org.cogcomp.md.LbjGen.bio_classifier_pro;
 import org.cogcomp.md.LbjGen.bio_label;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -364,8 +370,13 @@ public class BIOTester {
 
     /**
      * Cross Validation tester
+     * @throws DatastoreException 
+     * @throws JWNLException 
+     * @throws IOException 
+     * @throws InvalidEndpointException 
+     * @throws InvalidPortException 
      */
-    public static void test_cv(){
+    public static void test_cv() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         boolean isBIO = false;
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
@@ -468,8 +479,13 @@ public class BIOTester {
 
     /**
      * Test set tester
+     * @throws JWNLException 
+     * @throws IOException 
+     * @throws DatastoreException 
+     * @throws InvalidEndpointException 
+     * @throws InvalidPortException 
      */
-    public static void test_ts(){
+    public static void test_ts() throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         boolean isBIO = false;
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
@@ -582,8 +598,13 @@ public class BIOTester {
 
     /**
      * ERE corpus tester
+     * @throws JWNLException 
+     * @throws IOException 
+     * @throws DatastoreException 
+     * @throws InvalidEndpointException 
+     * @throws InvalidPortException 
      */
-    public static void test_ere(){
+    public static void test_ere() throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
@@ -655,7 +676,7 @@ public class BIOTester {
         System.out.println("F1: " + f);
     }
 
-    public static void test_tac(){
+    public static void test_tac() throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
@@ -744,8 +765,13 @@ public class BIOTester {
     /**
      * Test the model trained on hybrid ACE/ERE and evaluated on hybrid ACE/ERE
      * Produce results on separate types
+     * @throws DatastoreException 
+     * @throws JWNLException 
+     * @throws IOException 
+     * @throws InvalidEndpointException 
+     * @throws InvalidPortException 
      */
-    public static void test_hybrid(){
+    public static void test_hybrid() throws InvalidPortException, InvalidEndpointException, IOException, JWNLException, DatastoreException{
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
@@ -951,7 +977,7 @@ public class BIOTester {
         System.out.println("TAC_NOM: " + tac_nom);
     }
 
-    public static void TrainModel(String corpus){
+    public static void TrainModel(String corpus) throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         if (corpus.equals("ACE")) {
             Parser train_parser_nam = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "NAM", false);
             Parser train_parser_nom = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "NOM", false);
@@ -970,11 +996,11 @@ public class BIOTester {
         }
     }
 
-    public static void TrainACEModel(){
+    public static void TrainACEModel() throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         TrainModel("ACE");
     }
 
-    public static void TrainEREModel(){
+    public static void TrainEREModel() throws InvalidPortException, InvalidEndpointException, DatastoreException, IOException, JWNLException{
         TrainModel("ERE");
     }
 
