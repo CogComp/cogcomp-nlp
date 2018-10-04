@@ -102,7 +102,7 @@ The system implemented here is based of the following paper:
     year = {2001},
     publisher = {MIT Press},
     acceptance = {25/514 (4.8\%) Oral Presentations; 152/514 (29%) overall},
-    url = " http://cogcomp.cs.illinois.edu/papers/nips01.pdf",
+    url = " http://cogcomp.org/papers/nips01.pdf",
     funding = {NSF98 CAREER},
     projects = {LnI,SI,IE,NE,NLP,CCM},
     comment = {Structured, sequential output; Sequence Prediction: HMM with classifiers, Conditional Models, Constraint Satisfaction},

@@ -59,7 +59,7 @@ for (int i = 0; i < ta.size(); i++) {
 
 J. Clarke and V. Srikumar and M. Sammons and D. Roth, An NLP Curator (or: How I Learned to Stop Worrying and Love NLP Pipelines). LREC (2012) pp.
 
-Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/Curator
+Thank you for citing us if you use us in your work! http://cogcomp.org/page/software_view/Curator
 
 ```
 @inproceedings{ClarkeSrSaRo2012,
@@ -68,6 +68,6 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     booktitle = {LREC},
     month = {5},
     year = {2012},
-    url = "http://cogcomp.cs.illinois.edu/papers/ClarkeSrSaRo2012.pdf",
+    url = "http://cogcomp.org/papers/ClarkeSrSaRo2012.pdf",
 }
 ```

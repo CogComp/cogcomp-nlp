@@ -25,7 +25,7 @@ own NerOntonotesConfigurator class).
 
 ## Quickstart
 
-This assumes you have downloaded the package from the [CogComp download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
+This assumes you have downloaded the package from the [CogComp download page](http://cogcomp.org/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
 
 ### Using the Menu Driven Command Line Application
 
@@ -327,14 +327,14 @@ marked with an empty line, which is not the case for "brackets format".
 See the files in [test/Test/](test/Test/) for sample column format.
 
 ## Licensing
-To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
+To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.org/page/software_view/NETagger) for this software
 and press 'Download'. The next screen displays the license. 
 
 ## Citation
 
 L. Ratinov and D. Roth, Design Challenges and Misconceptions in Named Entity Recognition. CoNLL (2009) pp.
 
-Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/NETagger
+Thank you for citing us if you use us in your work! http://cogcomp.org/page/software_view/NETagger
 
 ```
 @inproceedings{RatinovRo09,
@@ -343,7 +343,7 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     booktitle = {CoNLL},
     month = {6},
     year = {2009},
-    url = " http://cogcomp.cs.illinois.edu/papers/RatinovRo09.pdf",
+    url = " http://cogcomp.org/papers/RatinovRo09.pdf",
     funding = {MIAS, SoD, Library},
     projects = {IE},
     comment = {Named entity recognition; information extraction; knowledge resources; word class models; gazetteers; non-local features; global features; inference methods; BIO vs. BIOLU; text chunk representation},

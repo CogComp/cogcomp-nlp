@@ -37,7 +37,7 @@ To use Edison as a Maven dependency please add the following lines to your `pom.
 
 or if you are using SBT:
 ```
-resolvers += "CogcompSoftware" at "http://cogcomp.cs.illinois.edu/m2repo/"
+resolvers += "CogcompSoftware" at "http://cogcomp.org/m2repo/"
 
 libraryDependencies += "edu.illinois.cs.cogcomp" % "illinois-edison" % "#VERSION"
 ```
@@ -99,7 +99,7 @@ leaf := must be in KnownFexes.fexes
 
 Mark Sammons, Christos Christodoulopoulos, Parisa Kordjamshidi, Daniel Khashabi, Vivek Srikumar, Paul Vijayakumar, Mazin Bokhari, Xinbo Wu, Dan Roth, EDISON: Feature Extraction for NLP, Simplified. Proceedings of the Tenth International Conference on Language Resources and Evaluation (LREC 2016) (2016) pp.
 
-Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/Edison
+Thank you for citing us if you use us in your work! http://cogcomp.org/page/software_view/Edison
 
 ```
 @inproceedings{SCKKSVBWR16,
@@ -109,6 +109,6 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     year = {2016},
     publisher = {European Language Resources Association (ELRA)},
     editor = {Nicoletta Calzolari (Conference Chair) and Khalid Choukri and Thierry Declerck and Marko Grobelnik and Bente Maegaard and Joseph Mariani and Asuncion Moreno and Jan Odijk and Stelios Piperidis},
-    url = "http://cogcomp.cs.illinois.edu/papers/SCKKSVBWR16.pdf",
+    url = "http://cogcomp.org/papers/SCKKSVBWR16.pdf",
 }
 ```

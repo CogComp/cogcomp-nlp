@@ -9,7 +9,7 @@
 
     <artifactId>LBJava-NLP-tools</artifactId>
     <packaging>jar</packaging>
-    <url>http://cogcomp.cs.illinois.edu</url>
+    <url>http://cogcomp.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
