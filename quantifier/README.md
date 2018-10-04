@@ -15,7 +15,7 @@ training data.
 Compiling the CogComp Quantifier *requires* Java 1.6 or higher. If you use it a maven (sbt, etc) dependency, you need Java 1.8. 
 
 ## Installation
-CogComp Quantifier can be downloaded from http://cogcomp.cs.illinois.edu/page/software_view/Quantifier.
+CogComp Quantifier can be downloaded from http://cogcomp.org/page/software_view/Quantifier.
 
 
 ## Running the CogComp Quantifier
@@ -138,4 +138,4 @@ Simply open an issue in this repository.
 Copyright (C) 2012, Subhro Roy and Dan Roth
 Cognitive Computation Group
 Department of Computer Science, University of Illinois at Urbana-Champaign
-http://cogcomp.cs.illinois.edu/page/software_view/Chunker
+http://cogcomp.org/page/software_view/Chunker

@@ -65,7 +65,7 @@ To use this metric properly, you need to specify some configurations in the Conf
 
 `usePhraseSim` option will automatically split the sentence into phrase-based units when comparing sentences. To use this option, set it as true and use `phrase2vec` as `wordMetric`. The system splits the text into phrases, then matches those phrases using a phrase similarity metric that can match different formulations of many phrases, E.g. "please turn the light on" => "please turn-on the light". Notice: When we split sentences into phrases, this phrases identification process depends on the generalized phrases dictionary we extracted from Wordnet (see `src/main/resources/phrases.txt`).
 
-`useNER` option will run NER on sentence and compare name-entity using NE comparison metrics in LLM. To use this option, set it as true. The system will run NER on the sentences first and comparing name entity and words separately. Notice: the NER initialization takes a lot of memory. See [NER detail here](http://cogcomp.cs.illinois.edu/page/software_view/NETagger).
+`useNER` option will run NER on sentence and compare name-entity using NE comparison metrics in LLM. To use this option, set it as true. The system will run NER on the sentences first and comparing name entity and words separately. Notice: the NER initialization takes a lot of memory. See [NER detail here](http://cogcomp.org/page/software_view/NETagger).
 
 To get the basic LLM similarity score, just set `usePhraseSim` and `useNER` as false in config file (which is also the default setting).
 

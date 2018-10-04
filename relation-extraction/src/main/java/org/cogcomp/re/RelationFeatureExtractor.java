@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package org.cogcomp.re;
 
@@ -502,7 +502,7 @@ public class RelationFeatureExtractor {
 
     /**
      * @Extract Collocations features in
-     *          http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+     *          http://cogcomp.org/papers/ChanRo10.pdf Table 1
      * @return A list of String features
      */
     public List<String> getCollocationsFeature(Relation r){
@@ -595,7 +595,7 @@ public class RelationFeatureExtractor {
 
     /**
      * @Extract Structural features in
-     *          http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+     *          http://cogcomp.org/papers/ChanRo10.pdf Table 1
      * @return A list of String features
      */
     public List<String> getStructualFeature(Relation r){
@@ -641,7 +641,7 @@ public class RelationFeatureExtractor {
 
     /**
      * @Extract Mention features in
-     *          http://cogcomp.cs.illinois.edu/papers/ChanRo10.pdf Table 1
+     *          http://cogcomp.org/papers/ChanRo10.pdf Table 1
      * @return A list of String features
      */
     public List<String> getMentionFeature(Relation r){

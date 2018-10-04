@@ -5,8 +5,8 @@
 Dataset Annotation Guidelines [link] (https://www.ldc.upenn.edu/collaborations/past-projects/ace/annotation-tasks-and-specifications)
 
 Dataset Download links:
-[ACE-2004](http://cogcomp.cs.illinois.edu/page/resource_view/60)
-[ACE-2005](http://cogcomp.cs.illinois.edu/page/resource_view/59)
+[ACE-2004](http://cogcomp.org/page/resource_view/60)
+[ACE-2005](http://cogcomp.org/page/resource_view/59)
 
 ## Implementation details
 

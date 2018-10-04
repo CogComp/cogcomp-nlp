@@ -15,7 +15,7 @@ Thank you for citing us if you use us in your work!
     month = {5},
     year = {2010},
     address = {Valletta, Malta},
-    url = " http://cogcomp.cs.illinois.edu/papers/RizzoloRo10.pdf",
+    url = " http://cogcomp.org/papers/RizzoloRo10.pdf",
     funding = {NSF-SoD},
     projects = {LBP, CCM},
     comment = {Learning Based Java: a Modeling language that facilitates development of systems with learning and inference components.},
