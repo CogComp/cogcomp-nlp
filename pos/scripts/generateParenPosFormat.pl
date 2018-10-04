@@ -29,6 +29,9 @@
 use strict;
 use Carp;
 
+
+# wsj-dir must be the path to the 'parsed/' directory of a Penn Treebank
+#   distribution.
 croak "Usage: $0 wsj-dir out-dir" unless @ARGV == 2;
 
 my $wsjDir = shift;
