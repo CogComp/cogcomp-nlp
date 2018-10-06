@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.ner.ParsingProcessingData.TextAnnotationConverter;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +29,7 @@ import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.ParsingProcessingData.PlainTextReader;
 
 import javax.print.DocFlavor;
+import javax.xml.soap.Text;
 
 public class NETagPlain {
     private static final String NAME = NETagPlain.class.getCanonicalName();
@@ -41,10 +45,10 @@ public class NETagPlain {
      */
     public static void tagData(String inputPath, String outputPath, String dataFormat, ParametersForLbjCode params) throws Exception {
 
-        Data d;
+        Data data;
 
         if(!dataFormat.equals("-plaintext")) {
-            d = new Data(inputPath, inputPath, dataFormat, new String[]{}, new String[]{}, params);
+            data = new Data(inputPath, inputPath, dataFormat, new String[]{}, new String[]{}, params);
         }else{
             // plaintext reading/writing.
             File f = new File(inputPath);
@@ -62,26 +66,26 @@ public class NETagPlain {
                 outFiles.addElement(outputPath);
             }
 
-            d = new Data();
+            data = new Data();
 
             for (int fileId = 0; fileId < inFiles.size(); fileId++) {
                 logger.debug("Tagging file: " + inFiles.elementAt(fileId));
                 ArrayList<LinkedVector> sentences =
                         PlainTextReader.parsePlainTextFile(inFiles.elementAt(fileId), params);
                 NERDocument doc = new NERDocument(sentences, "consoleInput");
-                d.documents.add(doc);
+                data.documents.add(doc);
             }
         }
 
-        ExpressiveFeaturesAnnotator.annotate(d, params);
-        Decoder.annotateDataBIO(d, params);
+        ExpressiveFeaturesAnnotator.annotate(data, params);
+        Decoder.annotateDataBIO(data, params);
 
 
 
-        if(dataFormat.equals("-c")){
-            for (int docid = 0; docid < d.documents.size(); docid++) {
+        if(dataFormat.equals("-c")) {
+            for (int docid = 0; docid < data.documents.size(); docid++) {
                 List<String> res = new ArrayList<>();
-                ArrayList<LinkedVector> sentences = d.documents.get(docid).sentences;
+                ArrayList<LinkedVector> sentences = data.documents.get(docid).sentences;
                 for (LinkedVector vector : sentences) {
 
                     for (int j = 0; j < vector.size(); j++) {
@@ -93,9 +97,20 @@ public class NETagPlain {
                 }
                 LineIO.write(outputPath + "/" + docid + ".txt", res);
             }
+        }else if(dataFormat.equals("-json")){
+            File inputfiles = new File(inputPath);
+            List<TextAnnotation> tas = new ArrayList<>();
+            for(String f : inputfiles.list()) {
+                TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile(f, true);
+                tas.add(ta);
+            }
+            TextAnnotationConverter.Data2TextAnnotation(data, tas);
 
+            for(TextAnnotation ta : tas){
+                SerializationHelper.serializeTextAnnotationToFile(ta, outputPath + "/" + ta.getId(), true);
+            }
         }else{
-            throw new NotImplementedException("We do not support dataFormat of " + dataFormat + " yet.");
+            throw new NotImplementedException("We do not yet support dataFormat of " + dataFormat + " yet.");
         }
 
 
