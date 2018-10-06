@@ -39,7 +39,7 @@ of several other components for which it is a dependency.
 6. [Constituency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): 1G, no dependencies.
 6. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies.
 7. Dependency Parser (CogComp): <1G requires Part-of-Speech tagger, Chunker.
-8. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+8. Verb Semantic Role Labeler: ~40G (see [issue656](https://github.com/CogComp/cogcomp-nlp/issues/656)), requires Lemmatizer, Part-of-Speech, Shallow Parsing, Named Entity Recognizer (CoNLL),
    Constituency Parser.
 9. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
