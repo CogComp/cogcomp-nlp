@@ -41,15 +41,15 @@ configFile=$2
 # Classpath
 DIST=target
 LIB=target/dependency
-cpath=".:target/test-classes"
-for JAR in `ls $DIST/*jar`; do
-    cpath="$cpath:$JAR"
-done
+cpath=".:target/test-classes:target/classes"
+#for JAR in `ls $DIST/*jar`; do
+#    cpath="$cpath:$JAR"
+#done
 for JAR in `ls $LIB/*jar`; do
     cpath="$cpath:$JAR"
 done
 
-CMD="java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.ner.NerTagger -test $test $configFile"
+CMD="java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.ner.NerTagger -test $test -json $configFile"
 
 echo "$0: running command '$CMD'..."
 
