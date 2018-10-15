@@ -22,14 +22,10 @@ import org.slf4j.LoggerFactory;
 
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
-import edu.illinois.cs.cogcomp.ner.IO.OutFile;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.ParsingProcessingData.PlainTextReader;
-
-import javax.print.DocFlavor;
-import javax.xml.soap.Text;
 
 public class NETagPlain {
     private static final String NAME = NETagPlain.class.getCanonicalName();
