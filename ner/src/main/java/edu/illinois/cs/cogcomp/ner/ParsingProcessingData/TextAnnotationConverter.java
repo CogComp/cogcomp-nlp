@@ -46,7 +46,6 @@ public class TextAnnotationConverter {
         String[] tokens = ta.getTokens();
 
         View ner;
-        System.out.println(ta.getAvailableViews());
         if(ta.hasView(ViewNames.NER_CONLL)) {
             ner = ta.getView(ViewNames.NER_CONLL);
         }else if(ta.hasView(ViewNames.NER_ONTONOTES)){
@@ -179,5 +178,4 @@ public class TextAnnotationConverter {
             ta.addView(ViewNames.NER_CONLL, nerView);
         }
     }
-
 }
