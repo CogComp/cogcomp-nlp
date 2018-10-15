@@ -1,11 +1,11 @@
 #!/bin/sh
 #
-# This is a simple test script. It takes two arguments, the first specifies the directory
-# containing the testing data, the second specifies the configuration file.
+# This is a simple test script. It takes three arguments, the first specifies the directory
+# containing the testing data, the second specifies the format, and the last specifies the configuration file.
 #
 
 if [ "$#" -ne 3 ]; then
-    echo "usage: $0 TESTING_DATA_DIRECTORY FORMAT CONFIGURATION_FILE"
+    echo "usage: $0 TESTING_DATA_DIRECTORY FORMAT CONFIGURATION_FILE\n(See NerTagger.java for details)"
 	exit
 fi
 

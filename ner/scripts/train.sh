@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-# This is a simple training script. It takes two arguments, the first specifies the directory
-# containing the training data, the second specifies the directory containing the test data, 
-# and the last argument specifies the config file.
+# This is a simple training script. It takes 4 arguments, the first specifies the directory
+# containing the training data, the second specifies the directory containing the test data,
+# the third specifies the input file format, and the last argument specifies the config file.
 #
 
 if [ "$#" -ne 4 ]; then
-    echo "usage: $0 TRAINING_DATA_DIRECTORY TESTING_DATA_DIRECTORY FORMAT CONFIGURATION_FILE"
+    echo "usage: $0 TRAINING_DATA_DIRECTORY TESTING_DATA_DIRECTORY FORMAT CONFIGURATION_FILE\n(See NerTagger.java for details)"
 	exit
 fi
 

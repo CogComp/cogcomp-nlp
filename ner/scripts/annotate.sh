@@ -1,11 +1,11 @@
 #!/bin/sh
 #
-# This scipt will annotate documents in the input directory, producing results into the output 
-# directory. It takes an input directory, an output directory and configuration file
+# This script will annotate documents in the input directory, producing results into the output
+# directory. It takes an input directory, an output directory, an input file format, and configuration file
 #
 
 if [ "$#" -ne 4 ]; then
-    echo "usage: $0 INPUT_DATA_DIRECTORY OUTPUT_DATA_DIRECTORY FORMAT CONFIGURATION_FILE"
+    echo "usage: $0 INPUT_DATA_DIRECTORY OUTPUT_DATA_DIRECTORY FORMAT CONFIGURATION_FILE\n(See NerTagger.java for details)"
 	exit
 fi
 
