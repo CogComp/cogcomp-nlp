@@ -4,7 +4,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.13</version>
+        <version>4.0.14</version>
     </parent>
 
     <artifactId>illinois-quantifier</artifactId>
@@ -35,31 +35,31 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
