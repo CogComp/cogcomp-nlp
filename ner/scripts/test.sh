@@ -42,7 +42,7 @@ then
 	exit
 fi
 
-# set training directory, test directory, and config file
+# set test directory, format, and config file
 test=$1
 format=$2
 configFile=$3

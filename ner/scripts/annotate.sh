@@ -54,7 +54,7 @@ then
 	exit
 fi
 
-# set training directory, test directory, and config file
+# set training directory, test directory, format, and config file
 input=$1
 output=$2
 format=$3
