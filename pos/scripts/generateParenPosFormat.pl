@@ -4,7 +4,7 @@
 # the LICENSE file in the root folder for details. Copyright (c) 2016
 #
 # Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
-# http://cogcomp.cs.illinois.edu/
+# http://cogcomp.org/
 #
 
 
@@ -29,6 +29,9 @@
 use strict;
 use Carp;
 
+
+# wsj-dir must be the path to the 'parsed/' directory of a Penn Treebank
+#   distribution.
 croak "Usage: $0 wsj-dir out-dir" unless @ARGV == 2;
 
 my $wsjDir = shift;

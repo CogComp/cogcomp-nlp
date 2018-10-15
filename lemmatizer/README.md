@@ -104,7 +104,7 @@ You will need to initialize the `IllinoisLemmatizer`:
 IllinoisLemmatizer lem = new IllinoisLemmatizer();
 ```
 The lemmatizer requires a single word and a Part of Speech (POS) tag. For information
-about Part of Speech tagging, [see this link](http://cogcomp.cs.illinois.edu/page/demo_view/POS).
+about Part of Speech tagging, [see this link](http://cogcomp.org/page/demo_view/POS).
 
 ```java 
 String lemma = lem.getSingleLemma( "leaders", "NNS" );
@@ -114,14 +114,14 @@ System.out.println( lemma );
 
 Note that there is also a version of this method that take as their arguments
 a TextAnnotation object and a token index (see the Edison library -- 
-http://cogcomp.cs.illinois.edu/page/software_view/Edison). 
+http://cogcomp.org/page/software_view/Edison). 
 
 
 ### 3.2 Lemmatizing Views
 
 There are also methods for creating Lemma views in Records (Curator data structure --
-visit [here](http://cogcomp.cs.illinois.edu/page/software_view/Curator) and in `TextAnnotations` 
-(Edison data structure -- visit [here](http://cogcomp.cs.illinois.edu/page/software_view/Edison).
+visit [here](http://cogcomp.org/page/software_view/Curator) and in `TextAnnotations` 
+(Edison data structure -- visit [here](http://cogcomp.org/page/software_view/Edison).
 
 
 ## 4. DOWNLOAD CONTENTS
@@ -155,4 +155,4 @@ If you have any questions/issues use our issue tracker.
 
 If you use this code in your research, please provide the URL for this github repository in the relevant publications.
 Thank you for citing us if you use us in your work! 
-More info at http://cogcomp.cs.illinois.edu/page/software_view/illinois-lemmatizer
+More info at http://cogcomp.org/page/software_view/illinois-lemmatizer
