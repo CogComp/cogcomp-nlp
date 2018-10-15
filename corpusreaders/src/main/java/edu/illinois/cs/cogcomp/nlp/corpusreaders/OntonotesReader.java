@@ -142,7 +142,8 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
                 logger.error("Cannot find the document " + filename + "_part" + part);
             }
         } else {
-            m_docID = filename;
+            m_docID = Paths.get(filename).getFileName().toString();
+            //m_docID = filename;
         }
 
         boolean sentenceStart = true;
