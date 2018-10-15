@@ -4,8 +4,8 @@
 # directory. It takes an input directory, an output directory and configuration file
 #
 
-if [ "$#" -ne 3 ]; then
-    echo "usage: $0 INPUT_DATA_DIRECTORY OUTPUT_DATA_DIRECTORY CONFIGURATION_FILE"
+if [ "$#" -ne 4 ]; then
+    echo "usage: $0 INPUT_DATA_DIRECTORY OUTPUT_DATA_DIRECTORY FORMAT CONFIGURATION_FILE"
 	exit
 fi
 
@@ -22,11 +22,19 @@ then
 	exit
 fi
 
-if ! [ -e "$3" ] 
+
+if ! [ -e "$3" ]
 then
-	echo "configuration file $3 did not exist!"
+	echo "format $3 did not exist!"
 	exit
 fi
+
+if ! [ -e "$4" ]
+then
+	echo "configuration file $4 did not exist!"
+	exit
+fi
+
 
 if ! [ -d "$1" ] 
 then
@@ -40,16 +48,17 @@ then
 	exit
 fi
 
-if ! [ -f "$3" ] 
+if ! [ -f "$4" ]
 then
-	echo "configuration file $3 is not a regular file!"
+	echo "configuration file $4 is not a regular file!"
 	exit
 fi
 
 # set training directory, test directory, and config file
 input=$1
 output=$2
-configFile=$3
+format=$3
+configFile=$4
 
 # Classpath
 DIST=target
@@ -61,7 +70,7 @@ done
 for JAR in `ls $LIB/*jar`; do
     cpath="$cpath:$JAR"
 done
-va -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerTagger -annotate $input $output -c $configFile"
+va -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerTagger -annotate $input $output $format $configFile"
 
 echo "$0: running command '$CMD'..."
 

@@ -5,8 +5,8 @@
 # and the last argument specifies the config file.
 #
 
-if [ "$#" -ne 3 ]; then
-    echo "usage: $0 TRAINING_DATA_DIRECTORY TESTING_DATA_DIRECTORY CONFIGURATION_FILE"
+if [ "$#" -ne 4 ]; then
+    echo "usage: $0 TRAINING_DATA_DIRECTORY TESTING_DATA_DIRECTORY FORMAT CONFIGURATION_FILE"
 	exit
 fi
 
@@ -23,9 +23,16 @@ then
 	exit
 fi
 
-if ! [ -e "$3" ] 
+if ! [ -e "$3" ]
 then
-	echo "configuration file $3 did not exist!"
+	echo "format $3 did not exist!"
+	exit
+fi
+
+
+if ! [ -e "$4" ]
+then
+	echo "configuration file $4 did not exist!"
 	exit
 fi
 
@@ -41,16 +48,17 @@ then
 	exit
 fi
 
-if ! [ -f "$3" ] 
+if ! [ -f "$4" ]
 then
-	echo "configuration file $3 is not a regular file!"
+	echo "configuration file $4 is not a regular file!"
 	exit
 fi
 
 # set training directory, test directory, and config file
 train=$1
 test=$2
-configFile=$3
+format=$3
+configFile=$4
 
 # Classpath
 DIST=target
@@ -63,7 +71,7 @@ for JAR in `ls $LIB/*jar`; do
     cpath="$cpath:$JAR"
 done
 
-CMD="java -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerTagger -train $train $test -json $configFile"
+CMD="java -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerTagger -train $train $test $format $configFile"
 
 echo "$0: running command '$CMD'..."
 
