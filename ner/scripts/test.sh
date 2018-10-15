@@ -16,13 +16,6 @@ then
 	exit
 fi
 
-if ! [ -e "$2" ]
-then
-	echo "format $2 did not exist!"
-	exit
-fi
-
-
 if ! [ -e "$3" ]
 then
 	echo "configuration file $3 did not exist!"
