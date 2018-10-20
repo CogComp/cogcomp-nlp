@@ -34,12 +34,12 @@ of several other components for which it is a dependency.
 1. Lemmatizer: <1G memory, no dependencies.
 2. Part-of-Speech tagger: <1G, no dependencies.
 3. Chunker: <1G, requires Part-of-Speech tagger.
-4. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (CoNLL): 4G, no dependencies.
-5. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (OntoNotes) 6G, no dependencies.
+4. [Named Entity Recognizer](http://cogcomp.org/page/software_view/NETagger) (CoNLL): 4G, no dependencies.
+5. [Named Entity Recognizer](http://cogcomp.org/page/software_view/NETagger) (OntoNotes) 6G, no dependencies.
 6. [Constituency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): 1G, no dependencies.
 6. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies.
 7. Dependency Parser (CogComp): <1G requires Part-of-Speech tagger, Chunker.
-8. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+8. Verb Semantic Role Labeler: ~40G (see [issue656](https://github.com/CogComp/cogcomp-nlp/issues/656)), requires Lemmatizer, Part-of-Speech, Shallow Parsing, Named Entity Recognizer (CoNLL),
    Constituency Parser.
 9. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
@@ -74,7 +74,7 @@ its components.
 
 This software has been developed to allow some of our more complex tools
 to be run completely within a single JVM, either programmatically or
-from the command line,  instead of in tandem with the [CCG NLP Curator](http://cogcomp.cs.illinois.edu/page/software_view/Curator).
+from the command line,  instead of in tandem with the [CCG NLP Curator](http://cogcomp.org/page/software_view/Curator).
 
 The `cogcomp-nlp-pipeline` package was designed to be used either
 programmatically -- inline in your Java code -- or from the command line,
@@ -350,5 +350,5 @@ public class TestPipeline {
 
 ## LICENSE
 
-To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
+To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.org/page/software_view/NETagger) for this software
 and press 'Download'. The next screen displays the license.

@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
@@ -390,7 +390,7 @@ public class TreeView extends View {
             Constituent childConstituent =
                     getConstituentRelativeToSentenceStart(child, 1.0, sentStart, relationLabel);
 
-            this.addConstituent(childConstituent);
+            this.addConstituent(childConstituent, true);
             this.addRelation(new Relation(relationLabel, parent, childConstituent, 1.0));
 
             addDependencyTree(child, sentStart, childConstituent);
@@ -425,7 +425,7 @@ public class TreeView extends View {
             Constituent childConstituent =
                     getConstituentRelativeToSentenceStart(child, 1.0, sentenceStart, relationLabel);
 
-            this.addConstituent(childConstituent);
+            this.addConstituent(childConstituent, true);
             this.addRelation(new Relation(relationLabel, parent, childConstituent, 1.0));
 
             addDependencyTreeWithHack(child, childConstituent, sentenceStart);
@@ -495,7 +495,7 @@ public class TreeView extends View {
                 childConstituent =
                         createNewConstituent(start, end, constituentLabel, constituentScore);
 
-                this.addConstituent(childConstituent);
+                this.addConstituent(childConstituent, true);
 
                 this.addRelation(new Relation(edgeLabel, root, childConstituent, edgeScore));
 
@@ -544,7 +544,8 @@ public class TreeView extends View {
                     }
                 }
 
-                this.addConstituent(childConstituent);
+                // because of the way that punctuation is labeled, it is possible to have duplicate label/leaf constituents.
+                this.addConstituent(childConstituent, true);
                 this.addRelation(new Relation(edgeLabel, root, childConstituent, 1.0));
                 this.addParseTree(child, childConstituent, sentenceStartPosition);
             }

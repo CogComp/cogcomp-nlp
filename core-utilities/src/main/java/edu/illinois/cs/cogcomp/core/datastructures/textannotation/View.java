@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
@@ -136,20 +136,33 @@ public class View implements Serializable, IQueryable<Constituent> {
     }
 
     /**
-     * Adds a new constituent to this view
+     * Convenience method for addConstituent(constituent, false)
+     * @param constituent
+     */
+    public void addConstituent(Constituent constituent){
+        this.addConstituent(constituent, false);
+    }
+
+    /**
+     * Adds a new constituent to this view. If this constituent already exists, we return the existing constituent.
+     * Otherwise, we return the new constituent.
      *
      * @param constituent The new constituent to be added.
      */
-    public void addConstituent(Constituent constituent) {
-        constituents.add(constituent);
+    public void addConstituent(Constituent constituent, boolean force) {
+        if(!constituents.contains(constituent) || force) {
+            constituents.add(constituent);
 
-        startSpan = Math.min(this.startSpan, constituent.getStartSpan());
-        endSpan = Math.max(this.endSpan, constituent.getEndSpan());
+            startSpan = Math.min(this.startSpan, constituent.getStartSpan());
+            endSpan = Math.max(this.endSpan, constituent.getEndSpan());
 
-        if (startSpan >= 0 && endSpan >= 0) {
-            for (int token = constituent.getStartSpan(); token < constituent.getEndSpan(); token++) {
-                this.addTokenToConstituentMapping(token, constituent);
+            if (startSpan >= 0 && endSpan >= 0) {
+                for (int token = constituent.getStartSpan(); token < constituent.getEndSpan(); token++) {
+                    this.addTokenToConstituentMapping(token, constituent);
+                }
             }
+        }else {
+            System.err.println("Warning (View.java): not adding duplicate Constituent: " + constituent + ", use addConstituent(c, true) to force add.");
         }
     }
 
@@ -368,18 +381,26 @@ public class View implements Serializable, IQueryable<Constituent> {
         return output;
     }
 
+    /**
+     * In certain cases (such as Trees) duplicate constituents are allowed. This implementation
+     * means that duplicate constituents will be preserved in the output.
+     * @param start
+     * @param end
+     * @return
+     */
     public List<Constituent> getConstituentsCoveringSpan(int start, int end) {
 
-        Set<Constituent> output = new HashSet<>();
+        List<Constituent> output = new ArrayList<>();
 
-        for (int token = start; token < end; token++) {
-            output.addAll(getConstituentsCoveringToken(token));
+        for(Constituent c : this.constituents){
+            if(c.getStartSpan() < end && start < c.getEndSpan()){
+                // then there is overlap..
+                output.add(c);
+            }
         }
 
-        List<Constituent> list = new ArrayList<>(output);
-
-        Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
-        return list;
+        Collections.sort(output, TextAnnotationUtilities.constituentStartComparator);
+        return output;
     }
 
     /**

@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 /**
  *
@@ -82,9 +82,9 @@ public class Table extends DefaultTableModel {
             }
         }
 
-        String formatterString = "";
+        StringBuilder formatterString = new StringBuilder();
         for (int i = 0; i < formatterList.size(); i ++) {
-            formatterString += formatterList.get(i);
+            formatterString.append(formatterList.get(i));
         }
 
         int lenColSep = 0;
@@ -99,7 +99,7 @@ public class Table extends DefaultTableModel {
                 buffer.append(colSep);
                 buffer.append("|\n");
             }
-            String appendStr = String.format(formatterString, (allTableRows.get(i)).toArray());
+            String appendStr = String.format(formatterString.toString(), (allTableRows.get(i)).toArray());
             buffer.append(appendStr);
             if (i == 0) {
                 lenColSep = appendStr.length();

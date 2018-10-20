@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.ner;
 
@@ -51,7 +51,16 @@ public class NerTagger {
                 // load up the models
                 ModelLoader.load(rm, rm.getString("modelName"), false, cp);
                 if (args[0].equalsIgnoreCase("-annotate")) {
-                    NETagPlain.tagData(args[1], args[2], cp);
+
+                    String dataFormat;
+                    // config file is always the last one.
+                    if(args.length < 5){
+                        dataFormat = "-plaintext";
+                    }else{
+                        dataFormat = args[3];
+                    }
+
+                    NETagPlain.tagData(args[1], args[2], dataFormat, cp);
                 }
                 if (args[0].equalsIgnoreCase("-demo")) {
                     String input = "";
@@ -97,7 +106,7 @@ public class NerTagger {
         String usage =
                 "Usage: edu.illinois.cs.cogcomp.ner.NerTagger <command> [options] <config-file>\n";
         usage +=
-                "commands:\n" + "\t-demo\n" + "\t-annotate <input-dir> <output-dir>\n"
+                "commands:\n" + "\t-demo\n" + "\t-annotate <input-dir> <output-dir> <dataformat = {-c, -json, -plaintext}, -plaintext by default>\n"
                         + "\t-train <train-dir> <test-dir> <dataformat = {-c, -r, -json}, -c by default>\n"
                         + "\t-trainFixedIterations <num-iters> <train-dir> <test-dir>\n"
                         + "\t-test <test-dir> <dataformat = {-c, -r, -json}, -c by default>\n"

@@ -4,7 +4,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.13</version>
+        <version>4.0.14</version>
     </parent>
 
     <artifactId>illinois-question-typer</artifactId>
@@ -13,22 +13,22 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pipeline-client</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>

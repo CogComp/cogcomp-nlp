@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
@@ -159,12 +159,12 @@ public class TextCleanerTest {
             fail(e.getMessage());
         }
 
-        String badText = "";
+        StringBuilder badText = new StringBuilder();
 
         for (String line : badTextLines)
-            badText += line + "\n";
+            badText.append(line).append("\n");
 
-        String cleanText = TextCleaner.replaceControlSequence(badText);
+        String cleanText = TextCleaner.replaceControlSequence(badText.toString());
 
         boolean isGood = !(cleanText.contains("^@"));
 

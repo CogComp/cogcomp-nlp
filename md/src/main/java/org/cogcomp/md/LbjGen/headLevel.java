@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
 // F1B88000000000000000B49CC2E4E2A4D294558C84D4C41F94D2B4DC1D80A4DC94C29CCCFC35822D450B1D558A6500AC7961109BA79E9A52129854042534314C67C29292ACC4A2D2945D0527DCB29CC29A4FD4DC3096C09AC284552D4B658A50005F3D7514D5000000

@@ -4,12 +4,12 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.13</version>
+        <version>4.0.14</version>
     </parent>
 
     <artifactId>LBJava-NLP-tools</artifactId>
     <packaging>jar</packaging>
-    <url>http://cogcomp.cs.illinois.edu</url>
+    <url>http://cogcomp.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

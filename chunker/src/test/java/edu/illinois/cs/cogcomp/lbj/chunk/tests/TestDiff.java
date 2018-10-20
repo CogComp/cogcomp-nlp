@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.lbj.chunk.tests;
 
@@ -37,7 +37,7 @@ import static org.junit.Assert.fail;
 public class TestDiff {
     private static final String testFileName = "testIn.txt";
     private static String testFile;
-    private static final String refFileName = "testRefOutput.txt";
+    private static final String refFileName = "testRefOut.txt";
     private static List<String> refSentences;
 
     @Before

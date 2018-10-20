@@ -7,7 +7,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.13</version>
+        <version>4.0.14</version>
     </parent>
 
     <artifactId>illinois-edison</artifactId>
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
@@ -80,13 +80,13 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
         </dependency>
         <!-- Used only in utilities.CreateTestTAResource -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
             <scope>test</scope>
         </dependency>
         <dependency>

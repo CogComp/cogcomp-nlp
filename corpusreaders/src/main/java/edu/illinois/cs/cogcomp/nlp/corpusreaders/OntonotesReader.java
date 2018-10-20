@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
@@ -58,7 +58,7 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
         this.textAnnotations = new ArrayList<>();
 
         String ontonotesDirectory =
-                this.resourceManager.getString(CorpusReaderConfigurator.CORPUS_DIRECTORY.key);
+                this.resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY.key);
 
         String[] files = new String[0];
         // In case the input argument is a single file
@@ -77,6 +77,7 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
         }
         try {
             for (String file : files) {
+                System.out.println("loading: " + file);
                 // Load all parts of the document (part # = -1)
                 // TODO Add this as a global parameter?
                 textAnnotations.add(loadCoNLLfile(file, -1));
@@ -141,7 +142,8 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
                 logger.error("Cannot find the document " + filename + "_part" + part);
             }
         } else {
-            m_docID = filename;
+            m_docID = Paths.get(filename).getFileName().toString();
+            //m_docID = filename;
         }
 
         boolean sentenceStart = true;
@@ -153,7 +155,10 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
 
             // end of the document
             if (line.contains("#end document"))
-                break;
+                continue;
+
+            if (line.contains("#begin document"))
+                continue;
 
             // Initialize a sentence
             if (sentenceStart) {
@@ -174,6 +179,7 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
                 sentences.add(sentence.toArray(new String[sentence.size()]));
                 sentenceStart = true;
                 predicateNumOffset += numPredicates;
+                sentence = new ArrayList<>();
                 continue;
             }
 
@@ -287,7 +293,9 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
                     relations.toArray(new String[relations.size()]), scoresDoubleArray);
         }
 
-        ta.addView(ViewNames.SRL_VERB, pav);
+        if(pav.getConstituents().size() > 0) {
+            ta.addView(ViewNames.SRL_VERB, pav);
+        }
     }
 
     private void addNERView(List<String> neLabels, List<Integer> neStart, List<Integer> neEnd,

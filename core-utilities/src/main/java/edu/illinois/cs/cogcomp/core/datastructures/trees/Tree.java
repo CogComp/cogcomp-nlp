@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.trees;
 
@@ -297,27 +297,29 @@ public class Tree<T> implements Serializable {
      */
 
     private String toString(boolean firstChild, int spaces) {
-        String treeString = "";
+        StringBuilder treeString = new StringBuilder();
         if (!firstChild) {
             for (int i = 0; i < spaces; i++) {
-                treeString += " ";
+                treeString.append(" ");
             }
         }
 
         if (!this.isLeaf())
-            treeString += "(";
+            treeString.append("(");
 
         int position = this.getPositionAmongParentsChildren();
 
         if (this.parent != null && this.parent.childrenEdgeLabels != null
                 && this.parent.childrenEdgeLabels.get(position) != null) {
-            treeString += (":LABEL:" + this.parent.childrenEdgeLabels.get(position) + " ");
+            treeString.append(":LABEL:")
+                    .append(this.parent.childrenEdgeLabels.get(position))
+                    .append(" ");
         }
 
-        treeString += label.toString();
+        treeString.append(label.toString());
 
         if (children.size() > 0)
-            treeString += " ";
+            treeString.append(" ");
 
         int len = treeString.length();
 
@@ -326,19 +328,19 @@ public class Tree<T> implements Serializable {
         for (Iterator<Tree<T>> iterator = children.iterator(); iterator.hasNext();) {
             Tree<T> child = iterator.next();
 
-            treeString += child.toString(first, len);
+            treeString.append(child.toString(first, len));
 
             first = false;
 
             if (iterator.hasNext())
-                treeString += "\n";
+                treeString.append("\n");
             index++;
         }
 
         if (!this.isLeaf())
-            treeString += ")";
+            treeString.append(")");
 
-        return treeString;
+        return treeString.toString();
 
     }
 

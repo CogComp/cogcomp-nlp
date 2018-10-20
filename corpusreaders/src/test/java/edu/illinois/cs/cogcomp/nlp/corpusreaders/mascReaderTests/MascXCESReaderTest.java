@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.mascReaderTests;
 
@@ -58,7 +58,7 @@ public class MascXCESReaderTest {
         Assert.assertEquals(sentencesGold.get(2).getEndSpan(), 25);
 
         List<Constituent> shallowParse = ta.getView(ViewNames.SHALLOW_PARSE).getConstituents();
-        Assert.assertEquals(shallowParse.size(), 130);  // nchunk 91, vchunk 39
+        Assert.assertEquals(shallowParse.size(), 129);  // nchunk 90, vchunk 39
         Assert.assertEquals(shallowParse.get(1).getStartSpan(), 3);
         Assert.assertEquals(shallowParse.get(1).getEndSpan(), 5);
         Assert.assertEquals(shallowParse.get(1).getLabel(), "NP");

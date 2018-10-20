@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import org.slf4j.Logger;
@@ -233,7 +234,7 @@ public class TextAnnotationUtilities {
             }
         }
 
-        Map<Constituent, Constituent> consMap = new HashMap<>();
+        List<Pair<Constituent, Constituent>> consMap = new ArrayList<>();
         List<Constituent> constituentsToCopy = null;
 
         if (ta.size() <= newTA.size())
@@ -244,16 +245,31 @@ public class TextAnnotationUtilities {
         for (Constituent c : constituentsToCopy) {
             // replacing the constituents with a new ones, with token ids shifted
             Constituent newC = copyConstituentWithNewTokenOffsets(newTA, c, offset);
-            consMap.put(c, newC);
-            newVu.addConstituent(newC);
+            consMap.add(new Pair<>(c, newC));
+            newVu.addConstituent(newC, true);
         }
+
         for (Relation r : vu.getRelations()) {
-            //don't include relations that cross into irrelevant span
-            if (!consMap.containsKey(r.getSource()) || !consMap.containsKey(r.getTarget()))
-                continue;
-            // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
-            Relation newR = copyRelation(r, consMap);
-            newVu.addRelation(newR);
+
+            // only include relations which have both source and target in the consMap
+            boolean sourcePresent = false;
+            boolean targetPresent = false;
+            for(Pair<Constituent, Constituent> p : consMap){
+                // the == is very important. We do not want to check attribute, but object equality.
+                // this is because duplicates are technically allowed.
+                if(r.getSource() == p.getFirst()){
+                    sourcePresent = true;
+                }
+                if(r.getTarget() == p.getFirst()){
+                    targetPresent = true;
+                }
+            }
+
+            if(sourcePresent && targetPresent) {
+                // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
+                Relation newR = copyRelation(r, consMap);
+                newVu.addRelation(newR);
+            }
         }
 
         newTA.addView(vuName, newVu);
@@ -284,6 +300,42 @@ public class TextAnnotationUtilities {
 
         return newRel;
     }
+
+    /**
+     * required: consMap *must* contain the source and target constituents for r as keys, and their values
+     *    must be non-null
+     * @param r relation to copy
+     * @param consMap list containing pairs that map from original constituents to new counterparts
+     * @return new relation with all info copied from original, but with new source and target constituents
+     */
+    public static Relation copyRelation(Relation r, List<Pair<Constituent, Constituent>> consMap) {
+        Relation newRel = null;
+
+        Constituent src = null;
+        Constituent tgt = null;
+
+        // the equality check here is VERY important. Sometimes duplicate constituents are allowed,
+        // and we want to check OBJECT equality, not attribute equality.
+        for(Pair<Constituent,Constituent> p : consMap){
+            if(r.getSource() == p.getFirst()){
+                src = p.getSecond();
+            }
+
+            if(r.getTarget() == p.getFirst()){
+                tgt = p.getSecond();
+            }
+        }
+
+        if ( null == r.getLabelsToScores() )
+            newRel = new Relation(r.getRelationName(), src, tgt, r.getScore());
+        else
+            newRel = new Relation(r.getLabelsToScores(), src, tgt);
+
+        copyAttributesFromTo(r, newRel);
+
+        return newRel;
+    }
+
 
     public static void copyAttributesFromTo(HasAttributes origObj, HasAttributes newObj) {
         for(String key : origObj.getAttributeKeys())
@@ -380,24 +432,40 @@ public class TextAnnotationUtilities {
                 newTA.addView(vuName, newVu);
             }
 
-            Map<Constituent, Constituent> consMap = new HashMap<>();
+            List<Pair<Constituent, Constituent>> consMap = new ArrayList<>();
             List<Constituent> constituentsToCopy = vu.getConstituents();
 
             for (Constituent c : constituentsToCopy) {
                 // replacing the constituents with new ones, token ids remain the same (!)
-//                IntPair origCharOffsets = st.getOriginalOffsets(c.getStartCharOffset(), c.getEndCharOffset());
                 Constituent newC = copyConstituentWithNewTokenOffsets(newTA, c, 0);
-                consMap.put(c, newC);
-                newVu.addConstituent(newC);
+                consMap.add(new Pair<>(c, newC));
+                newVu.addConstituent(newC, true);
             }
+
             for (Relation r : vu.getRelations()) {
-                //don't include relations that cross into irrelevant span
-                if (!consMap.containsKey(r.getSource()) || !consMap.containsKey(r.getTarget()))
-                    continue;
-                // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
-                Relation newR = copyRelation(r, consMap);
-                newVu.addRelation(newR);
+
+                // only include relations which have both source and target in the consMap
+                boolean sourcePresent = false;
+                boolean targetPresent = false;
+                for(Pair<Constituent, Constituent> p : consMap){
+                    // the == is very important. We do not want to check attribute, but object equality.
+                    // this is because duplicates are technically allowed.
+                    if(r.getSource() == p.getFirst()){
+                        sourcePresent = true;
+                    }
+                    if(r.getTarget() == p.getFirst()){
+                        targetPresent = true;
+                    }
+                }
+
+                if(sourcePresent && targetPresent) {
+                    // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
+                    Relation newR = copyRelation(r, consMap);
+                    newVu.addRelation(newR);
+                }
             }
+
+
             if (vu instanceof TreeView) {
                 ((TreeView) newVu).makeTrees();
             }

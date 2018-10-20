@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.core.utilities.protobuf;
 
@@ -168,7 +168,11 @@ public class ProtobufSerializer extends AbstractSerializer {
         for (ConstituentProto consProto : viewData.getConstituentsList()) {
             Constituent cons = readConstituent(consProto, ta, viewName);
             constituents.add(cons);
-            view.addConstituent(cons);
+
+            if(viewName.contains("PARSE"))
+                view.addConstituent(cons, true);
+            else
+                view.addConstituent(cons);
         }
 
         for (RelationProto relationProto : viewData.getRelationsList()) {

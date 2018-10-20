@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.ner.ParsingProcessingData;
 
@@ -75,7 +75,7 @@ public class TaggedDataReader {
             res = BracketFileReader.read(path, documentName, cp);
         }else if (format.equals("-json")) {
             TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile(path, true);
-            res = TextAnnotationConverter.getNerDocument(ta);
+            res = TextAnnotationConverter.getNerDocument(ta, cp);
         } else {
             System.err.println("Fatal error: unrecognized file format: " + format);
             System.exit(0);

@@ -58,7 +58,7 @@ For example,
 
 ## Citation
 
-Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/POS
+Thank you for citing us if you use us in your work! http://cogcomp.org/page/software_view/POS
 
 ```
 @inproceedings{RothZe98,
@@ -68,7 +68,7 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     pages = {1136--1142},
     year = {1998},
     acceptance = {137/550 (25\%)},
-    url = " http://cogcomp.cs.illinois.edu/papers/pos.pdf",
+    url = " http://cogcomp.org/papers/pos.pdf",
     funding = {NSF98,KDI},
     projects = {SI,NLP},
 }
@@ -79,7 +79,7 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     booktitle = {EMNLP},
     pages = {10-19},
     year = {2001},
-    url = " http://cogcomp.cs.illinois.edu/papers/emnlp01.pdf"
+    url = " http://cogcomp.org/papers/emnlp01.pdf"
 }
 ```
 

@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.core.utilities;
 
@@ -189,7 +189,12 @@ public class JsonSerializer extends AbstractSerializer {
                 JsonObject cJ = (JsonObject) cJson.get(i);
                 Constituent c = readConstituent(cJ, ta, viewName);
                 constituents.add(c);
-                view.addConstituent(c);
+
+                // all parse trees should allow duplicate constituents
+                if(view.getViewName().contains("PARSE"))
+                    view.addConstituent(c,true);
+                else
+                    view.addConstituent(c);
             }
         }
 

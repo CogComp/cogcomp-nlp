@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>4.0.13</version>
+    <version>4.0.14</version>
     <modules>
         <module>core-utilities</module>
         <module>tokenizer</module>
@@ -53,7 +53,7 @@
         <repository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>http://cogcomp.org/m2repo/</url>
+            <url>http://macniece.seas.upenn.edu/m2repo/</url>
         </repository>
     </repositories>
 
@@ -61,11 +61,11 @@
         <repository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/m2repo</url>
+            <url>scp://macniece.seas.upenn.edu:/pool0/webserver/htdocs/public/m2repo</url>
         </repository>
         <site>
             <id>CogcompSoftwareDoc</id>
-            <url>scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/software/doc/</url>
+            <url>scp://macniece.seas.upenn.edu:/pool0/webserver/htdocs/public/software/doc/</url>
         </site>
     </distributionManagement>
 

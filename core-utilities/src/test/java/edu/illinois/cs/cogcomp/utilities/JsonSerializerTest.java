@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.utilities;
 
@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.JsonSerializer;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
@@ -26,13 +27,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Simple sanity tests for JsonSerializer.
@@ -40,6 +41,7 @@ import static org.junit.Assert.assertNotNull;
  * @author mssammon
  */
 public class JsonSerializerTest {
+    private static final String RHYME_VIEW_NAME = "rhyme";
     private static Logger logger = LoggerFactory.getLogger(JsonSerializerTest.class);
 
     TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {
@@ -122,7 +124,19 @@ public class JsonSerializerTest {
 
     @Test
     public void testSerializerWithCharOffsets() {
-        View rhymeView = new View("rhyme", "test", ta, 0.4 );
+
+        addRhymeViewToTa(ta);
+
+        String taJson = SerializationHelper.serializeToJson(ta, true);
+        logger.info(taJson);
+
+        JsonObject jobj = (JsonObject) new JsonParser().parse(taJson);
+        JsonSerializerTest.verifySerializedJSONObject(jobj, ta);
+    }
+
+
+    private static void addRhymeViewToTa(TextAnnotation someTa) {
+        View rhymeView = new View(RHYME_VIEW_NAME, "test", someTa, 0.4);
 
         Map< String, Double > newLabelsToScores = new TreeMap< String, Double >();
         String[] labels = { "eeny", "meeny", "miny", "mo" };
@@ -131,32 +145,26 @@ public class JsonSerializerTest {
         for ( int i = 0; i < labels.length; ++i )
             newLabelsToScores.put(labels[i], scores[i]);
 
-        Constituent first = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+        Constituent first = new Constituent(newLabelsToScores, RHYME_VIEW_NAME, someTa, 2, 4);
         rhymeView.addConstituent(first);
 
         /**
          * no constraint on scores -- don't have to sum to 1.0
          */
         for ( int i = labels.length -1; i > 0; --i )
-            newLabelsToScores.put( labels[i], scores[3-i] );
+            newLabelsToScores.put(labels[i], scores[3-i]);
 
-        Constituent second = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+        Constituent second = new Constituent(newLabelsToScores, RHYME_VIEW_NAME, someTa, 2, 4);
         rhymeView.addConstituent(second);
 
         Map<String, Double> relLabelsToScores = new TreeMap<>();
-        relLabelsToScores.put( "Yes", 0.8 );
-        relLabelsToScores.put( "No", 0.2 );
+        relLabelsToScores.put("Yes", 0.8);
+        relLabelsToScores.put("No", 0.2);
 
         Relation rel = new Relation( relLabelsToScores, first, second );
         rhymeView.addRelation(rel);
 
-        ta.addView("rhyme", rhymeView);
-
-        String taJson = SerializationHelper.serializeToJson(ta, true);
-        logger.info(taJson);
-
-        JsonObject jobj = (JsonObject) new JsonParser().parse(taJson);
-        JsonSerializerTest.verifySerializedJSONObject(jobj, ta);
+        someTa.addView(RHYME_VIEW_NAME, rhymeView);
     }
 
     @Test
@@ -170,5 +178,72 @@ public class JsonSerializerTest {
         String json = SerializationHelper.serializeToJson(ta, true);
 
         JsonSerializerTest.verifyDeserializedJsonString(json, ta);
+    }
+
+    /**
+     * make sure that if an already serialized TextAnnotation object is modified and reserialized,
+     *    (and written to the same target file), that the file is updated correctly
+     */
+    @Test
+    public void testJsonSerializedTaUpdate() {
+
+        // make sure we aren't using a TA already updated with "rhyme" view
+        TextAnnotation localTa = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {
+                ViewNames.POS, ViewNames.NER_CONLL, ViewNames.SRL_VERB}, false, 3); // no noise
+
+        String serTestDir = "serTestDir";
+        if(!IOUtils.exists(serTestDir))
+            IOUtils.mkdir(serTestDir);
+        else if (IOUtils.isFile(serTestDir))
+            throw new IllegalStateException("ERROR: test directory " + serTestDir + " already exists as file.");
+        else
+            try {
+                IOUtils.cleanDir(serTestDir);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new IllegalStateException("ERROR: test directory " + serTestDir + " could not be cleaned. Permissions?");
+            }
+        if (!IOUtils.getListOfFilesInDir(serTestDir).isEmpty())
+            throw new IllegalStateException("ERROR: test directory " + serTestDir + " already contains files even after cleaning.");
+
+        String fileName = serTestDir + "/arbitrary.json";
+        boolean forceOverwrite = true;
+        boolean useJson = true;
+        try {
+            SerializationHelper.serializeTextAnnotationToFile(localTa, fileName, forceOverwrite, useJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("error trying to serialize json file " + fileName + ".");
+        }
+
+        TextAnnotation taDeser = null;
+        try {
+            taDeser = SerializationHelper.deserializeTextAnnotationFromFile(fileName, useJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("error trying to deserialize json file " + fileName + ".");
+        }
+        assertTrue(taDeser.hasView(ViewNames.SRL_VERB));
+        assertFalse(taDeser.hasView(RHYME_VIEW_NAME));
+        addRhymeViewToTa(taDeser);
+        assertTrue(taDeser.hasView(RHYME_VIEW_NAME));
+
+        try {
+            SerializationHelper.serializeTextAnnotationToFile(taDeser, fileName, forceOverwrite, useJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("error trying to serialize json file " + fileName + " for second time.");
+        }
+
+        TextAnnotation taDeserDeser = null;
+        try {
+            taDeserDeser = SerializationHelper.deserializeTextAnnotationFromFile(fileName, useJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("error trying to deserialize json file " + fileName + " for second time.");
+        }
+
+        assertTrue(taDeserDeser.hasView(RHYME_VIEW_NAME));
+        assertTrue(taDeserDeser.getView(RHYME_VIEW_NAME).getConstituents().size() > 0);
     }
 }
