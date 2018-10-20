@@ -81,6 +81,8 @@ public class TokenizerStateMachine {
     
     /**
      * Init the state machine decision matrix and the text annotation.
+     * @param splitOnDash true to split tokens on a "-"
+     * @param splitOnTwoNewlines if true split a paragraph on two new lines.
      */
     public TokenizerStateMachine(final boolean splitOnDash, final boolean splitOnTwoNewlines) {
         // cardinality of 1st dim the number of states(TokenizerState), 2nd is the number of token
@@ -524,8 +526,9 @@ public class TokenizerStateMachine {
     
     /** this regex finds emails addresses. */
     private static final Pattern emailRegex = 
-                    Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}", Pattern.CASE_INSENSITIVE);
-    
+                    Pattern.compile("\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b", Pattern.CASE_INSENSITIVE);
+    final Pattern emailRegex2 = 
+                    Pattern.compile("\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\b", Pattern.CASE_INSENSITIVE);
     /**
      * We have encountered a colon in the input data stream, check to see if it is a URL, and if it
      * is, advance the cursor and return true, or return false.
@@ -542,7 +545,15 @@ public class TokenizerStateMachine {
             this.pop(this.current + 1);
             return true;
         } else {
-            return false;
+            matcher = emailRegex2.matcher(tmp);
+            if (matcher.find()) {
+                int end = matcher.end();
+                current = start + (end-1);
+                this.pop(this.current + 1);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -897,15 +908,27 @@ public class TokenizerStateMachine {
     }
     static public void main(String[] args) {
         final Pattern emailRegex = 
-                        Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}", Pattern.CASE_INSENSITIVE);
-        String tmp = "redman@illinois.edu-tmpl.ak is my email.";
+                        Pattern.compile("\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b", Pattern.CASE_INSENSITIVE);
+        final Pattern emailRegex2 = 
+                        Pattern.compile("\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\b", Pattern.CASE_INSENSITIVE);
+        //String tmp = "redman@illinois.edu-tmpl.ak is my email.";
+        String tmp = "   jlama@summat\n" + 
+                        "   to\n" + 
+                        "   <robertserafin@kmzcom";
         Matcher matcher = emailRegex.matcher(tmp);
         if (matcher.find()) {
             int end = matcher.end();
-            System.out.println("did work : "+tmp.substring(matcher.start(), matcher.end()));
+            System.out.println("1 did work : "+tmp.substring(matcher.start(), matcher.end()));
 
         } else {
-            System.err.println("didn't work.");
+            System.err.println("1 didn't work.");
+        }
+        matcher = emailRegex2.matcher(tmp);
+        if (matcher.find()) {
+            int end = matcher.end();
+            System.out.println("2 did work : "+tmp.substring(matcher.start(), matcher.end()));
+        } else {
+            System.err.println("2 didn't work.");
         }
 
     }

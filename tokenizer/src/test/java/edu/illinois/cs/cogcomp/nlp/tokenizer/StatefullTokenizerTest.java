@@ -392,6 +392,24 @@ public class StatefullTokenizerTest {
         assertEquals(ta.getNumberOfSentences(), 1);
     }
     /**
+     * 
+     * Test sentence splitter behavior when a there is a lower cased acronym followed immediately by a dot.
+     */
+    @Test
+    public void testEmails(){
+        TokenizerTextAnnotationBuilder tab =
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String text = "jlama@summat\n" + 
+                        "to\n" + 
+                        "   <robertserafin@kmzcom";
+        TextAnnotation ta = tab.createTextAnnotation(text);
+        String [] tokens = ta.getTokens();
+        for (String token : tokens) {
+            System.out.println(token);
+        }
+    }
+    
+    /**
      * This can be used to just quickly debug when a sentence produces an error.
      * @param args
      */
