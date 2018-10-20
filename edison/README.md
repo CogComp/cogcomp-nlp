@@ -1,6 +1,6 @@
 # CogComp Edison
 
-*Edison* is a feature extraction framework that uses the data structures of [cogcomp-core-utilities](../core-utilities/README.md)
+*Edison* is a feature extraction framework that uses the data structures of [core-utilities](../core-utilities/README.md)
 to extract features used in NLP applications.
 We can define functions for feature extraction that use the tokens and one or more views. 
 This enables us to not only develop feature sets like words, n-grams, paths in parse trees, which work with a single view, 
@@ -55,45 +55,6 @@ Feature extractors can be combined with each via operators to build newer ones.
 For example, a valid operators to conjoin feature extractors with each other to 
 produce a new `FeatureExtractor`. Use the `FeatureUtilities.conjoin` to do this.
 
-### Output features to a file
-You can output the set of `Feature`s returned by any `FeatureExtractor` to an [SVMLite-format](http://svmlight.joachims.org) 
-file in order to be used by any learning software that supports it using the method 
-`WriteSVMLightFormat.writeFeatureExample`.
-
-## List of pre-defined feature extractors
-To see the set of pre-defined feature extractors along
-with their description and the `FeatureExtractor` that implements
-them please visit our [Edison search interface](http://legolas.cs.illinois.edu:5900). 
-
-### Bias feature
-The keyword `bias` in a `.fex` specification includes a feature
-that will always be present. This is useful to add a bias feature
-for binary classification.
-
-## FEX Functionality
-
-In addition to the programmatic generation using feature extractors, we allow specification of
-feature extractors through a special file that defines feature extractors. This file is the .fex file.
-
-### What happens
-`FeatureManifest` loads the file and sends it to `ManifestParser`. Contains logic for converting
-    definitions, variables, names into `FeatureExtractor`s.
-`ManifestParser` actually parses the file, and stores definitions, variables, names, etc.
-
-
-### Structure of the .fex file
-
-The file has a lisp-like syntax. As in lisp, a semicolon (;) is the comment symbol. This may come anywhere
-in the line.
-```
-file := (define name definition* featureslist)
-definition := NULL | (define name body) | (defvar name value)
-body := something parsable by FeatureManifest.createFex
-featureslist := leaf | (list leaf*) | (conjoin leaf leaf)
-keywordbody := (conjoin ??) | (list leaf*) | (conjoin-and-include) | (bigram) | (trigram) | (transform-input) | (if)
-name := <string>
-leaf := must be in KnownFexes.fexes
-```
 
 ## Citation
 
