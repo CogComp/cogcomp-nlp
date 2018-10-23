@@ -129,6 +129,7 @@ public class CharacterLanguageModel {
         System.out.println("Accuracy: " + correct / total);
 
         LineIO.write("pred.txt", outpreds);
+        System.out.println("Wrote to pred.txt. Now run $ conlleval pred.txt to get F1 scores.");
 
     }
 
