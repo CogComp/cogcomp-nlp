@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
@@ -142,7 +142,8 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
                 logger.error("Cannot find the document " + filename + "_part" + part);
             }
         } else {
-            m_docID = filename;
+            m_docID = Paths.get(filename).getFileName().toString();
+            //m_docID = filename;
         }
 
         boolean sentenceStart = true;

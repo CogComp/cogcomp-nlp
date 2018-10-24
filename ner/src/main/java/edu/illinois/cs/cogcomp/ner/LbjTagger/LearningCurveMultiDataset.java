@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
+
+import static java.lang.Float.NaN;
 
 /**
  * build the model test it out, report results and so on.
@@ -195,15 +197,22 @@ public class LearningCurveMultiDataset {
                 TestDiscrete.testDiscrete(simpleTest, tagger1, null, testParser1, true, 0);
 
                 double f1Level1 = simpleTest.getOverallStats()[2];
+                if(Double.isNaN(f1Level1)) f1Level1 = 0;
                 if (f1Level1 > bestF1Level1) {
                     bestF1Level1 = f1Level1;
                     bestRoundLevel1 = i;
                     saveme = (NETaggerLevel1) tagger1.clone();
                     saveme.beginTraining();
+
+                    System.out.println(saveme);
+                    System.out.println(bestF1Level1);
+                    System.out.println(f1Level1);
+
                 }
                 logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
                             + bestF1Level1);
             }
+
             saveme.getBaseLTU().featurePruningThreshold = params.featurePruningThreshold;
             saveme.doneTraining();
             saveme.save();

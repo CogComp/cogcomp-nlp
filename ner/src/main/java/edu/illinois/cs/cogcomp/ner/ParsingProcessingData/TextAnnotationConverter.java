@@ -4,9 +4,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +23,11 @@ public class TextAnnotationConverter {
      *
      * @param tas list of text annotations
      */
-    public static Data loaddataFromTAs(List<TextAnnotation> tas) throws Exception {
+    public static Data loaddataFromTAs(List<TextAnnotation> tas, ParametersForLbjCode cp) throws Exception {
 
         Data data = new Data();
         for(TextAnnotation ta : tas) {
-            NERDocument doc = getNerDocument(ta);
+            NERDocument doc = getNerDocument(ta, cp);
 
             data.documents.add(doc);
         }
@@ -42,14 +40,16 @@ public class TextAnnotationConverter {
      * @param ta a text annotation
      * @return NERDocument
      */
-    public static NERDocument getNerDocument(TextAnnotation ta) {
+    public static NERDocument getNerDocument(TextAnnotation ta, ParametersForLbjCode cp) {
         // convert this data structure into one the NER package can deal with.
         ArrayList<LinkedVector> sentences = new ArrayList<>();
         String[] tokens = ta.getTokens();
 
         View ner;
-        if(ta.hasView(ViewNames.NER_CONLL)){
+        if(ta.hasView(ViewNames.NER_CONLL)) {
             ner = ta.getView(ViewNames.NER_CONLL);
+        }else if(ta.hasView(ViewNames.NER_ONTONOTES)){
+            ner = ta.getView(ViewNames.NER_ONTONOTES);
         }else{
             ner = new View(ViewNames.NER_CONLL, "Ltf2TextAnnotation",ta,1.0);
             ta.addView(ViewNames.NER_CONLL, ner);
@@ -85,11 +85,11 @@ public class TextAnnotationConverter {
                 }
 
                 if (w.length() > 0) {
-                    //NEWord.addTokenToSentence(words, w, tag);
+                    NEWord.addTokenToSentence(words, w, tag, cp);
 
-                    NEWord word=new NEWord(new Word(w),null,tag);
+                    //NEWord word = new NEWord(new Word(w),null,tag);
 
-                    NEWord.addTokenToSentence(words, word);
+                    //NEWord.addTokenToSentence(words, word);
 
 
                     tokenindices[neWordIndex] = tokenIndex;
@@ -178,5 +178,4 @@ public class TextAnnotationConverter {
             ta.addView(ViewNames.NER_CONLL, nerView);
         }
     }
-
 }

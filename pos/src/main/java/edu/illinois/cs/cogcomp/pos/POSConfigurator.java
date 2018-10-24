@@ -3,7 +3,7 @@
  * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
- * http://cogcomp.cs.illinois.edu/
+ * http://cogcomp.org/
  */
 package edu.illinois.cs.cogcomp.pos;
 
@@ -21,7 +21,9 @@ import java.io.IOException;
 public class POSConfigurator extends Configurator {
     /** A configurable prefix. */
     public static final Property CORPUS_PREFIX = new Property("corpusPrefix",
-            "/shared/corpora/corporaWeb/written/eng/POS/");
+            "/shared/experiments/mssammon/workspace-github/cogcomp-nlp/pos/corpus-paren-format/");
+							      //            "/shared/corpora/corporaWeb/written/eng/POS/");
+
     /** The file containing the training set. */
     public static final Property TRAINING_DATA = new Property("trainingData", CORPUS_PREFIX.value
             + "00-18.br");

@@ -3,7 +3,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.13</version>
+        <version>4.0.14</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -21,12 +21,12 @@
     	<dependency>
       		<groupId>edu.illinois.cs.cogcomp</groupId>
       		<artifactId>illinois-core-utilities</artifactId>
-      		<version>4.0.13</version>
+      		<version>4.0.14</version>
       	</dependency>
       	<dependency>
       		<groupId>edu.illinois.cs.cogcomp</groupId>
       		<artifactId>illinois-tokenizer</artifactId>
-      		<version>4.0.13</version>
+      		<version>4.0.14</version>
       	</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

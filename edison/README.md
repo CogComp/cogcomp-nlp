@@ -1,6 +1,6 @@
 # CogComp Edison
 
-*Edison* is a feature extraction framework that uses the data structures of [cogcomp-core-utilities](../core-utilities/README.md)
+*Edison* is a feature extraction framework that uses the data structures of [core-utilities](../core-utilities/README.md)
 to extract features used in NLP applications.
 We can define functions for feature extraction that use the tokens and one or more views. 
 This enables us to not only develop feature sets like words, n-grams, paths in parse trees, which work with a single view, 
@@ -37,7 +37,7 @@ To use Edison as a Maven dependency please add the following lines to your `pom.
 
 or if you are using SBT:
 ```
-resolvers += "CogcompSoftware" at "http://cogcomp.cs.illinois.edu/m2repo/"
+resolvers += "CogcompSoftware" at "http://cogcomp.org/m2repo/"
 
 libraryDependencies += "edu.illinois.cs.cogcomp" % "illinois-edison" % "#VERSION"
 ```
@@ -63,7 +63,7 @@ file in order to be used by any learning software that supports it using the met
 ## List of pre-defined feature extractors
 To see the set of pre-defined feature extractors along
 with their description and the `FeatureExtractor` that implements
-them please visit our [Edison search interface](http://legolas.cs.illinois.edu:5900). 
+them. 
 
 ### Bias feature
 The keyword `bias` in a `.fex` specification includes a feature
@@ -99,7 +99,7 @@ leaf := must be in KnownFexes.fexes
 
 Mark Sammons, Christos Christodoulopoulos, Parisa Kordjamshidi, Daniel Khashabi, Vivek Srikumar, Paul Vijayakumar, Mazin Bokhari, Xinbo Wu, Dan Roth, EDISON: Feature Extraction for NLP, Simplified. Proceedings of the Tenth International Conference on Language Resources and Evaluation (LREC 2016) (2016) pp.
 
-Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/Edison
+Thank you for citing us if you use us in your work! http://cogcomp.org/page/software_view/Edison
 
 ```
 @inproceedings{SCKKSVBWR16,
@@ -109,6 +109,6 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     year = {2016},
     publisher = {European Language Resources Association (ELRA)},
     editor = {Nicoletta Calzolari (Conference Chair) and Khalid Choukri and Thierry Declerck and Marko Grobelnik and Bente Maegaard and Joseph Mariani and Asuncion Moreno and Jan Odijk and Stelios Piperidis},
-    url = "http://cogcomp.cs.illinois.edu/papers/SCKKSVBWR16.pdf",
+    url = "http://cogcomp.org/papers/SCKKSVBWR16.pdf",
 }
 ```
