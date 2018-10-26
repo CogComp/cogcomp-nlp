@@ -1,6 +1,6 @@
 # CogComp Edison
 
-*Edison* is a feature extraction framework that uses the data structures of [cogcomp-core-utilities](../core-utilities/README.md)
+*Edison* is a feature extraction framework that uses the data structures of [core-utilities](../core-utilities/README.md)
 to extract features used in NLP applications.
 We can define functions for feature extraction that use the tokens and one or more views. 
 This enables us to not only develop feature sets like words, n-grams, paths in parse trees, which work with a single view, 
@@ -63,7 +63,7 @@ file in order to be used by any learning software that supports it using the met
 ## List of pre-defined feature extractors
 To see the set of pre-defined feature extractors along
 with their description and the `FeatureExtractor` that implements
-them please visit our [Edison search interface](http://legolas.cs.illinois.edu:5900). 
+them. 
 
 ### Bias feature
 The keyword `bias` in a `.fex` specification includes a feature
