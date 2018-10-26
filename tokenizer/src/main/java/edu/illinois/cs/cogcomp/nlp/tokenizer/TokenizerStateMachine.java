@@ -81,6 +81,8 @@ public class TokenizerStateMachine {
     
     /**
      * Init the state machine decision matrix and the text annotation.
+     * @param splitOnDash true to split tokens on a "-"
+     * @param splitOnTwoNewlines if true split a paragraph on two new lines.
      */
     public TokenizerStateMachine(final boolean splitOnDash, final boolean splitOnTwoNewlines) {
         // cardinality of 1st dim the number of states(TokenizerState), 2nd is the number of token
@@ -524,7 +526,11 @@ public class TokenizerStateMachine {
     
     /** this regex finds emails addresses. */
     private static final Pattern emailRegex = 
-                    Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}", Pattern.CASE_INSENSITIVE);
+                    Pattern.compile("\\b[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-]+\\.[A-Za-z]+\\b");
+    
+    /** match emails with only one term in the domain name. */
+    private static final Pattern emailRegex2 = 
+                    Pattern.compile("\\b[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-\\.]+\\b");
     
     /**
      * We have encountered a colon in the input data stream, check to see if it is a URL, and if it
@@ -535,14 +541,22 @@ public class TokenizerStateMachine {
     protected boolean isEmail() {
         int start = this.getCurrent().start;
         String tmp = new String (text).substring(start);
-        Matcher matcher = emailRegex.matcher(tmp);
+        Matcher matcher = emailRegex2.matcher(tmp);
         if (matcher.find()) {
             int end = matcher.end();
             current = start + (end-1);
             this.pop(this.current + 1);
             return true;
         } else {
-            return false;
+            matcher = emailRegex.matcher(tmp);
+            if (matcher.find()) {
+                int end = matcher.end();
+                current = start + (end-1);
+                this.pop(this.current + 1);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -895,19 +909,20 @@ public class TokenizerStateMachine {
             return end - start;
         }
     }
+    
+    /**
+     * This is just used to test whatever doesn't parse correctly.
+     * @param args
+     */
     static public void main(String[] args) {
-        final Pattern emailRegex = 
-                        Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}", Pattern.CASE_INSENSITIVE);
-        String tmp = "redman@illinois.edu-tmpl.ak is my email.";
-        Matcher matcher = emailRegex.matcher(tmp);
-        if (matcher.find()) {
-            int end = matcher.end();
-            System.out.println("did work : "+tmp.substring(matcher.start(), matcher.end()));
-
-        } else {
-            System.err.println("didn't work.");
+        final Pattern emailRegex2 = 
+                        Pattern.compile("\\b[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-\\.]+\\b");
+        String tmp = "robert_serafin@kmz.com to robert-serafin@kmz.com";
+        Matcher match = emailRegex2.matcher(tmp);
+        while (match.find()) {
+            int start = match.start();
+            int end = match.end();
+            System.out.println(tmp.substring(match.start(), match.end()));
         }
-
     }
-
 }

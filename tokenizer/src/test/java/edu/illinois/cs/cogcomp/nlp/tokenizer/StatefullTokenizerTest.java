@@ -356,6 +356,14 @@ public class StatefullTokenizerTest {
         assertEquals(taA.getNumberOfSentences(), 1);
         String[] toks = taA.getTokens();
         assertEquals(toks[1], "tomredman@mchsi.com");
+        
+        text = "JLama@summat To robert_serafin@kmz.com";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        toks = taA.getTokens();
+        assertEquals(toks[0], "JLama@summat");
+        assertEquals(toks[2], "robert_serafin@kmz.com");
+
     }
 
     /**
@@ -391,6 +399,7 @@ public class StatefullTokenizerTest {
         TextAnnotation ta = tab.createTextAnnotation(text);
         assertEquals(ta.getNumberOfSentences(), 1);
     }
+    
     /**
      * This can be used to just quickly debug when a sentence produces an error.
      * @param args
