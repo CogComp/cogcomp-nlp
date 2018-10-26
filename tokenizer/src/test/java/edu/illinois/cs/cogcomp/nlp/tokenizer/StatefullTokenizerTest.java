@@ -356,6 +356,14 @@ public class StatefullTokenizerTest {
         assertEquals(taA.getNumberOfSentences(), 1);
         String[] toks = taA.getTokens();
         assertEquals(toks[1], "tomredman@mchsi.com");
+        
+        text = "JLama@summat To robert_serafin@kmz.com";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        assertEquals(taA.getNumberOfSentences(), 1);
+        toks = taA.getTokens();
+        assertEquals(toks[0], "JLama@summat");
+        assertEquals(toks[2], "robert_serafin@kmz.com");
+
     }
 
     /**
@@ -390,23 +398,6 @@ public class StatefullTokenizerTest {
         String text = "I was born in Urbana, Il. in 1992.";
         TextAnnotation ta = tab.createTextAnnotation(text);
         assertEquals(ta.getNumberOfSentences(), 1);
-    }
-    /**
-     * 
-     * Test sentence splitter behavior when a there is a lower cased acronym followed immediately by a dot.
-     */
-    @Test
-    public void testEmails(){
-        TokenizerTextAnnotationBuilder tab =
-                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
-        String text = "jlama@summat\n" + 
-                        "to\n" + 
-                        "   <robertserafin@kmzcom";
-        TextAnnotation ta = tab.createTextAnnotation(text);
-        String [] tokens = ta.getTokens();
-        for (String token : tokens) {
-            System.out.println(token);
-        }
     }
     
     /**
