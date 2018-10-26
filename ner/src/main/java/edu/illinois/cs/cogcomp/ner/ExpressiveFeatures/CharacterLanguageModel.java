@@ -27,7 +27,7 @@ public class CharacterLanguageModel {
 
         // counts maps: history -> { word: count, word : count, etc }
         counts = new HashMap<>();
-        order = 6;
+        order = 4;
     }
 
 
@@ -250,8 +250,8 @@ public class CharacterLanguageModel {
 //        String trainpath= "/shared/corpora/ner/conll2003/eng-files/Train-json/";
 //        String testpath = "/shared/corpora/ner/conll2003/eng-files/Test-json/";
 
-        String trainpath= "/shared/corpora/ner/lorelei-swm-new/ben/Train/";
-        String testpath = "/shared/corpora/ner/lorelei-swm-new/ben/Test/";
+        String trainpath= "/shared/corpora/ner/lorelei-swm-new/ara/Train/";
+        String testpath = "/shared/corpora/ner/lorelei-swm-new/ara/Test/";
 
 
         Data trainData = new Data(trainpath, trainpath, "-json", new String[] {}, new String[] {}, params);
