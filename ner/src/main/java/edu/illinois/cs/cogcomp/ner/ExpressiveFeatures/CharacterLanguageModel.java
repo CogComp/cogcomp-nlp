@@ -173,6 +173,26 @@ public class CharacterLanguageModel {
         return chars;
     }
 
+    // this test is for a large file at :
+    // /shared/corpora/ner/clm/wikiEntity_train.out
+    public static void test2() throws Exception {
+        List<String> lines = LineIO.read("/shared/corpora/ner/clm/wikiEntity_train.out");
+        List<List<String>> seqs = new ArrayList<>();
+        for(String line : lines){
+            String[] chars = line.trim().split(" ");
+            ArrayList<String> seq = new ArrayList<String>(Arrays.asList(chars));
+            seqs.add(seq);
+        }
+
+        CharacterLanguageModel clm = new CharacterLanguageModel();
+        System.out.println(seqs.size());
+        clm.train(seqs);
+
+
+        System.out.println(clm.perplexity(Arrays.asList("H o e k s t e n b e r g e r".split(" "))));
+        System.out.println(clm.perplexity(Arrays.asList("a b s t r a c t u a l l y".split(" "))));
+    }
+    
     public static void test() throws FileNotFoundException {
         String dir = "/home/mayhew/data/pytorch-example/data/names/";
         File names = new File(dir);
@@ -243,21 +263,21 @@ public class CharacterLanguageModel {
 
     public static void main(String[] args) throws Exception {
         // this trains models, and provides perplexities.
-        //test();
+        test2();
 
-        ParametersForLbjCode params = Parameters.readConfigAndLoadExternalData("config/ner.properties", false);
+        //ParametersForLbjCode params = Parameters.readConfigAndLoadExternalData("config/ner.properties", false);
 
 //        String trainpath= "/shared/corpora/ner/conll2003/eng-files/Train-json/";
 //        String testpath = "/shared/corpora/ner/conll2003/eng-files/Test-json/";
 
-        String trainpath= "/shared/corpora/ner/lorelei-swm-new/ara/Train/";
-        String testpath = "/shared/corpora/ner/lorelei-swm-new/ara/Test/";
+        //String trainpath= "/shared/corpora/ner/lorelei-swm-new/ara/Train/";
+        //String testpath = "/shared/corpora/ner/lorelei-swm-new/ara/Test/";
 
 
-        Data trainData = new Data(trainpath, trainpath, "-json", new String[] {}, new String[] {}, params);
-        Data testData = new Data(testpath, testpath, "-json", new String[] {}, new String[] {}, params);
+        //Data trainData = new Data(trainpath, trainpath, "-json", new String[] {}, new String[] {}, params);
+        //Data testData = new Data(testpath, testpath, "-json", new String[] {}, new String[] {}, params);
 
-        trainEntityNotEntity(trainData, testData);
+        //trainEntityNotEntity(trainData, testData);
     }
 
 
