@@ -34,10 +34,14 @@ public class CharacterLanguageModel {
 
         // counts maps: history -> { word: count, word : count, etc }
         counts = new HashMap<>();
-        order = 6;
+        order = 4;
     }
 
-    static public CharacterLanguageModel getLM(String key) {
+    public static void addLM(String key, CharacterLanguageModel clm) {
+        charlms.put(key, clm);
+    }
+
+    public static CharacterLanguageModel getLM(String key) {
         return charlms.get(key);
     }
 
@@ -183,6 +187,26 @@ public class CharacterLanguageModel {
         return chars;
     }
 
+    // this test is for a large file at :
+    // /shared/corpora/ner/clm/wikiEntity_train.out
+    public static void test2() throws Exception {
+        List<String> lines = LineIO.read("/shared/corpora/ner/clm/wikiEntity_train.out");
+        List<List<String>> seqs = new ArrayList<>();
+        for(String line : lines){
+            String[] chars = line.trim().split(" ");
+            ArrayList<String> seq = new ArrayList<String>(Arrays.asList(chars));
+            seqs.add(seq);
+        }
+
+        CharacterLanguageModel clm = new CharacterLanguageModel();
+        System.out.println(seqs.size());
+        clm.train(seqs);
+
+
+        System.out.println(clm.perplexity(Arrays.asList("H o e k s t e n b e r g e r".split(" "))));
+        System.out.println(clm.perplexity(Arrays.asList("a b s t r a c t u a l l y".split(" "))));
+    }
+    
     public static void test() throws FileNotFoundException {
         String dir = "/home/mayhew/data/pytorch-example/data/names/";
         File names = new File(dir);
@@ -301,30 +325,28 @@ public class CharacterLanguageModel {
 
     public static List<List<String>> readList(String path) {
 
-        List<List<String>> data = new ArrayList<>();
+        List<List<String>> seqs = new ArrayList<>();
         try {
-            InputStream is = new FileInputStream(path);
-            InFile in = new InFile(is);
-            String line = in.readLine();
-            while (line != null) {
-                List<String> splited = new ArrayList<>(Arrays.asList(line.replace("\n","").split(" ")));
-                data.add(splited);
-                line = in.readLine();
+            List<String> lines = LineIO.read("/shared/corpora/ner/clm/wikiEntity_train.out");
+            for(String line : lines){
+                String[] chars = line.trim().split(" ");
+                ArrayList<String> seq = new ArrayList<String>(Arrays.asList(chars));
+                seqs.add(seq);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return data;
+        return seqs;
     }
 
 
     public static void main(String[] args) throws Exception {
         // this trains models, and provides perplexities.
-        //test();
+//        test2();
 
         ParametersForLbjCode params = Parameters.readConfigAndLoadExternalData("config/ner.properties", false);
 
-//        String trainpath= "/shared/corpora/ner/conll2003/eng-files/Train-json/";
+        String trainpath= "/shared/corpora/ner/conll2003/eng-files/Train-json/";
         String testpath = "/shared/corpora/ner/conll2003/eng-files/Test-json/";
 
 //        String trainpath= "/shared/corpora/ner/lorelei-swm-new/ben/Train/";
@@ -334,16 +356,16 @@ public class CharacterLanguageModel {
         String wiki_ent_file = "/shared/corpora/ner/clm/wikiEntity_train.out";
         String wiki_nonent_file = "/shared/corpora/ner/clm/wikiNotEntity_train.out";
 
-        List<List<String>> wiki_ent = CharacterLanguageModel.readList(wiki_ent_file);
-        List<List<String>> wiki_non_ent = CharacterLanguageModel.readList(wiki_nonent_file);
+//        List<List<String>> wiki_ent = CharacterLanguageModel.readList(wiki_ent_file);
+//        List<List<String>> wiki_non_ent = CharacterLanguageModel.readList(wiki_nonent_file);
 
         System.out.println("train entity clm");
         CharacterLanguageModel eclm = new CharacterLanguageModel();
-        eclm.train(wiki_ent);
+        eclm.train(CharacterLanguageModel.readList(wiki_ent_file));
 
         System.out.println("train non entity clm");
         CharacterLanguageModel neclm = new CharacterLanguageModel();
-        neclm.train(wiki_non_ent);
+        neclm.train(CharacterLanguageModel.readList(wiki_nonent_file));
 
         System.out.println("Testing");
 //        Data trainData = new Data(trainpath, trainpath, "-json", new String[] {}, new String[] {}, params);
@@ -352,6 +374,7 @@ public class CharacterLanguageModel {
 
 
 //        trainEntityNotEntity(trainData, testData);
+
     }
 
 

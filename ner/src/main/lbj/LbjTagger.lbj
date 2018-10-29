@@ -3,6 +3,7 @@ package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.CharacterLanguageModel;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordTopicAndLayoutFeatures;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
@@ -363,7 +364,52 @@ discrete% PreviousTagPatternLevel1(NEWord word) <-
 	}
 }
 
-mixed% FeaturesSharedTemp(NEWord word) 	<-	IsSentenceStart, Capitalization, nonLocalFeatures, GazetteersFeatures, FormParts, Forms,  WordTypeInformation, Affixes, BrownClusterPaths, WordEmbeddingFeatures, WikifierFeatures, AffixesZH
+discrete{false, true}% CharLangModelPrediction_context(NEWord word) <-
+{
+  	int i;
+  	CharacterLanguageModel eclm = CharacterLanguageModel.getLM("entity");
+  	CharacterLanguageModel neclm = CharacterLanguageModel.getLM("nonentity");
+
+  	NEWord w = word, last = word;
+  	for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
+  	for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
+  	for (; w != last; w = (NEWord) w.next){
+  		Double isEntity = eclm.perplexity(CharacterLanguageModel.string2list(w.form));
+        Double isNotEntity = neclm.perplexity(CharacterLanguageModel.string2list(w.form));
+
+  		if( Double.compare(isEntity, isNotEntity) < 0 )
+          	sense i+"NoThreshold" : true;
+        else
+         	sense i+"NoThreshold" : false;
+  		i++;
+  	}
+}
+
+discrete{false, true}% CharLangModelArabic(NEWord word) <-
+{
+    CharacterLanguageModel arabic_clm = CharacterLanguageModel.getLM("arabic");
+  	CharacterLanguageModel neclm = CharacterLanguageModel.getLM("nonentity");
+  	Double isArabic = arabic_clm.perplexity(CharacterLanguageModel.string2list(word.form));
+    Double isNotEntity = neclm.perplexity(CharacterLanguageModel.string2list(word.form));
+    if( Double.compare(isArabic, isNotEntity) < 0 )
+        sense "Arabic" : true;
+    else
+        sense "Arabic" : false;
+}
+
+discrete{false, true}% CharLangModelRussian(NEWord word) <-
+{
+   	CharacterLanguageModel russian_clm = CharacterLanguageModel.getLM("russian");
+    CharacterLanguageModel neclm = CharacterLanguageModel.getLM("nonentity");
+   	Double isRussian = russian_clm.perplexity(CharacterLanguageModel.string2list(word.form));
+    Double isNotEntity = neclm.perplexity(CharacterLanguageModel.string2list(word.form));
+    if( Double.compare(isRussian, isNotEntity) < 0 )
+        sense "Russian" : true;
+    else
+        sense "Russian" : false;
+}
+
+mixed% FeaturesSharedTemp(NEWord word) 	<-	IsSentenceStart, Capitalization, nonLocalFeatures, GazetteersFeatures, FormParts, Forms,  WordTypeInformation, Affixes, BrownClusterPaths, WordEmbeddingFeatures, WikifierFeatures, AffixesZH, CharLangModelPrediction_context, CharLangModelArabic, CharLangModelRussian
 
 mixed% FeaturesLevel1SharedWithLevel2(NEWord word)  <- FeaturesSharedTemp /*,  IsWordCaseNormalized&&FeaturesSharedTemp*/
 

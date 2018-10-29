@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.CharacterLanguageModel;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TitleTextNormalizer;
@@ -312,6 +313,35 @@ public class Parameters {
                     wordEmbeddingDebug +=
                             "\t-IsLowercased=" + isLowercaseWordEmbeddings.elementAt(i) + "\n";
                 }
+
+            }
+
+            if (rm.containsKey("pathToLM")) {
+                String wiki_ent_file = "/shared/corpora/ner/clm/wikiEntity_train.out";
+                String wiki_nonent_file = "/shared/corpora/ner/clm/wikiNotEntity_train.out";
+                String arabic_file = "/shared/corpora/ner/clm/arabic_names.out";
+                String russian_file = "/shared/corpora/ner/clm/russian_train.out";
+
+                System.out.println("train entity clm");
+                CharacterLanguageModel eclm = new CharacterLanguageModel();
+                eclm.train(CharacterLanguageModel.readList(wiki_ent_file));
+
+                System.out.println("train non entity clm");
+                CharacterLanguageModel neclm = new CharacterLanguageModel();
+                neclm.train(CharacterLanguageModel.readList(wiki_nonent_file));
+
+                System.out.println("train arabic clm");
+                CharacterLanguageModel arabic_clm = new CharacterLanguageModel();
+                arabic_clm.train(CharacterLanguageModel.readList(arabic_file));
+
+                System.out.println("train russian clm");
+                CharacterLanguageModel russian_clm = new CharacterLanguageModel();
+                russian_clm.train(CharacterLanguageModel.readList(russian_file));
+
+                CharacterLanguageModel.addLM("entity", eclm);
+                CharacterLanguageModel.addLM("nonentity", neclm);
+                CharacterLanguageModel.addLM("arabic", arabic_clm);
+                CharacterLanguageModel.addLM("russian", russian_clm);
 
             }
 
