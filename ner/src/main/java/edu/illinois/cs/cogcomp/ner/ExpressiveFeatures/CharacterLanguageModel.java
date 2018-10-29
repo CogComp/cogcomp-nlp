@@ -1,11 +1,17 @@
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
+import edu.illinois.cs.cogcomp.ner.IO.InFile;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
+import gnu.trove.map.hash.THashMap;
+
+import java.io.InputStream;
+import java.io.FileInputStream;
+
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -18,6 +24,7 @@ public class CharacterLanguageModel {
     private HashMap<String, HashMap<String, Double>> counts;
     private int order;
     private String pad = "_";
+    private static THashMap<String, CharacterLanguageModel> charlms = new THashMap<>();
 
     public CharacterLanguageModel(){
         // parameterized how? order of ngrams?
@@ -30,6 +37,9 @@ public class CharacterLanguageModel {
         order = 6;
     }
 
+    static public CharacterLanguageModel getLM(String key) {
+        return charlms.get(key);
+    }
 
     /**
      * Actually returns the log perplexity.
@@ -241,6 +251,73 @@ public class CharacterLanguageModel {
 
     }
 
+
+    public static void test(CharacterLanguageModel eclm, CharacterLanguageModel neclm, Data testData) throws IOException {
+
+        double correct = 0;
+        double total = 0;
+        List<String> outpreds = new ArrayList<>();
+        for(NERDocument doc : testData.documents){
+            for(LinkedVector sentence : doc.sentences){
+                for(int i = 0; i < sentence.size(); i++) {
+                    NEWord word = (NEWord) sentence.get(i);
+                    String label = word.neLabel.equals("O")? "O" : "B-ENT";
+                    double eppl = eclm.perplexity(string2list(word.form));
+                    double neppl = neclm.perplexity(string2list(word.form));
+
+                    String pred;
+
+                    if(word.form.length() < 3){
+                        pred = "O";
+                    }else if(eppl < neppl){
+                        pred = "B-ENT";
+                    }else{
+                        pred = "O";
+                    }
+
+                    if (pred.equals(label)){
+                        //System.out.println(word.form + ": correct");
+                        correct += 1;
+                    }else{
+                        System.out.println(word.form + ": WRONG***");
+                    }
+                    total +=1;
+
+                    outpreds.add(word.form + " " + label + " " + pred);
+                }
+                outpreds.add("");
+            }
+        }
+
+        System.out.println("Accuracy: " + correct / total);
+
+        LineIO.write("pred.txt", outpreds);
+        System.out.println("Wrote to pred.txt. Now run $ conlleval pred.txt to get F1 scores.");
+
+
+    }
+
+
+
+    public static List<List<String>> readList(String path) {
+
+        List<List<String>> data = new ArrayList<>();
+        try {
+            InputStream is = new FileInputStream(path);
+            InFile in = new InFile(is);
+            String line = in.readLine();
+            while (line != null) {
+                List<String> splited = new ArrayList<>(Arrays.asList(line.replace("\n","").split(" ")));
+                data.add(splited);
+                line = in.readLine();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+
     public static void main(String[] args) throws Exception {
         // this trains models, and provides perplexities.
         //test();
@@ -248,16 +325,33 @@ public class CharacterLanguageModel {
         ParametersForLbjCode params = Parameters.readConfigAndLoadExternalData("config/ner.properties", false);
 
 //        String trainpath= "/shared/corpora/ner/conll2003/eng-files/Train-json/";
-//        String testpath = "/shared/corpora/ner/conll2003/eng-files/Test-json/";
+        String testpath = "/shared/corpora/ner/conll2003/eng-files/Test-json/";
 
-        String trainpath= "/shared/corpora/ner/lorelei-swm-new/ben/Train/";
-        String testpath = "/shared/corpora/ner/lorelei-swm-new/ben/Test/";
+//        String trainpath= "/shared/corpora/ner/lorelei-swm-new/ben/Train/";
+//        String testpath = "/shared/corpora/ner/lorelei-swm-new/ben/Test/";
 
+        System.out.println("Reading List");
+        String wiki_ent_file = "/shared/corpora/ner/clm/wikiEntity_train.out";
+        String wiki_nonent_file = "/shared/corpora/ner/clm/wikiNotEntity_train.out";
 
-        Data trainData = new Data(trainpath, trainpath, "-json", new String[] {}, new String[] {}, params);
+        List<List<String>> wiki_ent = CharacterLanguageModel.readList(wiki_ent_file);
+        List<List<String>> wiki_non_ent = CharacterLanguageModel.readList(wiki_nonent_file);
+
+        System.out.println("train entity clm");
+        CharacterLanguageModel eclm = new CharacterLanguageModel();
+        eclm.train(wiki_ent);
+
+        System.out.println("train non entity clm");
+        CharacterLanguageModel neclm = new CharacterLanguageModel();
+        neclm.train(wiki_non_ent);
+
+        System.out.println("Testing");
+//        Data trainData = new Data(trainpath, trainpath, "-json", new String[] {}, new String[] {}, params);
         Data testData = new Data(testpath, testpath, "-json", new String[] {}, new String[] {}, params);
+        CharacterLanguageModel.test(eclm, neclm, testData);
 
-        trainEntityNotEntity(trainData, testData);
+
+//        trainEntityNotEntity(trainData, testData);
     }
 
 
