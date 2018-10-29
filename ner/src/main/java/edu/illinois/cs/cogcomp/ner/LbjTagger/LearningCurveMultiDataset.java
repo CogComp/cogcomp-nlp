@@ -73,6 +73,7 @@ public class LearningCurveMultiDataset {
      * @param incremental if the model is being incremented, this is true.
      * @throws Exception
      */
+
     public static void getLearningCurve(int fixedNumIterations, String trainDataPath, String testDataPath, 
             boolean incremental, ParametersForLbjCode params) throws Exception {
         getLearningCurve(fixedNumIterations, "-c", trainDataPath, testDataPath, incremental, params);
