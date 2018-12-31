@@ -3,7 +3,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.14</version>
+        <version>4.0.15</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -33,42 +33,42 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>stanford_3.3.1</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-md</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
