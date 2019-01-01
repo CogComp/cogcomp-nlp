@@ -248,7 +248,13 @@ public class Main extends AbstractMain {
             System.out.println("Loading resources...");
             if (resourceManager == null)
                 this.resourceManager = new NerBaseConfigurator().getDefaultConfig();
-            String viewName = this.resourceManager.getString(NerBaseConfigurator.VIEW_NAME);
+            String viewName = null;
+            try {
+                viewName = this.resourceManager.getString(NerBaseConfigurator.VIEW_NAME);
+            } catch (Throwable t) {
+                // for some reason they have decided to throw an exception simply because a property
+                // isn't defined.
+            }
             if (viewName == null) {
                 String modelName = this.resourceManager.getString(NerBaseConfigurator.MODEL_NAME);
                 if (modelName.toLowerCase().equals("conll"))

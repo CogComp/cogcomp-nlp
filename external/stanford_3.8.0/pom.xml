@@ -2,7 +2,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.14</version>
+        <version>4.0.15</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -16,12 +16,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>external-commons</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -49,6 +49,21 @@
             <groupId>com.github.stuxuhai</groupId>
             <artifactId>jpinyin</artifactId>
             <version>1.1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.stuxuhai</groupId>
+            <artifactId>jpinyin</artifactId>
+            <version>1.1.8</version>
+        </dependency>
+		<dependency>
+            <groupId>com.atilika.kuromoji</groupId>
+            <artifactId>kuromoji-core</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+		<dependency>
+            <groupId>com.atilika.kuromoji</groupId>
+            <artifactId>kuromoji-ipadic</artifactId>
+            <version>0.9.0</version>
         </dependency>
     </dependencies>
 

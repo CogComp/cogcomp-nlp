@@ -306,8 +306,8 @@ public class TokenizerStateMachine {
                                 // Hi., and Feb. 4. Rule here is that if it is followed by a printable
                                 // character, it is just part of the word.
                                 // If it is followed by a space, but appears to be part of an
-                                // acronym(starts with a
-                                // period), it's part word, otherwise, it's punctuation.
+                                // acronym(starts with a period), it's part word, otherwise, it's punctuation.
+                                // Decimal numbers are also handled here.
                                 char c = peek(1);
                                 if (!Character.isWhitespace(c)
                                         && (c != ',' && c != '"' && c != '.' && c != '?'
@@ -326,7 +326,7 @@ public class TokenizerStateMachine {
                                             // punctuation then, pass through
                                         }
                                     } else {
-                                        if ( (Character.isAlphabetic(c) && Character.isUpperCase(c)) || Character.isDigit(c))
+                                        if ( (Character.isAlphabetic(c)/* && Character.isUpperCase(c)*/) || Character.isDigit(c))
                                             // the next character is not white space, so the period
                                             // is part of the word
                                             return;
@@ -526,11 +526,11 @@ public class TokenizerStateMachine {
     
     /** this regex finds emails addresses. */
     private static final Pattern emailRegex = 
-                    Pattern.compile("\\b[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-]+\\.[A-Za-z]+\\b");
+                    Pattern.compile("^[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-]+\\.[A-Za-z]+\\b");
     
     /** match emails with only one term in the domain name. */
     private static final Pattern emailRegex2 = 
-                    Pattern.compile("\\b[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-\\.]+\\b");
+                    Pattern.compile("^[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-\\.]+\\b");
     
     /**
      * We have encountered a colon in the input data stream, check to see if it is a URL, and if it
@@ -543,6 +543,10 @@ public class TokenizerStateMachine {
         String tmp = new String (text).substring(start);
         Matcher matcher = emailRegex2.matcher(tmp);
         if (matcher.find()) {
+            
+            // has to match from the start
+            if (matcher.start() != 0)
+                return false;
             int end = matcher.end();
             current = start + (end-1);
             this.pop(this.current + 1);
@@ -619,7 +623,7 @@ public class TokenizerStateMachine {
     /**
      * Get the next word, this is a lookahead operation.
      * 
-     * @returns the next word.
+     * @return the next word.
      */
     String getNextWord() {
         int texttype = TokenType.TEXT.ordinal();
@@ -916,13 +920,11 @@ public class TokenizerStateMachine {
      */
     static public void main(String[] args) {
         final Pattern emailRegex2 = 
-                        Pattern.compile("\\b[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-\\.]+\\b");
+                        Pattern.compile("^[A-Za-z0-9\\._%\\+\\-]+@[A-Za-z0-9\\-\\.]+\\b");
         String tmp = "robert_serafin@kmz.com to robert-serafin@kmz.com";
         Matcher match = emailRegex2.matcher(tmp);
         while (match.find()) {
-            int start = match.start();
-            int end = match.end();
-            System.out.println(tmp.substring(match.start(), match.end()));
+           System.out.println(tmp.substring(match.start(), match.end()));
         }
     }
 }

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.14</version>
+        <version>4.0.15</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>illinois-time</artifactId>
@@ -13,7 +13,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>org.apache.uima</groupId>
@@ -43,12 +43,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
     </dependencies>
 </project>

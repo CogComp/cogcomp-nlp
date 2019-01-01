@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>4.0.14</version>
+    <version>4.0.15</version>
     <modules>
         <module>core-utilities</module>
         <module>tokenizer</module>
@@ -54,6 +54,10 @@
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
             <url>http://macniece.seas.upenn.edu/m2repo/</url>
+        </repository>
+        <repository>
+            <id>Atilika Open Source repository</id>
+            <url>http://www.atilika.org/nexus/content/repositories/atilika</url>
         </repository>
     </repositories>
 

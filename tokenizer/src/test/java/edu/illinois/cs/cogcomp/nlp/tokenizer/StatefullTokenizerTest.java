@@ -99,7 +99,7 @@ public class StatefullTokenizerTest {
      * Test method for {@link IllinoisTokenizer} .
      */
     @Test
-    public void testStatefulTokenizer() {
+    public void testBasicTokenization() {
         Tokenizer tokenizer = new StatefulTokenizer();
 
         String sentence = "This is a   test.";
@@ -296,6 +296,20 @@ public class StatefullTokenizerTest {
         taA = bldr.createTextAnnotation("test", "test", text);
         assertEquals(taA.getNumberOfSentences(), 2);
     }
+    
+    /**
+     * Parse out a date, which will hopefully look like a date.
+     */
+    @Test
+    public void testConjunctions() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String tmp = "Bob O'Rourke isn't going to be a good ally!";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", tmp);
+        String[] toks = taA.getTokens();
+        assertEquals(toks[1], "O'Rourke");
+    }
+    
 
     /**
      * Parse out a date, which will hopefully look like a date.
@@ -308,6 +322,29 @@ public class StatefullTokenizerTest {
         TextAnnotation taA = bldr.createTextAnnotation("test", "test", tmp);
         String[] toks = taA.getTokens();
         assertEquals(toks[8], "10/23/2018");
+    }
+    
+    /**
+     * Test file extensions.
+     */
+    @Test
+    public void testPeriodContract() {
+        TokenizerTextAnnotationBuilder bldr =
+                        new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true, true));
+        String tmp = "Info is in tokenizer.pdf or the palatar.MOV file. The next sentence is a structure unto itself.";
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", tmp);
+        String[] toks = taA.getTokens();
+        assertEquals(toks[3], "tokenizer.pdf");
+        assertEquals(toks[6], "palatar.MOV");
+        tmp = "I am the man from U.N.C.L.E., but you are not at the U.N. now.";
+        taA = bldr.createTextAnnotation("test", "test", tmp);
+        toks = taA.getTokens();
+        assertEquals(toks[5], "U.N.C.L.E.");
+        assertEquals(toks[13], "U.N.");
+        tmp = "The head of Inefficient Machine Co. Edward Doolally later relented.";
+        taA = bldr.createTextAnnotation("test", "test", tmp);
+        toks = taA.getTokens();
+        assertEquals(taA.getNumberOfSentences(), 1);
     }
     
     /**
@@ -342,6 +379,10 @@ public class StatefullTokenizerTest {
         assertEquals(toks[0], "(");
         assertEquals(toks[2], ")");
         assertEquals(taA.getNumberOfSentences(), 1);
+        
+        taA = bldr.createTextAnnotation("test", "test", "Bill was traveling at .34km an hour.");
+        toks = taA.getTokens();
+        assertEquals(toks[4],".34km");
     }
 
     /**
@@ -357,12 +398,19 @@ public class StatefullTokenizerTest {
         String[] toks = taA.getTokens();
         assertEquals(toks[1], "tomredman@mchsi.com");
         
-        text = "JLama@summat To robert_serafin@kmz.com";
+        text = "JLama@summat To robert.serafin@kmz.com At bob_marly@kmz.com";
         taA = bldr.createTextAnnotation("test", "test", text);
         assertEquals(taA.getNumberOfSentences(), 1);
         toks = taA.getTokens();
         assertEquals(toks[0], "JLama@summat");
-        assertEquals(toks[2], "robert_serafin@kmz.com");
+        assertEquals(toks[2], "robert.serafin@kmz.com");
+        assertEquals(toks[4], "bob_marly@kmz.com");
+        
+        text = "3@:_* 6@o    aB'J   h@a}-";
+        taA = bldr.createTextAnnotation("test", "test", text);
+        toks = taA.getTokens();
+        assertEquals(toks[5], "6@o");
+        assertEquals(toks[7], "h@a");
 
     }
 

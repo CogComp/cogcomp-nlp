@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>4.0.14</version>
+        <version>4.0.15</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
         <!-- Stanford Core NLP, used for its parser (for SRL) -->
         <dependency>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.15</version>
         </dependency>
     </dependencies>
 </project>
