@@ -203,9 +203,7 @@ public class OJalgoHook implements ILPSolver {
                 model.addExpression("EqualityConstraint: " + Integer.toString(numConstraints));
         constraint.level(b);
         for (int ind = 0; ind < i.length; ind++) {
-            constraint.setLinearFactor(i[ind], a[ind]);
-            // in jdk8:
-            // constraint.set(i[ind], a[ind])
+            constraint.set(i[ind], a[ind]);
         }
     }
 
@@ -222,9 +220,7 @@ public class OJalgoHook implements ILPSolver {
                 model.addExpression("GreaterThanConstraint: " + Integer.toString(numConstraints));
         constraint.lower(b);
         for (int ind = 0; ind < i.length; ind++) {
-            constraint.setLinearFactor(i[ind], a[ind]);
-            // in jdk8:
-            // constraint.set(i[ind], a[ind]);
+            constraint.set(i[ind], a[ind]);
         }
     }
 
@@ -241,9 +237,7 @@ public class OJalgoHook implements ILPSolver {
                 model.addExpression("LessThanConstraint: " + Integer.toString(numConstraints));
         constraint.upper(b);
         for (int ind = 0; ind < i.length; ind++) {
-            constraint.setLinearFactor(i[ind], a[ind]);
-            // in jdk8:
-            // constraint.set(i[ind], a[ind]);
+            constraint.set(i[ind], a[ind]);
         }
     }
 

@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.ojalgo</groupId>
             <artifactId>ojalgo</artifactId>
-            <version>40.0.0</version>
+            <version>47.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.gurobi</groupId>
