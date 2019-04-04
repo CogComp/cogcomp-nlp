@@ -22,7 +22,7 @@ It is not hard to compile. `cd` to the main directory (`edu.illinois.cs.cogcomp.
 
 ### USE
 
-The parser is meant to be used as part of the [cogcomp-nlp-pipeline](pipeline/README.md),
+The parser is meant to be used as part of the [cogcomp-nlp-pipeline](../pipeline/README.md),
 but it can also be used programmatically either from the `DepAnnotator`
 class (sentence-by-sentence processing based on `TextAnnotation`) or via the `MainClass`
 class for batch file processing mode.
