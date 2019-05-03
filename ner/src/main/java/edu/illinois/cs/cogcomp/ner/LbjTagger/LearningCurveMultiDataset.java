@@ -276,7 +276,7 @@ public class LearningCurveMultiDataset {
                     TestDiscrete.testDiscrete(simpleTest, tagger2, null, testParser2, true, 0);
     
                     double f1Level2 = simpleTest.getOverallStats()[2];
-                    if (f1Level2 > bestF1Level2) {
+                    if (f1Level2 >= bestF1Level2) {
                         bestF1Level2 = f1Level2;
                         bestRoundLevel2 = i;
                         saveme = (NETaggerLevel2) tagger2.clone();

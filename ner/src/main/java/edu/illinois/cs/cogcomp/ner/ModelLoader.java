@@ -45,7 +45,8 @@ public class ModelLoader {
         
         // the loaded built into the model will check the local file system and the jar files in the classpath.
         String modelPath = cp.pathToModelFile;
-        java.io.File modelFile = new File(modelPath + ".level1");
+        String modelFilePath = modelPath + ".level1";
+        java.io.File modelFile = new File(modelFilePath);
         NETaggerLevel1 tagger1 = null;
         NETaggerLevel2 tagger2 = null;
         if (modelFile.exists()) {
@@ -57,7 +58,7 @@ public class ModelLoader {
             } else {
                 logger.info("L2 model not required.");
             }
-        } else if (IOUtilities.existsInClasspath(NETaggerLevel1.class, modelPath)) {
+        } else if (IOUtilities.existsInClasspath(NETaggerLevel1.class, modelFilePath)) {
             tagger1 = new NETaggerLevel1(modelPath + ".level1", modelPath + ".level1.lex");
             logger.info("Reading L1 model from classpath : " + modelPath + ".level2");
             if (cp.featuresToUse.containsKey("PredictionsLevel1")) {
