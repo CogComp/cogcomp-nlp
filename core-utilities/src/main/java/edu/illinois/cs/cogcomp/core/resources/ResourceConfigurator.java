@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
  * Default configuration for resources
  */
 public class ResourceConfigurator extends Configurator {
-    public static final Property ENDPOINT = new Property("datastoreEndpoint", "http://smaug.cs.illinois.edu:8080");
+    public static final Property ENDPOINT = new Property("datastoreEndpoint", "http://macniece.seas.upenn.edu:4008");
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
