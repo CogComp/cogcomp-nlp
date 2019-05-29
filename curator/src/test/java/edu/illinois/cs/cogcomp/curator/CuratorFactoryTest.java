@@ -17,6 +17,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class CuratorFactoryTest {
 
     private static AnnotatorService curator;
 
+    @Ignore
     @Before
     public void setUp() throws Exception {
         text = LineIO.slurp(TEXT_FILE);
@@ -50,6 +52,7 @@ public class CuratorFactoryTest {
         if (curator == null) curator = CuratorFactory.buildCuratorClient(config);
     }
 
+    @Ignore
     @Test
     public void testGetTextAnnotation() {
         // if we are running the test on Semaphore, ignore this test, since Gurobi is not provided on Semaphore.
@@ -80,6 +83,7 @@ public class CuratorFactoryTest {
         }
     }
 
+    @Ignore
     @Test
     public void testGetIndividualTextAnnotationViews() throws IOException {
         // if we are running the test on Semaphore, ignore this test, since Gurobi is not provided on Semaphore.
@@ -106,6 +110,7 @@ public class CuratorFactoryTest {
         }
     }
 
+    @Ignore
     @Test
     public void testGetAllTextAnnotationViews() {
         // if we are running the test on Semaphore, ignore this test, since Gurobi is not provided on Semaphore.
