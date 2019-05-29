@@ -7,11 +7,19 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +30,17 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.vectors.OVector;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.lbjava.classify.Feature;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
+import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
+import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron.AveragedWeightVector;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
-import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
-import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
@@ -242,5 +252,189 @@ public class NERAnnotator extends Annotator {
             tagSet.add(labelLexicon.lookupKey(i).getStringValue());
         }
         return tagSet;
+    }
+
+    /**
+     * Return the features and the weight vectors for each SparseAveragedPerceptron 
+     * in the network learner for the L1 model.
+     * 
+     * @return the set of string representing the tag values
+     */
+    public HashMap<Feature, double[]> getL1FeatureWeights() {
+        if (!isInitialized()) {
+            doInitialize();
+        }
+        SparseNetworkLearner l1= this.params.taggerLevel1;
+        Map lex =  l1.getLexicon().getMap();
+        OVector ov = l1.getNetwork();
+        HashMap<Feature, double[]> weightsPerFeature = new HashMap<>();
+        
+        // for each feature, make a map entry keyed on feature name.
+        int cnt = 0;
+        for (Object mapentry : lex.entrySet()) {
+        	
+        	// get the feature, and the features weight index within each of
+        	// the network fo learners.
+        	Feature feature = (Feature) ((Entry)mapentry).getKey();
+        	int index = ((Integer) ((Entry)mapentry).getValue()).intValue();
+        	double [] weights = new double[ov.size()];
+        	for (int i = 0 ; i < ov.size(); i++) {
+        		SparseAveragedPerceptron sap = (SparseAveragedPerceptron) (ov.get(i));
+        		AveragedWeightVector awv = sap.getAveragedWeightVector();
+        		weights[i] = awv.getRawWeights().get(index);
+        	}
+        	weightsPerFeature.put(feature, weights);
+        }
+        return weightsPerFeature;
+    }
+
+    /**
+     * Return the features and the weight vectors for each SparseAveragedPerceptron 
+     * in the network learner for the L2 model.
+     * 
+     * @return the set of string representing the tag values
+     */
+    public HashMap<Feature, double[]> getL2FeatureWeights() {
+        if (!isInitialized()) {
+            doInitialize();
+        }
+        SparseNetworkLearner l2= this.params.taggerLevel2;
+        Map lex =  l2.getLexicon().getMap();
+        OVector ov = l2.getNetwork();
+        HashMap<Feature, double[]> weightsPerFeature = new HashMap<>();
+        
+        // for each feature, make a map entry keyed on feature name.
+        for (Object mapentry : lex.entrySet()) {
+        	
+        	// get the feature, and the features weight index within each of
+        	// the network fo learners.
+        	Feature feature = (Feature) ((Entry)mapentry).getKey();
+        	int index = ((Integer) ((Entry)mapentry).getValue()).intValue();
+        	double [] weights = new double[ov.size()];
+        	for (int i = 0 ; i < ov.size(); i++) {
+        		SparseAveragedPerceptron sap = (SparseAveragedPerceptron) (ov.get(i));
+        		AveragedWeightVector awv = sap.getAveragedWeightVector();
+        		weights[i] = awv.getRawWeights().get(index);
+        	}
+        	weightsPerFeature.put(feature, weights);
+        }
+        return weightsPerFeature;
+    }
+    
+    /**
+     * This method takes two arguments, first is the configuration file name, relative to the working
+     * directory or the absolute path. This config can also be in a jar file, it must be found in the path
+     * provided. The second argument, L1 or anything else, indicates if the weights of the L1 or L2 models
+     * should be produced. The resulting tab delimited data contains a column for the feature type, the feature
+     * value, and an additional column for each of the models in the network learner, in the case of the CoNLL
+     * model, the following models (and consequently a column with weights) are included:
+     * I-MISC	B-LOC	I-PER	L-MISC	B-PER	U-PER	I-LOC	L-ORG	B-MISC	U-LOC	U-MISC	B-ORG	U-ORG	O	L-PER	I-ORG	L-LOC
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+        if (args.length != 2) {
+            System.out.println("FeatureWeightsMatrix requires two arguments:\n"
+                    + "   configuration file first,\n"
+                    + "   [L1|L2] to indicate which model, level 1 model or level 2 model.");
+            String configFile = args[0];
+        }
+        String conf = args[0];
+        boolean l1model = args[1].equals("L1");
+    
+    	/**
+    	 * wrap a feature and it's weights in a class enabling sorting and array acces.
+    	 * @author redman
+    	 */
+        class FeatureWrapper implements Comparable {
+        	double [] weights;
+        	Feature feature;
+        	
+        	/**
+        	 * takes the feature and weights.
+        	 * @param f the feature.
+        	 * @param w the weights.
+        	 */
+        	FeatureWrapper(Feature f, double[] w) {
+        		this.feature = f;
+        		this.weights = w;
+        	}
+        	
+			@Override
+			public int compareTo(Object o) {
+				FeatureWrapper other = (FeatureWrapper) o;
+				double s1 = this.sumWeights();
+				double s2 = other.sumWeights();
+				if (s1 > s2)
+					return -1;
+				else if (s1 == s2)
+					return 0;
+				else
+					return 1;
+			}
+			
+			/**
+			 * Add the weights together for the sort. 
+			 * @return the sum of all the weights.
+			 */
+			double sumWeights() {
+				double sum = 0;
+				for (double d : weights) {
+					sum += Math.abs(d);
+				}
+				return sum;
+			}
+			
+			/**
+			 * String in the form of that would would feel good inside of a CSV.
+			 */
+			public String toString() {
+				StringBuffer sb = new StringBuffer();
+				sb.append(feature.toString());
+				sb.append('\t');
+				sb.append(feature.getStringValue());
+				for (double d : weights) {
+					sb.append('\t');
+					sb.append(d);
+				}
+                return sb.toString();
+			}
+        }
+        
+        // set up the configuration
+        try {
+            ResourceManager rm = new ResourceManager(conf);
+            NERAnnotator nerAnnotator = NerAnnotatorManager.buildNerAnnotator(rm, ViewNames.NER_CONLL);
+            File tsvfile = new File(l1model ? "L1FeatureWeights.tsv" : "L2FeatureWeights.tsv");
+            try (BufferedWriter bow = new BufferedWriter(new FileWriter(tsvfile))) {
+	            bow.append("name\tvalue");
+	            for (String p : nerAnnotator.getTagValues()) {
+	            	bow.append("\t"+p);
+	            }
+	            bow.newLine();
+	
+	            Map<Feature, double[]> wm;
+	            if (l1model)
+	                wm = nerAnnotator.getL1FeatureWeights();
+	            else
+	                wm = nerAnnotator.getL2FeatureWeights();
+	
+	            ArrayList<FeatureWrapper> wrappers = new ArrayList<FeatureWrapper>();
+	            for (Entry<Feature, double[]> entry : wm.entrySet()) {
+	                FeatureWrapper fw = new FeatureWrapper(entry.getKey(), entry.getValue());
+	                wrappers.add(fw);
+	            }
+	            Collections.sort(wrappers);
+	            for (FeatureWrapper wrapper : wrappers) {
+	                bow.append(wrapper.toString());
+	                bow.newLine();
+	            }
+            }
+            System.out.println("Completed.");
+        } catch (IOException e) {
+            System.out.println("Cannot initialize the test, can not continue.");
+            e.printStackTrace();
+        }
+
     }
 }
