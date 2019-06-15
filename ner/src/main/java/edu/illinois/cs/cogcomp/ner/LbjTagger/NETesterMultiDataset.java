@@ -30,10 +30,10 @@ public class NETesterMultiDataset {
     /**
      * NB: assuming column format
      */
-    public static void test(String testDatapath, boolean verbose,  Vector<String> labelsToIgnoreInEvaluation, 
+    public static Vector<TestDiscrete[]> test(String testDatapath, boolean verbose,  Vector<String> labelsToIgnoreInEvaluation, 
         Vector<String> labelsToAnonymizeInEvaluation, ParametersForLbjCode params)
             throws Exception {
-        test(testDatapath,verbose, "-c", labelsToIgnoreInEvaluation, labelsToAnonymizeInEvaluation, params);
+        return test(testDatapath,verbose, "-c", labelsToIgnoreInEvaluation, labelsToAnonymizeInEvaluation, params);
     }
 
     /**
@@ -45,7 +45,7 @@ public class NETesterMultiDataset {
      * @param labelsToAnonymizeInEvaluation
      * @throws Exception
      */
-    public static void test(String testDatapath, boolean verbose, String dataFormat, Vector<String> labelsToIgnoreInEvaluation,
+    public static Vector<TestDiscrete[]> test(String testDatapath, boolean verbose, String dataFormat, Vector<String> labelsToIgnoreInEvaluation,
         Vector<String> labelsToAnonymizeInEvaluation, ParametersForLbjCode params)
             throws Exception {
         Data testData =
@@ -66,7 +66,7 @@ public class NETesterMultiDataset {
             SparseAveragedPerceptron sap2 = (SparseAveragedPerceptron)taggerLevel2.getBaseLTU();
             System.out.println("L2 SparseAveragedPerceptron learning rate = "+sap2.getLearningRate()+", thickness = "+sap2.getPositiveThickness());
         }
-        printTestResultsByDataset(data, taggerLevel1, taggerLevel2, verbose, params);
+        return printTestResultsByDataset(data, taggerLevel1, taggerLevel2, verbose, params);
     }
 
     /**
