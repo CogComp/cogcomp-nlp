@@ -34,7 +34,7 @@ import static org.junit.Assert.fail;
 public class NerLabelPruningTest {
 
     private static final String TEST_INPUT =
-            "JFK has one dog and Newark has a handful, Farbstein said. 114 dollars will by you a meal in New York, but not in Bement Illinois";
+            "JFK has one dog and Newark has a handful, Farbstein said.";
 
     @Test
     public void testOntonotesNer() {
@@ -52,6 +52,6 @@ public class NerLabelPruningTest {
             fail(e.getMessage());
         }
         View v = taOnto.getView(nerOntonotes.getViewName());
-        assertEquals(6, v.getConstituents().size());
+        assertEquals(3, v.getConstituents().size());
     }
 }
