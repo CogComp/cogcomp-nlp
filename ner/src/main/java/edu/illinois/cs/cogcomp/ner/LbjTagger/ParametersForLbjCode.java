@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -34,6 +35,9 @@ public class ParametersForLbjCode {
     // This is necessary for brackets file reader
     // will be initialized to something like {"PER","ORG","LOC","MISC"}; */
     public String[] labelTypes = {"PER", "ORG", "LOC", "MISC"};
+
+    /** labels of interest if a subset of all labels, all other labels are ignored. */
+    public ArrayList<String> labelsToKeep = null;
 
     /** Labels to ignore when evaluating model performance, e.g. "MISC" for the MUC7 dataset. */
     public Vector<String> labelsToIgnoreInEvaluation = null;

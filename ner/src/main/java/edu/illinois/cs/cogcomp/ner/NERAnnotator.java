@@ -121,7 +121,13 @@ public class NERAnnotator extends Annotator {
         // load the models.
         synchronized (LOADING_MODELS) {
             ModelLoader.load(nerRm, viewName, false, this.params);
-       }
+        }
+        if (this.params.labelsToKeep != null) {
+        	logger.info("Kept label : "+this.params.labelsToKeep);
+        	this.params.taggerLevel1.pruneUnusedLabels(this.params.labelsToKeep);
+        	if (this.params.taggerLevel2 != null)
+        		this.params.taggerLevel2.pruneUnusedLabels(this.params.labelsToKeep);
+        }
     }
 
     /**

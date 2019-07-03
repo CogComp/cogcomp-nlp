@@ -136,12 +136,15 @@ public class Parameters {
                 Language lang = Language.getLanguageByCode(rm.getString("language"));
                 param.language = lang;
             }
-
             if (rm.containsKey("labelsToAnonymizeInEvaluation")) {
                 String labelsToAnonymizeInEvaluation =
                         rm.getString("labelsToAnonymizeInEvaluation");
                 param.labelsToAnonymizeInEvaluation =
                         new Vector<>(Arrays.asList(labelsToAnonymizeInEvaluation.split(" ")));
+            }
+            if (rm.containsKey(NerBaseConfigurator.LABELS_TO_KEEP)) {
+                String labelsToKeep = rm.getString(NerBaseConfigurator.LABELS_TO_KEEP);
+                param.labelsToKeep = new ArrayList<String>(Arrays.asList(labelsToKeep.split(" ")));
             }
             if (rm.containsKey("labelsToIgnoreInEvaluation")) {
                 String labelsToIgnoreInEvaluation = rm.getString("labelsToIgnoreInEvaluation");
