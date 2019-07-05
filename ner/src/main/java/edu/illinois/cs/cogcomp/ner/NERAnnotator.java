@@ -177,26 +177,24 @@ public class NERAnnotator extends Annotator {
         // the data always has a single document
         // each LinkedVector in data corresponds to a sentence.
         int tokenoffset = 0;
-        for (LinkedVector vector : nerSentences) {
+        for (LinkedVector nerWords : nerSentences) {
             boolean open = false;
 
             // there should be a 1:1 mapping btw sentence tokens in record and words/predictions
             // from NER.
             int startIndex = -1;
             String label = null;
-            for (int j = 0; j < vector.size(); j++, tokenoffset++) {
-                NEWord neWord = (NEWord) (vector.get(j));
+            for (int j = 0; j < nerWords.size(); j++, tokenoffset++) {
+                NEWord neWord = (NEWord) (nerWords.get(j));
                 String prediction = neWord.neTypeLevel2;
 
-                // LAM-tlr this is not a great way to ascertain the entity type, it's a bit
-                // convoluted, and very
-                // inefficient, use enums, or nominalized indexes for this sort of thing.
+                // identify the label.
                 if (prediction.startsWith("B-")) {
                     startIndex = tokenoffset;
                     label = prediction.substring(2);
                     open = true;
                 } else if (j > 0) {
-                    String previous_prediction = ((NEWord) vector.get(j - 1)).neTypeLevel2;
+                    String previous_prediction = ((NEWord) nerWords.get(j - 1)).neTypeLevel2;
                     if (prediction.startsWith("I-")
                             && (!previous_prediction.endsWith(prediction.substring(2)))) {
                         startIndex = tokenoffset;
@@ -207,10 +205,10 @@ public class NERAnnotator extends Annotator {
 
                 if (open) {
                     boolean close = false;
-                    if (j == vector.size() - 1) {
+                    if (j == nerWords.size() - 1) {
                         close = true;
                     } else {
-                        String next_prediction = ((NEWord) vector.get(j + 1)).neTypeLevel2;
+                        String next_prediction = ((NEWord) nerWords.get(j + 1)).neTypeLevel2;
                         if (next_prediction.startsWith("B-"))
                             close = true;
                         if (next_prediction.equals("O"))
@@ -232,8 +230,7 @@ public class NERAnnotator extends Annotator {
                         int e = tokenindices[endIndex];
                         if (e <= s)
                             e = s + 1;
-
-                        nerView.addSpanLabel(s, e, label, 1d);
+                        nerView.addSpanLabel(s, e, label, neWord.getScore());
                         open = false;
                     }
                 }

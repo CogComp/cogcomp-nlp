@@ -160,7 +160,7 @@ public class NEWord extends Word {
      * Produces a simple <code>String</code> representation of this word in which the
      * <code>neLabel</code> field appears followed by the word's part of speech and finally the form
      * (i.e., spelling) of the word all surrounded by parentheses.
-     **/
+     */
     public String toString() {
         return "(" + neLabel + " " + partOfSpeech + " " + form + ")";
     }
@@ -200,7 +200,20 @@ public class NEWord extends Word {
             this.neTypeLevel2 = label;
     }
 
-
+    /**
+     * This method will return the score of the chosen label.
+     * @return the score of the best label for this term.
+     */
+    public double getScore() {
+    	if (predictionConfidencesLevel2Classifier == null || predictionConfidencesLevel2Classifier.topScores.size() == 0)
+    		if (predictionConfidencesLevel1Classifier == null || predictionConfidencesLevel1Classifier.topScores.size() == 0) 
+    			throw new RuntimeException("Attempt to get label score before scores are set.");
+    		else
+    			return this.predictionConfidencesLevel1Classifier.topScores.elementAt(0);
+    	else
+			return this.predictionConfidencesLevel2Classifier.topScores.elementAt(0);    	
+    }
+    
     public enum LabelToLookAt {
         PredictionLevel2Tagger, PredictionLevel1Tagger, GoldLabel
     }

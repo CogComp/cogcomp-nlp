@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.ner;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -52,6 +53,9 @@ public class NerLabelPruningTest {
             fail(e.getMessage());
         }
         View v = taOnto.getView(nerOntonotes.getViewName());
+        for (Constituent c : v.getConstituents()) {
+        	System.out.println(c+" = "+c.getLabel()+" : "+c.getConstituentScore());
+        }
         assertEquals(3, v.getConstituents().size());
     }
 }
