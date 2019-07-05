@@ -24,7 +24,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
-            <version>1.3.0</version>
+            <version>1.3.2</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
