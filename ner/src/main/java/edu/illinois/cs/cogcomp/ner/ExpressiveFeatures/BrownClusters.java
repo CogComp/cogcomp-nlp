@@ -188,14 +188,16 @@ public class BrownClusters {
             if (isLowercaseBrownClustersByResource[j])
                 word = word.toLowerCase();
             THashMap<String, String> wordToPath = wordToPathByResource.get(j);
-            final String prefix = "resource" + j + ":";
-            if (wordToPath != null && wordToPath.containsKey(word)) {
-                String path = wordToPath.get(word);
-                int pathlength = path.length();
-                v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[0])));
-                for (int i = 1; i < prefixLengths.length; i++)
-                    if (prefixLengths[i - 1] < pathlength)
-                        v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[i])));
+            if (wordToPath != null) {
+	            String path = wordToPath.get(word);
+	            final String prefix = "resource"+j+":";
+	            if (path != null) {
+	                int pathlength = path.length();
+	                v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[0])));
+	                for (int i = 1; i < prefixLengths.length; i++)
+	                    if (prefixLengths[i - 1] < pathlength)
+	                        v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[i])));
+	            }
             }
         }
         String[] res = new String[v.size()];
