@@ -48,7 +48,13 @@ public class BrownClusters {
 
     /** clusters store, keyed on catenated paths. */
     static private HashMap<String, BrownClusters> clusters = new HashMap<>();
-
+    
+    /** Predetermined number of words in these caches. */
+    final private int INITIAL_CACHE_SIZE = 40000;
+    
+    /** this maps a word to a set of feature names. */
+    private THashMap<String, String[]> cache = new THashMap<String, String[]> (INITIAL_CACHE_SIZE);
+    
     /**
      * Makes a unique key based on the paths, for storage in a hashmap.
      * @param pathsToClusterFiles the paths.
@@ -181,8 +187,16 @@ public class BrownClusters {
     final public String[] getPrefixes(NEWord w) {
         return getPrefixes(w.form);
     }
-
+        
     final public String[] getPrefixes(String word) {
+    	
+    	// if we have already encountered this, it's cached, try that first.
+    	String[] cachedPath = cache.get(word);
+    	if (cachedPath != null) {
+    		return cachedPath;
+    	}
+    	
+    	// not cached.
         ArrayList<String> v = new ArrayList<>(wordToPathByResource.size());
         for (int j = 0; j < wordToPathByResource.size(); j++) {
             if (isLowercaseBrownClustersByResource[j])
@@ -202,6 +216,9 @@ public class BrownClusters {
         }
         String[] res = new String[v.size()];
         res = v.toArray(res);
+        if (res.length > 0) {
+        	cache.put(word, res);
+        }
         return res;
     }
 
