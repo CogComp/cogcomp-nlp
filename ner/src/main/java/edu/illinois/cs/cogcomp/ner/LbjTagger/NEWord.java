@@ -61,10 +61,9 @@ public class NEWord extends Word {
     private HashMap<String, Integer> nonLocalFeatures = null;
     private String[] nonLocFeatArray = null;
 
-    /*
-     * This stuff was added for form normalization purposes.
-     */
-
+    /** this feature is only populate if useFileTypes feature is enabled. */
+    private String fileType = null;
+    
     /**
      * An <code>NEWord</code> can be constructed from a <code>Word</code> object representing the
      * same word, an <code>NEWord</code> representing the previous word in the sentence, and the
@@ -81,7 +80,7 @@ public class NEWord extends Word {
         neLabel = type;
         neTypeLevel1 = null;
     }
-
+    
     /**
      * Add the provided token to the sentence, for also do any additional word spliting.
      *
@@ -95,6 +94,22 @@ public class NEWord extends Word {
         addTokenToSentence(sentence, word);
     }
 
+    /**
+     * Add the provided token to the sentence, also do any additional word splitting. Additional argument
+     * indicates the file type which must be provided. If there is no file type, the file type is null.
+     *
+     * @param sentence the sentence to add the word to.
+     * @param token the individual token.
+     * @param tag the tag to annotate the word with.
+     * @param fileType a string representing file type.
+     */
+    public static void addTokenToSentence(LinkedVector sentence, String token, String tag, ParametersForLbjCode prs, String fileType) {
+        NEWord word = new NEWord(new Word(token), null, tag);
+        word.params = prs;
+        word.setFileType(fileType);
+        addTokenToSentence(sentence, word);
+    }
+    
     public static void addTokenToSentence(LinkedVector sentence, NEWord word) {
         Vector<NEWord> v = NEWord.splitWord(word);
         if (word.params.tokenizationScheme
@@ -201,6 +216,20 @@ public class NEWord extends Word {
     }
 
     /**
+	 * @return the file type of this term (same for entire document).
+	 */
+	public String getFileType() {
+		return fileType;
+	}
+
+	/**
+	 * @param fileType the file type of this term (same for entire document).
+	 */
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	/**
      * This method will return the score of the chosen label.
      * @return the score of the best label for this term.
      */

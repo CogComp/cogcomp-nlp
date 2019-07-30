@@ -266,7 +266,7 @@ public class Main extends AbstractMain {
             } else {
                 this.nerAnnotator = new NERAnnotator(this.resourceManager, viewName);
             }
-            System.out.println("Completed loading resources, assuming a ");
+            System.out.println("Completed loading resources ");
         }
 
         // display the command prompt depending on the mode we are in.

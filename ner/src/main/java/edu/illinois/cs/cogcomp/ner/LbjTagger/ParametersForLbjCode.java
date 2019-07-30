@@ -39,6 +39,9 @@ public class ParametersForLbjCode {
     /** labels of interest if a subset of all labels, all other labels are ignored. */
     public ArrayList<String> labelsToKeep = null;
 
+    /** use filetype feature, greatly increasing the number of features. */
+    public boolean useFileType = false;
+
     /** Labels to ignore when evaluating model performance, e.g. "MISC" for the MUC7 dataset. */
     public Vector<String> labelsToIgnoreInEvaluation = null;
 
