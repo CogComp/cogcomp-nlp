@@ -48,7 +48,13 @@ public class BrownClusters {
 
     /** clusters store, keyed on catenated paths. */
     static private HashMap<String, BrownClusters> clusters = new HashMap<>();
-
+    
+    /** Predetermined number of words in these caches. */
+    final private int INITIAL_CACHE_SIZE = 40000;
+    
+    /** this maps a word to a set of feature names. */
+    private THashMap<String, String[]> cache = new THashMap<String, String[]> (INITIAL_CACHE_SIZE);
+    
     /**
      * Makes a unique key based on the paths, for storage in a hashmap.
      * @param pathsToClusterFiles the paths.
@@ -181,25 +187,38 @@ public class BrownClusters {
     final public String[] getPrefixes(NEWord w) {
         return getPrefixes(w.form);
     }
-
+        
     final public String[] getPrefixes(String word) {
+    	
+    	// if we have already encountered this, it's cached, try that first.
+    	String[] cachedPath = cache.get(word);
+    	if (cachedPath != null) {
+    		return cachedPath;
+    	}
+    	
+    	// not cached.
         ArrayList<String> v = new ArrayList<>(wordToPathByResource.size());
         for (int j = 0; j < wordToPathByResource.size(); j++) {
             if (isLowercaseBrownClustersByResource[j])
                 word = word.toLowerCase();
             THashMap<String, String> wordToPath = wordToPathByResource.get(j);
-            final String prefix = "resource" + j + ":";
-            if (wordToPath != null && wordToPath.containsKey(word)) {
-                String path = wordToPath.get(word);
-                int pathlength = path.length();
-                v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[0])));
-                for (int i = 1; i < prefixLengths.length; i++)
-                    if (prefixLengths[i - 1] < pathlength)
-                        v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[i])));
+            if (wordToPath != null) {
+	            String path = wordToPath.get(word);
+	            final String prefix = "resource"+j+":";
+	            if (path != null) {
+	                int pathlength = path.length();
+	                v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[0])));
+	                for (int i = 1; i < prefixLengths.length; i++)
+	                    if (prefixLengths[i - 1] < pathlength)
+	                        v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[i])));
+	            }
             }
         }
         String[] res = new String[v.size()];
         res = v.toArray(res);
+        if (res.length > 0) {
+        	cache.put(word, res);
+        }
         return res;
     }
 
