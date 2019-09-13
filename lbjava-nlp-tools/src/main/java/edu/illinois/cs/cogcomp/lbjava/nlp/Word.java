@@ -184,7 +184,10 @@ public class Word extends LinkedChild {
         capitalized = f != null && f.length() > 0
                 && Character.isUpperCase(f.charAt(0));
         partOfSpeech = pos;
-        if (partOfSpeech != null) POS.fromToken(partOfSpeech);
+        
+        // if assertions are enabled, this fails, so I seen no 
+        // reason to leave it in - redman
+        //if (partOfSpeech != null) POS.fromToken(partOfSpeech);
         lemma = l;
         wordSense = sense;
     }

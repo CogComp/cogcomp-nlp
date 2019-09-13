@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.ner.ParsingProcessingData;
 
 
+import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
@@ -18,8 +19,12 @@ import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 class ColumnFileReader extends ColumnFormat {
+    private static Logger logger = LoggerFactory.getLogger(ColumnFileReader.class);
     String filename = null;
     ParametersForLbjCode params = null;
     public ColumnFileReader(String file, ParametersForLbjCode params) {
@@ -60,7 +65,14 @@ class ColumnFileReader extends ColumnFormat {
         }
 
         LinkedVector res = new LinkedVector();
-        NEWord w = new NEWord(new Word(token, pos), null, label);
+        Word word = null;
+        try {
+        	word = new Word(token, pos);
+        } catch (Throwable t) {
+        	logger.error("A POS tag was bad in this file : "+filename);
+        	throw t;
+        }
+        NEWord w = new NEWord(word, null, label);
         NEWord.addTokenToSentence(res, w.form, w.neLabel, params, fileType);
         for (line = (String[]) super.next(); line != null && line.length > 0; line =
                 (String[]) super.next()) {

@@ -31,15 +31,13 @@ class PredictionsToProbabilities {
         }
         double[] correctedScores = new double[scores.length];
         double min = scores[0].score;
-        int maxScoreIdx = 0;
-        double maxScore = scores[maxScoreIdx].score;
-        String maxLabel = scores[maxScoreIdx].value;
+        double max = scores[0].score;
+        String maxLabel = scores[0].value;
         for (int i = 0; i < scores.length; i++) {
             if (min > scores[i].score)
                 min = scores[i].score;
-            if (maxScore < scores[i].score) {
-                maxScore = scores[i].score;
-                maxScoreIdx = i;
+            if (max < scores[i].score) {
+                max = scores[i].score;
                 maxLabel = scores[i].value;
             }
         }
@@ -55,19 +53,20 @@ class PredictionsToProbabilities {
                 correctedScores[i] /= sum;
         }
 
+        /* this doesn't seem necessary
         for (int i = 0; i < correctedScores.length; i++)
-            correctedScores[i] = correctedScores[i];
+            correctedScores[i] = correctedScores[i];*/
 
         CharacteristicWords res = new CharacteristicWords(scores.length);
 
         for (int i = 0; i < scores.length; i++)
             res.addElement(scores[i].value, correctedScores[i]);
 
+        w.setRawScore((float)max);
         if (predictionType.equals(NEWord.LabelToLookAt.PredictionLevel1Tagger)) {
             w.neTypeLevel1 = maxLabel;
             w.predictionConfidencesLevel1Classifier = res;
-        }
-        if (predictionType.equals(NEWord.LabelToLookAt.PredictionLevel2Tagger)) {
+        } else if (predictionType.equals(NEWord.LabelToLookAt.PredictionLevel2Tagger)) {
             w.neTypeLevel2 = maxLabel;
             w.predictionConfidencesLevel2Classifier = res;
         }

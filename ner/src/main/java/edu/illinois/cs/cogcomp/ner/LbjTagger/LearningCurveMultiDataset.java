@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
+import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TwoLayerPredictionAggregationFeatures;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import static java.lang.Float.NaN;
@@ -123,7 +125,7 @@ public class LearningCurveMultiDataset {
      */
     public static void getLearningCurve(Vector<Data> trainDataSet, Vector<Data> testDataSet,
             int fixedNumIterations, boolean incremental, ParametersForLbjCode params) throws Exception {
-        double bestF1Level1 = -1;
+        double bestF1Level1 = -2;
         int bestRoundLevel1 = 0;
         // Get the directory name (<configname>.model is appended in LbjTagger/Parameters.java:139)
         String modelPath = params.pathToModelFile;
@@ -202,14 +204,12 @@ public class LearningCurveMultiDataset {
                     bestRoundLevel1 = i;
                     saveme = (NETaggerLevel1) tagger1.clone();
                     saveme.beginTraining();
-
-                    System.out.println(saveme);
-                    System.out.println(bestF1Level1);
-                    System.out.println(f1Level1);
-
-                }
-                logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
+                    logger.info(i + " rounds.  New best for Level1 : (" + bestRoundLevel1 + ")="
                             + bestF1Level1);
+                } else {
+                	logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
+                            + bestF1Level1);
+                }
             }
 
             saveme.getBaseLTU().featurePruningThreshold = params.featurePruningThreshold;
@@ -252,7 +252,7 @@ public class LearningCurveMultiDataset {
         if (params.featuresToUse.containsKey("PredictionsLevel1")) {
             logger.info("Level 2 classifier learning rate = "+params.learningRatePredictionsLevel2+
                 ", thickness = "+params.thicknessPredictionsLevel2);
-            double bestF1Level2 = -1;
+            double bestF1Level2 = -2;
             int bestRoundLevel2 = 0;
             logger.info("Pre-extracting the training data for Level 2 classifier, saving to "+trainPathL2);
             BatchTrainer bt2train =
@@ -276,14 +276,19 @@ public class LearningCurveMultiDataset {
                     TestDiscrete.testDiscrete(simpleTest, tagger2, null, testParser2, true, 0);
     
                     double f1Level2 = simpleTest.getOverallStats()[2];
-                    if (f1Level2 >= bestF1Level2) {
+                    if(Double.isNaN(f1Level2)) 
+                    	f1Level2 = 0;
+                    if (f1Level2 > bestF1Level2) {
                         bestF1Level2 = f1Level2;
                         bestRoundLevel2 = i;
                         saveme = (NETaggerLevel2) tagger2.clone();
                         saveme.beginTraining();
-                    }
-                    logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
+                        logger.info(i + " rounds.  New best for Level2 : (" + bestRoundLevel2 + ") "
                                 + bestF1Level2);
+                    } else {
+                    	logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
+                                + bestF1Level2);
+                    }
                 }
                 saveme.getBaseLTU().featurePruningThreshold = params.featurePruningThreshold;
                 saveme.doneTraining();
@@ -362,22 +367,37 @@ public class LearningCurveMultiDataset {
         }
 
         public Object next() {
-            if (datasetId >= dataset.size())
-                return null;
-            // logger.debug("token = "+tokenId+"; sentence = "+sentenceId+"; dataset = "+datasetId+" ---  datasets="+dataset.size()+" now sentences= "+dataset.elementAt(datasetId).sentences.size()+"; now tokens = "+dataset.elementAt(datasetId).sentences.elementAt(sentenceId).size());
-            Object res =
+            if (datasetId >= dataset.size()) {
+                return null;	// expected, we are just done with the dataset.
+            }
+            Data nerdata = dataset.elementAt(datasetId);
+            if (nerdata.documents.size() <= docid) {
+            	logger.info("Encountered a dataset with no documents in it.");
+                return null;	// a dataset with no documents in it is odd.
+            }
+            NERDocument nerdoc = nerdata.documents.get(docid);
+            if (nerdoc.sentences.size() <= sentenceId) {
+            	logger.info("Encountered a document with no sentences in it : "+nerdoc.docname);
+            	return null;
+            }
+            LinkedVector nersentence = nerdoc.sentences.get(sentenceId);
+            if (nersentence.size() <= tokenId) {
+            	logger.info("Encountered a sentnce with no tokens in it : "+nerdoc.docname);
+            	return null;
+            }
+            Object res = nersentence.get(tokenId);
+            /*Object res =
                     dataset.elementAt(datasetId).documents.get(docid).sentences.get(sentenceId)
-                            .get(tokenId);
-            if (tokenId < dataset.elementAt(datasetId).documents.get(docid).sentences.get(
-                    sentenceId).size() - 1)
+                            .get(tokenId);*/
+            if (tokenId < nersentence.size() - 1)
                 tokenId++;
             else {
                 tokenId = 0;
-                if (sentenceId < dataset.elementAt(datasetId).documents.get(docid).sentences.size() - 1) {
+                if (sentenceId < nerdoc.sentences.size() - 1) {
                     sentenceId++;
                 } else {
                     sentenceId = 0;
-                    if (docid < dataset.elementAt(datasetId).documents.size() - 1) {
+                    if (docid < nerdata.documents.size() - 1) {
                         docid++;
                     } else {
                         docid = 0;

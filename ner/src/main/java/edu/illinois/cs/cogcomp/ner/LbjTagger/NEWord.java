@@ -26,6 +26,10 @@ public class NEWord extends Word {
 
     /** This field is used to store a computed named entity type tag. */
     public String neTypeLevel1;
+    
+    /** raw score as returned by the classifier without normalization. */
+    private float rawScore;
+    
     public String neTypeLevel2;
     public NamedEntity predictedEntity = null;// if non-null it keeps the named entity the tagger
     public ParametersForLbjCode params = null;
@@ -243,7 +247,23 @@ public class NEWord extends Word {
 			return this.predictionConfidencesLevel2Classifier.topScores.elementAt(0);    	
     }
     
-    public enum LabelToLookAt {
+
+	/**
+     * This method will return the score of the chosen label.
+     * @return the unnormalized score as returned directly by classifier.
+     */
+    public float getRawScore() {
+    	return rawScore;    	
+    }
+    
+    /**
+	 * @param rawScore the unnormalized score as returned directly by classifier.
+	 */
+	public void setRawScore(float rawScore) {
+		this.rawScore = rawScore;
+	}
+
+	public enum LabelToLookAt {
         PredictionLevel2Tagger, PredictionLevel1Tagger, GoldLabel
     }
 
