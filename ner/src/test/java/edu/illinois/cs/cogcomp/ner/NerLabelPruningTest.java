@@ -53,9 +53,6 @@ public class NerLabelPruningTest {
             fail(e.getMessage());
         }
         View v = taOnto.getView(nerOntonotes.getViewName());
-        for (Constituent c : v.getConstituents()) {
-        	System.out.println(c+" = "+c.getLabel()+" : "+c.getConstituentScore());
-        }
         assertEquals(3, v.getConstituents().size());
     }
 }

@@ -137,7 +137,8 @@ public class View implements Serializable, IQueryable<Constituent> {
 
     /**
      * Convenience method for addConstituent(constituent, false)
-     * @param constituent
+     *
+     * @param constituent The new constituent to be added.
      */
     public void addConstituent(Constituent constituent){
         this.addConstituent(constituent, false);
@@ -148,9 +149,10 @@ public class View implements Serializable, IQueryable<Constituent> {
      * Otherwise, we return the new constituent.
      *
      * @param constituent The new constituent to be added.
+     * @param force if true, add constituent even if it is a duplicate
      */
     public void addConstituent(Constituent constituent, boolean force) {
-        if(!constituents.contains(constituent) || force) {
+        if(force || this.tokensToConstituents[constituent.getStartSpan()] == null || !constituents.contains(constituent)) {
             constituents.add(constituent);
 
             startSpan = Math.min(this.startSpan, constituent.getStartSpan());
@@ -161,7 +163,7 @@ public class View implements Serializable, IQueryable<Constituent> {
                     this.addTokenToConstituentMapping(token, constituent);
                 }
             }
-        }else {
+        } else {
             System.err.println("Warning (View.java): not adding duplicate Constituent: " + constituent + ", use addConstituent(c, true) to force add.");
         }
     }

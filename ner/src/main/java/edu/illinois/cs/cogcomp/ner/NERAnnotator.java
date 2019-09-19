@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -55,6 +56,10 @@ import edu.illinois.cs.cogcomp.ner.config.NerOntonotesConfigurator;
  */
 public class NERAnnotator extends Annotator {
 
+	/** name of attribute containing the raw score value represented as a string. This value is
+	 * not normalized in any way, it is the value produced by the perceptron. */
+	final static public String RAW_SCORE_ATTRIBUTE = "RawScore";
+	
     /** our specific logger. */
     private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
 
@@ -230,7 +235,8 @@ public class NERAnnotator extends Annotator {
                         int e = tokenindices[endIndex];
                         if (e <= s)
                             e = s + 1;
-                        nerView.addSpanLabel(s, e, label, neWord.getScore());
+                        Constituent tokenlabel = nerView.addSpanLabel(s, e, label, neWord.getScore());
+                        tokenlabel.addAttribute(RAW_SCORE_ATTRIBUTE, Float.toString(neWord.getRawScore()));
                         open = false;
                     }
                 }

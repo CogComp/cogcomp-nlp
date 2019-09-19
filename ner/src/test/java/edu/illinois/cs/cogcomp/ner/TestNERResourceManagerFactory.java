@@ -26,12 +26,12 @@ public class TestNERResourceManagerFactory {
 	 */
 	@Test
 	public void test() throws IOException {
-        ResourceManager rm = NERResourceManagerFactory.get("edu/illinois/cs/cogcomp/ner/reuters.config", "#MODELS_PATH#", 
+        ResourceManager rm = NERResourceManagerFactory.get("resource_manager_test.config", "#MODELS_PATH#", 
         		"#RESOURCES_PATH#","","");
         assertEquals(rm.getString(NerBaseConfigurator.PATH_TO_MODEL), "models/reuters");
         assertEquals(rm.getString(NerBaseConfigurator.PATH_TO_GAZETTEERS), "gazetteers");
         assertEquals(rm.getString(NerBaseConfigurator.PATH_TO_TOKEN_NORM_DATA), "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
-        rm = NERResourceManagerFactory.get("edu/illinois/cs/cogcomp/ner/reuters.config", "#MODELS_PATH#", 
+        rm = NERResourceManagerFactory.get("resource_manager_test.config", "#MODELS_PATH#", 
         		"#RESOURCES_PATH#",".",".");
         assertEquals(rm.getString(NerBaseConfigurator.PATH_TO_MODEL), "./models/reuters");
         assertEquals(rm.getString(NerBaseConfigurator.PATH_TO_GAZETTEERS), "./gazetteers");
@@ -44,7 +44,7 @@ public class TestNERResourceManagerFactory {
         }
         
         try {
-	        rm = NERResourceManagerFactory.get("edu/illinois/cs/cogcomp/ner/reuters.config", null, null, null, null);
+	        rm = NERResourceManagerFactory.get("resource_manager_test.config", null, null, null, null);
 	        assertEquals(rm.getString(NerBaseConfigurator.PATH_TO_MODEL), "#MODELS_PATH#models/reuters");
 	        assertEquals(rm.getString(NerBaseConfigurator.PATH_TO_GAZETTEERS), "#RESOURCES_PATH#gazetteers");
 	        assertEquals(rm.getString(NerBaseConfigurator.PATH_TO_TOKEN_NORM_DATA), "#RESOURCES_PATH#brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
