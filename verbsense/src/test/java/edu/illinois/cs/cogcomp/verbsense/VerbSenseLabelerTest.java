@@ -12,6 +12,9 @@ import edu.illinois.cs.cogcomp.verbsense.experiment.TextPreProcessor;
 import junit.framework.TestCase;
 
 public class VerbSenseLabelerTest extends TestCase {
+/*
+ * 2019-10-14: Commenting out VerbSense tests as it won't compile without Gurobi, a licensed software. -Ben
+ *
     VerbSenseLabeler labeler;
     TextAnnotation ta, taNoVerb;
     TextPreProcessor preProcessor;
@@ -42,4 +45,5 @@ public class VerbSenseLabelerTest extends TestCase {
         assertEquals("Events from the year 1872 . ", taNoVerb.getView(annotator.getViewName())
                 .toString());
     }
+*/
 }

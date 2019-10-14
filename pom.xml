@@ -55,10 +55,6 @@
             <name>CogcompSoftware</name>
             <url>http://macniece.seas.upenn.edu/m2repo/</url>
         </repository>
-        <repository>
-            <id>Atilika Open Source repository</id>
-            <url>http://www.atilika.org/nexus/content/repositories/atilika</url>
-        </repository>
     </repositories>
 
     <distributionManagement>

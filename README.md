@@ -8,7 +8,7 @@ by [Cognitive Computation Group](https://cogcomp.org).
 ## How to use it? 
 Depending on what you are after, follow one of the items: 
  - **If you want to annotate your raw text** (i.e. no need to open the annotator boxes to retrain them) you should look into the [pipeline](pipeline/). 
- - **If you want to train and test an NLP annotator** (i.e. you want to open an annotator box), see the list of components below and choose the desired one. 
+ - **If you want to train and test an NLP annotator** (i.e. you want to open an annotator box), see the list of components below and choose the desired one. We recommend using JDK8, as no other versions are officially supported and tested.
  - **If you want to read a corpus** you should look into [the corpus-readers](corpusreaders) module. 
  - **If you want to do feature-extraction** you should look into [edison](edison) module. 
 
