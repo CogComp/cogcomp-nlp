@@ -13,7 +13,6 @@ import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.ner.IO.InFile;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import gnu.trove.map.hash.THashMap;
 import io.minio.errors.InvalidEndpointException;
@@ -48,13 +47,7 @@ public class BrownClusters {
 
     /** clusters store, keyed on catenated paths. */
     static private HashMap<String, BrownClusters> clusters = new HashMap<>();
-    
-    /** Predetermined number of words in these caches. */
-    final private int INITIAL_CACHE_SIZE = 40000;
-    
-    /** this maps a word to a set of feature names. */
-    private THashMap<String, String[]> cache = new THashMap<String, String[]> (INITIAL_CACHE_SIZE);
-    
+   
     /**
      * Makes a unique key based on the paths, for storage in a hashmap.
      * @param pathsToClusterFiles the paths.
@@ -190,12 +183,6 @@ public class BrownClusters {
         
     final public String[] getPrefixes(String word) {
     	
-    	// if we have already encountered this, it's cached, try that first.
-    	String[] cachedPath = cache.get(word);
-    	if (cachedPath != null) {
-    		return cachedPath;
-    	}
-    	
     	// not cached.
         ArrayList<String> v = new ArrayList<>(wordToPathByResource.size());
         for (int j = 0; j < wordToPathByResource.size(); j++) {
@@ -216,9 +203,6 @@ public class BrownClusters {
         }
         String[] res = new String[v.size()];
         res = v.toArray(res);
-        if (res.length > 0) {
-        	cache.put(word, res);
-        }
         return res;
     }
 
@@ -229,12 +213,6 @@ public class BrownClusters {
             ret += s + ",";
         }
         return ret;
-    }
-
-    private static void printArr(String[] arr) {
-        for (String anArr : arr)
-            logger.info(" " + anArr);
-        logger.info("");
     }
 
     final public void printOovData(Data data) {
