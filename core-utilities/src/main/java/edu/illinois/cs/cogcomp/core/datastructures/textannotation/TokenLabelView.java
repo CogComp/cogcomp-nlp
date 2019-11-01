@@ -31,8 +31,17 @@ public class TokenLabelView extends SpanLabelView {
         this(viewName, viewName + "-annotator", text, 1.0);
     }
 
+    public TokenLabelView(String viewName, TextAnnotation text, boolean allowOverlappingSpans) {
+        this(viewName, viewName + "-annotator", text, 1.0, allowOverlappingSpans);
+    }
+
     public TokenLabelView(String viewName, String viewGenerator, TextAnnotation text, double score) {
         super(viewName, viewGenerator, text, score);
+    }
+
+    public TokenLabelView(String viewName, String viewGenerator, TextAnnotation text, double score,
+                          boolean allowOverlappingSpans) {
+        super(viewName, viewGenerator, text, score, allowOverlappingSpans);
     }
 
     /**

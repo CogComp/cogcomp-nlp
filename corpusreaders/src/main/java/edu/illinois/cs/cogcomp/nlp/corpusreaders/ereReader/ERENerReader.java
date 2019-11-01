@@ -173,7 +173,7 @@ public class ERENerReader extends EREDocumentReader {
         TextAnnotation ta = sourceTa.getTextAnnotation();
         SpanLabelView tokens = (SpanLabelView) ta.getView(ViewNames.TOKENS);
         compileOffsets(tokens);
-        SpanLabelView nerView = new SpanLabelView(getMentionViewName(), NAME, ta, 1.0, false);
+        SpanLabelView nerView = new SpanLabelView(getMentionViewName(), NAME, ta, 1.0, true);
 
         // now pull all mentions we deal with. Start from file list index 1, as index 0 was source
         // text
