@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import edu.illinois.cs.cogcomp.core.constants.Language;
 
@@ -51,6 +52,22 @@ public class GazetteersFactory {
                 }
             }
             return gazetteers_map.get(path);
+        }
+    }
+    
+    /**
+     * Purge all gaz data, clearing memory.
+     */
+    static public void reset() {
+    	gazetteers_map = new HashMap<>();
+    }
+    
+    /**
+     * Purge a single gazetteer entry for the gaz at that path.
+     */
+    static public void purge(String path) {
+        synchronized (GAZ_INIT_LOCK) {
+            gazetteers_map.remove(path);
         }
     }
 }

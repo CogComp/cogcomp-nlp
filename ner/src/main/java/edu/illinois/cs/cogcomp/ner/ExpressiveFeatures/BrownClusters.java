@@ -9,10 +9,14 @@ package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
 import org.cogcomp.Datastore;
 import org.cogcomp.DatastoreException;
+
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.ner.IO.InFile;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import gnu.trove.map.hash.THashMap;
 import io.minio.errors.InvalidEndpointException;
@@ -47,7 +51,10 @@ public class BrownClusters {
 
     /** clusters store, keyed on catenated paths. */
     static private HashMap<String, BrownClusters> clusters = new HashMap<>();
-   
+    /** this is just to test the tokenizer produces same as the splitter. */
+    static private TextAnnotationBuilder tokenizer = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+
+
     /**
      * Makes a unique key based on the paths, for storage in a hashmap.
      * @param pathsToClusterFiles the paths.
@@ -115,7 +122,22 @@ public class BrownClusters {
                                 String word = st.nextToken();
                                 int occ = Integer.parseInt(st.nextToken());
                                 if (occ >= thresholds.elementAt(i)) {
-                                    h.put(word, path);
+                                	if (!word.contains("-"))
+                                		h.put(word, path);
+                                	else {
+	                                    try {
+		                                	if (tokenizer.createTextAnnotation(word).getTokens().length == 1) {
+		                                		
+		                                		// the word contained a dash but tokenized to a single word.
+		                                		h.put(word, path);
+		                                	} else {
+		                                		System.out.println("2&&& \""+line+"\" tokenized differently for brown clusters.");
+		                                	}
+	                                    } catch (Throwable t) {
+	                                    	t.printStackTrace();
+	                                		System.out.println("2&&& \""+line+"\" produced an exception.");
+	                                    }
+                                    }
                                 }
                                 line = in.readLine();
                             }
@@ -243,6 +265,24 @@ public class BrownClusters {
                 }
             }
         }
-
     }
+    
+    /**
+     * Purge all brown cluster data, clearing memory.
+     */
+    static public void reset() {
+    	clusters = new HashMap<>();
+    }
+    
+    /**
+     * Purge all brown cluster data, clearing memory.
+     */
+    static public void purge(Vector<String> pathsToClusterFiles) {
+        synchronized (INIT_SYNC) {
+            // first check for a cluster already loaded for this data.
+            String key = getKey(pathsToClusterFiles);
+            clusters.remove(key);
+        }
+    }
+
 }
