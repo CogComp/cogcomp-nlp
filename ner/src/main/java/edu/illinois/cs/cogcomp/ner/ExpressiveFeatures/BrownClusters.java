@@ -122,22 +122,7 @@ public class BrownClusters {
                                 String word = st.nextToken();
                                 int occ = Integer.parseInt(st.nextToken());
                                 if (occ >= thresholds.elementAt(i)) {
-                                	if (!word.contains("-"))
-                                		h.put(word, path);
-                                	else {
-	                                    try {
-		                                	if (tokenizer.createTextAnnotation(word).getTokens().length == 1) {
-		                                		
-		                                		// the word contained a dash but tokenized to a single word.
-		                                		h.put(word, path);
-		                                	} else {
-		                                		System.out.println("2&&& \""+line+"\" tokenized differently for brown clusters.");
-		                                	}
-	                                    } catch (Throwable t) {
-	                                    	t.printStackTrace();
-	                                		System.out.println("2&&& \""+line+"\" produced an exception.");
-	                                    }
-                                    }
+                                	h.put(word, path);
                                 }
                                 line = in.readLine();
                             }
