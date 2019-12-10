@@ -180,14 +180,15 @@ public class LearningCurveMultiDataset {
         deleteme = new File(testPathL1);
         if (deleteme.exists())
             deleteme.delete();
-        logger.info("Pre-extracting the training data for Level 1 classifier, saving to "+trainPathL1);
-        BatchTrainer bt1train = prefetchAndGetBatchTrainer(tagger1, trainDataSet, trainPathL1, params);
-        logger.info("Pre-extracting the testing data for Level 1 classifier, saving to "+testPathL1);
-        BatchTrainer bt1test = prefetchAndGetBatchTrainer(tagger1, testDataSet, testPathL1, params);
-        Parser testParser1 = bt1test.getParser();
 
         // create the best model possible.
         {
+            logger.info("Pre-extracting the training data for Level 1 classifier, saving to "+trainPathL1);
+            BatchTrainer bt1train = prefetchAndGetBatchTrainer(tagger1, trainDataSet, trainPathL1, params);
+            logger.info("Pre-extracting the testing data for Level 1 classifier, saving to "+testPathL1);
+            BatchTrainer bt1test = prefetchAndGetBatchTrainer(tagger1, testDataSet, testPathL1, params);
+            Parser testParser1 = bt1test.getParser();
+            
             NETaggerLevel1 saveme = null;
             for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel1 < 10)
                     || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
@@ -211,13 +212,22 @@ public class LearningCurveMultiDataset {
                             + bestF1Level1);
                 }
             }
-
             saveme.getBaseLTU().featurePruningThreshold = params.featurePruningThreshold;
             saveme.doneTraining();
             saveme.save();
+            bt1train.getParser().close();
+            bt1test.getParser().close();
             logger.info("Level 1; best round : " + bestRoundLevel1 + "\tbest F1 : " + bestF1Level1);
         }
         
+        // dispose of the L1 caching files
+        deleteme = new File(trainPathL1);
+        if (deleteme.exists())
+            deleteme.delete();
+        deleteme = new File(testPathL1);
+        if (deleteme.exists())
+            deleteme.delete();
+
         // Read the best model back in, optimize by pruning useless features, then write it agains
         tagger1 = new NETaggerLevel1(paramLevel1, modelPath + ".level1", modelPath + ".level1.lex");
                 
@@ -254,16 +264,16 @@ public class LearningCurveMultiDataset {
                 ", thickness = "+params.thicknessPredictionsLevel2);
             double bestF1Level2 = -2;
             int bestRoundLevel2 = 0;
-            logger.info("Pre-extracting the training data for Level 2 classifier, saving to "+trainPathL2);
-            BatchTrainer bt2train =
-                    prefetchAndGetBatchTrainer(tagger2, trainDataSet, trainPathL2, params);
-            logger.info("Pre-extracting the testing data for Level 2 classifier, saving to "+testPathL2);
-            BatchTrainer bt2test =
-                    prefetchAndGetBatchTrainer(tagger2, testDataSet, testPathL2, params);
-            Parser testParser2 = bt2test.getParser();
 
             // create the best model possible.
             {
+                logger.info("Pre-extracting the training data for Level 2 classifier, saving to "+trainPathL2);
+                BatchTrainer bt2train =
+                        prefetchAndGetBatchTrainer(tagger2, trainDataSet, trainPathL2, params);
+                logger.info("Pre-extracting the testing data for Level 2 classifier, saving to "+testPathL2);
+                BatchTrainer bt2test =
+                        prefetchAndGetBatchTrainer(tagger2, testDataSet, testPathL2, params);
+                Parser testParser2 = bt2test.getParser();
                 NETaggerLevel2 saveme = null;
                 for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel2 < 10)
                         || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
@@ -293,13 +303,15 @@ public class LearningCurveMultiDataset {
                 saveme.getBaseLTU().featurePruningThreshold = params.featurePruningThreshold;
                 saveme.doneTraining();
                 saveme.save();
+                bt2train.getParser().close();
+                bt2test.getParser().close();
             }
             
             // trash the l2 prefetch data
             deleteme = new File(trainPathL2);
             if (deleteme.exists())
                 deleteme.delete();
-            deleteme = new File(testPathL1);
+            deleteme = new File(testPathL2);
             if (deleteme.exists())
                 deleteme.delete();
 
