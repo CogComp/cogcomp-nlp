@@ -34,8 +34,8 @@ public class ExceptionlessInputStream extends FilterInputStream {
     private char[] chars = null;
     /** The underlying data input stream. */
     private DataInputStream dis;
-
-
+    /** if there is a zip stream, we must close it, closing the resulting stream does not close the file. */
+    private ZipFile zipfile = null;
     /**
      * Opens a buffered (and uncompressed) stream for reading from the specified file.
      *
@@ -70,9 +70,9 @@ public class ExceptionlessInputStream extends FilterInputStream {
 
         try {
             ZipFile zip = new ZipFile(filename);
-            eis =
-                    new ExceptionlessInputStream(new BufferedInputStream(zip.getInputStream(zip
+            eis = new ExceptionlessInputStream(new BufferedInputStream(zip.getInputStream(zip
                             .getEntry(zipEntryName))));
+            eis.zipfile = zip;
         } catch (Exception e) {
             System.err.println("Can't open '" + filename + "' for input:");
             e.printStackTrace();
@@ -160,7 +160,11 @@ public class ExceptionlessInputStream extends FilterInputStream {
      **/
     public void close() {
         try {
-            dis.close();
+            dis.close(); 
+            if (zipfile != null) {
+            	zipfile.close();
+            	zipfile = null;
+            }
         } catch (Exception e) {
             System.err.println("Can't close input stream:");
             e.printStackTrace();

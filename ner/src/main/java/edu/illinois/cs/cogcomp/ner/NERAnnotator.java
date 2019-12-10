@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -55,6 +56,10 @@ import edu.illinois.cs.cogcomp.ner.config.NerOntonotesConfigurator;
  */
 public class NERAnnotator extends Annotator {
 
+	/** name of attribute containing the raw score value represented as a string. This value is
+	 * not normalized in any way, it is the value produced by the perceptron. */
+	final static public String RAW_SCORE_ATTRIBUTE = "RawScore";
+	
     /** our specific logger. */
     private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
 
@@ -121,7 +126,13 @@ public class NERAnnotator extends Annotator {
         // load the models.
         synchronized (LOADING_MODELS) {
             ModelLoader.load(nerRm, viewName, false, this.params);
-       }
+        }
+        if (this.params.labelsToKeep != null) {
+        	logger.info("Kept label : "+this.params.labelsToKeep);
+        	this.params.taggerLevel1.pruneUnusedLabels(this.params.labelsToKeep);
+        	if (this.params.taggerLevel2 != null)
+        		this.params.taggerLevel2.pruneUnusedLabels(this.params.labelsToKeep);
+        }
     }
 
     /**
@@ -171,26 +182,24 @@ public class NERAnnotator extends Annotator {
         // the data always has a single document
         // each LinkedVector in data corresponds to a sentence.
         int tokenoffset = 0;
-        for (LinkedVector vector : nerSentences) {
+        for (LinkedVector nerWords : nerSentences) {
             boolean open = false;
 
             // there should be a 1:1 mapping btw sentence tokens in record and words/predictions
             // from NER.
             int startIndex = -1;
             String label = null;
-            for (int j = 0; j < vector.size(); j++, tokenoffset++) {
-                NEWord neWord = (NEWord) (vector.get(j));
+            for (int j = 0; j < nerWords.size(); j++, tokenoffset++) {
+                NEWord neWord = (NEWord) (nerWords.get(j));
                 String prediction = neWord.neTypeLevel2;
 
-                // LAM-tlr this is not a great way to ascertain the entity type, it's a bit
-                // convoluted, and very
-                // inefficient, use enums, or nominalized indexes for this sort of thing.
+                // identify the label.
                 if (prediction.startsWith("B-")) {
                     startIndex = tokenoffset;
                     label = prediction.substring(2);
                     open = true;
                 } else if (j > 0) {
-                    String previous_prediction = ((NEWord) vector.get(j - 1)).neTypeLevel2;
+                    String previous_prediction = ((NEWord) nerWords.get(j - 1)).neTypeLevel2;
                     if (prediction.startsWith("I-")
                             && (!previous_prediction.endsWith(prediction.substring(2)))) {
                         startIndex = tokenoffset;
@@ -201,10 +210,10 @@ public class NERAnnotator extends Annotator {
 
                 if (open) {
                     boolean close = false;
-                    if (j == vector.size() - 1) {
+                    if (j == nerWords.size() - 1) {
                         close = true;
                     } else {
-                        String next_prediction = ((NEWord) vector.get(j + 1)).neTypeLevel2;
+                        String next_prediction = ((NEWord) nerWords.get(j + 1)).neTypeLevel2;
                         if (next_prediction.startsWith("B-"))
                             close = true;
                         if (next_prediction.equals("O"))
@@ -226,8 +235,8 @@ public class NERAnnotator extends Annotator {
                         int e = tokenindices[endIndex];
                         if (e <= s)
                             e = s + 1;
-
-                        nerView.addSpanLabel(s, e, label, 1d);
+                        Constituent tokenlabel = nerView.addSpanLabel(s, e, label, neWord.getScore());
+                        tokenlabel.addAttribute(RAW_SCORE_ATTRIBUTE, Float.toString(neWord.getRawScore()));
                         open = false;
                     }
                 }

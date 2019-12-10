@@ -7,17 +7,16 @@
  */
 package edu.illinois.cs.cogcomp.ner.InferenceMethods;
 
-import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TwoLayerPredictionAggregationFeatures;
-import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord.RealFeature;
-import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.CharacteristicWords;
-import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
-
 import java.util.ArrayList;
 import java.util.Vector;
 
-/*
+import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.NamedEntity;
+import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.CharacteristicWords;
+
+/**
  * This class is responsible for handling prediction scores of the entities. That is, this class can
  * prune the entities/predictions on which we're not confident at
  * 

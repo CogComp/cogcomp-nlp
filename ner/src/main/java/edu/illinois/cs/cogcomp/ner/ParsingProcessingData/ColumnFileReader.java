@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.ner.ParsingProcessingData;
 
 
+import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
@@ -15,10 +16,15 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.ColumnFormat;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 class ColumnFileReader extends ColumnFormat {
+    private static Logger logger = LoggerFactory.getLogger(ColumnFileReader.class);
     String filename = null;
     ParametersForLbjCode params = null;
     public ColumnFileReader(String file, ParametersForLbjCode params) {
@@ -32,6 +38,7 @@ class ColumnFileReader extends ColumnFormat {
         String token = null;
         String pos = null;
         String label = null;
+        String fileType = null;
         linec++;
         // Skip to start of next line, skip unnecessary blank lines, headers and so on.
         String[] line = (String[]) super.next();
@@ -50,11 +57,23 @@ class ColumnFileReader extends ColumnFormat {
             token = line[5];
             label = line[0];
             pos = line[4];
+            if (line.length > 9 && params.useFileType) {
+            	fileType = line[9];
+            } else {
+            	fileType = null;
+            }
         }
 
         LinkedVector res = new LinkedVector();
-        NEWord w = new NEWord(new Word(token, pos), null, label);
-        NEWord.addTokenToSentence(res, w.form, w.neLabel, params);
+        Word word = null;
+        try {
+        	word = new Word(token, pos);
+        } catch (Throwable t) {
+        	logger.error("A POS tag was bad in this file : "+filename);
+        	throw t;
+        }
+        NEWord w = new NEWord(word, null, label);
+        NEWord.addTokenToSentence(res, w.form, w.neLabel, params, fileType);
         for (line = (String[]) super.next(); line != null && line.length > 0; line =
                 (String[]) super.next()) {
             linec++;
@@ -67,14 +86,19 @@ class ColumnFileReader extends ColumnFormat {
                 token = line[5];
                 label = line[0];
                 pos = line[4];
+                if (line.length > 9 && params.useFileType) {
+                	fileType = line[9];
+                } else {
+                	fileType = null;
+                }
             } else {
-                System.out.println("Line "+linec+" in "+filename+" is wrong with "+line.length);
+                System.out.println("Line "+linec+" in "+filename+" has wrong number of columns :  "+line.length);
                 for (String a : line) System.out.print(":"+a);
                 System.out.println();
                 continue;
             }
             w = new NEWord(new Word(token, pos), null, label);
-            NEWord.addTokenToSentence(res, w.form, w.neLabel, params);
+            NEWord.addTokenToSentence(res, w.form, w.neLabel, params, fileType);
         }
         if (res.size() == 0)
             return null;

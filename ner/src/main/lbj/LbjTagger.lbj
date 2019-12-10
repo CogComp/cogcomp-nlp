@@ -365,7 +365,7 @@ discrete% PreviousTagPatternLevel1(NEWord word) <-
 
 mixed% FeaturesSharedTemp(NEWord word) 	<-	IsSentenceStart, Capitalization, nonLocalFeatures, GazetteersFeatures, FormParts, Forms,  WordTypeInformation, Affixes, BrownClusterPaths, WordEmbeddingFeatures, WikifierFeatures, AffixesZH
 
-mixed% FeaturesLevel1SharedWithLevel2(NEWord word)  <- FeaturesSharedTemp /*,  IsWordCaseNormalized&&FeaturesSharedTemp*/
+mixed% FeaturesLevel1SharedWithLevel2(NEWord word)  <- FeaturesSharedTemp
 
 mixed% FeaturesLevel1Only(NEWord word) <- PreviousTagPatternLevel1, PreviousTag1Level1,PreviousTag2Level1, prevTagsForContextLevel1, PreviousTag1Level1&&Forms
 

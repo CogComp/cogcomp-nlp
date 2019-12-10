@@ -44,7 +44,13 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     // public final static String TOKENIZATION_SCHEME = "tokenizationScheme";
     public final static String FORCE_NEW_SENTENCE_ON_LINE_BREAKS = "forceNewSentenceOnLineBreaks";
     public final static String LABEL_TYPES = "labelTypes";
-
+    
+    /** enumerates labels of interest, other labels are discared, if null, keep them all. */
+    public final static String LABELS_TO_KEEP = "labelsToKeep";
+    
+    /** enumerates labels of interest, other labels are discared, if null, keep them all. */
+    public final static String USE_FILETYPE = "useFileType";
+    
     public final static String NORMALIZE_TITLE_TEXT = "normalizeTitleText";
     public final static String PATH_TO_TOKEN_NORM_DATA = "pathToTokenNormalizationData";
     public final static String SORT_FILES_LEXICALLY = "sortLexicallyFilesInFolders";

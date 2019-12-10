@@ -83,6 +83,18 @@ public class NerBenchmark {
      * model and continue training from there. */
     private boolean incremental = false;
 
+    /** The resources replacement pattern. */
+    private String resourcesReplacementPattern = null;
+    
+    /** The resources replacement pattern. */
+    private String modelsReplacementPattern = null;
+    
+    /** The resources replacement pattern. */
+    private String resourcesDirectory = null;
+    
+    /** The resources replacement pattern. */
+    private String modelsDirectory = null;
+    
     /**
      * all default.
      */
@@ -223,6 +235,66 @@ public class NerBenchmark {
     }
 
     /**
+	 * @return the resourcesReplacementPattern
+	 */
+	public String getResourcesReplacementPattern() {
+		return resourcesReplacementPattern;
+	}
+
+	/**
+	 * @param resourcesReplacementPattern the resourcesReplacementPattern to set
+	 */
+	public NerBenchmark setResourcesReplacementPattern(String resourcesReplacementPattern) {
+		this.resourcesReplacementPattern = resourcesReplacementPattern;
+        return this;
+	}
+
+	/**
+	 * @return the modelsReplacementPattern
+	 */
+	public String getModelsReplacementPattern() {
+		return modelsReplacementPattern;
+	}
+
+	/**
+	 * @param modelsReplacementPattern the modelsReplacementPattern to set
+	 */
+	public NerBenchmark setModelsReplacementPattern(String modelsReplacementPattern) {
+		this.modelsReplacementPattern = modelsReplacementPattern;
+        return this;
+	}
+
+	/**
+	 * @return the resourcesDirectory
+	 */
+	public String getResourcesDirectory() {
+		return resourcesDirectory;
+	}
+
+	/**
+	 * @param resourcesDirectory the resourcesDirectory to set
+	 */
+	public NerBenchmark setResourcesDirectory(String resourcesDirectory) {
+		this.resourcesDirectory = resourcesDirectory;
+        return this;
+	}
+
+	/**
+	 * @return the modelsDirectory
+	 */
+	public String getModelsDirectory() {
+		return modelsDirectory;
+	}
+
+	/**
+	 * @param modelsDirectory the modelsDirectory to set
+	 */
+	public NerBenchmark setModelsDirectory(String modelsDirectory) {
+		this.modelsDirectory = modelsDirectory;
+        return this;
+	}
+
+	/**
      * for the builder design pattern, less the factory, which I consider just a waste of
      * time.
      * @return a default instance of an NerBenchmark.
@@ -291,7 +363,9 @@ public class NerBenchmark {
                     break;
             }
         }
-        NerBenchmark bm = NerBenchmark.build().setIncremental(incremental).setIterations(iterations).setOutput(output).setRelease(release).setReportFeatures(reportFeatures).setSkiptraining(skiptraining).setReportLabels(reportLabels).setVerbose(verbose);
+        NerBenchmark bm = NerBenchmark.build().setIncremental(incremental).setIterations(iterations)
+        		.setOutput(output).setRelease(release).setReportFeatures(reportFeatures)
+        		.setSkiptraining(skiptraining).setReportLabels(reportLabels).setVerbose(verbose);
 
         // Loop over every directory within the benchmark directory. Each subdirectory will contain
         // a configuration file, and a directory with the test data at the very least. If there is
@@ -309,7 +383,7 @@ public class NerBenchmark {
                 continue;
             File configsDir = new File(dir + "/config/");
             if (!configsDir.exists()) {
-                System.err.println("There was no config file in " + configsDir);
+                System.err.println("There was no config directory in " + configsDir);
                 continue;
             }
 
@@ -332,6 +406,9 @@ public class NerBenchmark {
                         return name.endsWith(".config");
                     }
                 });
+                if (configfiles.length == 0) {
+                    System.err.println("There was no config file in " + configsDir);
+                }
                 for (String confFile : configfiles) {
                     confFile = dir + "/config/" + confFile;
                     bm.execute(confFile, trainDirName, trainDir, devDirName, devDir, testDirName, testDir);
@@ -354,11 +431,19 @@ public class NerBenchmark {
      */
     public Vector<TestDiscrete[]> execute(String confFile, String trainDirName, File trainDir, String devDirName, File devDir, String testDirName, File testDir) throws Exception {
         if (!skiptraining) {
-            if (trainDir.exists() && testDir.exists() && devDir.exists()) {
-                return trainModel(confFile, trainDirName, trainDir, devDirName, devDir, testDirName, testDir);
-            } else {
-                System.err.println("Training requires a \"train\", \"test\" and \"dev\" subdirectory!");
-            }
+        	if (trainDir.exists()) {
+        		if (testDir.exists()) {
+        			if (devDir.exists()) {
+                        return trainModel(confFile, trainDirName, trainDir, devDirName, devDir, testDirName, testDir);
+        			} else {
+                        System.err.println("Dev directory, required for training, did not exist : "+devDir);
+        			}
+        		} else {
+                    System.err.println("Test directory, required for training, did not exist : "+testDir);
+    			}
+        	} else {
+                System.err.println("Train directory, required for training, did not exist : "+trainDir);
+			}
         } else if (!release) {
 
             // if not training, and not build a release model, we are just reporting the accuracy of the existing
@@ -372,8 +457,9 @@ public class NerBenchmark {
             // dev data using the number of iterations to determine a stopping point rather than using the dev set
             // for that.
             if (trainDir.exists() && testDir.exists() && devDir.exists()) {
-                ParametersForLbjCode prms = Parameters.readConfigAndLoadExternalData(confFile, true);
-                ResourceManager rm = new ResourceManager(confFile);
+                ResourceManager rm = NERResourceManagerFactory.get(confFile, this.modelsReplacementPattern, this.resourcesReplacementPattern,
+                		this.modelsDirectory, this.resourcesDirectory);
+                ParametersForLbjCode prms = Parameters.readAndLoadConfig(rm, true);
                 ModelLoader.load(rm, rm.getString("modelName"), true, prms);
                 System.out.println("\n\n----- Building a final model for " + confFile + " ------");
 
@@ -400,8 +486,9 @@ public class NerBenchmark {
      */
     private void reportResults(String confFile, String testDirName) throws Exception {
         System.out.println("\n\n----- Reporting results from existing models for " + confFile + " ------");
-        ParametersForLbjCode prms = Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
-        ResourceManager rm = new ResourceManager(confFile);
+        ResourceManager rm = NERResourceManagerFactory.get(confFile, this.modelsReplacementPattern, this.resourcesReplacementPattern,
+        		this.modelsDirectory, this.resourcesDirectory);
+        ParametersForLbjCode prms = Parameters.readAndLoadConfig(rm, !skiptraining);
         ModelLoader.load(rm, rm.getString("modelName"), !skiptraining, prms);
         System.out.println("Benchmark against configuration : " + confFile);
         if (reportLabels)
@@ -429,8 +516,9 @@ public class NerBenchmark {
      */
     private Vector<TestDiscrete[]> trainModel(String confFile, String trainDirName, File trainDir, String devDirName, File devDir, String testDirName, File testDir) throws Exception {
         System.out.println("\n\n----- Training models for evaluation for " + confFile + " ------");
-        ParametersForLbjCode prms = Parameters.readConfigAndLoadExternalData(confFile, true);
-        ResourceManager rm = new ResourceManager(confFile);
+        ResourceManager rm = NERResourceManagerFactory.get(confFile, this.modelsReplacementPattern, this.resourcesReplacementPattern,
+        		this.modelsDirectory, this.resourcesDirectory);
+        ParametersForLbjCode prms = Parameters.readAndLoadConfig(rm, true);
         ModelLoader.load(rm, rm.getString("modelName"), true, prms);
         NETaggerLevel1 taggerLevel1 = (NETaggerLevel1) prms.taggerLevel1;
         NETaggerLevel2 taggerLevel2 = (NETaggerLevel2) prms.taggerLevel2;

@@ -139,8 +139,7 @@ public class NERAnnotatorTest {
      * See if we get the right entities back. TODO: MS removed @Test annotation as this test
      * currently fails, but benchmark performance is good
      */
-
-
+    @Test
     public void testResults() {
         TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
         View view = null;
@@ -152,6 +151,13 @@ public class NERAnnotatorTest {
         }
         for (Constituent c : view.getConstituents()) {
             assertTrue("No entity named \"" + c.toString() + "\"", entities.contains(c.toString()));
+            String raw = c.getAttribute(NERAnnotator.RAW_SCORE_ATTRIBUTE);
+            assertTrue(raw != null);
+            try {
+            	Float.parseFloat(raw);
+            } catch (NumberFormatException nfe) {
+            	fail("The raw score was not a number.");
+            }
         }
     }
 

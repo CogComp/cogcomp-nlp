@@ -118,8 +118,6 @@ public class Parameters {
             }
 
             param.debug = rm.getDebug();
-            // ParametersForLbjCode.currentParameters.debug = param.debug;
-
             double randomNoiseLevel = rm.getDouble(NerBaseConfigurator.RANDOM_NOISE_LEVEL);
             double omissionRate = rm.getDouble(NerBaseConfigurator.OMISSION_RATE);
 
@@ -136,13 +134,26 @@ public class Parameters {
                 Language lang = Language.getLanguageByCode(rm.getString("language"));
                 param.language = lang;
             }
-
             if (rm.containsKey("labelsToAnonymizeInEvaluation")) {
                 String labelsToAnonymizeInEvaluation =
                         rm.getString("labelsToAnonymizeInEvaluation");
                 param.labelsToAnonymizeInEvaluation =
                         new Vector<>(Arrays.asList(labelsToAnonymizeInEvaluation.split(" ")));
             }
+            if (rm.containsKey(NerBaseConfigurator.LABELS_TO_KEEP)) {
+                String labelsToKeep = rm.getString(NerBaseConfigurator.LABELS_TO_KEEP);
+                param.labelsToKeep = new ArrayList<String>(Arrays.asList(labelsToKeep.split(" ")));
+            }
+            
+            // this property can be either "1" or "true" to enable file type.
+            if (rm.containsKey(NerBaseConfigurator.USE_FILETYPE)) {
+		        String usefiletype = rm.getString(NerBaseConfigurator.USE_FILETYPE);
+		        if (usefiletype.equalsIgnoreCase("true") || usefiletype.equals("1")) {
+		        	logger.info("File Type information will be included in the feature set.");
+		            param.useFileType = true;
+		        }
+            }
+            
             if (rm.containsKey("labelsToIgnoreInEvaluation")) {
                 String labelsToIgnoreInEvaluation = rm.getString("labelsToIgnoreInEvaluation");
                 param.labelsToIgnoreInEvaluation =
