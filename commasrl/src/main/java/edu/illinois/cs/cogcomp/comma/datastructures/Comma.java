@@ -14,7 +14,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+// import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
@@ -581,15 +582,15 @@ public class Comma implements Serializable {
 
     public String getAnnotatedText() {
         List<String> tokens = Arrays.asList(s.ta.getTokens());
-        return StringUtils.join(" ", tokens.subList(0, commaPosition + 1)) + "["
-                + StringUtils.join(",", labels) + "] "
-                + StringUtils.join(" ", tokens.subList(commaPosition + 1, tokens.size()));
+        return StringUtils.join(tokens.subList(0, commaPosition + 1), " ") + "["
+                + StringUtils.join(labels, ",") + "] "
+                + StringUtils.join(tokens.subList(commaPosition + 1, tokens.size()), " ");
     }
 
     public String getBayraktarAnnotatedText() {
         List<String> tokens = Arrays.asList(s.ta.getTokens());
-        return StringUtils.join(" ", tokens.subList(0, commaPosition + 1)) + "["
+        return StringUtils.join(tokens.subList(0, commaPosition + 1), " ") + "["
                 + getBayraktarLabel() + "] "
-                + StringUtils.join(" ", tokens.subList(commaPosition + 1, tokens.size()));
+                + StringUtils.join(tokens.subList(commaPosition + 1, tokens.size()), " ");
     }
 }

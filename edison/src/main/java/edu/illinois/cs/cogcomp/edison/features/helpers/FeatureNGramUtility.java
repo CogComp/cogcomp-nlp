@@ -9,7 +9,8 @@ package edu.illinois.cs.cogcomp.edison.features.helpers;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+// import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 
@@ -52,7 +53,7 @@ public class FeatureNGramUtility {
                 }
 
             }
-            features.add(DiscreteFeature.create(i + ":" + StringUtils.join("-", strings)));
+            features.add(DiscreteFeature.create(i + ":" + StringUtils.join(strings, "-")));
         }
         return features;
     }
@@ -77,7 +78,7 @@ public class FeatureNGramUtility {
                 }
 
             }
-            features.add(DiscreteFeature.create(StringUtils.join("-", strings)));
+            features.add(DiscreteFeature.create(StringUtils.join(strings, "-")));
         }
         return features;
     }

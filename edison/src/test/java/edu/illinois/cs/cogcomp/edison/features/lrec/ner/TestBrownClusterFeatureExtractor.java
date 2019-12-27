@@ -10,7 +10,8 @@ package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+// import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -109,7 +110,7 @@ public class TestBrownClusterFeatureExtractor {
             featArray[i++] = f.toString();
 
         Arrays.sort(featArray);
-        String actualOutput = StringUtils.join(",", featArray);
+        String actualOutput = StringUtils.join(featArray, ",");
         assertEquals(expectedOutput, actualOutput);
     }
 }

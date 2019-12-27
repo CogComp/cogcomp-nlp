@@ -18,7 +18,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+// import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Used to group all the commas in a sentence. The commas can then be accessed based on positional
@@ -238,7 +239,7 @@ public class CommaSRLSentence implements Serializable {
             annotatedText += " " + tokens[tokenIdx];
             String commaAnnotation = "";
             while (commaNum < commas.size() && commas.get(commaNum).commaPosition == tokenIdx) {
-                commaAnnotation += StringUtils.join(",", commas.get(commaNum).getLabels());
+                commaAnnotation += StringUtils.join(commas.get(commaNum).getLabels(), ",");
                 commaNum++;
             }
             if (commaAnnotation.length() > 0)
