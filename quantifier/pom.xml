@@ -16,7 +16,7 @@
         <pluginRepository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>http://cogcomp.org/m2repo/</url>
+            <url>https://cogcomp.org/m2repo/</url>
         </pluginRepository>
     </pluginRepositories>
 

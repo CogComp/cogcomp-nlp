@@ -53,7 +53,7 @@
         <repository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>http://macniece.seas.upenn.edu/m2repo/</url>
+            <url>https://macniece.seas.upenn.edu/m2repo/</url>
         </repository>
     </repositories>
 
