@@ -5,6 +5,10 @@
 This project collects a number of core libraries for Natural Language Processing (NLP) developed 
 by [Cognitive Computation Group](https://cogcomp.org).  
 
+## Demo
+Demo Link: https://cogcomp.seas.upenn.edu/page/demo_view/CogCompNLP
+<img width="1166" alt="image" src="https://user-images.githubusercontent.com/22654200/177396316-4aa74b48-a8df-4260-a445-0fd56f896ce0.png">
+
 ## How to use it? 
 Depending on what you are after, follow one of the items: 
  - **To annotate raw text** (i.e. no need to open the annotator boxes to retrain them) you should look into the [pipeline](pipeline/). 
