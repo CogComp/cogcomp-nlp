@@ -35,8 +35,16 @@ public class NerTest {
     private static final String TEST_OUTPUT =
             "[PERSON JFK] has [CARDINAL one] dog and [GPE Newark] has a handful , [PERSON Farbstein] said . ";
 
+    private static final String TEST_OUTPUT_PERSON =
+            "[PERSON JFK] has [CARDINAL one] dog and Newark has a handful , [PERSON Farbstein] said . ";
+
+    /** the T1 model. */
     private static NETaggerLevel1 t1;
+    
+    /** the second level model. */
     private static NETaggerLevel2 t2 = null;
+    
+    /** the parameters configure the models. */
     ParametersForLbjCode params = null;
     @Before
     public void setUp() throws Exception {
@@ -67,6 +75,59 @@ public class NerTest {
             fail();
         }
         assertTrue(output.equals(TEST_OUTPUT));
+    }
+
+
+    @Test
+    public void testPersonOnlyTagger() {
+        long start = System.currentTimeMillis();
+        System.out.println("Warming up.");
+        try {
+            ArrayList<LinkedVector> sentences = PlainTextReader.parseText(TEST_INPUT, params);
+            Data data = new Data(new NERDocument(sentences, "input"));
+            NETagPlain.tagData(data, params);
+        } catch (Exception e) {
+            logger.info("Cannot annotate the test, the exception was: ");
+            e.printStackTrace();
+            fail();
+        }        
+        String output = null;
+        System.out.println("Starting full models.");
+        final int TOT = 500;
+        for (int i = 0; i < TOT; i++) {
+	        try {
+	            ArrayList<LinkedVector> sentences = PlainTextReader.parseText(TEST_INPUT, params);
+	            Data data = new Data(new NERDocument(sentences, "input"));
+	            output = NETagPlain.tagData(data, params);
+	        } catch (Exception e) {
+	            logger.info("Cannot annotate the test, the exception was: ");
+	            e.printStackTrace();
+	            fail();
+	        }
+        }
+        System.out.println("Took "+(System.currentTimeMillis()-start)+" for "+TOT);
+        
+        // Strip out labels we don't want
+    	ArrayList<String> keepers = new ArrayList<>();
+    	keepers.add("PERSON");
+    	keepers.add("CARDINAL");
+        params.taggerLevel1.pruneUnusedLabels(keepers);
+        params.taggerLevel2.pruneUnusedLabels(keepers);
+        System.out.println("Starting reduced models.");
+        start = System.currentTimeMillis();
+        for (int i = 0; i < TOT; i++)
+	        try {
+	            ArrayList<LinkedVector> sentences = PlainTextReader.parseText(TEST_INPUT, params);
+	            Data data = new Data(new NERDocument(sentences, "input"));
+	            output = NETagPlain.tagData(data, params);
+	        } catch (Exception e) {
+	            logger.info("Cannot annotate the test, the exception was: ");
+	            e.printStackTrace();
+	            fail();
+	        }
+        
+        System.out.println("Took "+(System.currentTimeMillis()-start)+" for "+TOT);
+        assertTrue(output.equals(TEST_OUTPUT_PERSON));
     }
 
     @After

@@ -22,13 +22,20 @@ public class MyString {
         return res.toString();
     }
 
+    /**
+     * If this is an easily identifiable date, return "*DATE*", if it is a 
+     * combination of digits and characters, return a descriptive pattern indicating
+     * such, or just return the input form.
+     * @param s the input token term, or part of the term for DualTokenization.
+     * @return the feature, or just the name of the form.
+     */
     public static String normalizeDigitsForFeatureExtraction(String s) {
-        String form = s;
-        if (MyString.isDate(form))
-            form = "*DATE*";
-        if (MyString.hasDigits(form))
-            form = MyString.normalizeDigits(form);
-        return form;
+        if (MyString.isDate(s))
+            return "*DATE*";
+        else if (MyString.hasDigits(s))
+            return MyString.normalizeDigits(s);
+        else 
+            return s;
     }
 
     /** fast date formatter for identifying date instances. */

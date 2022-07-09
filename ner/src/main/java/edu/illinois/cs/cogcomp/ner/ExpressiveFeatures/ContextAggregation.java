@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
+import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -20,9 +21,9 @@ public class ContextAggregation {
      * that the data was annotated with dictionaries etc.
      */
     public static void annotate(NEWord word) {
-        if (word.params.featuresToUse.containsKey("aggregateContext")
+        if (word.params.featuresToUse.containsKey(NerBaseConfigurator.AGGREGATE_CONTEXT)
                 || word.params.featuresToUse
-                        .containsKey("aggregateGazetteerMatches")) {
+                        .containsKey(NerBaseConfigurator.AGGREGATE_GAZETTEER)) {
             int i = 0;
             NEWord w = word, last = word.nextIgnoreSentenceBoundary;
 

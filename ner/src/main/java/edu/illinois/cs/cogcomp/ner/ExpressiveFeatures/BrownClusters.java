@@ -9,11 +9,14 @@ package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
 import org.cogcomp.Datastore;
 import org.cogcomp.DatastoreException;
+
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.ner.IO.InFile;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import gnu.trove.map.hash.THashMap;
 import io.minio.errors.InvalidEndpointException;
@@ -48,6 +51,9 @@ public class BrownClusters {
 
     /** clusters store, keyed on catenated paths. */
     static private HashMap<String, BrownClusters> clusters = new HashMap<>();
+    /** this is just to test the tokenizer produces same as the splitter. */
+    static private TextAnnotationBuilder tokenizer = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+
 
     /**
      * Makes a unique key based on the paths, for storage in a hashmap.
@@ -116,7 +122,7 @@ public class BrownClusters {
                                 String word = st.nextToken();
                                 int occ = Integer.parseInt(st.nextToken());
                                 if (occ >= thresholds.elementAt(i)) {
-                                    h.put(word, path);
+                                	h.put(word, path);
                                 }
                                 line = in.readLine();
                             }
@@ -181,21 +187,25 @@ public class BrownClusters {
     final public String[] getPrefixes(NEWord w) {
         return getPrefixes(w.form);
     }
-
+        
     final public String[] getPrefixes(String word) {
+    	
+    	// not cached.
         ArrayList<String> v = new ArrayList<>(wordToPathByResource.size());
         for (int j = 0; j < wordToPathByResource.size(); j++) {
             if (isLowercaseBrownClustersByResource[j])
                 word = word.toLowerCase();
             THashMap<String, String> wordToPath = wordToPathByResource.get(j);
-            final String prefix = "resource" + j + ":";
-            if (wordToPath != null && wordToPath.containsKey(word)) {
-                String path = wordToPath.get(word);
-                int pathlength = path.length();
-                v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[0])));
-                for (int i = 1; i < prefixLengths.length; i++)
-                    if (prefixLengths[i - 1] < pathlength)
-                        v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[i])));
+            if (wordToPath != null) {
+	            String path = wordToPath.get(word);
+	            final String prefix = "resource"+j+":";
+	            if (path != null) {
+	                int pathlength = path.length();
+	                v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[0])));
+	                for (int i = 1; i < prefixLengths.length; i++)
+	                    if (prefixLengths[i - 1] < pathlength)
+	                        v.add(prefix + path.substring(0, Math.min(pathlength, prefixLengths[i])));
+	            }
             }
         }
         String[] res = new String[v.size()];
@@ -210,12 +220,6 @@ public class BrownClusters {
             ret += s + ",";
         }
         return ret;
-    }
-
-    private static void printArr(String[] arr) {
-        for (String anArr : arr)
-            logger.info(" " + anArr);
-        logger.info("");
     }
 
     final public void printOovData(Data data) {
@@ -246,6 +250,24 @@ public class BrownClusters {
                 }
             }
         }
-
     }
+    
+    /**
+     * Purge all brown cluster data, clearing memory.
+     */
+    static public void reset() {
+    	clusters = new HashMap<>();
+    }
+    
+    /**
+     * Purge all brown cluster data, clearing memory.
+     */
+    static public void purge(Vector<String> pathsToClusterFiles) {
+        synchronized (INIT_SYNC) {
+            // first check for a cluster already loaded for this data.
+            String key = getKey(pathsToClusterFiles);
+            clusters.remove(key);
+        }
+    }
+
 }
