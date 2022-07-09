@@ -14,7 +14,7 @@
         <repository>
             <id>XypronRelease</id>
             <name>Xypron Release</name>
-            <url>http://rsync.xypron.de/repository</url>
+            <url>https://rsync.xypron.de/repository</url>
             <layout>default</layout>
         </repository>
     </repositories>
