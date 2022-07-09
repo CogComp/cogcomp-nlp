@@ -43,8 +43,14 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  */
 public class Main extends AbstractMain {
 
+
+    enum OutputFormat {
+      BRACKETED,
+      CONLL,
+      STANDOFF
+    }
     /** set to true to produce bracketed output, otherwise CoNLL output. */
-    boolean bracketedOutput = true;
+    OutputFormat outFormat = OutputFormat.BRACKETED;
 
     /**
      * enumerates the various input processing states.
@@ -118,7 +124,9 @@ public class Main extends AbstractMain {
     @Override
     protected int processArgument(String[] args, int current) throws Exception {
         if (args[current].equals("-c"))
-            bracketedOutput = false;
+            outFormat = OutputFormat.CONLL;
+        if (args[current].equals("-s"))
+            outFormat = OutputFormat.STANDOFF;
         else {
             if (new File(args[current]).exists()) {
                 System.out.println("Loading properties from " + args[current]);
@@ -133,9 +141,10 @@ public class Main extends AbstractMain {
 
     @Override
     protected String getCommandSyntax() {
-        return "java -Xms2g edu.illinois.cs.cogcomp.ner.Main -b <config_file_name> [-c]\n"
+        return "java -Xms2g edu.illinois.cs.cogcomp.ner.Main -b <config_file_name> [-c|-s]\n"
                 + "    <config_file_name> : specify the location of a configuration file.\n"
-                + "    -c                 : produce output in CoNLL 2002 format, by default, output in bracketed format.";
+                + "    -c                 : produce output in CoNLL 2002 format, by default, output in bracketed format.\n"
+                + "    -s                 : produce output in a standoff format with columns (start char, end char, label, text).";
     }
 
     /**
@@ -476,8 +485,10 @@ public class Main extends AbstractMain {
      * @return the string with the data.
      */
     private String produceOutput(View nerView, TextAnnotation ta) {
-        if (bracketedOutput)
+        if (outFormat == OutputFormat.BRACKETED)
             return this.produceBracketedAnnotations(nerView, ta);
+        else if (outFormat == OutputFormat.STANDOFF)
+            return this.produceStandoffAnnotations(nerView, ta);
         else
             return this.produceCoNLL2002Annotations(nerView, ta);
     }
@@ -511,6 +522,32 @@ public class Main extends AbstractMain {
         }
         if (where < text.length())
             sb.append(text.substring(where, text.length()));
+        return sb.toString();
+    }
+
+    /**
+     * Render a string of standoff annotations in tab-delimited format
+     * 
+     * @param nerView the NER label view.
+     * @param ta the text annotation.
+     * @return standoff annotations in (start char, end char, label, text) tab-delimited format
+     */
+    private String produceStandoffAnnotations(View nerView, TextAnnotation ta) {
+        StringBuilder sb = new StringBuilder();
+        List<Constituent> constituents = new ArrayList<>(nerView.getConstituents());
+        Collections.sort(constituents, TextAnnotationUtilities.constituentStartComparator);
+        String text = ta.getText();
+        int where = 0;
+        for (Constituent c : constituents) {
+            sb.append(c.getStartCharOffset());
+            sb.append("\t");
+            sb.append(c.getEndCharOffset());
+            sb.append("\t");
+            sb.append(c.getLabel());
+            sb.append("\t");
+            sb.append(c.getTokenizedSurfaceForm());
+            sb.append("\n");
+        }
         return sb.toString();
     }
 
