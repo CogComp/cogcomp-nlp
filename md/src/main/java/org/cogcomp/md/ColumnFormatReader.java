@@ -118,7 +118,7 @@ public class ColumnFormatReader extends AnnotationReader<TextAnnotation> {
             tokens.add(curSentenceArr);
         }
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokens);
-        SpanLabelView mentionView = new SpanLabelView("MENTIONS", this.getClass().getCanonicalName(), ta, 1.0f);
+        SpanLabelView mentionView = new SpanLabelView("MENTIONS", this.getClass().getCanonicalName(), ta, 1.0f, true);
         if (mentionTypes.size() != mentions.size()){
             System.out.println("ERROR");
         }

@@ -54,7 +54,7 @@ public class StanfordTrueCaseHandler extends Annotator {
     public void addView(TextAnnotation ta) throws AnnotatorException {
         Annotation document = new Annotation(ta.text);
         pipeline.annotate(document);
-        TokenLabelView vu = new TokenLabelView(viewName, ta);
+        TokenLabelView vu = new TokenLabelView(viewName, ta, true);
 
         for (CoreMap sentence : document.get(CoreAnnotations.SentencesAnnotation.class)) {
             for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {

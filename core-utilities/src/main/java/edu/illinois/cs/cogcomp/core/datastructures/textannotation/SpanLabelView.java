@@ -5,9 +5,7 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.org/
  */
-/**
- *
- */
+
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import java.util.ArrayList;
@@ -60,6 +58,14 @@ public class SpanLabelView extends View {
 
     @Override
     public void addConstituent(Constituent constituent) {
+
+        if (!allowOverlappingSpans) {
+            int start = constituent.getStartSpan();
+            int end = constituent.getEndSpan();
+            if (this.getConstituentsCoveringSpan(start, end).size() != 0)
+                throw new IllegalArgumentException("Span [" + start + ", " + end + "] already labeled.");
+        }
+
         super.addConstituent(constituent);
 
         // this sort is grossly inefficient when appending contiguous tokens one at a time. 
@@ -94,9 +100,6 @@ public class SpanLabelView extends View {
         Constituent c =
                 new Constituent(label, score, this.getViewName(), this.getTextAnnotation(), start,
                         end);
-
-        if (!allowOverlappingSpans && this.getConstituentsCoveringSpan(start, end).size() != 0)
-            throw new IllegalArgumentException("Span [" + start + ", " + end + "] already labeled.");
 
         this.addConstituent(c);
 

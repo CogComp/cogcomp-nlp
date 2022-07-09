@@ -203,7 +203,7 @@ public class MentionAnnotator extends Annotator{
             throw new AnnotatorException("Missing required view POS");
         }
         View mentionView = new SpanLabelView(ViewNames.MENTION, MentionAnnotator.class.getCanonicalName(), ta, 1.0f, true);
-        View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
+        View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f, true);
         View tokenView = ta.getView(ViewNames.TOKENS);
         for (int i = tokenView.getStartSpan(); i < tokenView.getEndSpan(); i++){
             Constituent currentToken = tokenView.getConstituentsCoveringToken(i).get(0).cloneForNewView("BIO");
